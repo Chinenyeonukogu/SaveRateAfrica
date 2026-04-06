@@ -24,12 +24,12 @@ Wise, Remitly, LemFi, Sendwave, WorldRemit,TapTap
 MoneyGram, Western Union and more
 
 ## Tech Stack
-Next.js 
-React 
-TypeScript 
-Tailwind CSS 
-Framer Motion 
-Recharts 
+- Next.js 
+- React 
+- TypeScript 
+- Tailwind CSS 
+- Framer Motion 
+- Recharts 
 
 ## Live Site
 [saverateafrica.com](https://saverateafrica.com)
