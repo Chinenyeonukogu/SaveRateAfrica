@@ -31,11 +31,10 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "32x32" },
-      { url: "/icon.png", sizes: "512x512" }
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico" }
     ],
-    apple: "/apple-icon.png",
-    shortcut: "/favicon.ico"
+    apple: "/apple-icon.png"
   },
   category: "finance"
 };
@@ -51,6 +50,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+      </head>
       <body className="bg-brand-light text-brand-navy">
         {children}
         <SiteFooter />
