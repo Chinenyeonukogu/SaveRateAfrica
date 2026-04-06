@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
 import { MobileNav } from "@/components/MobileNav";
+import { SiteFooter } from "@/components/SiteFooter";
 
 import "./globals.css";
 
@@ -48,6 +49,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="bg-brand-light text-brand-navy">
         {children}
+        <SiteFooter />
         <MobileNav />
         <Analytics />
       </body>

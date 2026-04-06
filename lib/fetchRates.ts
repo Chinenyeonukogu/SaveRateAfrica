@@ -6,7 +6,11 @@ import {
   type SenderCountry,
   type SourceCurrency
 } from "@/lib/providers";
-import type { LiveBaseRatesResponse } from "@/lib/exchangeRateApi";
+import {
+  getFallbackBaseRates,
+  getLiveBaseRates,
+  type LiveBaseRatesResponse
+} from "@/lib/exchangeRateApi";
 
 export interface ComparisonProviderRow {
   slug: string;
@@ -34,6 +38,9 @@ export interface ComparisonResult {
   recipientCurrency: "NGN";
   sortBy: ComparisonSort;
   updatedAt: string;
+  sourceUpdatedAt: string;
+  cachedUntil: string;
+  rateProvider: LiveBaseRatesResponse["provider"];
   baseMidMarketRate: number;
   providers: ComparisonProviderRow[];
   savings: {
@@ -65,32 +72,43 @@ function clampAmount(value: number) {
   return Math.min(Math.max(Math.round(value), 50), 25000);
 }
 
-function round(value: number) {
+function roundToTwo(value: number) {
   return Math.round(value * 100) / 100;
 }
 
-function getRatesEndpointUrl(apiBaseUrl?: string) {
+function getRatesEndpointUrl(
+  args: Required<FetchRatesArgs>,
+  apiBaseUrl?: string
+) {
+  const searchParams = new URLSearchParams({
+    amount: String(args.amount),
+    senderCountry: args.senderCountry,
+    sortBy: args.sortBy
+  });
+
   if (typeof window !== "undefined") {
-    return "/api/rates";
+    return `/api/rates?${searchParams.toString()}`;
   }
 
   if (apiBaseUrl) {
-    return new URL("/api/rates", apiBaseUrl).toString();
+    const url = new URL("/api/rates", apiBaseUrl);
+    url.search = searchParams.toString();
+    return url.toString();
   }
 
   throw new Error("A base URL is required to call /api/rates on the server.");
 }
 
-async function fetchLiveBaseRatesFromApi({
-  apiBaseUrl,
-  signal
-}: Pick<FetchRatesOptions, "apiBaseUrl" | "signal">): Promise<LiveBaseRatesResponse> {
-  const response = await fetch(getRatesEndpointUrl(apiBaseUrl), {
+async function fetchLiveComparisonFromApi(
+  args: Required<FetchRatesArgs>,
+  { apiBaseUrl, signal }: Pick<FetchRatesOptions, "apiBaseUrl" | "signal">
+): Promise<ComparisonResult> {
+  const response = await fetch(getRatesEndpointUrl(args, apiBaseUrl), {
     cache: "no-store",
     signal
   });
 
-  const payload = (await response.json()) as LiveBaseRatesResponse & {
+  const payload = (await response.json()) as ComparisonResult & {
     error?: string;
   };
 
@@ -128,7 +146,7 @@ function buildComparison({
   senderCountry,
   sortBy,
   liveBaseRates
-}: Required<FetchRatesArgs> & { liveBaseRates: LiveBaseRatesResponse }) {
+}: Required<FetchRatesArgs> & { liveBaseRates: LiveBaseRatesResponse }): ComparisonResult {
   const sourceCurrency = getCurrencyBySender(senderCountry);
   const baseMidMarketRate = liveBaseRates.rates[sourceCurrency];
   const adjustedAmount = clampAmount(amount);
@@ -136,9 +154,13 @@ function buildComparison({
   const rows = providers
     .filter((provider) => provider.supportedSenderCountries.includes(senderCountry))
     .map((provider) => {
-      const fee = provider.fees[sourceCurrency];
-      const exchangeRate = round(baseMidMarketRate * provider.rateMultiplier[sourceCurrency]);
-      const amountReceived = Math.round(Math.max(adjustedAmount - fee, 0) * exchangeRate);
+      const fee = roundToTwo(provider.fees[sourceCurrency]);
+      const exchangeRate = roundToTwo(
+        baseMidMarketRate * provider.rateMultiplier[sourceCurrency]
+      );
+      const amountReceived = roundToTwo(
+        Math.max(adjustedAmount - fee, 0) * exchangeRate
+      );
 
       return {
         slug: provider.slug,
@@ -184,9 +206,12 @@ function buildComparison({
     amount: adjustedAmount,
     senderCountry,
     sourceCurrency,
-    recipientCurrency: "NGN" as const,
+    recipientCurrency: "NGN",
     sortBy,
     updatedAt: liveBaseRates.updatedAt,
+    sourceUpdatedAt: liveBaseRates.sourceUpdatedAt,
+    cachedUntil: liveBaseRates.cachedUntil,
+    rateProvider: liveBaseRates.provider,
     baseMidMarketRate,
     providers: sortedProviders,
     savings: {
@@ -194,39 +219,29 @@ function buildComparison({
       bestAmount: bestProvider.amountReceived,
       worstProvider: worstProvider.name,
       worstAmount: worstProvider.amountReceived,
-      maxSavings: bestProvider.amountReceived - worstProvider.amountReceived
+      maxSavings: roundToTwo(bestProvider.amountReceived - worstProvider.amountReceived)
     }
   };
 }
 
-export async function fetchRates({
-  amount,
-  senderCountry,
-  sortBy = "best-rate"
-}: FetchRatesArgs, options: FetchRatesOptions = {}): Promise<ComparisonResult> {
+export async function getLiveComparison(
+  {
+    amount,
+    senderCountry,
+    sortBy = "best-rate"
+  }: FetchRatesArgs,
+  options: Pick<FetchRatesOptions, "allowFallback"> = {}
+): Promise<ComparisonResult> {
   const adjustedAmount = clampAmount(amount);
-
   let liveBaseRates: LiveBaseRatesResponse;
 
   try {
-    if (typeof window === "undefined" && !options.apiBaseUrl) {
-      const { getLiveBaseRates } = await import("@/lib/exchangeRateApi");
-      liveBaseRates = await getLiveBaseRates();
-    } else {
-      liveBaseRates = await fetchLiveBaseRatesFromApi({
-        apiBaseUrl: options.apiBaseUrl,
-        signal: options.signal
-      });
-    }
+    liveBaseRates = await getLiveBaseRates();
   } catch (error) {
-    const allowFallback =
-      options.allowFallback ?? typeof window === "undefined";
-
-    if (!allowFallback) {
+    if (!options.allowFallback) {
       throw error;
     }
 
-    const { getFallbackBaseRates } = await import("@/lib/exchangeRateApi");
     liveBaseRates = getFallbackBaseRates();
   }
 
@@ -235,5 +250,31 @@ export async function fetchRates({
     senderCountry,
     sortBy,
     liveBaseRates
+  });
+}
+
+export async function fetchRates(
+  {
+    amount,
+    senderCountry,
+    sortBy = "best-rate"
+  }: FetchRatesArgs,
+  options: FetchRatesOptions = {}
+): Promise<ComparisonResult> {
+  const normalizedArgs = {
+    amount: clampAmount(amount),
+    senderCountry,
+    sortBy
+  };
+
+  if (typeof window === "undefined" && !options.apiBaseUrl) {
+    return getLiveComparison(normalizedArgs, {
+      allowFallback: options.allowFallback ?? true
+    });
+  }
+
+  return fetchLiveComparisonFromApi(normalizedArgs, {
+    apiBaseUrl: options.apiBaseUrl,
+    signal: options.signal
   });
 }

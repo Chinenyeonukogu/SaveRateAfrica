@@ -18,6 +18,7 @@ import { SavingsCalculator } from "@/components/SavingsCalculator";
 import { AlertsForm } from "@/components/AlertsForm";
 import { formatNaira } from "@/lib/format";
 import { fetchRates, type ComparisonResult } from "@/lib/fetchRates";
+import { RateDisclaimer } from "@/components/RateDisclaimer";
 import {
   faqItems,
   howItWorksSteps,
@@ -42,11 +43,15 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
   const [sortBy, setSortBy] = useState<ComparisonSort>(initialComparison.sortBy);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [nextRefreshAt, setNextRefreshAt] = useState(initialComparison.cachedUntil);
   const amountRef = useRef(amount);
   const senderCountryRef = useRef(senderCountry);
   const sortByRef = useRef(sortBy);
 
-  async function refreshComparison(nextSort = sortByRef.current, signal?: AbortSignal) {
+  async function refreshComparison(
+    nextSort = sortByRef.current,
+    signal?: AbortSignal
+  ) {
     const parsedAmount = Number.parseFloat(amountRef.current);
     const normalizedAmount = Number.isFinite(parsedAmount) ? parsedAmount : 500;
 
@@ -66,10 +71,14 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
       );
 
       setComparison(nextComparison);
+      setNextRefreshAt(nextComparison.cachedUntil);
+      return nextComparison;
     } catch (error) {
       setErrorMessage(
         error instanceof Error ? error.message : "Unable to refresh rates right now."
       );
+      setNextRefreshAt(new Date(Date.now() + 60_000).toISOString());
+      return null;
     } finally {
       setIsLoading(false);
     }
@@ -89,17 +98,27 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
 
   useEffect(() => {
     const controller = new AbortController();
-    const intervalId = window.setInterval(() => {
-      void refreshComparison(sortByRef.current);
-    }, 60_000);
 
     void refreshComparison(sortByRef.current, controller.signal);
 
     return () => {
       controller.abort();
-      window.clearInterval(intervalId);
     };
   }, []);
+
+  useEffect(() => {
+    const msUntilRefresh = Math.max(
+      new Date(nextRefreshAt).getTime() - Date.now(),
+      30_000
+    );
+    const timeoutId = window.setTimeout(() => {
+      void refreshComparison(sortByRef.current);
+    }, msUntilRefresh);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [nextRefreshAt]);
 
   async function handleCompare() {
     await refreshComparison(sortBy);
@@ -138,9 +157,12 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                 comparison={comparison}
                 errorMessage={errorMessage}
                 isLoading={isLoading}
+                nextRefreshAt={nextRefreshAt}
                 onSortChange={handleSortChange}
               />
             </div>
+
+            <RateDisclaimer />
 
             <section className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
               <div className="rounded-[28px] border border-brand-navy/10 bg-white p-6 shadow-float">

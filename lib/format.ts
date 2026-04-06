@@ -8,11 +8,18 @@ export function formatCurrency(amount: number, currency: SourceCurrency) {
   }).format(amount);
 }
 
-export function formatNaira(amount: number) {
+export function formatNaira(
+  amount: number,
+  options: {
+    minimumFractionDigits?: number;
+    maximumFractionDigits?: number;
+  } = {}
+) {
   return new Intl.NumberFormat("en-NG", {
     style: "currency",
     currency: "NGN",
-    maximumFractionDigits: 0
+    minimumFractionDigits: options.minimumFractionDigits ?? 0,
+    maximumFractionDigits: options.maximumFractionDigits ?? 0
   }).format(amount);
 }
 
@@ -37,4 +44,29 @@ export function formatDateTime(value: string) {
     hour: "numeric",
     minute: "2-digit"
   }).format(new Date(value));
+}
+
+export function formatRelativeTime(value: string, now = Date.now()) {
+  const deltaMs = Math.max(now - new Date(value).getTime(), 0);
+  const deltaMinutes = Math.floor(deltaMs / 60_000);
+  const deltaHours = Math.floor(deltaMinutes / 60);
+
+  if (deltaMinutes < 1) {
+    return "just now";
+  }
+
+  if (deltaMinutes < 60) {
+    return `${deltaMinutes} minute${deltaMinutes === 1 ? "" : "s"} ago`;
+  }
+
+  return `${deltaHours} hour${deltaHours === 1 ? "" : "s"} ago`;
+}
+
+export function formatRefreshCountdown(value: string, now = Date.now()) {
+  const remainingMs = Math.max(new Date(value).getTime() - now, 0);
+  const totalSeconds = Math.floor(remainingMs / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  return `${minutes}:${String(seconds).padStart(2, "0")}`;
 }

@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowUpRight, BadgeCheck, Clock3, Star } from "lucide-react";
+import { ArrowUpRight, BadgeCheck, Clock3, Info, Star } from "lucide-react";
 
 import { formatCompact, formatCurrency, formatNaira, formatRate } from "@/lib/format";
 import type { ComparisonProviderRow } from "@/lib/fetchRates";
@@ -18,6 +19,8 @@ export function ProviderCard({
   provider,
   sourceCurrency
 }: ProviderCardProps) {
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
+
   return (
     <motion.article
       animate={{ opacity: 1, x: 0 }}
@@ -74,9 +77,30 @@ export function ProviderCard({
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-navy/50">
             Exchange rate
           </p>
-          <p className="mt-2 font-mono text-lg text-brand-navy">
-            {formatRate(provider.exchangeRate, sourceCurrency)}
-          </p>
+          <div
+            className="relative mt-2"
+            onMouseLeave={() => setIsTooltipOpen(false)}
+          >
+            <button
+              aria-expanded={isTooltipOpen}
+              className="inline-flex items-center gap-2 text-left font-mono text-lg text-brand-navy"
+              type="button"
+              onBlur={() => setIsTooltipOpen(false)}
+              onClick={() => setIsTooltipOpen((current) => !current)}
+              onFocus={() => setIsTooltipOpen(true)}
+              onMouseEnter={() => setIsTooltipOpen(true)}
+            >
+              <span>{formatRate(provider.exchangeRate, sourceCurrency)}</span>
+              <Info className="h-4 w-4 text-brand-navy/45" />
+            </button>
+
+            {isTooltipOpen ? (
+              <div className="absolute left-0 top-full z-20 mt-2 w-64 rounded-2xl bg-brand-navy px-4 py-3 text-xs font-medium leading-5 text-white shadow-float">
+                This rate is estimated based on {provider.name}&apos;s published
+                spread. Click Send Now to see exact rate.
+              </div>
+            ) : null}
+          </div>
         </div>
 
         <div className="rounded-2xl bg-brand-light p-4">
@@ -93,7 +117,10 @@ export function ProviderCard({
             Amount received
           </p>
           <p className="mt-2 text-2xl font-heading text-brand-navy">
-            {formatNaira(provider.amountReceived)}
+            {formatNaira(provider.amountReceived, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            })}
           </p>
         </div>
 

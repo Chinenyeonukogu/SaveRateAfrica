@@ -3,6 +3,7 @@ import { baseMidMarketRates, type SourceCurrency } from "@/lib/providers";
 export interface LiveBaseRatesResponse {
   provider: "ExchangeRate-API" | "Fallback";
   updatedAt: string;
+  sourceUpdatedAt: string;
   cachedUntil: string;
   rates: Record<SourceCurrency, number>;
 }
@@ -11,6 +12,7 @@ interface ExchangeRateApiPayload {
   result?: "success" | "error";
   "error-type"?: string;
   time_last_update_utc?: string;
+  time_next_update_utc?: string;
   conversion_rates?: Record<string, number>;
 }
 
@@ -21,8 +23,8 @@ declare global {
     | undefined;
 }
 
-const LIVE_RATE_CACHE_TTL_MS = 60_000;
-const supportedBaseCurrencies: SourceCurrency[] = ["USD", "GBP", "CAD"];
+export const LIVE_RATE_REVALIDATE_SECONDS = 300;
+const LIVE_RATE_CACHE_TTL_MS = LIVE_RATE_REVALIDATE_SECONDS * 1000;
 
 function parseUtcDate(value?: string) {
   if (!value) {
@@ -33,19 +35,16 @@ function parseUtcDate(value?: string) {
   return Number.isNaN(parsed.getTime()) ? new Date().toISOString() : parsed.toISOString();
 }
 
-async function fetchBaseCurrencyRate(
-  apiKey: string,
-  baseCurrency: SourceCurrency
-) {
+async function fetchUsdBaseRates(apiKey: string) {
   const response = await fetch(
-    `https://v6.exchangerate-api.com/v6/${apiKey}/latest/${baseCurrency}`,
+    `https://v6.exchangerate-api.com/v6/${apiKey}/latest/USD`,
     {
-      next: { revalidate: 60 }
+      next: { revalidate: LIVE_RATE_REVALIDATE_SECONDS }
     }
   );
 
   if (!response.ok) {
-    throw new Error(`ExchangeRate-API request failed for ${baseCurrency}.`);
+    throw new Error("ExchangeRate-API request failed for USD.");
   }
 
   const payload = (await response.json()) as ExchangeRateApiPayload;
@@ -54,20 +53,32 @@ async function fetchBaseCurrencyRate(
     throw new Error(
       payload["error-type"]
         ? `ExchangeRate-API error: ${payload["error-type"]}.`
-        : `ExchangeRate-API returned an invalid response for ${baseCurrency}.`
+        : "ExchangeRate-API returned an invalid response for USD."
     );
   }
 
-  const rate = payload.conversion_rates?.NGN;
+  const usdToNgn = payload.conversion_rates?.NGN;
+  const usdToGbp = payload.conversion_rates?.GBP;
+  const usdToCad = payload.conversion_rates?.CAD;
 
-  if (typeof rate !== "number") {
-    throw new Error(`NGN rate missing from ExchangeRate-API payload for ${baseCurrency}.`);
+  if (
+    typeof usdToNgn !== "number" ||
+    typeof usdToGbp !== "number" ||
+    typeof usdToCad !== "number"
+  ) {
+    throw new Error("USD, GBP, CAD, or NGN rates are missing from ExchangeRate-API.");
   }
 
   return {
-    baseCurrency,
-    rate,
-    updatedAt: parseUtcDate(payload.time_last_update_utc)
+    updatedAt: parseUtcDate(payload.time_last_update_utc),
+    nextUpdateAt: payload.time_next_update_utc
+      ? parseUtcDate(payload.time_next_update_utc)
+      : new Date(Date.now() + LIVE_RATE_CACHE_TTL_MS).toISOString(),
+    rates: {
+      USD: usdToNgn,
+      GBP: usdToNgn / usdToGbp,
+      CAD: usdToNgn / usdToCad
+    }
   };
 }
 
@@ -75,6 +86,7 @@ export function getFallbackBaseRates(): LiveBaseRatesResponse {
   return {
     provider: "Fallback",
     updatedAt: new Date().toISOString(),
+    sourceUpdatedAt: new Date().toISOString(),
     cachedUntil: new Date(Date.now() + LIVE_RATE_CACHE_TTL_MS).toISOString(),
     rates: baseMidMarketRates
   };
@@ -95,29 +107,23 @@ export async function getLiveBaseRates(): Promise<LiveBaseRatesResponse> {
     );
   }
 
-  const results = await Promise.all(
-    supportedBaseCurrencies.map((baseCurrency) =>
-      fetchBaseCurrencyRate(apiKey, baseCurrency)
-    )
+  const fetchedRates = await fetchUsdBaseRates(apiKey);
+  const now = Date.now();
+  const nextCacheExpiry = Math.min(
+    now + LIVE_RATE_CACHE_TTL_MS,
+    new Date(fetchedRates.nextUpdateAt).getTime()
   );
-
-  const updatedAt = results
-    .map((result) => new Date(result.updatedAt).getTime())
-    .reduce((latest, current) => Math.max(latest, current), 0);
 
   const data: LiveBaseRatesResponse = {
     provider: "ExchangeRate-API",
-    updatedAt: new Date(updatedAt).toISOString(),
-    cachedUntil: new Date(Date.now() + LIVE_RATE_CACHE_TTL_MS).toISOString(),
-    rates: {
-      USD: results.find((result) => result.baseCurrency === "USD")?.rate ?? baseMidMarketRates.USD,
-      GBP: results.find((result) => result.baseCurrency === "GBP")?.rate ?? baseMidMarketRates.GBP,
-      CAD: results.find((result) => result.baseCurrency === "CAD")?.rate ?? baseMidMarketRates.CAD
-    }
+    updatedAt: new Date(now).toISOString(),
+    sourceUpdatedAt: fetchedRates.updatedAt,
+    cachedUntil: new Date(nextCacheExpiry).toISOString(),
+    rates: fetchedRates.rates
   };
 
   globalThis.__saveRateAfricaLiveBaseRatesCache = {
-    expiresAt: Date.now() + LIVE_RATE_CACHE_TTL_MS,
+    expiresAt: nextCacheExpiry,
     data
   };
 

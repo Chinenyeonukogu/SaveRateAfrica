@@ -1,6 +1,12 @@
 "use client";
 
-import { ArrowRight, ShieldCheck, TimerReset, WalletCards } from "lucide-react";
+import {
+  ArrowRight,
+  BadgePercent,
+  ShieldCheck,
+  TimerReset,
+  WalletCards
+} from "lucide-react";
 
 import { senderCountries, type SenderCountry } from "@/lib/providers";
 
@@ -43,8 +49,8 @@ export function HeroSection({
                   Send Money to Nigeria. Compare and save instantly.
                 </h1>
                 <p className="max-w-2xl text-base leading-7 text-white/80 sm:text-lg">
-                  Real-time rates from 15+ providers. No hidden fees. Trusted
-                  by 50,000+ Nigerians in USA, UK and Canada.
+                  Real-time rates from 15+ providers. No hidden fees. Trusted by
+                  Nigerians in USA, UK and Canada.
                 </p>
               </div>
 
@@ -59,7 +65,7 @@ export function HeroSection({
                   <p className="text-xs uppercase tracking-[0.2em] text-white/60">
                     Refresh
                   </p>
-                  <p className="mt-2 text-2xl font-heading">60s</p>
+                  <p className="mt-2 text-2xl font-heading">5 min</p>
                 </div>
                 <div className="rounded-3xl border border-white/20 bg-white/10 p-4 backdrop-blur">
                   <p className="text-xs uppercase tracking-[0.2em] text-white/60">
@@ -83,6 +89,15 @@ export function HeroSection({
                 <div className="inline-flex min-h-12 items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4">
                   <WalletCards className="h-4 w-4" />
                   No sign-up needed
+                </div>
+                <div className="inline-flex min-h-12 items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4">
+                  <BadgePercent className="h-4 w-4" />
+                  <span>
+                    98% Rate Accuracy
+                    <span className="ml-1 text-white/70">
+                      Verified against provider rates daily
+                    </span>
+                  </span>
                 </div>
               </div>
             </div>

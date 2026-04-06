@@ -1,3 +1,5 @@
+import type { SourceCurrency } from "@/lib/providers";
+
 const remittanceProviderLinks: Record<string, string> = {
   wise: "https://wise.com/",
   remitly: "https://www.remitly.com/",
@@ -26,6 +28,12 @@ const creditCardLinks: Record<string, string> = {
 
 type TrackingParams = Record<string, string | number | undefined>;
 
+interface ProviderTrackingParams extends TrackingParams {
+  amount?: number;
+  currency?: SourceCurrency;
+  recipientCurrency?: "NGN";
+}
+
 function withTracking(baseUrl: string, params: TrackingParams, campaign: string) {
   const url = new URL(baseUrl);
 
@@ -42,15 +50,43 @@ function withTracking(baseUrl: string, params: TrackingParams, campaign: string)
   return url.toString();
 }
 
+function buildWiseLink(amount: number, currency: SourceCurrency) {
+  const url = new URL("https://wise.com/send");
+  url.hash = `source-currency=${currency}&target-currency=NGN&amount=${amount}`;
+  return url.toString();
+}
+
+function buildProviderBaseUrl(
+  slug: string,
+  { amount = 500, currency = "USD", recipientCurrency = "NGN" }: ProviderTrackingParams
+) {
+  switch (slug) {
+    case "lemfi":
+      return `https://lemfi.com/send-money?amount=${amount}&from=${currency}&to=${recipientCurrency}`;
+    case "wise":
+      return buildWiseLink(amount, currency);
+    case "remitly":
+      return `https://www.remitly.com/?sourceAmount=${amount}&sourceCurrency=${currency}&destinationCurrency=${recipientCurrency}`;
+    case "worldremit":
+      return `https://www.worldremit.com/en/send-money?amount=${amount}&currency=${currency}&destinationCurrency=${recipientCurrency}`;
+    case "sendwave":
+      return `https://www.sendwave.com/?amount=${amount}&currency=${currency}`;
+    case "moneygram":
+      return `https://www.moneygram.com/mgo/us/en/send/?amount=${amount}&currency=${currency}`;
+    case "western-union":
+      return `https://www.westernunion.com/us/en/send-money/?amount=${amount}&currency=${currency}&destinationCurrency=${recipientCurrency}`;
+    default:
+      return remittanceProviderLinks[slug] ?? "https://www.saverateafrica.com/providers";
+  }
+}
+
 export function getProviderAffiliateLink(
   slug: string,
-  params: TrackingParams = {}
+  params: ProviderTrackingParams = {}
 ) {
-  return withTracking(
-    remittanceProviderLinks[slug] ?? "https://www.saverateafrica.com/providers",
-    params,
-    "remittance-comparison"
-  );
+  const baseUrl = buildProviderBaseUrl(slug, params);
+
+  return withTracking(baseUrl, params, "remittance-comparison");
 }
 
 export function getCreditCardAffiliateLink(
