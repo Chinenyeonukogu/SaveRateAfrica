@@ -93,7 +93,7 @@ export const providers: Provider[] = [
     headline: "Best for predictable, transparent pricing.",
     bestFor: "Bank transfers with mid-market pricing",
     trustNote: "Public fee breakdown and strong app experience.",
-    supportedSenderCountries: ["USA", "UK"],
+    supportedSenderCountries: ["USA", "UK", "Canada"],
     payoutChannels: ["Bank deposit"],
     pros: ["Clear fee split", "Strong app", "Great for repeat transfers"],
     cons: ["Not always the fastest", "Card funding can cost more"]
@@ -359,7 +359,7 @@ export const providers: Provider[] = [
     headline: "Best for high-value mobile transfers.",
     bestFor: "Value-conscious app-first senders",
     trustNote: "Diaspora-focused product messaging and polished UX.",
-    supportedSenderCountries: ["USA", "UK", "Canada"],
+    supportedSenderCountries: ["USA", "UK"],
     payoutChannels: ["Bank deposit"],
     pros: ["Great rate", "Fast", "Polished mobile experience"],
     cons: ["Bank-first payout model", "Less legacy brand familiarity"]
