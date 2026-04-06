@@ -6,7 +6,7 @@ import { fetchRates } from "@/lib/fetchRates";
 export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: "Send Money to Nigeria from USA, UK and Canada",
+  title: "Compare Ways to Save Money Sending to Nigeria | SaveRateAfrica",
   description:
     "Compare real-time NGN remittance rates from 15+ providers, track currency trends, and save on every transfer to Nigeria.",
   alternates: {

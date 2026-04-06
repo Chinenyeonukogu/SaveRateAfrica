@@ -4,7 +4,7 @@ import { BellRing, Crown, Zap } from "lucide-react";
 import { AlertsForm } from "@/components/AlertsForm";
 
 export const metadata: Metadata = {
-  title: "Rate Alerts",
+  title: "NGN Rate Alerts | SaveRateAfrica",
   description:
     "Create email or SMS alerts and get notified when USD, GBP, or CAD routes to Nigeria hit your target rate.",
   alternates: {

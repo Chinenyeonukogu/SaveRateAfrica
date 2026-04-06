@@ -8,34 +8,26 @@ import { SiteFooter } from "@/components/SiteFooter";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.saverateafrica.com"),
-  title: {
-    default: "SaveRateAfrica | Real-Time Rates to Nigeria",
-    template: "%s | SaveRateAfrica"
-  },
+  metadataBase: new URL("https://saverateafrica.com"),
+  title: "Compare Ways to Save Money Sending to Nigeria | SaveRateAfrica",
   description:
-    "Compare real-time remittance rates to Nigeria from USA, UK, and Canada. Save more on fees, spot the best NGN payout, and send smarter.",
+    "Compare 15+ money transfer providers and find the best NGN exchange rate. Save hundreds of naira on every transfer from USA, UK and Canada to Nigeria.",
   applicationName: "SaveRateAfrica",
-  keywords: [
-    "send money to Nigeria from USA",
-    "best exchange rate Nigeria 2025",
-    "Wise vs Remitly Nigeria",
-    "Nigeria remittance comparison",
-    "NGN rate alerts"
-  ],
+  keywords:
+    "send money Nigeria, best NGN exchange rate, compare remittance Nigeria, Nigerian diaspora money transfer, USD to NGN best rate, GBP to NGN best rate, CAD to NGN best rate",
   openGraph: {
-    title: "SaveRateAfrica | Real-Time Rates to Nigeria",
+    title: "Compare Ways to Save Money Sending to Nigeria | SaveRateAfrica",
     description:
-      "Compare real-time remittance rates to Nigeria from USA, UK, and Canada.",
+      "Find the best NGN exchange rate from USA, UK and Canada. Compare 15+ providers instantly.",
     siteName: "SaveRateAfrica",
     type: "website",
-    url: "https://www.saverateafrica.com"
+    url: "https://saverateafrica.com"
   },
   twitter: {
     card: "summary_large_image",
-    title: "SaveRateAfrica | Real-Time Rates to Nigeria",
+    title: "Compare Ways to Save Money Sending to Nigeria",
     description:
-      "Compare live remittance rates to Nigeria and maximize the amount your recipient gets."
+      "Find the best NGN rate from USA, UK and Canada instantly."
   },
   category: "finance"
 };

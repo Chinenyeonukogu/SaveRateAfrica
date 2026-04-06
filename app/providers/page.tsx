@@ -4,7 +4,7 @@ import { ProvidersDirectoryClient } from "@/components/ProvidersDirectoryClient"
 import { providers } from "@/lib/providers";
 
 export const metadata: Metadata = {
-  title: "Providers Directory",
+  title: "All Money Transfer Providers to Nigeria | SaveRateAfrica",
   description:
     "Browse 15+ money transfer providers sending to Nigeria and filter by country, speed, fee range, and rating.",
   alternates: {

@@ -5,7 +5,7 @@ import { CreditCardCard } from "@/components/CreditCardCard";
 import { creditCardOffers } from "@/lib/site-data";
 
 export const metadata: Metadata = {
-  title: "Best Credit Cards for Nigerians in the USA",
+  title: "Best Credit Cards for Nigerians in USA | SaveRateAfrica",
   description:
     "Mobile-friendly credit card recommendations for Nigerians in the USA with low or limited credit history.",
   alternates: {
