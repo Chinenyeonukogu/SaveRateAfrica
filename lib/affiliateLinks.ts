@@ -1,22 +1,22 @@
 import type { SourceCurrency } from "@/lib/providers";
 
 const remittanceProviderLinks: Record<string, string> = {
-  wise: "https://wise.com/",
-  remitly: "https://www.remitly.com/",
-  worldremit: "https://www.worldremit.com/",
-  ofx: "https://www.ofx.com/",
-  sendwave: "https://www.sendwave.com/",
-  "western-union": "https://www.westernunion.com/",
-  moneygram: "https://www.moneygram.com/",
-  pangea: "https://www.pangeamoneytransfer.com/",
-  "chipper-cash": "https://chippercash.com/",
-  lemfi: "https://www.lemfi.com/",
-  "grey-finance": "https://grey.co/",
-  afriex: "https://www.afriex.com/",
-  "flutterwave-send": "https://send.flutterwave.com/",
-  nala: "https://www.nala.com/",
-  "taptap-send": "https://www.taptapsend.com/send-money-to/nigeria",
-  paysend: "https://paysend.com/"
+  wise: "https://wise.com/send",
+  remitly: "https://remitly.com",
+  worldremit: "https://worldremit.com/en",
+  ofx: "https://ofx.com",
+  sendwave: "https://sendwave.com",
+  "western-union": "https://westernunion.com/us/en/send-money",
+  moneygram: "https://moneygram.com/mgo/us/en/send",
+  pangea: "https://pangeamoneytransfer.com",
+  "chipper-cash": "https://chippercash.com",
+  lemfi: "https://lemfi.com/send-money",
+  "grey-finance": "https://grey.co",
+  afriex: "https://afriex.co",
+  "flutterwave-send": "https://send.flutterwave.com",
+  nala: "https://nala.com",
+  "taptap-send": "https://taptapsend.com",
+  paysend: "https://paysend.com"
 };
 
 const creditCardLinks: Record<string, string> = {
@@ -66,15 +66,15 @@ function buildProviderBaseUrl(
     case "wise":
       return buildWiseLink(amount, currency);
     case "remitly":
-      return `https://www.remitly.com/?sourceAmount=${amount}&sourceCurrency=${currency}&destinationCurrency=${recipientCurrency}`;
+      return `https://remitly.com?sourceAmount=${amount}&sourceCurrency=${currency}&destinationCurrency=${recipientCurrency}`;
     case "worldremit":
-      return `https://www.worldremit.com/en/send-money?amount=${amount}&currency=${currency}&destinationCurrency=${recipientCurrency}`;
+      return `https://worldremit.com/en/send-money?amount=${amount}&currency=${currency}&destinationCurrency=${recipientCurrency}`;
     case "sendwave":
-      return `https://www.sendwave.com/?amount=${amount}&currency=${currency}`;
+      return `https://sendwave.com?amount=${amount}&currency=${currency}`;
     case "moneygram":
-      return `https://www.moneygram.com/mgo/us/en/send/?amount=${amount}&currency=${currency}`;
+      return `https://moneygram.com/mgo/us/en/send?amount=${amount}&currency=${currency}`;
     case "western-union":
-      return `https://www.westernunion.com/us/en/send-money/?amount=${amount}&currency=${currency}&destinationCurrency=${recipientCurrency}`;
+      return `https://westernunion.com/us/en/send-money?amount=${amount}&currency=${currency}&destinationCurrency=${recipientCurrency}`;
     default:
       return remittanceProviderLinks[slug] ?? "https://www.saverateafrica.com/providers";
   }
@@ -84,9 +84,19 @@ export function getProviderAffiliateLink(
   slug: string,
   params: ProviderTrackingParams = {}
 ) {
-  const baseUrl = buildProviderBaseUrl(slug, params);
+  const {
+    amount,
+    currency,
+    recipientCurrency,
+    ...trackingParams
+  } = params;
+  const baseUrl = buildProviderBaseUrl(slug, {
+    amount,
+    currency,
+    recipientCurrency
+  });
 
-  return withTracking(baseUrl, params, "remittance-comparison");
+  return withTracking(baseUrl, trackingParams, "remittance-comparison");
 }
 
 export function getCreditCardAffiliateLink(
