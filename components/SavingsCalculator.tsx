@@ -18,7 +18,11 @@ export function SavingsCalculator({ comparison }: SavingsCalculatorProps) {
         Savings calculator
       </p>
       <h3 className="mt-2 font-heading text-3xl">
-        You could save up to {formatNaira(comparison.savings.maxSavings)}
+        You could save up to{" "}
+        {formatNaira(comparison.savings.maxSavings, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        })}
       </h3>
       <p className="mt-3 max-w-xl text-sm leading-7 text-white/75">
         Based on a {comparison.sourceCurrency} {comparison.amount.toLocaleString("en-US")} transfer,
@@ -31,7 +35,11 @@ export function SavingsCalculator({ comparison }: SavingsCalculatorProps) {
           <p className="text-sm text-white/60">Best value</p>
           <p className="mt-2 text-2xl font-heading">{comparison.savings.bestProvider}</p>
           <p className="mt-2 text-sm text-white/75">
-            Recipient gets {formatNaira(comparison.savings.bestAmount)}
+            Recipient gets{" "}
+            {formatNaira(comparison.savings.bestAmount, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            })}
           </p>
         </div>
 
@@ -43,7 +51,11 @@ export function SavingsCalculator({ comparison }: SavingsCalculatorProps) {
           <p className="text-sm text-white/60">Less efficient route</p>
           <p className="mt-2 text-2xl font-heading">{comparison.savings.worstProvider}</p>
           <p className="mt-2 text-sm text-white/75">
-            Recipient gets {formatNaira(comparison.savings.worstAmount)}
+            Recipient gets{" "}
+            {formatNaira(comparison.savings.worstAmount, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            })}
           </p>
         </div>
       </div>
