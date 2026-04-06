@@ -42,7 +42,4 @@ No guesswork. Just smarter sending money!
 
 ## Built By
 Chinenye Onukogu
-
-## Built By
-Chinenye Onukogu
 ###
