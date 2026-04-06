@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowUpRight, BadgeCheck, Clock3, Info, Star } from "lucide-react";
 
-import { formatCompact, formatCurrency, formatNaira, formatRate } from "@/lib/format";
+import { formatCompact, formatNaira, formatRate } from "@/lib/format";
 import type { ComparisonProviderRow } from "@/lib/fetchRates";
 import type { SourceCurrency } from "@/lib/providers";
 
@@ -119,7 +119,7 @@ export function ProviderCard({
               Transfer fee
             </p>
             <p className="mt-2 text-lg font-semibold text-brand-coral">
-              {formatCurrency(provider.fee, sourceCurrency)}
+              {provider.feeDisplayText}
             </p>
           </div>
         ) : null}
@@ -151,6 +151,11 @@ export function ProviderCard({
         <div>
           <p className="text-sm font-semibold text-brand-navy">{provider.bestFor}</p>
           <p className="mt-1 text-sm leading-6 text-brand-navy/70">{provider.trustNote}</p>
+          {provider.transferFeeNote ? (
+            <p className="mt-3 rounded-2xl bg-brand-coral/10 px-3 py-3 text-xs font-medium leading-5 text-brand-navy/75">
+              {provider.transferFeeNote}
+            </p>
+          ) : null}
           <div className="mt-3 flex flex-wrap gap-2">
             {provider.payoutChannels.map((channel) => (
               <span

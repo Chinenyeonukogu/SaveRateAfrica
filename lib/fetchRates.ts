@@ -1,4 +1,5 @@
 import { getProviderAffiliateLink } from "@/lib/affiliateLinks";
+import { formatCurrency } from "@/lib/format";
 import {
   getCurrencyBySender,
   providers,
@@ -21,11 +22,13 @@ export interface ComparisonProviderRow {
   reviewCount: number;
   exchangeRate: number;
   fee: number;
+  feeDisplayText: string;
   amountReceived: number;
   speedHours: number;
   deliveryLabel: string;
   bestFor: string;
   trustNote: string;
+  transferFeeNote?: string;
   payoutChannels: string[];
   sendUrl: string;
   isBestValue: boolean;
@@ -67,7 +70,7 @@ interface FetchRatesOptions {
 
 function clampAmount(value: number) {
   if (!Number.isFinite(value) || value <= 0) {
-    return 1;
+    return 500;
   }
 
   return Math.max(Math.round(value), 1);
@@ -75,6 +78,35 @@ function clampAmount(value: number) {
 
 function roundToTwo(value: number) {
   return Math.round(value * 100) / 100;
+}
+
+function getProviderFee(
+  provider: (typeof providers)[number],
+  sourceCurrency: SourceCurrency,
+  amount: number
+) {
+  if (provider.feeType === "percentage") {
+    const fixedFee = provider.fixedFees?.[sourceCurrency] ?? provider.fees[sourceCurrency];
+    const variableFeePercent = provider.variableFeePercents?.[sourceCurrency] ?? 0;
+
+    return roundToTwo(fixedFee + amount * (variableFeePercent / 100));
+  }
+
+  return roundToTwo(provider.fees[sourceCurrency]);
+}
+
+function getProviderFeeDisplayText(
+  provider: (typeof providers)[number],
+  sourceCurrency: SourceCurrency,
+  fee: number
+) {
+  const formattedFee = formatCurrency(fee, sourceCurrency);
+
+  if (provider.feeDisplayPrefix) {
+    return `${provider.feeDisplayPrefix} ${formattedFee}`;
+  }
+
+  return formattedFee;
 }
 
 function getRatesEndpointUrl(
@@ -155,12 +187,14 @@ export function buildComparisonFromLiveRates({
   const rows = providers
     .filter((provider) => provider.supportedSenderCountries.includes(senderCountry))
     .map((provider) => {
-      const fee = roundToTwo(provider.fees[sourceCurrency]);
+      const fee = getProviderFee(provider, sourceCurrency, adjustedAmount);
       const exchangeRate = roundToTwo(
         baseMidMarketRate * provider.rateMultiplier[sourceCurrency]
       );
+      const grossRecipientAmount = adjustedAmount * exchangeRate;
+      const feeInNaira = fee * exchangeRate;
       const amountReceived = roundToTwo(
-        Math.max(adjustedAmount - fee, 0) * exchangeRate
+        Math.max(grossRecipientAmount - feeInNaira, 1)
       );
 
       return {
@@ -172,11 +206,13 @@ export function buildComparisonFromLiveRates({
         reviewCount: provider.reviewCount,
         exchangeRate,
         fee,
+        feeDisplayText: getProviderFeeDisplayText(provider, sourceCurrency, fee),
         amountReceived,
         speedHours: provider.speedHours,
         deliveryLabel: provider.deliveryLabel,
         bestFor: provider.bestFor,
         trustNote: provider.trustNote,
+        transferFeeNote: provider.transferFeeNote,
         payoutChannels: provider.payoutChannels,
         sendUrl: getProviderAffiliateLink(provider.slug, {
           origin: senderCountry,

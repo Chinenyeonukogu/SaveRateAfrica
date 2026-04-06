@@ -3,6 +3,7 @@ export type SourceCurrency = "USD" | "GBP" | "CAD";
 export type ComparisonSort = "best-rate" | "lowest-fee" | "fastest";
 export type SpeedBand = "instant" | "same-day" | "standard";
 export type FeeBand = "low" | "medium" | "premium";
+export type FeeType = "flat" | "percentage";
 
 export interface SenderCountryOption {
   code: SenderCountry;
@@ -23,7 +24,12 @@ export interface Provider {
   speedBand: SpeedBand;
   deliveryLabel: string;
   feeBand: FeeBand;
+  feeType?: FeeType;
   fees: Record<SourceCurrency, number>;
+  fixedFees?: Partial<Record<SourceCurrency, number>>;
+  variableFeePercents?: Partial<Record<SourceCurrency, number>>;
+  feeDisplayPrefix?: string;
+  transferFeeNote?: string;
   rateMultiplier: Record<SourceCurrency, number>;
   summary: string;
   headline: string;
@@ -73,11 +79,15 @@ export const providers: Provider[] = [
     logoTo: "#17B6B2",
     rating: 4.8,
     reviewCount: 14820,
-    speedHours: 0.02,
-    speedBand: "instant",
-    deliveryLabel: "In seconds",
+    speedHours: 6,
+    speedBand: "same-day",
+    deliveryLabel: "Same day",
     feeBand: "medium",
-    fees: { USD: 7.79, GBP: 6.14, CAD: 8.72 },
+    feeType: "percentage",
+    fees: { USD: 0.55, GBP: 0.45, CAD: 0.65 },
+    fixedFees: { USD: 0.55, GBP: 0.45, CAD: 0.65 },
+    variableFeePercents: { USD: 1.27, GBP: 1.22, CAD: 1.24 },
+    feeDisplayPrefix: "From",
     rateMultiplier: { USD: 0.9965, GBP: 0.9965, CAD: 0.9965 },
     summary: "Transparent pricing and strong bank transfer rates for recurring senders.",
     headline: "Best for predictable, transparent pricing.",
@@ -95,9 +105,9 @@ export const providers: Provider[] = [
     logoTo: "#FF8F00",
     rating: 4.7,
     reviewCount: 20411,
-    speedHours: 0.25,
+    speedHours: 0.2,
     speedBand: "instant",
-    deliveryLabel: "Instant",
+    deliveryLabel: "Minutes",
     feeBand: "low",
     fees: { USD: 3.99, GBP: 3.99, CAD: 3.99 },
     rateMultiplier: { USD: 0.9955, GBP: 0.9955, CAD: 0.9955 },
@@ -141,7 +151,7 @@ export const providers: Provider[] = [
     reviewCount: 16754,
     speedHours: 0.02,
     speedBand: "instant",
-    deliveryLabel: "In seconds",
+    deliveryLabel: "Instant",
     feeBand: "low",
     fees: { USD: 0, GBP: 0, CAD: 0 },
     rateMultiplier: { USD: 0.9982, GBP: 0.9982, CAD: 0.9982 },
@@ -161,11 +171,13 @@ export const providers: Provider[] = [
     logoTo: "#FFD600",
     rating: 4.2,
     reviewCount: 28911,
-    speedHours: 0.4,
+    speedHours: 0.5,
     speedBand: "instant",
     deliveryLabel: "Minutes",
     feeBand: "premium",
     fees: { USD: 8.99, GBP: 8.99, CAD: 8.99 },
+    transferFeeNote:
+      "Rate includes exchange rate margin. Final rate confirmed at checkout.",
     rateMultiplier: { USD: 0.993, GBP: 0.993, CAD: 0.993 },
     summary: "Excellent brand recognition and one of the strongest cash pickup footprints.",
     headline: "Best for cash pickup reach.",
@@ -205,9 +217,9 @@ export const providers: Provider[] = [
     logoTo: "#EC407A",
     rating: 4.3,
     reviewCount: 5114,
-    speedHours: 0.5,
+    speedHours: 0.4,
     speedBand: "instant",
-    deliveryLabel: "Instant",
+    deliveryLabel: "Minutes",
     feeBand: "low",
     fees: { USD: 4.49, GBP: 4.49, CAD: 4.49 },
     rateMultiplier: { USD: 0.9968, GBP: 0.9968, CAD: 0.9968 },
@@ -229,7 +241,7 @@ export const providers: Provider[] = [
     reviewCount: 9010,
     speedHours: 0.3,
     speedBand: "instant",
-    deliveryLabel: "Instant",
+    deliveryLabel: "Minutes",
     feeBand: "low",
     fees: { USD: 0, GBP: 0, CAD: 0 },
     rateMultiplier: { USD: 0.9975, GBP: 0.9975, CAD: 0.9975 },
@@ -271,9 +283,9 @@ export const providers: Provider[] = [
     logoTo: "#0A1628",
     rating: 4.6,
     reviewCount: 7721,
-    speedHours: 0.1,
-    speedBand: "instant",
-    deliveryLabel: "Instant",
+    speedHours: 8,
+    speedBand: "same-day",
+    deliveryLabel: "Same day",
     feeBand: "low",
     fees: { USD: 0.02, GBP: 0.02, CAD: 0.03 },
     rateMultiplier: { USD: 1.0, GBP: 0.999, CAD: 0.999 },
@@ -295,7 +307,7 @@ export const providers: Provider[] = [
     reviewCount: 6433,
     speedHours: 0.01,
     speedBand: "instant",
-    deliveryLabel: "In seconds",
+    deliveryLabel: "Instant",
     feeBand: "low",
     fees: { USD: 0, GBP: 0, CAD: 0 },
     rateMultiplier: { USD: 0.9972, GBP: 0.9972, CAD: 0.9972 },
@@ -315,9 +327,9 @@ export const providers: Provider[] = [
     logoTo: "#5D4037",
     rating: 4.4,
     reviewCount: 5860,
-    speedHours: 0.15,
-    speedBand: "instant",
-    deliveryLabel: "Within minutes",
+    speedHours: 6,
+    speedBand: "same-day",
+    deliveryLabel: "Same day",
     feeBand: "low",
     fees: { USD: 1, GBP: 1, CAD: 1 },
     rateMultiplier: { USD: 0.989, GBP: 0.989, CAD: 0.988 },
@@ -339,7 +351,7 @@ export const providers: Provider[] = [
     reviewCount: 8344,
     speedHours: 0.12,
     speedBand: "instant",
-    deliveryLabel: "In minutes",
+    deliveryLabel: "Minutes",
     feeBand: "low",
     fees: { USD: 0.99, GBP: 0.99, CAD: 0.99 },
     rateMultiplier: { USD: 0.9978, GBP: 0.9978, CAD: 0.9978 },
@@ -361,7 +373,7 @@ export const providers: Provider[] = [
     reviewCount: 11542,
     speedHours: 0.17,
     speedBand: "instant",
-    deliveryLabel: "In minutes",
+    deliveryLabel: "Minutes",
     feeBand: "low",
     fees: { USD: 0, GBP: 0, CAD: 0 },
     rateMultiplier: { USD: 0.995, GBP: 0.995, CAD: 0.995 },
@@ -381,9 +393,9 @@ export const providers: Provider[] = [
     logoTo: "#00B0FF",
     rating: 4.3,
     reviewCount: 12498,
-    speedHours: 24,
+    speedHours: 36,
     speedBand: "standard",
-    deliveryLabel: "1 business day",
+    deliveryLabel: "1-2 business days",
     feeBand: "medium",
     fees: { USD: 1.99, GBP: 1.99, CAD: 1.99 },
     rateMultiplier: { USD: 0.987, GBP: 0.986, CAD: 0.986 },

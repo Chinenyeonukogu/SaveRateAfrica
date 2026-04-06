@@ -4,7 +4,7 @@ import { ArrowLeft, ArrowUpRight, BadgeCheck, Clock3, Star } from "lucide-react"
 import { notFound } from "next/navigation";
 
 import { fetchRates } from "@/lib/fetchRates";
-import { formatCompact, formatCurrency, formatNaira } from "@/lib/format";
+import { formatCompact, formatNaira } from "@/lib/format";
 import { getProviderAffiliateLink } from "@/lib/affiliateLinks";
 import { getProviderBySlug, providers } from "@/lib/providers";
 
@@ -147,7 +147,7 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
                     <div className="rounded-3xl bg-white/5 p-4">
                       <p className="text-sm text-white/60">Transfer fee</p>
                       <p className="mt-2 text-lg font-semibold">
-                        {formatCurrency(providerSnapshot.fee, comparison.sourceCurrency)}
+                        {providerSnapshot.feeDisplayText}
                       </p>
                     </div>
                     <div className="rounded-3xl bg-white/5 p-4">

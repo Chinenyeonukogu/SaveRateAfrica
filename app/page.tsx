@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   const initialComparison = await fetchRates({
-    amount: 1,
+    amount: 500,
     senderCountry: "USA"
   });
 

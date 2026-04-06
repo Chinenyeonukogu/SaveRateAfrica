@@ -148,7 +148,7 @@ export function HeroSection({
                       value={amount}
                       onBlur={() => {
                         const normalizedAmount = Math.max(
-                          Number.parseInt(amount || "1", 10) || 1,
+                          Number.parseInt(amount || "500", 10) || 500,
                           1
                         );
                         onAmountChange(String(normalizedAmount));
