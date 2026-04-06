@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { MobileNav } from "@/components/MobileNav";
 
 import "./globals.css";
@@ -48,6 +49,7 @@ export default function RootLayout({
       <body className="bg-brand-light text-brand-navy">
         {children}
         <MobileNav />
+        <SpeedInsights />
       </body>
     </html>
   );
