@@ -1,10 +1,18 @@
 import type { SourceCurrency } from "@/lib/providers";
 
-export function formatCurrency(amount: number, currency: SourceCurrency) {
+export function formatCurrency(
+  amount: number,
+  currency: SourceCurrency,
+  options: {
+    minimumFractionDigits?: number;
+    maximumFractionDigits?: number;
+  } = {}
+) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency,
-    maximumFractionDigits: 2
+    minimumFractionDigits: options.minimumFractionDigits ?? 2,
+    maximumFractionDigits: options.maximumFractionDigits ?? 2
   }).format(amount);
 }
 
