@@ -11,6 +11,8 @@ import {
   Star
 } from "lucide-react";
 
+import { AIAssistant } from "@/components/AIAssistant";
+import { BestTimeToSend } from "@/components/BestTimeToSend";
 import { ComparisonTable } from "@/components/ComparisonTable";
 import { HeroSection } from "@/components/HeroSection";
 import { RateChart } from "@/components/RateChart";
@@ -331,6 +333,8 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
               </div>
             </section>
 
+            <BestTimeToSend comparison={comparison} />
+
             <div ref={alertsRef} className="scroll-mt-24">
               <AlertsForm />
             </div>
@@ -484,6 +488,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
           </button>
         </div>
       </main>
+      <AIAssistant comparison={comparison} />
     </>
   );
 }

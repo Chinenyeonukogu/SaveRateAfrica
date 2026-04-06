@@ -8,6 +8,7 @@
     "start": "./node_modules/.bin/next start"
   },
   "dependencies": {
+    "@google/genai": "^1.48.0",
     "@vercel/analytics": "^2.0.1",
     "framer-motion": "^11.1.7",
     "lucide-react": "^0.378.0",
