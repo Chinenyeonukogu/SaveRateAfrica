@@ -93,7 +93,7 @@ export const providers: Provider[] = [
     headline: "Best for predictable, transparent pricing.",
     bestFor: "Bank transfers with mid-market pricing",
     trustNote: "Public fee breakdown and strong app experience.",
-    supportedSenderCountries: ["USA", "UK", "Canada"],
+    supportedSenderCountries: ["USA", "UK"],
     payoutChannels: ["Bank deposit"],
     pros: ["Clear fee split", "Strong app", "Great for repeat transfers"],
     cons: ["Not always the fastest", "Card funding can cost more"]
