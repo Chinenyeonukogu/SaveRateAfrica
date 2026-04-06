@@ -1,5 +1,5 @@
 import { Analytics } from '@vercel/analytics/react'
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 
 import { MobileNav } from "@/components/MobileNav";
@@ -29,7 +29,19 @@ export const metadata: Metadata = {
     description:
       "Find the best NGN rate from USA, UK and Canada instantly."
   },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "32x32" },
+      { url: "/icon.png", sizes: "512x512" }
+    ],
+    apple: "/apple-icon.png",
+    shortcut: "/favicon.ico"
+  },
   category: "finance"
+};
+
+export const viewport: Viewport = {
+  themeColor: "#00C853"
 };
 
 export default function RootLayout({
