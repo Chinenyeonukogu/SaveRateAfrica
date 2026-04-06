@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react'
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
@@ -48,6 +49,7 @@ export default function RootLayout({
       <body className="bg-brand-light text-brand-navy">
         {children}
         <MobileNav />
+        <Analytics />
       </body>
     </html>
   );
