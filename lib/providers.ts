@@ -287,7 +287,7 @@ export const providers: Provider[] = [
     speedBand: "same-day",
     deliveryLabel: "Same day",
     feeBand: "low",
-    fees: { USD: 0.02, GBP: 0.02, CAD: 0.03 },
+    fees: { USD: 0, GBP: 0, CAD: 0 },
     rateMultiplier: { USD: 1.0, GBP: 0.999, CAD: 0.999 },
     summary: "Good option for diaspora professionals already using multicurrency accounts.",
     headline: "Best for freelancers and digital earners.",
@@ -295,7 +295,7 @@ export const providers: Provider[] = [
     trustNote: "Appeals to remote workers and multi-currency account holders.",
     supportedSenderCountries: ["USA", "UK", "Canada"],
     payoutChannels: ["Bank deposit"],
-    pros: ["Low fee", "Great for freelancers", "Strong multicurrency positioning"],
+    pros: ["No Fee ✅", "Great for freelancers", "Strong multicurrency positioning"],
     cons: ["Less mainstream brand recognition", "Not always instant"]
   },
   {

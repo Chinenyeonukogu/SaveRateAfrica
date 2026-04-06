@@ -60,6 +60,7 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
   const providerSnapshot = comparison.providers.find(
     (item) => item.slug === provider.slug
   );
+  const providerHasFee = (providerSnapshot?.fee ?? 0) > 0;
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -121,6 +122,11 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
                   <BadgeCheck className="h-4 w-4 text-brand-green" />
                   {formatCompact(provider.reviewCount)} user reviews
                 </div>
+                {!providerHasFee ? (
+                  <div className="inline-flex min-h-12 items-center gap-2 rounded-2xl bg-brand-green px-4 font-semibold text-white">
+                    No Fee ✅
+                  </div>
+                ) : null}
               </div>
             </div>
 
@@ -143,13 +149,15 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
                       })}
                     </p>
                   </div>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <div className="rounded-3xl bg-white/5 p-4">
-                      <p className="text-sm text-white/60">Transfer fee</p>
-                      <p className="mt-2 text-lg font-semibold">
-                        {providerSnapshot.feeDisplayText}
-                      </p>
-                    </div>
+                  <div className={`grid gap-4 ${providerHasFee ? "sm:grid-cols-2" : "sm:grid-cols-1"}`}>
+                    {providerHasFee ? (
+                      <div className="rounded-3xl bg-white/5 p-4">
+                        <p className="text-sm text-white/60">Transfer fee</p>
+                        <p className="mt-2 text-lg font-semibold">
+                          {providerSnapshot.feeDisplayText}
+                        </p>
+                      </div>
+                    ) : null}
                     <div className="rounded-3xl bg-white/5 p-4">
                       <p className="text-sm text-white/60">Delivery</p>
                       <p className="mt-2 text-lg font-semibold">
