@@ -9,6 +9,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://saverateafrica.com"),
+  manifest: "/manifest.webmanifest",
   title: "Compare Ways to Save Money Sending to Nigeria | SaveRateAfrica",
   description:
     "Compare 10+ money transfer providers and find the best NGN exchange rate. Save hundreds of naira on every transfer from USA, UK and Canada to Nigeria.",
@@ -32,9 +33,12 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
-      { url: "/favicon.ico" }
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icons/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+      { url: "/icons/favicon-16x16.png", type: "image/png", sizes: "16x16" }
     ],
-    apple: "/apple-icon.png"
+    shortcut: ["/favicon.ico"],
+    apple: [{ url: "/icons/apple-touch-icon.png", sizes: "180x180" }]
   },
   category: "finance"
 };
@@ -50,9 +54,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-      </head>
       <body className="bg-brand-light text-brand-navy">
         {children}
         <SiteFooter />
