@@ -133,28 +133,6 @@ export const providers: Provider[] = [
     cons: ["Rates can trail the leaders", "Fees vary by route"]
   },
   {
-    slug: "ofx",
-    name: "OFX",
-    logoFrom: "#14213D",
-    logoTo: "#415A77",
-    rating: 4.4,
-    reviewCount: 6420,
-    speedHours: 30,
-    speedBand: "standard",
-    deliveryLabel: "1-2 days",
-    feeBand: "low",
-    fees: { USD: 0.99, GBP: 0.99, CAD: 0.99 },
-    rateMultiplier: { USD: 0.995, GBP: 0.996, CAD: 0.995 },
-    summary: "Competitive for larger transfers where percentage spread matters most.",
-    headline: "Best for larger transfer sizes.",
-    bestFor: "Five-figure transfers and business senders",
-    trustNote: "Popular with larger-value international transfers.",
-    supportedSenderCountries: ["USA", "UK", "Canada"],
-    payoutChannels: ["Bank deposit"],
-    pros: ["Low flat fees", "Good for large sends", "Dedicated support"],
-    cons: ["Slower than app-first providers", "Less suited for urgent cash"]
-  },
-  {
     slug: "sendwave",
     name: "Sendwave",
     logoFrom: "#00C853",

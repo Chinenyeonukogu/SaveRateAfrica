@@ -4,7 +4,6 @@ const remittanceProviderLinks: Record<string, string> = {
   wise: "https://wise.com/send",
   remitly: "https://remitly.com",
   worldremit: "https://worldremit.com/en",
-  ofx: "https://ofx.com",
   sendwave: "https://sendwave.com",
   "western-union": "https://westernunion.com/us/en/send-money",
   moneygram: "https://moneygram.com/mgo/us/en/send",
