@@ -12,8 +12,8 @@ import {
 export const revalidate = 300;
 
 function getRequestAmount(value: string | null) {
-  const parsedValue = Number.parseFloat(value ?? "500");
-  return Number.isFinite(parsedValue) ? parsedValue : 500;
+  const parsedValue = Number.parseFloat(value ?? "1");
+  return Number.isFinite(parsedValue) ? parsedValue : 1;
 }
 
 function getRequestSenderCountry(value: string | null): SenderCountry {

@@ -19,6 +19,17 @@ interface HeroSectionProps {
   onCompare: () => void;
 }
 
+const quickAmounts = [50, 100, 200, 500, 1000] as const;
+
+const currencySymbolByCountry: Record<
+  SenderCountry,
+  { code: string; symbol: string }
+> = {
+  USA: { code: "USD", symbol: "$" },
+  UK: { code: "GBP", symbol: "\u00a3" },
+  Canada: { code: "CAD", symbol: "CA$" }
+};
+
 export function HeroSection({
   amount,
   senderCountry,
@@ -27,6 +38,8 @@ export function HeroSection({
   onSenderCountryChange,
   onCompare
 }: HeroSectionProps) {
+  const currencyMeta = currencySymbolByCountry[senderCountry];
+
   return (
     <section className="overflow-hidden px-4 pt-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl rounded-[32px] bg-hero-mesh px-5 py-7 text-white shadow-glow sm:px-8 sm:py-10 lg:px-12 lg:py-14">
@@ -123,18 +136,49 @@ export function HeroSection({
                     Send amount
                   </span>
                   <div className="mt-2 flex min-h-14 items-center rounded-2xl border border-brand-navy/10 bg-brand-light px-4">
-                    <span className="pr-3 font-mono text-lg text-brand-navy/70">
-                      {senderCountries.find((item) => item.code === senderCountry)?.currency}
+                    <span className="pr-3 font-mono text-sm font-semibold text-brand-navy/70 sm:text-base">
+                      {currencyMeta.code} {currencyMeta.symbol}
                     </span>
                     <input
                       className="w-full bg-transparent text-2xl font-heading text-brand-navy outline-none placeholder:text-brand-navy/40"
-                      inputMode="decimal"
-                      min={50}
-                      placeholder="500"
-                      type="number"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      placeholder="Enter amount"
+                      type="text"
                       value={amount}
-                      onChange={(event) => onAmountChange(event.target.value)}
+                      onBlur={() => {
+                        const normalizedAmount = Math.max(
+                          Number.parseInt(amount || "1", 10) || 1,
+                          1
+                        );
+                        onAmountChange(String(normalizedAmount));
+                      }}
+                      onChange={(event) =>
+                        onAmountChange(event.target.value.replace(/\D/g, ""))
+                      }
                     />
+                  </div>
+
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {quickAmounts.map((quickAmount) => {
+                      const isActive = amount === String(quickAmount);
+
+                      return (
+                        <button
+                          key={quickAmount}
+                          className={`min-h-11 rounded-full px-4 text-sm font-semibold transition ${
+                            isActive
+                              ? "bg-brand-green text-white shadow-glow"
+                              : "bg-brand-light text-brand-navy hover:bg-brand-navy hover:text-white"
+                          }`}
+                          type="button"
+                          onClick={() => onAmountChange(String(quickAmount))}
+                        >
+                          {currencyMeta.symbol}
+                          {quickAmount.toLocaleString("en-US")}
+                        </button>
+                      );
+                    })}
                   </div>
                 </label>
 

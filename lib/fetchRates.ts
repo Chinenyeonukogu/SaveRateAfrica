@@ -42,6 +42,7 @@ export interface ComparisonResult {
   cachedUntil: string;
   rateProvider: LiveBaseRatesResponse["provider"];
   baseMidMarketRate: number;
+  liveBaseRates: Record<SourceCurrency, number>;
   providers: ComparisonProviderRow[];
   savings: {
     bestProvider: string;
@@ -66,10 +67,10 @@ interface FetchRatesOptions {
 
 function clampAmount(value: number) {
   if (!Number.isFinite(value) || value <= 0) {
-    return 500;
+    return 1;
   }
 
-  return Math.min(Math.max(Math.round(value), 50), 25000);
+  return Math.max(Math.round(value), 1);
 }
 
 function roundToTwo(value: number) {
@@ -141,7 +142,7 @@ function sortRows(rows: ComparisonProviderRow[], sortBy: ComparisonSort) {
   );
 }
 
-function buildComparison({
+export function buildComparisonFromLiveRates({
   amount,
   senderCountry,
   sortBy,
@@ -213,6 +214,7 @@ function buildComparison({
     cachedUntil: liveBaseRates.cachedUntil,
     rateProvider: liveBaseRates.provider,
     baseMidMarketRate,
+    liveBaseRates: liveBaseRates.rates,
     providers: sortedProviders,
     savings: {
       bestProvider: bestProvider.name,
@@ -245,7 +247,7 @@ export async function getLiveComparison(
     liveBaseRates = getFallbackBaseRates();
   }
 
-  return buildComparison({
+  return buildComparisonFromLiveRates({
     amount: adjustedAmount,
     senderCountry,
     sortBy,

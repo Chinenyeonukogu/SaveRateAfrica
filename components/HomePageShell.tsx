@@ -17,7 +17,11 @@ import { RateChart } from "@/components/RateChart";
 import { SavingsCalculator } from "@/components/SavingsCalculator";
 import { AlertsForm } from "@/components/AlertsForm";
 import { formatNaira } from "@/lib/format";
-import { fetchRates, type ComparisonResult } from "@/lib/fetchRates";
+import {
+  buildComparisonFromLiveRates,
+  fetchRates,
+  type ComparisonResult
+} from "@/lib/fetchRates";
 import { RateDisclaimer } from "@/components/RateDisclaimer";
 import {
   faqItems,
@@ -47,13 +51,17 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
   const amountRef = useRef(amount);
   const senderCountryRef = useRef(senderCountry);
   const sortByRef = useRef(sortBy);
+  const latestRequestIdRef = useRef(0);
 
   async function refreshComparison(
     nextSort = sortByRef.current,
     signal?: AbortSignal
   ) {
     const parsedAmount = Number.parseFloat(amountRef.current);
-    const normalizedAmount = Number.isFinite(parsedAmount) ? parsedAmount : 500;
+    const normalizedAmount = Number.isFinite(parsedAmount) && parsedAmount > 0
+      ? parsedAmount
+      : 1;
+    const requestId = ++latestRequestIdRef.current;
 
     setIsLoading(true);
     setErrorMessage(null);
@@ -70,17 +78,27 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
         }
       );
 
+      if (signal?.aborted || requestId !== latestRequestIdRef.current) {
+        return null;
+      }
+
       setComparison(nextComparison);
       setNextRefreshAt(nextComparison.cachedUntil);
       return nextComparison;
     } catch (error) {
+      if (signal?.aborted || requestId !== latestRequestIdRef.current) {
+        return null;
+      }
+
       setErrorMessage(
         error instanceof Error ? error.message : "Unable to refresh rates right now."
       );
       setNextRefreshAt(new Date(Date.now() + 60_000).toISOString());
       return null;
     } finally {
-      setIsLoading(false);
+      if (requestId === latestRequestIdRef.current) {
+        setIsLoading(false);
+      }
     }
   }
 
@@ -97,14 +115,29 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
   }, [sortBy]);
 
   useEffect(() => {
-    const controller = new AbortController();
+    setReviewCountry(senderCountry);
+  }, [senderCountry]);
 
-    void refreshComparison(sortByRef.current, controller.signal);
+  useEffect(() => {
+    const parsedAmount = Number.parseFloat(amount);
+    const normalizedAmount =
+      Number.isFinite(parsedAmount) && parsedAmount > 0 ? parsedAmount : 1;
 
-    return () => {
-      controller.abort();
-    };
-  }, []);
+    setComparison((currentComparison) =>
+      buildComparisonFromLiveRates({
+        amount: normalizedAmount,
+        senderCountry,
+        sortBy,
+        liveBaseRates: {
+          provider: currentComparison.rateProvider,
+          updatedAt: currentComparison.updatedAt,
+          sourceUpdatedAt: currentComparison.sourceUpdatedAt,
+          cachedUntil: currentComparison.cachedUntil,
+          rates: currentComparison.liveBaseRates
+        }
+      })
+    );
+  }, [amount, senderCountry, sortBy]);
 
   useEffect(() => {
     const msUntilRefresh = Math.max(
@@ -120,15 +153,12 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
     };
   }, [nextRefreshAt]);
 
-  async function handleCompare() {
-    await refreshComparison(sortBy);
-    setReviewCountry(senderCountry);
+  function handleCompare() {
     compareRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  async function handleSortChange(nextSort: ComparisonSort) {
+  function handleSortChange(nextSort: ComparisonSort) {
     setSortBy(nextSort);
-    await refreshComparison(nextSort);
   }
 
   const filteredReviews = providerReviews.filter(
