@@ -11,12 +11,14 @@ import { ProviderCard } from "@/components/ProviderCard";
 
 interface ComparisonTableProps {
   comparison: ComparisonResult;
+  errorMessage?: string | null;
   isLoading: boolean;
   onSortChange: (value: ComparisonSort) => void;
 }
 
 export function ComparisonTable({
   comparison,
+  errorMessage,
   isLoading,
   onSortChange
 }: ComparisonTableProps) {
@@ -84,6 +86,17 @@ export function ComparisonTable({
         sourceCurrency={comparison.sourceCurrency}
         onSortChange={onSortChange}
       />
+
+      <div className="flex flex-col gap-2 text-sm text-brand-navy/70 md:flex-row md:items-center md:justify-between">
+        <p>Last updated: {formatDateTime(comparison.updatedAt)}</p>
+        <p>Live rates via ExchangeRate-API. Auto-refreshes every 60 seconds.</p>
+      </div>
+
+      {errorMessage ? (
+        <div className="rounded-[24px] border border-brand-coral/20 bg-brand-coral/10 px-5 py-4 text-sm font-medium text-brand-navy">
+          Live rate refresh failed. Showing the most recent available comparison. {errorMessage}
+        </div>
+      ) : null}
 
       <div className="relative">
         {isLoading && (

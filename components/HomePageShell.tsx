@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
   LineChart,
@@ -17,7 +17,7 @@ import { RateChart } from "@/components/RateChart";
 import { SavingsCalculator } from "@/components/SavingsCalculator";
 import { AlertsForm } from "@/components/AlertsForm";
 import { formatNaira } from "@/lib/format";
-import type { ComparisonResult } from "@/lib/fetchRates";
+import { fetchRates, type ComparisonResult } from "@/lib/fetchRates";
 import {
   faqItems,
   howItWorksSteps,
@@ -42,30 +42,30 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
   const [sortBy, setSortBy] = useState<ComparisonSort>(initialComparison.sortBy);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const amountRef = useRef(amount);
+  const senderCountryRef = useRef(senderCountry);
+  const sortByRef = useRef(sortBy);
 
-  async function refreshComparison(nextSort = sortBy) {
-    const parsedAmount = Number.parseFloat(amount);
+  async function refreshComparison(nextSort = sortByRef.current, signal?: AbortSignal) {
+    const parsedAmount = Number.parseFloat(amountRef.current);
     const normalizedAmount = Number.isFinite(parsedAmount) ? parsedAmount : 500;
 
     setIsLoading(true);
     setErrorMessage(null);
 
     try {
-      const params = new URLSearchParams({
-        amount: String(normalizedAmount),
-        senderCountry,
-        sortBy: nextSort
-      });
-      const response = await fetch(`/api/rates?${params.toString()}`);
-      const payload = (await response.json()) as ComparisonResult & {
-        error?: string;
-      };
+      const nextComparison = await fetchRates(
+        {
+          amount: normalizedAmount,
+          senderCountry: senderCountryRef.current,
+          sortBy: nextSort
+        },
+        {
+          signal
+        }
+      );
 
-      if (!response.ok) {
-        throw new Error(payload.error ?? "Unable to refresh rates right now.");
-      }
-
-      setComparison(payload);
+      setComparison(nextComparison);
     } catch (error) {
       setErrorMessage(
         error instanceof Error ? error.message : "Unable to refresh rates right now."
@@ -74,6 +74,32 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
       setIsLoading(false);
     }
   }
+
+  useEffect(() => {
+    amountRef.current = amount;
+  }, [amount]);
+
+  useEffect(() => {
+    senderCountryRef.current = senderCountry;
+  }, [senderCountry]);
+
+  useEffect(() => {
+    sortByRef.current = sortBy;
+  }, [sortBy]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const intervalId = window.setInterval(() => {
+      void refreshComparison(sortByRef.current);
+    }, 60_000);
+
+    void refreshComparison(sortByRef.current, controller.signal);
+
+    return () => {
+      controller.abort();
+      window.clearInterval(intervalId);
+    };
+  }, []);
 
   async function handleCompare() {
     await refreshComparison(sortBy);
@@ -110,16 +136,11 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
             <div ref={compareRef}>
               <ComparisonTable
                 comparison={comparison}
+                errorMessage={errorMessage}
                 isLoading={isLoading}
                 onSortChange={handleSortChange}
               />
             </div>
-
-            {errorMessage ? (
-              <div className="rounded-[24px] border border-brand-coral/20 bg-brand-coral/10 px-5 py-4 text-sm font-medium text-brand-navy">
-                {errorMessage}
-              </div>
-            ) : null}
 
             <section className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
               <div className="rounded-[28px] border border-brand-navy/10 bg-white p-6 shadow-float">

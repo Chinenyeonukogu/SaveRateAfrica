@@ -1,12 +1,12 @@
 import { getProviderAffiliateLink } from "@/lib/affiliateLinks";
 import {
-  baseMidMarketRates,
   getCurrencyBySender,
   providers,
   type ComparisonSort,
   type SenderCountry,
   type SourceCurrency
 } from "@/lib/providers";
+import type { LiveBaseRatesResponse } from "@/lib/exchangeRateApi";
 
 export interface ComparisonProviderRow {
   slug: string;
@@ -51,18 +51,10 @@ interface FetchRatesArgs {
   sortBy?: ComparisonSort;
 }
 
-declare global {
-  // eslint-disable-next-line no-var
-  var __saveRateAfricaRatesCache:
-    | Map<string, { expiresAt: number; data: ComparisonResult }>
-    | undefined;
-}
-
-const RATE_CACHE_TTL_MS = 60_000;
-const rateCache = globalThis.__saveRateAfricaRatesCache ?? new Map();
-
-if (!globalThis.__saveRateAfricaRatesCache) {
-  globalThis.__saveRateAfricaRatesCache = rateCache;
+interface FetchRatesOptions {
+  apiBaseUrl?: string;
+  allowFallback?: boolean;
+  signal?: AbortSignal;
 }
 
 function clampAmount(value: number) {
@@ -75,6 +67,38 @@ function clampAmount(value: number) {
 
 function round(value: number) {
   return Math.round(value * 100) / 100;
+}
+
+function getRatesEndpointUrl(apiBaseUrl?: string) {
+  if (typeof window !== "undefined") {
+    return "/api/rates";
+  }
+
+  if (apiBaseUrl) {
+    return new URL("/api/rates", apiBaseUrl).toString();
+  }
+
+  throw new Error("A base URL is required to call /api/rates on the server.");
+}
+
+async function fetchLiveBaseRatesFromApi({
+  apiBaseUrl,
+  signal
+}: Pick<FetchRatesOptions, "apiBaseUrl" | "signal">): Promise<LiveBaseRatesResponse> {
+  const response = await fetch(getRatesEndpointUrl(apiBaseUrl), {
+    cache: "no-store",
+    signal
+  });
+
+  const payload = (await response.json()) as LiveBaseRatesResponse & {
+    error?: string;
+  };
+
+  if (!response.ok) {
+    throw new Error(payload.error ?? "Unable to fetch live exchange rates.");
+  }
+
+  return payload;
 }
 
 function sortRows(rows: ComparisonProviderRow[], sortBy: ComparisonSort) {
@@ -102,10 +126,11 @@ function sortRows(rows: ComparisonProviderRow[], sortBy: ComparisonSort) {
 function buildComparison({
   amount,
   senderCountry,
-  sortBy
-}: Required<FetchRatesArgs>) {
+  sortBy,
+  liveBaseRates
+}: Required<FetchRatesArgs> & { liveBaseRates: LiveBaseRatesResponse }) {
   const sourceCurrency = getCurrencyBySender(senderCountry);
-  const baseMidMarketRate = baseMidMarketRates[sourceCurrency];
+  const baseMidMarketRate = liveBaseRates.rates[sourceCurrency];
   const adjustedAmount = clampAmount(amount);
 
   const rows = providers
@@ -161,7 +186,7 @@ function buildComparison({
     sourceCurrency,
     recipientCurrency: "NGN" as const,
     sortBy,
-    updatedAt: new Date().toISOString(),
+    updatedAt: liveBaseRates.updatedAt,
     baseMidMarketRate,
     providers: sortedProviders,
     savings: {
@@ -178,25 +203,37 @@ export async function fetchRates({
   amount,
   senderCountry,
   sortBy = "best-rate"
-}: FetchRatesArgs): Promise<ComparisonResult> {
+}: FetchRatesArgs, options: FetchRatesOptions = {}): Promise<ComparisonResult> {
   const adjustedAmount = clampAmount(amount);
-  const cacheKey = `${senderCountry}:${sortBy}:${adjustedAmount}`;
-  const cachedEntry = rateCache.get(cacheKey);
 
-  if (cachedEntry && cachedEntry.expiresAt > Date.now()) {
-    return cachedEntry.data;
+  let liveBaseRates: LiveBaseRatesResponse;
+
+  try {
+    if (typeof window === "undefined" && !options.apiBaseUrl) {
+      const { getLiveBaseRates } = await import("@/lib/exchangeRateApi");
+      liveBaseRates = await getLiveBaseRates();
+    } else {
+      liveBaseRates = await fetchLiveBaseRatesFromApi({
+        apiBaseUrl: options.apiBaseUrl,
+        signal: options.signal
+      });
+    }
+  } catch (error) {
+    const allowFallback =
+      options.allowFallback ?? typeof window === "undefined";
+
+    if (!allowFallback) {
+      throw error;
+    }
+
+    const { getFallbackBaseRates } = await import("@/lib/exchangeRateApi");
+    liveBaseRates = getFallbackBaseRates();
   }
 
-  const data = buildComparison({
+  return buildComparison({
     amount: adjustedAmount,
     senderCountry,
-    sortBy
+    sortBy,
+    liveBaseRates
   });
-
-  rateCache.set(cacheKey, {
-    expiresAt: Date.now() + RATE_CACHE_TTL_MS,
-    data
-  });
-
-  return data;
 }
