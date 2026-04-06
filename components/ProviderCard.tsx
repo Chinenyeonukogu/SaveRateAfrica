@@ -20,6 +20,7 @@ export function ProviderCard({
   sourceCurrency
 }: ProviderCardProps) {
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
+  const hasFee = provider.fee > 0;
 
   return (
     <motion.article
@@ -57,6 +58,11 @@ export function ProviderCard({
                 <BadgeCheck className="h-4 w-4" />
                 Trusted route
               </div>
+              {!hasFee ? (
+                <div className="inline-flex items-center gap-1 rounded-full bg-brand-green px-3 py-1 font-semibold text-white">
+                  No Fee ✅
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
@@ -72,7 +78,11 @@ export function ProviderCard({
         </a>
       </div>
 
-      <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div
+        className={`mt-6 grid gap-3 sm:grid-cols-2 ${
+          hasFee ? "lg:grid-cols-4" : "lg:grid-cols-3"
+        }`}
+      >
         <div className="rounded-2xl bg-brand-light p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-navy/50">
             Exchange rate
@@ -103,14 +113,16 @@ export function ProviderCard({
           </div>
         </div>
 
-        <div className="rounded-2xl bg-brand-light p-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-navy/50">
-            Transfer fee
-          </p>
-          <p className="mt-2 text-lg font-semibold text-brand-navy">
-            {formatCurrency(provider.fee, sourceCurrency)}
-          </p>
-        </div>
+        {hasFee ? (
+          <div className="rounded-2xl bg-brand-light p-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-navy/50">
+              Transfer fee
+            </p>
+            <p className="mt-2 text-lg font-semibold text-brand-coral">
+              {formatCurrency(provider.fee, sourceCurrency)}
+            </p>
+          </div>
+        ) : null}
 
         <div className="rounded-2xl border border-brand-green/20 bg-brand-green/10 p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-green">
