@@ -11,14 +11,14 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://saverateafrica.com"),
   title: "Compare Ways to Save Money Sending to Nigeria | SaveRateAfrica",
   description:
-    "Compare 15+ money transfer providers and find the best NGN exchange rate. Save hundreds of naira on every transfer from USA, UK and Canada to Nigeria.",
+    "Compare 10+ money transfer providers and find the best NGN exchange rate. Save hundreds of naira on every transfer from USA, UK and Canada to Nigeria.",
   applicationName: "SaveRateAfrica",
   keywords:
     "send money Nigeria, best NGN exchange rate, compare remittance Nigeria, Nigerian diaspora money transfer, USD to NGN best rate, GBP to NGN best rate, CAD to NGN best rate",
   openGraph: {
     title: "Compare Ways to Save Money Sending to Nigeria | SaveRateAfrica",
     description:
-      "Find the best NGN exchange rate from USA, UK and Canada. Compare 15+ providers instantly.",
+      "Find the best NGN exchange rate from USA, UK and Canada. Compare 10+ providers instantly.",
     siteName: "SaveRateAfrica",
     type: "website",
     url: "https://saverateafrica.com"

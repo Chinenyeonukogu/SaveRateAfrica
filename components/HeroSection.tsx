@@ -62,7 +62,7 @@ export function HeroSection({
                   Send Money to Nigeria. Compare and save instantly.
                 </h1>
                 <p className="max-w-2xl text-base leading-7 text-white/80 sm:text-lg">
-                  Real-time rates from 15+ providers. No hidden fees. Trusted by
+                  Real-time rates from 10+ providers. No hidden fees. Trusted by
                   Nigerians in USA, UK and Canada.
                 </p>
               </div>
@@ -72,7 +72,7 @@ export function HeroSection({
                   <p className="text-xs uppercase tracking-[0.2em] text-white/60">
                     Providers
                   </p>
-                  <p className="mt-2 text-2xl font-heading">15+</p>
+                  <p className="mt-2 text-2xl font-heading">10+</p>
                 </div>
                 <div className="rounded-3xl border border-white/20 bg-white/10 p-4 backdrop-blur">
                   <p className="text-xs uppercase tracking-[0.2em] text-white/60">

@@ -8,14 +8,14 @@ export const revalidate = 300;
 export const metadata: Metadata = {
   title: "Compare Ways to Save Money Sending to Nigeria | SaveRateAfrica",
   description:
-    "Compare real-time NGN remittance rates from 15+ providers, track currency trends, and save on every transfer to Nigeria.",
+    "Compare real-time NGN remittance rates from 10+ providers, track currency trends, and save on every transfer to Nigeria.",
   alternates: {
     canonical: "/"
   },
   openGraph: {
     title: "Send Money to Nigeria - Compare and Save Instantly",
     description:
-      "Real-time rates from 15+ providers. No hidden fees. Built for Nigerians in USA, UK and Canada."
+      "Real-time rates from 10+ providers. No hidden fees. Built for Nigerians in USA, UK and Canada."
   }
 };
 
