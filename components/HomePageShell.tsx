@@ -74,8 +74,7 @@ const primaryNavLinks = [
   { href: "#compare-rates", label: "Compare Rates" },
   { href: "#how-it-works", label: "How It Works" },
   { href: "#smart-sending", label: "Smart Sending" },
-  { href: "#build-credit", label: "Build Credit" },
-  { href: "#rate-alerts", label: "Rate Alerts" }
+  { href: "#build-credit", label: "Build Credit" }
 ] as const;
 
 const appDownloadButtons = [
@@ -391,36 +390,36 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
     <>
       <main className="pb-32 md:pb-16">
         <header className="px-4 pt-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-7xl space-y-3">
-            <div className="rounded-[20px] border border-brand-navy/10 bg-white/80 px-4 py-2 shadow-float backdrop-blur">
-              <div className="flex items-center justify-end gap-5 text-xs font-semibold text-brand-navy/70">
-                {utilityLinks.map((item) => (
-                  <Link
-                    key={item.label}
-                    className="hover:text-brand-green"
-                    href={item.href}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-
+          <div className="mx-auto max-w-7xl">
             <div className="rounded-[28px] border border-brand-navy/10 bg-white/95 px-4 py-4 shadow-float backdrop-blur sm:px-5">
-              <div className="flex flex-col gap-4 xl:grid xl:grid-cols-[auto_1fr_auto] xl:items-center">
-                <div className="flex items-center justify-between gap-4">
-                  <Link
-                    className="font-heading text-2xl text-brand-navy sm:text-3xl"
-                    href="/"
-                  >
-                    SaveRateAfrica
-                  </Link>
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+                  <div className="flex flex-wrap items-center justify-between gap-4 xl:flex-nowrap">
+                    <Link
+                      className="font-heading text-2xl text-brand-navy sm:text-3xl"
+                      href="/"
+                    >
+                      SaveRateAfrica
+                    </Link>
 
-                  <div className="flex items-center gap-2 xl:hidden">
+                    <div className="flex flex-wrap items-center gap-2 rounded-[20px] border border-brand-green/20 bg-brand-green/10 p-1">
+                      {utilityLinks.map((item) => (
+                        <Link
+                          key={item.label}
+                          className="inline-flex min-h-10 items-center rounded-2xl px-4 text-sm font-semibold text-brand-navy hover:bg-white hover:text-brand-green"
+                          href={item.href}
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2 xl:justify-end">
                     {appDownloadButtons.map((button) => (
                       <a
                         key={button.label}
-                        className={`inline-flex min-h-11 items-center rounded-2xl px-4 text-sm font-semibold ${
+                        className={`inline-flex min-h-11 items-center rounded-2xl px-4 text-sm font-semibold xl:min-h-12 xl:px-5 ${
                           button.variant === "bold"
                             ? "bg-brand-yellow text-brand-navy"
                             : "bg-brand-light text-brand-navy"
@@ -448,23 +447,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                     </Link>
                   ))}
                 </nav>
-
-                <div className="hidden items-center gap-2 xl:flex xl:justify-end">
-                  {appDownloadButtons.map((button) => (
-                    <a
-                      key={button.label}
-                      className={`inline-flex min-h-12 items-center rounded-2xl px-5 text-sm font-semibold ${
-                        button.variant === "bold"
-                          ? "bg-brand-yellow text-brand-navy"
-                          : "bg-brand-light text-brand-navy"
-                      }`}
-                      download
-                      href={button.href}
-                    >
-                      {button.label}
-                    </a>
-                  ))}
-                </div>
               </div>
             </div>
           </div>
