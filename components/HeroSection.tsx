@@ -51,10 +51,14 @@ export function HeroSection({
             <div className="absolute inset-y-0 right-0 w-1/2 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.06)_50%,transparent_100%)] bg-[length:18px_18px]" />
           </div>
 
-          <div className="relative grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+          <div className="relative grid gap-8 lg:grid-cols-[1.02fr_0.98fr] lg:items-center">
             <div className="space-y-6">
-              <div className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-white/90">
-                Real-time rates to Nigeria
+              <div className="inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-white/90">
+                <span className="relative flex h-3 w-3">
+                  <span className="absolute inset-0 animate-ping rounded-full bg-brand-yellow/80" />
+                  <span className="relative rounded-full bg-brand-yellow" />
+                </span>
+                Live comparison now
               </div>
 
               <div className="space-y-4">
@@ -65,29 +69,6 @@ export function HeroSection({
                   Real-time rates from 10+ providers. No hidden fees. Trusted by
                   Nigerians in USA, UK and Canada.
                 </p>
-              </div>
-
-              <div className="grid grid-cols-3 gap-3 sm:max-w-xl">
-                <div className="rounded-3xl border border-white/20 bg-white/10 p-4 backdrop-blur">
-                  <p className="text-xs uppercase tracking-[0.2em] text-white/60">
-                    Providers
-                  </p>
-                  <p className="mt-2 text-2xl font-heading">10+</p>
-                </div>
-                <div className="rounded-3xl border border-white/20 bg-white/10 p-4 backdrop-blur">
-                  <p className="text-xs uppercase tracking-[0.2em] text-white/60">
-                    Refresh
-                  </p>
-                  <p className="mt-2 text-2xl font-heading">5 min</p>
-                </div>
-                <div className="rounded-3xl border border-white/20 bg-white/10 p-4 backdrop-blur">
-                  <p className="text-xs uppercase tracking-[0.2em] text-white/60">
-                    Trust
-                  </p>
-                  <p className="mt-2 text-sm font-semibold leading-6 text-white sm:text-base">
-                    Trusted by Nigerians in USA, UK &amp; Canada
-                  </p>
-                </div>
               </div>
 
               <div className="flex flex-wrap gap-3 text-sm text-white/90">

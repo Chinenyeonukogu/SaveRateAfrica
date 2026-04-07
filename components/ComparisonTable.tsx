@@ -103,13 +103,17 @@ export function ComparisonTable({
   nextRefreshAt,
   onSortChange
 }: ComparisonTableProps) {
-  const [now, setNow] = useState(Date.now());
+  const snapshotNow = new Date(comparison.updatedAt).getTime();
+  const initialNow = Number.isFinite(snapshotNow) ? snapshotNow : 0;
+  const [now, setNow] = useState(initialNow);
   const bestValueProvider =
     comparison.providers.find((provider) => provider.isBestValue) ??
     comparison.providers[0];
   const freshness = getFreshnessState(comparison.updatedAt, now);
 
   useEffect(() => {
+    setNow(Date.now());
+
     const intervalId = window.setInterval(() => {
       setNow(Date.now());
     }, 1000);

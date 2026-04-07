@@ -1,6 +1,9 @@
 export function SiteFooter() {
   return (
-    <footer className="border-t border-brand-navy/10 bg-white px-4 py-8 text-sm text-brand-navy/72 sm:px-6 lg:px-8">
+    <footer
+      id="contact-us"
+      className="border-t border-brand-navy/10 bg-white px-4 py-8 text-sm text-brand-navy/72 sm:px-6 lg:px-8"
+    >
       <div className="mx-auto max-w-7xl space-y-5 pb-24 md:pb-4">
         <div className="rounded-[22px] border border-amber-200 bg-amber-50 px-4 py-3 text-xs font-medium leading-5 text-brand-navy/80">
           Rates are indicative. Updated every 5 minutes. Final rates confirmed at
