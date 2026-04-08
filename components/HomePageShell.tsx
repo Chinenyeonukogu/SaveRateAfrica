@@ -453,7 +453,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
           </div>
         </section>
 
-        <section className={sectionDividerClassName}>
+        <section id="faq" className={sectionDividerClassName}>
           <div className={topLevelSectionInnerClassName}>
             <section
               id="how-it-works"
