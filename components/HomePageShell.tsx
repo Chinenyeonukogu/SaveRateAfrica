@@ -6,13 +6,11 @@ import type { LucideIcon } from "lucide-react";
 import {
   Activity,
   ArrowRight,
-  BadgeCheck,
   BellRing,
   CheckCircle2,
   CircleDollarSign,
   CreditCard,
   LineChart,
-  PiggyBank,
   ShieldCheck,
   Star,
   Waves
@@ -54,12 +52,6 @@ type SectionTargetKey =
   | "rateChart"
   | "smartSending";
 
-interface FeatureStripItem {
-  description: string;
-  icon: LucideIcon;
-  title: string;
-}
-
 interface FeatureCardDefinition {
   category: Exclude<FeatureFilter, "all">;
   cta: string;
@@ -93,39 +85,6 @@ const appDownloadButtons = [
     prefix: "Get it on"
   }
 ] as const;
-
-const featureStripItems: FeatureStripItem[] = [
-  {
-    icon: Waves,
-    title: "Live Rate Comparison",
-    description: "Compare live NGN payout, fees, and speed side by side."
-  },
-  {
-    icon: BellRing,
-    title: "Rate Alerts",
-    description: "Track your target rate and get nudged when the market moves."
-  },
-  {
-    icon: CreditCard,
-    title: "Build U.S. Credit",
-    description: "Explore starter card paths designed for diaspora senders."
-  },
-  {
-    icon: LineChart,
-    title: "Smart Sending Tips",
-    description: "Use timing signals and route guidance before you transfer."
-  },
-  {
-    icon: PiggyBank,
-    title: "Fee Calculator",
-    description: "See how much value different provider spreads can cost you."
-  },
-  {
-    icon: BadgeCheck,
-    title: "Diaspora Community",
-    description: "Built around what Nigerians abroad need from each transfer."
-  }
-];
 
 const featureFilters = [
   { id: "all", label: "All Features" },
@@ -533,33 +492,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
             </div>
           </div>
         </header>
-
-        <section className="border-y border-[#dcedc8] bg-white">
-          <div className="mx-auto max-w-7xl">
-            <div className="flex overflow-x-auto">
-              {featureStripItems.map((item) => {
-                const Icon = item.icon;
-
-                return (
-                  <article
-                    key={item.title}
-                    className="min-w-[180px] shrink-0 border-r border-[#dcedc8] px-[14px] py-3 last:border-r-0 lg:min-w-0 lg:flex-1"
-                  >
-                    <div className="inline-flex h-4 w-4 items-center justify-center text-[#2e7d32]">
-                      <Icon className="h-4 w-4" />
-                    </div>
-                    <h2 className="mt-2 text-[12px] font-bold text-[#1a2e1a]">
-                      {item.title}
-                    </h2>
-                    <p className="mt-1 text-[10px] leading-4 text-brand-navy/55">
-                      {item.description}
-                    </p>
-                  </article>
-                );
-              })}
-            </div>
-          </div>
-        </section>
 
         <HeroSection
           amount={amount}
