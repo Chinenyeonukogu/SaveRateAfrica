@@ -61,7 +61,7 @@ export function HeroSection({
   const savings = bestPayout - worstPayout;
 
   return (
-    <section className="overflow-hidden px-4 py-16 min-[600px]:px-6 min-[600px]:py-16 lg:px-10">
+    <section className="overflow-hidden px-4 pb-10 pt-10 min-[600px]:px-6 lg:px-10">
       <div className="mx-auto max-w-[1200px] rounded-[32px] bg-hero-mesh px-5 py-8 text-white shadow-glow min-[600px]:px-8 min-[600px]:py-10 lg:px-12 lg:py-14">
         <div className="relative overflow-hidden">
           <div className="absolute inset-0 opacity-30">
@@ -71,7 +71,7 @@ export function HeroSection({
             <div className="absolute inset-y-0 right-0 w-1/2 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.06)_50%,transparent_100%)] bg-[length:18px_18px]" />
           </div>
 
-          <div className="relative grid gap-8 lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:gap-12">
+          <div className="relative grid gap-9 lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:gap-9">
             <div className="space-y-6">
               <div className="inline-flex items-center gap-3 rounded-full border border-[#66bb6a]/45 bg-[#2e7d32]/25 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-white/95">
                 <span className="relative flex h-3 w-3">
@@ -120,13 +120,13 @@ export function HeroSection({
             </div>
 
             <div className="flex w-full flex-col items-center gap-3 lg:max-w-[440px] lg:justify-self-end">
-              <div className="w-full rounded-[28px] border border-white/10 bg-white px-4 py-4 text-brand-navy shadow-float min-[600px]:px-5 min-[600px]:py-5">
-                <div className="flex items-center justify-between">
+              <div className="w-full rounded-[28px] border border-white/10 bg-white px-[18px] py-4 text-brand-navy shadow-float">
+                <div className="mb-[10px] flex items-center justify-between gap-3">
                   <div>
                     <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-green">
                       Compare now
                     </p>
-                    <p className="mt-1.5 font-heading text-[22px] min-[600px]:text-2xl">
+                    <p className="mt-[10px] font-heading text-base">
                       Check your best NGN payout
                     </p>
                   </div>
@@ -135,17 +135,17 @@ export function HeroSection({
                   </div>
                 </div>
 
-                <div className="mt-4 space-y-3.5">
+                <div className="space-y-2">
                   <label className="block">
                     <span className="text-sm font-medium text-brand-navy/70">
                       Send amount
                     </span>
-                    <div className="mt-1.5 flex min-h-12 items-center rounded-[18px] border border-brand-navy/10 bg-brand-light px-3.5">
+                    <div className="mt-1 flex items-center rounded-[18px] border border-brand-navy/10 bg-brand-light px-[10px] py-[7px]">
                       <span className="pr-2 font-mono text-[12px] font-semibold text-brand-navy/70 min-[600px]:text-base">
                         {currencyMeta.code} {currencyMeta.symbol}
                       </span>
                       <input
-                        className="w-full bg-transparent text-[22px] font-heading text-brand-navy outline-none placeholder:text-brand-navy/40 min-[600px]:text-2xl"
+                        className="w-full bg-transparent text-[18px] font-heading text-brand-navy outline-none placeholder:text-brand-navy/40"
                         inputMode="numeric"
                         pattern="[0-9]*"
                         placeholder="Enter amount"
@@ -164,14 +164,14 @@ export function HeroSection({
                       />
                     </div>
 
-                    <div className="mt-2 flex flex-wrap gap-1.5">
+                    <div className="mb-[10px] mt-[6px] flex flex-wrap gap-[5px]">
                       {quickAmounts.map((quickAmount) => {
                         const isActive = amount === String(quickAmount);
 
                         return (
                           <button
                             key={quickAmount}
-                            className={`min-h-10 rounded-full px-3.5 text-sm font-semibold transition ${
+                            className={`rounded-full px-[10px] py-[5px] text-[11px] font-semibold transition ${
                               isActive
                                 ? "bg-brand-green text-white shadow-glow"
                                 : "bg-brand-light text-brand-navy hover:bg-brand-navy hover:text-white"
@@ -187,18 +187,18 @@ export function HeroSection({
                     </div>
                   </label>
 
-                  <div>
+                  <div className="mb-2">
                     <p className="text-sm font-medium text-brand-navy/70">
                       Sender country
                     </p>
-                    <div className="mt-1.5 grid grid-cols-3 gap-1.5">
+                    <div className="mt-1 grid grid-cols-3 gap-[6px]">
                       {senderCountries.map((country) => {
                         const active = country.code === senderCountry;
 
                         return (
                           <button
                             key={country.code}
-                            className={`min-h-10 rounded-[18px] border px-2.5 text-sm font-semibold transition ${
+                            className={`rounded-[18px] border px-[8px] py-[7px] text-[11px] font-semibold transition ${
                               active
                                 ? "border-brand-green bg-brand-green text-white shadow-glow"
                                 : "border-brand-navy/10 bg-brand-light text-brand-navy hover:border-brand-green/30"
@@ -213,11 +213,11 @@ export function HeroSection({
                     </div>
                   </div>
 
-                  <div className="rounded-[18px] border border-brand-navy/10 bg-brand-light px-3.5 py-2.5">
-                    <p className="text-sm font-medium text-brand-navy/70">
+                  <div className="mb-[10px] rounded-[18px] border border-brand-navy/10 bg-brand-light px-3 py-2">
+                    <p className="text-[12px] font-medium text-brand-navy/70">
                       Recipient country
                     </p>
-                    <div className="mt-1.5 flex min-h-10 items-center justify-between rounded-xl bg-white px-3.5">
+                    <div className="mt-1 flex items-center justify-between rounded-xl bg-white px-3 py-2 text-[12px]">
                       <span className="font-semibold text-brand-navy">Nigeria</span>
                       <span className="rounded-full bg-brand-green/10 px-3 py-1 text-xs font-semibold text-brand-green">
                         Locked corridor
@@ -226,7 +226,7 @@ export function HeroSection({
                   </div>
 
                   <button
-                    className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-[18px] bg-brand-yellow px-5 text-base font-bold text-[#1a1a1a] transition hover:translate-y-[-1px] hover:shadow-float disabled:cursor-not-allowed disabled:opacity-70"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-[18px] bg-brand-yellow px-3 py-3 text-[13px] font-bold text-[#1a1a1a] transition hover:translate-y-[-1px] hover:shadow-float disabled:cursor-not-allowed disabled:opacity-70"
                     type="button"
                     onClick={onCompare}
                   >
@@ -234,53 +234,53 @@ export function HeroSection({
                     <ArrowRight className="h-5 w-5" />
                   </button>
 
-                  <div className="mt-3 border-t-[1.5px] border-[#e8f5e9] pt-3">
-                    <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[1.5px] text-[#2e7d32]">
+                  <div className="mt-[10px] border-t-[1.5px] border-[#e8f5e9] pt-[10px]">
+                    <div className="mb-[3px] flex items-center gap-2 text-[9px] font-bold uppercase tracking-[1.5px] text-[#2e7d32]">
                       <span aria-hidden="true">💰</span>
                       <span>Savings Calculator</span>
                     </div>
 
-                    <h3 className="mt-2 text-[18px] font-bold text-[#1a2e1a] min-[600px]:text-[22px]">
+                    <h3 className="mb-[3px] text-[16px] font-bold text-[#1a2e1a]">
                       You could save up to ₦{formatCalculatedNgn(savings)}
                     </h3>
 
-                    <p className="mb-3 mt-2 text-[12px] leading-[1.5] text-[#666]">
+                    <p className="mb-2 text-[10px] leading-[1.4] text-[#666]">
                       Based on a USD {sendAmount.toLocaleString("en-US")} transfer,
                       Grey Finance currently delivers more than Western Union after
                       fees and spread.
                     </p>
 
-                    <div className="grid grid-cols-[minmax(0,1fr)_32px_minmax(0,1fr)] items-center gap-2.5">
-                      <div className="min-w-0 rounded-[10px] border-[1.5px] border-[#2e7d32] bg-[#f0fbf2] px-3 py-2.5 min-[600px]:px-3.5 min-[600px]:py-3">
-                        <p className="text-[10px] text-[#888]">Best value</p>
-                        <p className="mt-1.5 text-base font-bold text-[#1a2e1a]">
+                    <div className="mb-[7px] grid grid-cols-[minmax(0,1fr)_28px_minmax(0,1fr)] items-center gap-2">
+                      <div className="min-w-0 rounded-[8px] border-[1.5px] border-[#2e7d32] bg-[#f0fbf2] px-[10px] py-[9px]">
+                        <p className="mb-[2px] text-[8px] text-[#888]">Best value</p>
+                        <p className="mb-[2px] text-[13px] font-bold text-[#1a2e1a]">
                           Grey Finance
                         </p>
-                        <p className="mt-1.5 text-[13px] font-semibold text-[#2e7d32]">
+                        <p className="text-[11px] font-semibold text-[#2e7d32]">
                           Recipient gets ₦{formatCalculatedNgn(bestPayout)}
                         </p>
                       </div>
 
-                      <div className="mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-[#2e7d32] text-white">
-                        <ArrowUpDown className="h-4 w-4" />
+                      <div className="mx-auto flex h-7 w-7 items-center justify-center rounded-full bg-[#2e7d32] text-white">
+                        <ArrowUpDown className="h-3 w-3" />
                       </div>
 
-                      <div className="min-w-0 rounded-[10px] border-[1.5px] border-[#c8e6c9] bg-[#f4faf5] px-3 py-2.5 min-[600px]:px-3.5 min-[600px]:py-3">
-                        <p className="text-[10px] text-[#888]">Less efficient route</p>
-                        <p className="mt-1.5 text-base font-bold text-[#1a2e1a]">
+                      <div className="min-w-0 rounded-[8px] border-[1.5px] border-[#c8e6c9] bg-[#f4faf5] px-[10px] py-[9px]">
+                        <p className="mb-[2px] text-[8px] text-[#888]">Less efficient route</p>
+                        <p className="mb-[2px] text-[13px] font-bold text-[#1a2e1a]">
                           Western Union
                         </p>
-                        <p className="mt-1.5 text-[13px] font-semibold text-[#2e7d32]">
+                        <p className="text-[11px] font-semibold text-[#2e7d32]">
                           Recipient gets ₦{formatCalculatedNgn(worstPayout)}
                         </p>
                       </div>
                     </div>
 
-                    <div className="mt-2.5 flex items-center justify-between gap-3 rounded-[8px] bg-[#e8f5e9] px-3.5 py-2.5">
-                      <span className="text-[11px] font-semibold text-[#2e7d32] min-[600px]:text-[12px]">
+                    <div className="mt-[7px] flex items-center justify-between gap-3 rounded-[8px] bg-[#e8f5e9] px-3 py-2">
+                      <span className="text-[11px] font-semibold text-[#2e7d32]">
                         Your savings using SaveRateAfrica
                       </span>
-                      <span className="text-[13px] font-bold text-[#1b5e20] min-[600px]:text-[15px]">
+                      <span className="text-[13px] font-bold text-[#1b5e20]">
                         + ₦{formatCalculatedNgn(savings)}
                       </span>
                     </div>
