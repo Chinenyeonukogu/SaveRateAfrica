@@ -804,7 +804,10 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                     <div className="mt-5 border-t border-brand-navy/10 pt-4">
                       <p className="font-semibold text-brand-navy">{review.name}</p>
                       <p className="text-sm text-brand-navy/60">
-                        {review.role} · uses {review.provider}
+                        {review.role} · uses{" "}
+                        <span className="font-semibold text-brand-green">
+                          {review.provider}
+                        </span>
                       </p>
                     </div>
                   </article>
