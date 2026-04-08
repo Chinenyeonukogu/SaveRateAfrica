@@ -61,7 +61,10 @@ export function HeroSection({
   const savings = bestPayout - worstPayout;
 
   return (
-    <section className="overflow-hidden px-4 pb-5 pt-5 min-[600px]:px-6 min-[600px]:pb-7 min-[600px]:pt-7 lg:px-10 lg:pb-10 lg:pt-10">
+    <section
+      id="home"
+      className="overflow-hidden px-4 pb-5 pt-5 min-[600px]:px-6 min-[600px]:pb-7 min-[600px]:pt-7 lg:px-10 lg:pb-10 lg:pt-10"
+    >
       <div className="mx-auto max-w-[1200px] rounded-[32px] bg-hero-mesh px-5 py-8 text-white shadow-glow min-[600px]:px-8 min-[600px]:py-10 lg:px-12 lg:py-14">
         <div className="relative overflow-hidden">
           <div className="absolute inset-0 opacity-30">

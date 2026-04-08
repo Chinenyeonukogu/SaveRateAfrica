@@ -435,9 +435,9 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
           </div>
         </section>
 
-        <section className={sectionDividerClassName}>
+        <section id="compare-rates" className={`${sectionDividerClassName} scroll-mt-24`}>
           <div className={topLevelSectionInnerClassName}>
-            <div id="compare-rates" ref={compareRef} className="scroll-mt-24">
+            <div ref={compareRef}>
               <ComparisonTable
                 comparison={comparison}
                 errorMessage={errorMessage}
@@ -586,9 +586,9 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
           </div>
         </section>
 
-        <section className={sectionDividerClassName}>
+        <section id="rate-alerts" className={`${sectionDividerClassName} scroll-mt-24`}>
           <div className={topLevelSectionInnerClassName}>
-            <div id="rate-alerts" ref={alertsRef} className="scroll-mt-24">
+            <div ref={alertsRef}>
               <AlertsForm />
             </div>
           </div>

@@ -21,45 +21,46 @@ interface NavigationItem {
 
 const navigationItems: NavigationItem[] = [
   {
-    href: "/#compare-rates",
+    href: "#compare-rates",
     keywords: ["compare", "rates", "providers"],
     label: "Compare Rates",
     sectionId: "compare-rates"
   },
   {
-    href: "/#how-it-works",
+    href: "#how-it-works",
     keywords: ["how", "works", "steps"],
     label: "How It Works",
     sectionId: "how-it-works"
   },
   {
-    href: "/#smart-sending",
+    href: "#smart-sending",
     keywords: ["smart", "sending", "ai"],
     label: "Smart Sending",
     sectionId: "smart-sending"
   },
   {
-    href: "/credit-cards",
+    href: "#build-credit",
     keywords: ["credit", "build"],
-    label: "Build Credit"
+    label: "Build Credit",
+    sectionId: "build-credit"
   },
   {
-    href: "/#rate-alerts",
+    href: "#rate-alerts",
     keywords: ["alert", "notify"],
     label: "Rate Alerts",
     sectionId: "rate-alerts"
   },
   {
-    href: "/#contact-us",
+    href: "#contact",
     keywords: ["contact"],
     label: "Contact Us",
-    sectionId: "contact-us"
+    sectionId: "contact"
   }
 ];
 
 const searchOnlyTargets: NavigationItem[] = [
   {
-    href: "/#feature-hub",
+    href: "#feature-hub",
     keywords: ["feature", "features", "tool", "tools"],
     label: "Feature Hub",
     sectionId: "feature-hub"
@@ -87,12 +88,17 @@ const brandFontStyle = {
 const pageShellClassName =
   "mx-auto w-full max-w-[1200px] px-4 min-[600px]:px-6 lg:px-10";
 
-function SaveRateAfricaLogo() {
+function SaveRateAfricaLogo({
+  onClick
+}: {
+  onClick: (event: MouseEvent<HTMLAnchorElement>) => void;
+}) {
   return (
-    <Link
+    <a
       aria-label="SaveRateAfrica home"
       className="inline-flex items-center gap-0 text-[#1a2e1a]"
-      href="/"
+      href="#home"
+      onClick={onClick}
       style={brandFontStyle}
     >
       <svg
@@ -122,7 +128,7 @@ function SaveRateAfricaLogo() {
       <span className="ml-0 text-[20px] font-bold leading-none tracking-[-0.03em]">
         Save<span className="text-[#2e7d32]">Rate</span>Africa
       </span>
-    </Link>
+    </a>
   );
 }
 
@@ -181,6 +187,9 @@ export function SiteHeader({
 }: SiteHeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const [activeSectionId, setActiveSectionId] = useState<string | null>(
+    pathname === "/" ? "home" : null
+  );
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
@@ -204,6 +213,44 @@ export function SiteHeader({
     };
   }, []);
 
+  useEffect(() => {
+    if (pathname !== "/") {
+      setActiveSectionId(null);
+      return;
+    }
+
+    const sectionIds = [
+      "home",
+      ...navigationItems.flatMap((item) => (item.sectionId ? [item.sectionId] : []))
+    ];
+    const sections = sectionIds
+      .map((sectionId) => document.getElementById(sectionId))
+      .filter((section): section is HTMLElement => Boolean(section));
+
+    if (!sections.length) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntry = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((entryA, entryB) => entryB.intersectionRatio - entryA.intersectionRatio)[0];
+
+        if (visibleEntry) {
+          setActiveSectionId(visibleEntry.target.id);
+        }
+      },
+      { threshold: 0.4 }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [pathname]);
+
   function closeMobilePanels() {
     setIsMobileMenuOpen(false);
     setIsMobileSearchOpen(false);
@@ -224,31 +271,32 @@ export function SiteHeader({
       }
     }
 
-    if (href === pathname) {
+    if (href === "#home" && pathname === "/") {
       window.scrollTo({ behavior: "smooth", top: 0 });
       return;
     }
 
-    router.push(href);
+    router.push(`/${href}`);
   }
 
   function handleNavClick(
     event: MouseEvent<HTMLAnchorElement>,
     item: NavigationItem
   ) {
-    if (item.sectionId && pathname === "/") {
+    if (item.sectionId) {
       event.preventDefault();
       navigateTo(item.href, item.sectionId);
-      return;
-    }
-
-    if (item.href === pathname) {
-      event.preventDefault();
-      navigateTo(item.href);
+      setActiveSectionId(item.sectionId);
       return;
     }
 
     closeMobilePanels();
+  }
+
+  function handleLogoClick(event: MouseEvent<HTMLAnchorElement>) {
+    event.preventDefault();
+    navigateTo("#home", "home");
+    setActiveSectionId("home");
   }
 
   function showNoResults(query: string) {
@@ -303,7 +351,7 @@ export function SiteHeader({
   }
 
   function isActiveNavigationItem(item: NavigationItem) {
-    return pathname === "/credit-cards" && item.href === "/credit-cards";
+    return pathname === "/" && activeSectionId === item.sectionId;
   }
 
   return (
@@ -317,11 +365,11 @@ export function SiteHeader({
             </span>
             <Link
               className="font-bold underline underline-offset-2"
-              href="/#compare-rates"
+              href="#compare-rates"
               onClick={(event) => {
                 if (pathname === "/") {
                   event.preventDefault();
-                  navigateTo("/#compare-rates", "compare-rates");
+                  navigateTo("#compare-rates", "compare-rates");
                 }
               }}
             >
@@ -331,11 +379,11 @@ export function SiteHeader({
         </div>
       ) : null}
 
-      <header className="sticky top-0 z-[100] border-b border-[#e8f5e9] bg-white shadow-[0_1px_8px_rgba(46,125,50,0.08)]">
+      <header className="sticky top-0 z-[1000] border-b border-[#c8e6c9] bg-white shadow-[0_1px_8px_rgba(46,125,50,0.08)]">
         <div className={pageShellClassName}>
           <div className="flex h-[60px] items-center justify-between gap-4">
             <div className="shrink-0">
-              <SaveRateAfricaLogo />
+              <SaveRateAfricaLogo onClick={handleLogoClick} />
             </div>
 
             <nav
@@ -350,7 +398,7 @@ export function SiteHeader({
                     key={item.label}
                     className={`inline-flex h-[60px] items-center border-b-2 text-[13px] font-medium transition ${
                       isActive
-                        ? "border-[#2e7d32] text-[#2e7d32]"
+                        ? "active border-[#2e7d32] text-[#2e7d32]"
                         : "border-transparent text-[#2e4a2e] hover:text-[#2e7d32]"
                     }`}
                     href={item.href}
@@ -461,7 +509,7 @@ export function SiteHeader({
                   <Link
                     key={item.label}
                     className={`inline-flex min-h-11 items-center border-b border-[#e8f5e9] px-4 py-3 text-[13px] font-medium ${
-                      isActive ? "text-[#2e7d32]" : "text-[#2e4a2e]"
+                      isActive ? "active text-[#2e7d32]" : "text-[#2e4a2e]"
                     }`}
                     href={item.href}
                     onClick={(event) => handleNavClick(event, item)}
