@@ -8,12 +8,12 @@ import {
   ArrowRight,
   BellRing,
   CheckCircle2,
+  Clock3,
   CircleDollarSign,
   CreditCard,
   LineChart,
   ShieldCheck,
-  Star,
-  Waves
+  Star
 } from "lucide-react";
 
 import { AIAssistant } from "@/components/AIAssistant";
@@ -45,7 +45,6 @@ interface HomePageShellProps {
   initialComparison: ComparisonResult;
 }
 
-type FeatureCategory = "alerts" | "credit" | "smart";
 type SectionTargetKey =
   | "alerts"
   | "bestTime"
@@ -56,118 +55,76 @@ type SectionTargetKey =
   | "smartSending";
 
 interface FeatureCardDefinition {
-  category: FeatureCategory;
+  accentBorderHoverClassName: string;
+  ctaClassName: string;
   cta: string;
   description: string;
   icon: LucideIcon;
+  iconBackgroundClassName: string;
   eyebrow: string;
+  labelClassName: string;
   targetKey: SectionTargetKey;
   title: string;
 }
 
 const featureCardDefinitions: FeatureCardDefinition[] = [
   {
-    category: "smart",
-    cta: "Open comparison",
+    accentBorderHoverClassName: "hover:border-[#2e7d32]",
+    cta: "Explore credit cards",
+    ctaClassName:
+      "border-[#2e7d32] text-[#2e7d32] group-hover:bg-[#2e7d32] group-hover:text-white hover:bg-[#2e7d32] hover:text-white",
     description:
-      "Scan the full provider table and sort the route that delivers the strongest NGN value.",
-    eyebrow: "Core comparison",
-    icon: Waves,
-    targetKey: "compare",
-    title: "Compare live providers"
+      "Explore immigrant-friendly card picks that help you earn rewards and strengthen your U.S. credit profile.",
+    eyebrow: "BUILD CREDIT",
+    icon: CreditCard,
+    iconBackgroundClassName: "bg-[#2e7d32]",
+    labelClassName: "text-[#2e7d32]",
+    targetKey: "buildCredit",
+    title: "Build credit while you send from the USA"
   },
   {
-    category: "smart",
+    accentBorderHoverClassName: "hover:border-[#7c6ff7]",
     cta: "View the flow",
+    ctaClassName:
+      "border-[#7c6ff7] text-[#7c6ff7] group-hover:bg-[#7c6ff7] group-hover:text-white hover:bg-[#7c6ff7] hover:text-white",
     description:
       "See the simple path from entering your amount to choosing the provider that fits your speed and budget.",
-    eyebrow: "How it works",
-    icon: ShieldCheck,
+    eyebrow: "HOW IT WORKS",
+    icon: Clock3,
+    iconBackgroundClassName: "bg-[#7c6ff7]",
+    labelClassName: "text-[#7c6ff7]",
     targetKey: "howItWorks",
     title: "Understand the send journey"
   },
   {
-    category: "smart",
-    cta: "See insights",
-    description:
-      "Use best-value guidance, savings context, and timing signals before you send money home.",
-    eyebrow: "Smart sending",
-    icon: LineChart,
-    targetKey: "smartSending",
-    title: "Get smarter route guidance"
-  },
-  {
-    category: "alerts",
+    accentBorderHoverClassName: "hover:border-[#4facfe]",
     cta: "Set an alert",
+    ctaClassName:
+      "border-[#4facfe] text-[#4facfe] group-hover:bg-[#4facfe] group-hover:text-white hover:bg-[#4facfe] hover:text-white",
     description:
       "Choose your target NGN level and let SaveRateAfrica notify you when the corridor is favorable.",
-    eyebrow: "Rate alerts",
+    eyebrow: "RATE ALERTS",
     icon: BellRing,
+    iconBackgroundClassName: "bg-[#4facfe]",
+    labelClassName: "text-[#4facfe]",
     targetKey: "alerts",
     title: "Track your target rate"
   },
   {
-    category: "alerts",
-    cta: "Read the market",
+    accentBorderHoverClassName: "hover:border-[#f5576c]",
+    cta: "See insights",
+    ctaClassName:
+      "border-[#f5576c] text-[#f5576c] group-hover:bg-[#f5576c] group-hover:text-white hover:bg-[#f5576c] hover:text-white",
     description:
-      "Check the AI-assisted market pulse and see whether current movement favors waiting or sending now.",
-    eyebrow: "Market timing",
+      "Use best-value guidance, savings context, and timing signals before you send money home.",
+    eyebrow: "SMART SENDING",
     icon: Activity,
-    targetKey: "bestTime",
-    title: "Watch timing signals"
-  },
-  {
-    category: "alerts",
-    cta: "View the chart",
-    description:
-      "Spot short-term and longer-term rate patterns before you lock in a transfer route.",
-    eyebrow: "Trend tracking",
-    icon: CircleDollarSign,
-    targetKey: "rateChart",
-    title: "Follow rate momentum"
-  },
-  {
-    category: "credit",
-    cta: "Explore credit",
-    description:
-      "Browse the credit-building section built for Nigerians settling into the U.S. financial system.",
-    eyebrow: "Build credit",
-    icon: CreditCard,
-    targetKey: "buildCredit",
-    title: "Build your U.S. profile"
+    iconBackgroundClassName: "bg-[#f5576c]",
+    labelClassName: "text-[#f5576c]",
+    targetKey: "smartSending",
+    title: "Get smarter route guidance"
   }
 ];
-
-const featureCardIconThemes = [
-  {
-    background: "linear-gradient(135deg, #4fc3f7 0%, #0288d1 100%)",
-    boxShadow: "0 5px 0 #0277bd, 0 7px 12px rgba(2,136,209,0.35)"
-  },
-  {
-    background: "linear-gradient(135deg, #81c784 0%, #2e7d32 100%)",
-    boxShadow: "0 5px 0 #1b5e20, 0 7px 12px rgba(46,125,50,0.35)"
-  },
-  {
-    background: "linear-gradient(135deg, #ce93d8 0%, #7b1fa2 100%)",
-    boxShadow: "0 5px 0 #6a1b9a, 0 7px 12px rgba(123,31,162,0.35)"
-  },
-  {
-    background: "linear-gradient(135deg, #ffb74d 0%, #e65100 100%)",
-    boxShadow: "0 5px 0 #bf360c, 0 7px 12px rgba(230,81,0,0.35)"
-  },
-  {
-    background: "linear-gradient(135deg, #4db6ac 0%, #00695c 100%)",
-    boxShadow: "0 5px 0 #004d40, 0 7px 12px rgba(0,105,92,0.35)"
-  },
-  {
-    background: "linear-gradient(135deg, #7986cb 0%, #283593 100%)",
-    boxShadow: "0 5px 0 #1a237e, 0 7px 12px rgba(40,53,147,0.35)"
-  },
-  {
-    background: "linear-gradient(135deg, #aed581 0%, #558b2f 100%)",
-    boxShadow: "0 5px 0 #33691e, 0 7px 12px rgba(85,139,47,0.35)"
-  }
-] as const;
 
 const reviewCountries = ["USA", "UK", "Canada"] as const;
 const pageShellClassName =
@@ -378,54 +335,50 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
 
         <section id="feature-hub" className={`${sectionDividerClassName} scroll-mt-24`}>
           <div className={topLevelSectionInnerClassName}>
-            <div className="rounded-[16px] bg-[#f4faf5] px-4 py-5 min-[600px]:px-5 min-[600px]:py-7 lg:px-8 lg:py-9">
-              <div className="max-w-2xl">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-green">
-                  Feature hub
+            <div className="mx-auto max-w-[1200px] rounded-[20px] border border-[#e0ede2] bg-[#f8fbf8] px-4 py-5 min-[600px]:px-6 min-[600px]:py-7 lg:px-[28px] lg:py-[32px]">
+              <div className="max-w-[520px]">
+                <p className="mb-2 text-[11px] font-medium uppercase tracking-[2px] text-[#2e7d32]">
+                  FEATURE HUB
                 </p>
-                <h2 className="mt-2 text-[20px] font-heading text-brand-navy min-[600px]:text-3xl">
+                <h2 className="mb-[5px] text-[19px] font-medium text-[#1a2e1a]">
                   Browse every core tool from one organized layer
                 </h2>
-                <p className="mt-3 text-[13px] leading-6 text-brand-navy/70">
-                  Browse rate monitoring, credit-building support, and the smart
-                  sending tools already inside the homepage.
+                <p className="text-[12px] leading-[1.6] text-[#5a7a5a]">
+                  Rate monitoring, credit-building support, and smart sending
+                  tools — all in one place.
                 </p>
               </div>
 
-              <div className="mt-6 grid grid-cols-1 items-stretch gap-3 min-[600px]:grid-cols-2 min-[600px]:gap-[14px] lg:grid-cols-3 lg:gap-4">
-                {featureCardDefinitions.map((card, index) => {
+              <div className="mt-6 grid grid-cols-1 gap-3 min-[600px]:grid-cols-2 lg:grid-cols-4">
+                {featureCardDefinitions.map((card) => {
                   const Icon = card.icon;
-                  const iconTheme =
-                    featureCardIconThemes[index] ??
-                    featureCardIconThemes[featureCardIconThemes.length - 1];
 
                   return (
                     <article
                       key={card.title}
-                      className="flex h-full flex-col rounded-[12px] border border-[#c8e6c9] bg-white px-4 py-[18px] transition duration-200 hover:-translate-y-[2px] hover:shadow-[0_8px_28px_rgba(46,125,50,0.13)] min-[600px]:px-5 min-[600px]:py-6"
+                      className={`group flex h-full flex-col rounded-[14px] border border-[#e0ede2] bg-white px-4 py-5 transition-all duration-200 ease-in-out hover:-translate-y-[2px] hover:shadow-[0_4px_16px_rgba(0,0,0,0.07)] ${card.accentBorderHoverClassName}`}
                     >
-                      <div
-                        className="inline-flex h-[50px] w-[50px] items-center justify-center rounded-[13px] text-white"
-                        style={iconTheme}
-                      >
-                        <Icon className="h-5 w-5 text-white [filter:drop-shadow(0_2px_2px_rgba(0,0,0,0.2))]" />
+                      <div className={`inline-flex h-[42px] w-[42px] items-center justify-center rounded-[11px] ${card.iconBackgroundClassName}`}>
+                        <Icon className="h-5 w-5 text-white" />
                       </div>
-                      <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-green">
+                      <p
+                        className={`mt-4 text-[11px] font-medium uppercase tracking-[1.6px] ${card.labelClassName}`}
+                      >
                         {card.eyebrow}
                       </p>
-                      <h3 className="mt-2 text-base font-heading text-brand-navy min-[600px]:text-2xl">
+                      <h3 className="mt-3 text-[18px] font-medium leading-6 text-[#1a2e1a]">
                         {card.title}
                       </h3>
-                      <p className="mt-3 flex-1 text-[12px] leading-5 text-brand-navy/70 min-[600px]:text-sm min-[600px]:leading-7">
+                      <p className="mt-3 flex-1 text-[12px] leading-[1.6] text-[#5a7a5a]">
                         {card.description}
                       </p>
                       <button
-                        className="mt-5 inline-flex min-h-12 items-center gap-2 self-start rounded-2xl bg-white px-4 text-sm font-semibold text-brand-navy shadow-float hover:bg-brand-navy hover:text-white"
+                        className={`mt-auto inline-flex w-fit items-center gap-[5px] self-start rounded-full border-[1.5px] px-3 py-[6px] text-[11px] font-medium transition-colors duration-200 ${card.ctaClassName}`}
                         type="button"
                         onClick={() => scrollToSection(sectionTargets[card.targetKey])}
                       >
                         {card.cta}
-                        <ArrowRight className="h-4 w-4" />
+                        <ArrowRight className="h-3.5 w-3.5" />
                       </button>
                     </article>
                   );
