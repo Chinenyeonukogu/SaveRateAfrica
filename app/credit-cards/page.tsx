@@ -168,7 +168,7 @@ export default function CreditCardsPage() {
       <SiteHeader showBreadcrumb />
 
       <main className="overflow-x-hidden pb-28 min-[600px]:pb-16">
-        <section className="bg-[linear-gradient(135deg,#0f2414_0%,#1a2e1a_38%,#2e7d32_100%)]">
+        <section className="bg-[linear-gradient(135deg,#1a3a1a_0%,#2e7d32_50%,#0d2416_100%)]">
           <div className="mx-auto max-w-[1200px] px-4 py-10 min-[600px]:px-6 min-[600px]:py-14 lg:px-10 lg:py-16">
             <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/5 px-5 py-6 text-white shadow-[0_20px_60px_rgba(15,36,20,0.35)] backdrop-blur-sm min-[600px]:px-8 min-[600px]:py-10 lg:px-12 lg:py-12">
               <div className="absolute -left-10 bottom-0 h-40 w-40 rounded-full bg-white/10 blur-3xl" />
