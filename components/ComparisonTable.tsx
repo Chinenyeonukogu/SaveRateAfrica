@@ -51,12 +51,12 @@ function getFreshnessState(updatedAt: string, now: number) {
 
 function LoadingSkeletonCards() {
   return (
-    <div className="absolute inset-0 z-10 overflow-hidden rounded-[28px] bg-white/88 px-1 py-1 backdrop-blur-sm">
-      <div className="flex h-full snap-x gap-4 overflow-hidden pb-3 md:flex-col">
+    <div className="absolute inset-0 z-10 overflow-hidden rounded-[16px] bg-white/88 backdrop-blur-sm">
+      <div className="flex h-full flex-col gap-3 overflow-hidden">
         {Array.from({ length: 3 }).map((_, index) => (
           <div
             key={index}
-            className="min-w-[84%] animate-pulse rounded-[28px] border border-brand-navy/10 bg-white p-5 shadow-float md:min-w-0"
+            className="animate-pulse rounded-[12px] border border-[#c8e6c9] bg-white px-6 py-5 shadow-float"
           >
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-start gap-4">
@@ -124,23 +124,23 @@ export function ComparisonTable({
   }, []);
 
   return (
-    <section className="space-y-5">
-      <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+    <section>
+      <div className="mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-green">
             Live comparison table
           </p>
-          <h2 className="mt-2 font-heading text-3xl text-brand-navy sm:text-4xl">
+          <h2 className="mt-[6px] text-[28px] font-heading text-brand-navy min-[600px]:text-4xl">
             Compare fees, speed, and real payout value
           </h2>
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-brand-navy/70 sm:text-base">
+          <p className="mt-4 max-w-2xl text-[12px] leading-6 text-brand-navy/70 min-[600px]:text-base">
             We rank providers by the NGN your recipient actually gets after fees,
             so you are not fooled by headline rates.
           </p>
         </div>
 
         <div className="grid gap-3 sm:grid-cols-3 lg:min-w-[420px]">
-          <div className="rounded-3xl bg-white p-4 shadow-float">
+          <div className="rounded-[12px] border border-[#c8e6c9] bg-white p-4 shadow-float">
             <div className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-green/10">
               <Waves className="h-5 w-5 text-brand-green" />
             </div>
@@ -151,7 +151,7 @@ export function ComparisonTable({
               {formatRate(comparison.baseMidMarketRate, comparison.sourceCurrency)}
             </p>
           </div>
-          <div className="rounded-3xl bg-white p-4 shadow-float">
+          <div className="rounded-[12px] border border-[#c8e6c9] bg-white p-4 shadow-float">
             <div className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-yellow/30">
               <BadgePercent className="h-5 w-5 text-brand-navy" />
             </div>
@@ -162,7 +162,7 @@ export function ComparisonTable({
               {bestValueProvider?.name}
             </p>
           </div>
-          <div className="rounded-3xl bg-white p-4 shadow-float">
+          <div className="rounded-[12px] border border-[#c8e6c9] bg-white p-4 shadow-float">
             <div className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-coral/10">
               <Activity className="h-5 w-5 text-brand-coral" />
             </div>
@@ -176,16 +176,18 @@ export function ComparisonTable({
         </div>
       </div>
 
-      <FilterBar
-        amount={comparison.amount}
-        senderCountry={comparison.senderCountry}
-        sortBy={comparison.sortBy}
-        sourceCurrency={comparison.sourceCurrency}
-        onSortChange={onSortChange}
-      />
+      <div className="mb-6">
+        <FilterBar
+          amount={comparison.amount}
+          senderCountry={comparison.senderCountry}
+          sortBy={comparison.sortBy}
+          sourceCurrency={comparison.sourceCurrency}
+          onSortChange={onSortChange}
+        />
+      </div>
 
       {errorMessage ? (
-        <div className="rounded-[24px] border border-brand-coral/20 bg-brand-coral/10 px-5 py-4 text-sm font-medium text-brand-navy">
+        <div className="mb-6 rounded-[12px] border border-brand-coral/20 bg-brand-coral/10 px-5 py-4 text-sm font-medium text-brand-navy">
           Live rate refresh failed. Showing the most recent available comparison. {errorMessage}
         </div>
       ) : null}
@@ -193,7 +195,7 @@ export function ComparisonTable({
       <div className="relative">
         {isLoading ? <LoadingSkeletonCards /> : null}
 
-        <div className="flex snap-x gap-4 overflow-x-auto pb-3 md:flex-col md:overflow-visible">
+        <div className="flex flex-col gap-3">
           {comparison.providers.map((provider, index) => (
             <ProviderCard
               key={`${comparison.senderCountry}-${provider.slug}-${comparison.amount}`}
@@ -205,7 +207,7 @@ export function ComparisonTable({
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 text-xs text-brand-navy/55 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mt-6 flex flex-col gap-2 text-xs text-brand-navy/55 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap items-center gap-3">
           <span
             className={`inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 font-semibold ${freshness.textClassName}`}

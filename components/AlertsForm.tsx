@@ -62,35 +62,33 @@ export function AlertsForm({ compact = false }: AlertsFormProps) {
 
   return (
     <form
-      className={`rounded-[28px] border border-brand-navy/10 bg-white p-5 shadow-float sm:p-6 ${
-        compact ? "" : "lg:p-8"
+      className={`mx-auto max-w-[560px] rounded-[16px] border border-[#c8e6c9] bg-white px-4 py-5 shadow-float min-[600px]:px-6 min-[600px]:py-8 ${
+        compact ? "" : ""
       }`}
       onSubmit={handleSubmit}
     >
-      <div className="flex items-start gap-4">
+      <div className="mx-auto max-w-[440px] text-center">
         <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-green/10">
           <BellRing className="h-6 w-6 text-brand-green" />
         </div>
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-green">
-            Rate alerts
-          </p>
-          <h3 className="mt-2 font-heading text-3xl text-brand-navy">
-            Get notified when NGN hits your target
-          </h3>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-brand-navy/70">
-            Free users get one alert per month. Premium users can track unlimited
-            targets across USD, GBP, and CAD routes.
-          </p>
-        </div>
+        <p className="mt-5 text-xs font-semibold uppercase tracking-[0.22em] text-brand-green">
+          Rate alerts
+        </p>
+        <h3 className="mt-2 text-[28px] font-heading text-brand-navy min-[600px]:text-3xl">
+          Get notified when NGN hits your target
+        </h3>
+        <p className="mt-2 text-[12px] leading-6 text-brand-navy/70 min-[600px]:text-sm">
+          Free users get one alert per month. Premium users can track unlimited
+          targets across USD, GBP, and CAD routes.
+        </p>
       </div>
 
       {!compact && (
-        <div className="mt-6 grid grid-cols-2 gap-2 rounded-[24px] bg-brand-light p-2">
+        <div className="mx-auto mt-6 grid max-w-[320px] grid-cols-2 gap-2 rounded-[12px] bg-brand-light p-2">
           {(["email", "sms"] as const).map((value) => (
             <button
               key={value}
-              className={`min-h-12 rounded-2xl text-sm font-semibold capitalize transition ${
+              className={`min-h-11 rounded-[8px] text-[12px] font-semibold capitalize transition min-[600px]:min-h-12 min-[600px]:text-sm ${
                 value === channel
                   ? "bg-brand-navy text-white"
                   : "text-brand-navy/70 hover:bg-white"
@@ -104,11 +102,11 @@ export function AlertsForm({ compact = false }: AlertsFormProps) {
         </div>
       )}
 
-      <div className="mt-6 grid gap-4 md:grid-cols-2">
-        <label className="space-y-2 text-sm font-medium text-brand-navy/70">
+      <div className="mt-6 grid gap-3 lg:grid-cols-[140px_minmax(0,1fr)_auto] lg:items-end">
+        <label className="space-y-2 text-[12px] font-medium text-brand-navy/70 min-[600px]:text-sm">
           Target rate
           <input
-            className="min-h-12 w-full rounded-2xl border border-brand-navy/10 bg-brand-light px-4 font-mono outline-none"
+            className="min-h-12 w-full rounded-[8px] border border-[#c8e6c9] bg-white px-[14px] py-[11px] font-mono outline-none"
             inputMode="decimal"
             placeholder="1600"
             type="number"
@@ -118,10 +116,10 @@ export function AlertsForm({ compact = false }: AlertsFormProps) {
         </label>
 
         {compact || channel === "email" ? (
-          <label className="space-y-2 text-sm font-medium text-brand-navy/70">
+          <label className="space-y-2 text-[12px] font-medium text-brand-navy/70 min-[600px]:text-sm">
             Email
             <input
-              className="min-h-12 w-full rounded-2xl border border-brand-navy/10 bg-brand-light px-4 outline-none"
+              className="min-h-12 w-full rounded-[8px] border border-[#c8e6c9] bg-white px-[14px] py-[11px] outline-none"
               placeholder="you@example.com"
               type="email"
               value={email}
@@ -129,10 +127,10 @@ export function AlertsForm({ compact = false }: AlertsFormProps) {
             />
           </label>
         ) : (
-          <label className="space-y-2 text-sm font-medium text-brand-navy/70">
+          <label className="space-y-2 text-[12px] font-medium text-brand-navy/70 min-[600px]:text-sm">
             SMS number
             <input
-              className="min-h-12 w-full rounded-2xl border border-brand-navy/10 bg-brand-light px-4 outline-none"
+              className="min-h-12 w-full rounded-[8px] border border-[#c8e6c9] bg-white px-[14px] py-[11px] outline-none"
               placeholder="+1 555 555 5555"
               type="tel"
               value={phone}
@@ -140,9 +138,17 @@ export function AlertsForm({ compact = false }: AlertsFormProps) {
             />
           </label>
         )}
+
+        <button
+          className="inline-flex min-h-12 items-center justify-center rounded-[8px] bg-[#2e7d32] px-5 text-sm font-bold text-white transition hover:shadow-float disabled:cursor-not-allowed disabled:opacity-60"
+          disabled={submitting}
+          type="submit"
+        >
+          {submitting ? "Saving alert..." : "Notify Me"}
+        </button>
       </div>
 
-      <label className="mt-5 flex items-start gap-3 rounded-2xl bg-brand-light px-4 py-4 text-sm text-brand-navy/70">
+      <label className="mt-[10px] flex items-start gap-3 text-[10px] leading-4 text-brand-navy/70">
         <input
           checked={consent}
           className="mt-1 h-4 w-4 rounded border-brand-navy/20 text-brand-green"
@@ -155,22 +161,12 @@ export function AlertsForm({ compact = false }: AlertsFormProps) {
         </span>
       </label>
 
-      <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
-        <button
-          className="inline-flex min-h-12 items-center justify-center rounded-2xl bg-brand-yellow px-5 text-sm font-bold text-brand-navy transition hover:shadow-float disabled:cursor-not-allowed disabled:opacity-60"
-          disabled={submitting}
-          type="submit"
-        >
-          {submitting ? "Saving alert..." : "Notify Me"}
-        </button>
-
-        {message && (
-          <div className="inline-flex items-center gap-2 rounded-2xl bg-brand-green/10 px-4 py-3 text-sm font-medium text-brand-green">
-            <CheckCircle2 className="h-4 w-4" />
-            {message}
-          </div>
-        )}
-      </div>
+      {message ? (
+        <div className="mt-4 inline-flex items-center gap-2 rounded-[12px] bg-brand-green/10 px-4 py-3 text-[12px] font-medium text-brand-green min-[600px]:text-sm">
+          <CheckCircle2 className="h-4 w-4" />
+          {message}
+        </div>
+      ) : null}
     </form>
   );
 }

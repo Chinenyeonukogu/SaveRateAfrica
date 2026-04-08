@@ -143,75 +143,75 @@ export function BestTimeToSend({ comparison }: BestTimeToSendProps) {
     );
 
   return (
-    <section className="rounded-[30px] border border-brand-green/20 bg-brand-navy p-6 text-white shadow-float transition duration-300 hover:-translate-y-1 hover:shadow-glow sm:p-8">
+    <section className="rounded-[16px] border border-[#c8e6c9] bg-[#f4faf5] p-4 text-brand-navy shadow-float min-[600px]:p-8">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
         <div className="max-w-2xl">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-brand-green">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#c8e6c9] bg-white px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-brand-green">
             <Sparkles className="h-4 w-4" />
             AI Rate Intelligence
           </div>
-          <h2 className="mt-4 font-heading text-3xl">
+          <h2 className="mt-4 text-[28px] font-heading min-[600px]:text-3xl">
             Best time to send to Nigeria
           </h2>
-          <p className="mt-3 text-sm leading-7 text-white/75">
+          <p className="mt-3 text-[12px] leading-6 text-brand-navy/70 min-[600px]:text-sm min-[600px]:leading-7">
             Live market context meets Gemini reasoning, with a manual analyst
             fallback if AI is unavailable.
           </p>
         </div>
 
-        <div className="inline-flex items-center gap-2 self-start rounded-full bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/70">
+        <div className="inline-flex items-center gap-2 self-start rounded-full border border-[#c8e6c9] bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-brand-navy/60">
           <BadgeCheck className="h-4 w-4 text-brand-green" />
           Powered by Gemini AI
         </div>
       </div>
 
-      <div className="mt-6 grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
-        <div className="rounded-[26px] border border-white/10 bg-white/5 p-5">
+      <div className="mt-5 grid gap-5 xl:grid-cols-[1.15fr_0.85fr]">
+        <div className="rounded-[14px] border border-[#c8e6c9] bg-white p-5">
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-green">
                 Analyst call
               </p>
-              <p className="mt-2 text-sm text-white/60">
+              <p className="mt-2 text-[12px] text-brand-navy/60 min-[600px]:text-sm">
                 {insight.mode === "manual"
                   ? "Manual Analyst View"
                   : "Live Gemini guidance"}
               </p>
             </div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-2 text-sm font-semibold">
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#f4faf5] px-3 py-2 text-[12px] font-semibold min-[600px]:text-sm">
               {trendIcon}
               {insight.snapshot.trend}
             </div>
           </div>
 
-          <div className="mt-5 rounded-[24px] bg-brand-light/5 p-5">
-            <p className="text-lg leading-8 text-white">
+          <div className="mt-5 rounded-[12px] bg-[#f4faf5] p-5">
+            <p className="text-base leading-8 text-brand-navy min-[600px]:text-lg">
               {isLoading ? "Reading the market pulse for you..." : insight.recommendation}
             </p>
           </div>
 
-          <div className="mt-5 grid gap-3 sm:grid-cols-3">
-            <div className="rounded-2xl bg-white/5 p-4">
-              <p className="text-xs uppercase tracking-[0.18em] text-white/45">
+          <div className="mt-5 grid gap-[14px] min-[600px]:grid-cols-3">
+            <div className="rounded-[10px] border border-[#c8e6c9] bg-white p-[14px]">
+              <p className="text-xs uppercase tracking-[0.18em] text-brand-navy/45">
                 Current rate
               </p>
-              <p className="mt-2 text-lg font-semibold">
+              <p className="mt-2 text-base font-semibold text-brand-navy min-[600px]:text-lg">
                 {insight.snapshot.currentRate.toFixed(2)} NGN/{insight.snapshot.sourceCurrency}
               </p>
             </div>
-            <div className="rounded-2xl bg-white/5 p-4">
-              <p className="text-xs uppercase tracking-[0.18em] text-white/45">
+            <div className="rounded-[10px] border border-[#c8e6c9] bg-white p-[14px]">
+              <p className="text-xs uppercase tracking-[0.18em] text-brand-navy/45">
                 7-day average
               </p>
-              <p className="mt-2 text-lg font-semibold">
+              <p className="mt-2 text-base font-semibold text-brand-navy min-[600px]:text-lg">
                 {insight.snapshot.sevenDayAverage.toFixed(2)} NGN/{insight.snapshot.sourceCurrency}
               </p>
             </div>
-            <div className="rounded-2xl bg-white/5 p-4">
-              <p className="text-xs uppercase tracking-[0.18em] text-white/45">
+            <div className="rounded-[10px] border border-[#c8e6c9] bg-white p-[14px]">
+              <p className="text-xs uppercase tracking-[0.18em] text-brand-navy/45">
                 Weekly move
               </p>
-              <p className="mt-2 text-lg font-semibold">
+              <p className="mt-2 text-base font-semibold text-brand-navy min-[600px]:text-lg">
                 {formatNaira(insight.snapshot.weeklyTransferDeltaNaira, {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2
@@ -221,32 +221,32 @@ export function BestTimeToSend({ comparison }: BestTimeToSendProps) {
           </div>
         </div>
 
-        <div className="space-y-4">
-          <div className="rounded-[26px] border border-white/10 bg-white/5 p-5">
+        <div className="space-y-5">
+          <div className="rounded-[14px] border border-[#c8e6c9] bg-white p-5">
             <div className="flex items-center gap-2">
               <Activity className="h-5 w-5 text-brand-green" />
-              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-white/70">
+              <p className="text-[12px] font-semibold uppercase tracking-[0.16em] text-brand-navy/60 min-[600px]:text-sm">
                 Confidence meter
               </p>
             </div>
-            <div className="mt-4 h-3 overflow-hidden rounded-full bg-white/10">
+            <div className="mt-4 h-3 overflow-hidden rounded-full bg-[#f4faf5]">
               <div
                 className={`${getConfidenceWidth(insight.confidence)} h-full rounded-full bg-brand-green transition-all duration-500`}
               />
             </div>
-            <p className="mt-3 text-sm text-white/70">
+            <p className="mt-3 text-[12px] text-brand-navy/70 min-[600px]:text-sm">
               {insight.confidence} confidence based on current-vs-average spread
               and 7-day volatility.
             </p>
           </div>
 
-          <div className="rounded-[26px] border border-white/10 bg-white/5 p-5">
+          <div className="rounded-[14px] border border-[#c8e6c9] bg-white p-5">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.16em] text-white/70">
+                <p className="text-[12px] font-semibold uppercase tracking-[0.16em] text-brand-navy/60 min-[600px]:text-sm">
                   Trend sparkline
                 </p>
-                <p className="mt-2 text-sm text-white/60">
+                <p className="mt-2 text-[12px] text-brand-navy/60 min-[600px]:text-sm">
                   {formatCurrency(insight.snapshot.amount, insight.snapshot.sourceCurrency, {
                     minimumFractionDigits: 0,
                     maximumFractionDigits: 0
@@ -255,16 +255,16 @@ export function BestTimeToSend({ comparison }: BestTimeToSendProps) {
               </div>
               <ArrowUpRight className="h-5 w-5 text-brand-green" />
             </div>
-            <div className="mt-4 rounded-2xl bg-white p-3">
+            <div className="mt-4 rounded-[12px] bg-[#f4faf5] p-3">
               <Sparkline values={insight.snapshot.sparkline} />
             </div>
           </div>
 
-          <div className="rounded-[26px] border border-white/10 bg-white/5 p-5">
-            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-white/70">
+          <div className="rounded-[14px] border border-[#c8e6c9] bg-white p-5">
+            <p className="text-[12px] font-semibold uppercase tracking-[0.16em] text-brand-navy/60 min-[600px]:text-sm">
               Provider spread today
             </p>
-            <p className="mt-3 text-sm leading-7 text-white/75">
+            <p className="mt-3 text-[12px] leading-6 text-brand-navy/70 min-[600px]:text-sm min-[600px]:leading-7">
               {insight.snapshot.bestProvider} is beating {insight.snapshot.worstProvider} by{" "}
               <span className="font-semibold text-brand-green">
                 {formatNaira(insight.snapshot.maxSavings, {

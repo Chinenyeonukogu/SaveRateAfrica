@@ -25,12 +25,12 @@ export function ProviderCard({
   return (
     <motion.article
       animate={{ opacity: 1, x: 0 }}
-      className="relative min-w-[84%] snap-center rounded-[28px] border border-brand-navy/10 bg-white p-5 shadow-float md:min-w-0"
+      className="relative rounded-[12px] border border-[#c8e6c9] bg-white px-6 py-5 shadow-float transition duration-200 hover:shadow-[0_4px_16px_rgba(46,125,50,0.1)]"
       initial={{ opacity: 0, x: 24 }}
       transition={{ delay: index * 0.06, duration: 0.4 }}
     >
       {provider.isBestValue && (
-        <div className="absolute left-5 top-0 -translate-y-1/2 rounded-full bg-brand-coral px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-white">
+        <div className="absolute left-6 top-0 -translate-y-1/2 rounded-full bg-[#e8f5e9] px-2 py-[3px] text-[9px] font-semibold uppercase tracking-[0.16em] text-[#2e7d32]">
           Best value
         </div>
       )}
@@ -47,8 +47,10 @@ export function ProviderCard({
           </div>
 
           <div>
-            <h3 className="font-heading text-2xl text-brand-navy">{provider.name}</h3>
-            <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-brand-navy/70">
+            <h3 className="font-heading text-[22px] text-brand-navy min-[600px]:text-2xl">
+              {provider.name}
+            </h3>
+            <div className="mt-2 flex flex-wrap items-center gap-3 text-[12px] text-brand-navy/70 min-[600px]:text-sm">
               <div className="inline-flex items-center gap-1">
                 <Star className="h-4 w-4 fill-brand-yellow text-brand-yellow" />
                 {provider.rating.toFixed(1)}
@@ -83,7 +85,7 @@ export function ProviderCard({
           hasFee ? "lg:grid-cols-4" : "lg:grid-cols-3"
         }`}
       >
-        <div className="rounded-2xl bg-brand-light p-4">
+        <div className="rounded-[12px] bg-brand-light p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-navy/50">
             Exchange rate
           </p>
@@ -114,7 +116,7 @@ export function ProviderCard({
         </div>
 
         {hasFee ? (
-          <div className="rounded-2xl bg-brand-light p-4">
+          <div className="rounded-[12px] bg-brand-light p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-navy/50">
               Transfer fee
             </p>
@@ -124,7 +126,7 @@ export function ProviderCard({
           </div>
         ) : null}
 
-        <div className="rounded-2xl border border-brand-green/20 bg-brand-green/10 p-4">
+        <div className="rounded-[12px] border border-brand-green/20 bg-brand-green/10 p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-green">
             Amount received
           </p>
@@ -136,7 +138,7 @@ export function ProviderCard({
           </p>
         </div>
 
-        <div className="rounded-2xl bg-brand-light p-4">
+        <div className="rounded-[12px] bg-brand-light p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-navy/50">
             Delivery
           </p>
@@ -149,10 +151,14 @@ export function ProviderCard({
 
       <div className="mt-5 flex flex-col gap-4 border-t border-brand-navy/10 pt-5 md:flex-row md:items-center md:justify-between">
         <div>
-          <p className="text-sm font-semibold text-brand-navy">{provider.bestFor}</p>
-          <p className="mt-1 text-sm leading-6 text-brand-navy/70">{provider.trustNote}</p>
+          <p className="text-[12px] font-semibold text-brand-navy min-[600px]:text-sm">
+            {provider.bestFor}
+          </p>
+          <p className="mt-1 text-[12px] leading-6 text-brand-navy/70 min-[600px]:text-sm">
+            {provider.trustNote}
+          </p>
           {provider.transferFeeNote ? (
-            <p className="mt-3 rounded-2xl bg-brand-coral/10 px-3 py-3 text-xs font-medium leading-5 text-brand-navy/75">
+            <p className="mt-3 rounded-[12px] bg-brand-coral/10 px-3 py-3 text-xs font-medium leading-5 text-brand-navy/75">
               {provider.transferFeeNote}
             </p>
           ) : null}

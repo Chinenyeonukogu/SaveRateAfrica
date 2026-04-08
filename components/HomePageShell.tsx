@@ -11,9 +11,11 @@ import {
   CircleDollarSign,
   CreditCard,
   LineChart,
+  Menu,
   ShieldCheck,
   Star,
-  Waves
+  Waves,
+  X
 } from "lucide-react";
 
 import { AIAssistant } from "@/components/AIAssistant";
@@ -159,10 +161,45 @@ const featureCardDefinitions: FeatureCardDefinition[] = [
   }
 ];
 
+const featureCardIconThemes = [
+  {
+    background: "linear-gradient(135deg, #4fc3f7 0%, #0288d1 100%)",
+    boxShadow: "0 5px 0 #0277bd, 0 7px 12px rgba(2,136,209,0.35)"
+  },
+  {
+    background: "linear-gradient(135deg, #81c784 0%, #2e7d32 100%)",
+    boxShadow: "0 5px 0 #1b5e20, 0 7px 12px rgba(46,125,50,0.35)"
+  },
+  {
+    background: "linear-gradient(135deg, #ce93d8 0%, #7b1fa2 100%)",
+    boxShadow: "0 5px 0 #6a1b9a, 0 7px 12px rgba(123,31,162,0.35)"
+  },
+  {
+    background: "linear-gradient(135deg, #ffb74d 0%, #e65100 100%)",
+    boxShadow: "0 5px 0 #bf360c, 0 7px 12px rgba(230,81,0,0.35)"
+  },
+  {
+    background: "linear-gradient(135deg, #4db6ac 0%, #00695c 100%)",
+    boxShadow: "0 5px 0 #004d40, 0 7px 12px rgba(0,105,92,0.35)"
+  },
+  {
+    background: "linear-gradient(135deg, #7986cb 0%, #283593 100%)",
+    boxShadow: "0 5px 0 #1a237e, 0 7px 12px rgba(40,53,147,0.35)"
+  },
+  {
+    background: "linear-gradient(135deg, #aed581 0%, #558b2f 100%)",
+    boxShadow: "0 5px 0 #33691e, 0 7px 12px rgba(85,139,47,0.35)"
+  }
+] as const;
+
 const reviewCountries = ["USA", "UK", "Canada"] as const;
 const brandFontStyle = {
   fontFamily: '"Sora", var(--font-heading), sans-serif'
 } as const;
+const pageShellClassName =
+  "mx-auto w-full max-w-[1200px] px-4 min-[600px]:px-6 lg:px-10";
+const topLevelSectionInnerClassName = `${pageShellClassName} py-9 min-[600px]:py-[52px] lg:py-[72px]`;
+const sectionDividerClassName = "border-t border-[#e8f5e9]";
 
 function SaveRateAfricaLogo() {
   return (
@@ -238,10 +275,10 @@ function AppStoreBadge({
     >
       <Icon />
       <span className="flex flex-col leading-none" style={brandFontStyle}>
-        <span className="text-[8px] font-medium tracking-[0.02em] text-white/85">
+        <span className="text-[7px] font-medium tracking-[0.02em] text-white/85">
           {prefix}
         </span>
-        <span className="mt-[2px] text-[14px] font-bold">{label}</span>
+        <span className="mt-[2px] text-[11px] font-bold">{label}</span>
       </span>
     </a>
   );
@@ -284,6 +321,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
   const [reviewCountry, setReviewCountry] = useState<SenderCountry>(
     initialComparison.senderCountry
   );
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [comparison, setComparison] = useState(initialComparison);
   const [sortBy, setSortBy] = useState<ComparisonSort>(initialComparison.sortBy);
   const [isLoading, setIsLoading] = useState(false);
@@ -434,9 +472,9 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
 
   return (
     <>
-      <main className="pb-32 md:pb-16">
+      <main className="overflow-x-hidden pb-32 md:pb-20">
         <div className="bg-[#2e7d32]">
-          <div className="mx-auto max-w-7xl px-4 py-[10px] text-center text-[13px] text-white">
+          <div className="mx-auto max-w-[1200px] px-5 py-[10px] text-center text-[13px] text-white">
             <span>
               ✦ Real-time NGN rates · No hidden fees · Compare 10+ providers and
               save on every transfer.{" "}
@@ -451,15 +489,15 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
         </div>
 
         <header className="border-b border-[#dcedc8] bg-white">
-          <div className="mx-auto max-w-7xl px-4">
-            <div className="flex flex-col gap-3 py-3 xl:h-[52px] xl:flex-row xl:items-center xl:justify-between xl:gap-6 xl:py-0">
+          <div className={pageShellClassName}>
+            <div className="flex h-[60px] items-center justify-between gap-4">
               <div className="shrink-0">
                 <SaveRateAfricaLogo />
               </div>
 
               <nav
                 aria-label="Primary"
-                className="flex min-w-0 flex-1 gap-4 overflow-x-auto xl:justify-center"
+                className="hidden min-w-0 flex-1 items-center justify-center gap-4 overflow-x-auto min-[600px]:flex"
               >
                 {primaryNavLinks.map((item) => (
                   <Link
@@ -472,12 +510,45 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                 ))}
               </nav>
 
-              <div className="flex shrink-0 flex-wrap items-center gap-2">
+              <div className="hidden shrink-0 items-center gap-2 min-[600px]:flex">
                 {appDownloadButtons.map((button) => (
                   <AppStoreBadge key={button.platform} {...button} />
                 ))}
               </div>
+
+              <button
+                aria-expanded={isMobileMenuOpen}
+                aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+                className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-[#dcedc8] text-brand-navy min-[600px]:hidden"
+                type="button"
+                onClick={() => setIsMobileMenuOpen((current) => !current)}
+              >
+                {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </button>
             </div>
+
+            {isMobileMenuOpen ? (
+              <div className="border-t border-[#e8f5e9] pb-4 pt-4 min-[600px]:hidden">
+                <nav aria-label="Mobile primary" className="grid gap-2">
+                  {primaryNavLinks.map((item) => (
+                    <Link
+                      key={item.label}
+                      className="inline-flex min-h-11 items-center rounded-xl px-3 text-sm font-medium text-[#2e4a2e] hover:bg-brand-light"
+                      href={item.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </nav>
+
+                <div className="mt-4 flex flex-col gap-2">
+                  {appDownloadButtons.map((button) => (
+                    <AppStoreBadge key={button.platform} {...button} />
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </div>
         </header>
 
@@ -490,10 +561,10 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
           onSenderCountryChange={setSenderCountry}
         />
 
-        <section className="px-4 pt-8 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-7xl rounded-[12px] border border-brand-navy/10 bg-white px-4 py-5 shadow-float min-[600px]:rounded-[16px] min-[600px]:px-6 min-[600px]:py-8 lg:px-10 lg:py-11">
-            <div className="max-w-2xl">
-              <div>
+        <section className={sectionDividerClassName}>
+          <div className={topLevelSectionInnerClassName}>
+            <div className="rounded-[16px] bg-[#f4faf5] px-4 py-5 min-[600px]:px-5 min-[600px]:py-7 lg:px-8 lg:py-9">
+              <div className="max-w-2xl">
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-green">
                   Feature hub
                 </p>
@@ -505,46 +576,52 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                   sending tools already inside the homepage.
                 </p>
               </div>
-            </div>
 
-            <div className="mt-6 grid grid-cols-1 items-stretch gap-3 min-[600px]:grid-cols-2 min-[600px]:gap-[14px] lg:grid-cols-3 lg:gap-4">
-              {featureCardDefinitions.map((card) => {
-                const Icon = card.icon;
+              <div className="mt-6 grid grid-cols-1 items-stretch gap-3 min-[600px]:grid-cols-2 min-[600px]:gap-[14px] lg:grid-cols-3 lg:gap-4">
+                {featureCardDefinitions.map((card, index) => {
+                  const Icon = card.icon;
+                  const iconTheme =
+                    featureCardIconThemes[index] ??
+                    featureCardIconThemes[featureCardIconThemes.length - 1];
 
-                return (
-                  <article
-                    key={card.title}
-                    className="flex h-full flex-col rounded-[24px] bg-brand-light p-[18px] min-[600px]:p-5"
-                  >
-                    <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-brand-green shadow-float">
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-green">
-                      {card.eyebrow}
-                    </p>
-                    <h3 className="mt-2 text-base font-heading text-brand-navy min-[600px]:text-2xl">
-                      {card.title}
-                    </h3>
-                    <p className="mt-3 flex-1 text-[12px] leading-5 text-brand-navy/70 min-[600px]:text-sm min-[600px]:leading-7">
-                      {card.description}
-                    </p>
-                    <button
-                      className="mt-5 inline-flex min-h-12 items-center gap-2 self-start rounded-2xl bg-white px-4 text-sm font-semibold text-brand-navy shadow-float hover:bg-brand-navy hover:text-white"
-                      type="button"
-                      onClick={() => scrollToSection(sectionTargets[card.targetKey])}
+                  return (
+                    <article
+                      key={card.title}
+                      className="flex h-full flex-col rounded-[12px] border border-[#c8e6c9] bg-white px-4 py-[18px] transition duration-200 hover:-translate-y-[2px] hover:shadow-[0_8px_28px_rgba(46,125,50,0.13)] min-[600px]:px-5 min-[600px]:py-6"
                     >
-                      {card.cta}
-                      <ArrowRight className="h-4 w-4" />
-                    </button>
-                  </article>
-                );
-              })}
+                      <div
+                        className="inline-flex h-[50px] w-[50px] items-center justify-center rounded-[13px] text-white"
+                        style={iconTheme}
+                      >
+                        <Icon className="h-5 w-5 text-white [filter:drop-shadow(0_2px_2px_rgba(0,0,0,0.2))]" />
+                      </div>
+                      <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-green">
+                        {card.eyebrow}
+                      </p>
+                      <h3 className="mt-2 text-base font-heading text-brand-navy min-[600px]:text-2xl">
+                        {card.title}
+                      </h3>
+                      <p className="mt-3 flex-1 text-[12px] leading-5 text-brand-navy/70 min-[600px]:text-sm min-[600px]:leading-7">
+                        {card.description}
+                      </p>
+                      <button
+                        className="mt-5 inline-flex min-h-12 items-center gap-2 self-start rounded-2xl bg-white px-4 text-sm font-semibold text-brand-navy shadow-float hover:bg-brand-navy hover:text-white"
+                        type="button"
+                        onClick={() => scrollToSection(sectionTargets[card.targetKey])}
+                      >
+                        {card.cta}
+                        <ArrowRight className="h-4 w-4" />
+                      </button>
+                    </article>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="px-4 pt-8 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-7xl space-y-8 lg:space-y-10">
+        <section className={sectionDividerClassName}>
+          <div className={topLevelSectionInnerClassName}>
             <div id="compare-rates" ref={compareRef} className="scroll-mt-24">
               <ComparisonTable
                 comparison={comparison}
@@ -555,143 +632,175 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
               />
             </div>
 
-            <RateDisclaimer />
+            <div className="mt-8">
+              <RateDisclaimer />
+            </div>
+          </div>
+        </section>
 
+        <section className={sectionDividerClassName}>
+          <div className={topLevelSectionInnerClassName}>
+            <SavingsCalculator comparison={comparison} />
+          </div>
+        </section>
+
+        <section className={sectionDividerClassName}>
+          <div className={topLevelSectionInnerClassName}>
             <section
               id="how-it-works"
               ref={howItWorksRef}
-              className="scroll-mt-24 grid gap-6 xl:grid-cols-[0.95fr_1.05fr] xl:items-start"
+              className="scroll-mt-24 rounded-[16px] border border-[#c8e6c9] bg-white px-4 py-5 min-[600px]:px-6 min-[600px]:py-8 lg:px-8 lg:py-10"
             >
-              <SavingsCalculator comparison={comparison} />
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-green">
+                How it works
+              </p>
+              <h2 className="mt-2 text-[28px] font-heading text-brand-navy min-[600px]:text-3xl">
+                A clearer route from diaspora wallet to Nigerian bank account
+              </h2>
 
-              <div className="rounded-[28px] border border-brand-navy/10 bg-white p-6 shadow-float">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-green">
-                  How it works
-                </p>
-                <h2 className="mt-2 font-heading text-3xl text-brand-navy">
-                  A clearer route from diaspora wallet to Nigerian bank account
-                </h2>
-                <div className="mt-6 space-y-4">
-                  {howItWorksSteps.map((step) => (
-                    <div
-                      key={step.step}
-                      className="rounded-[24px] bg-brand-light p-5"
-                    >
-                      <div className="inline-flex rounded-full bg-brand-navy px-3 py-1 text-xs font-semibold tracking-[0.18em] text-white">
-                        Step {step.step}
-                      </div>
-                      <h3 className="mt-3 text-xl font-heading text-brand-navy">
-                        {step.title}
-                      </h3>
-                      <p className="mt-2 text-sm leading-6 text-brand-navy/70">
-                        {step.description}
-                      </p>
-                    </div>
-                  ))}
-                </div>
+              <div className="mt-8 grid min-[600px]:grid-cols-3">
+                {howItWorksSteps.map((step, index) => (
+                  <article
+                    key={step.step}
+                    className={`relative min-[600px]:px-6 ${
+                      index < howItWorksSteps.length - 1
+                        ? "border-b border-[#e8f5e9] pb-6 min-[600px]:border-b-0"
+                        : ""
+                    } ${index > 0 ? "pt-6 min-[600px]:pt-0" : ""}`}
+                  >
+                    {index < howItWorksSteps.length - 1 ? (
+                      <span className="absolute right-0 top-4 hidden h-[60px] border-r border-[#c8e6c9] min-[600px]:block" />
+                    ) : null}
+                    <p className="mb-[10px] text-[11px] font-semibold uppercase tracking-[0.18em] text-[#2e7d32]">
+                      Step {step.step}
+                    </p>
+                    <h3 className="mb-[6px] text-base font-heading text-brand-navy min-[600px]:text-lg">
+                      {step.title}
+                    </h3>
+                    <p className="text-[12px] leading-6 text-brand-navy/70 min-[600px]:text-sm">
+                      {step.description}
+                    </p>
+                  </article>
+                ))}
               </div>
             </section>
+          </div>
+        </section>
 
+        <section className={sectionDividerClassName}>
+          <div className={topLevelSectionInnerClassName}>
             <section
               id="smart-sending"
               ref={smartSendingRef}
-              className="scroll-mt-24 rounded-[28px] border border-brand-navy/10 bg-white p-6 shadow-float sm:p-8"
+              className="scroll-mt-24 rounded-[16px] border border-[#c8e6c9] bg-white px-4 py-5 min-[600px]:px-6 min-[600px]:py-8 lg:px-8 lg:py-10"
             >
-              <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-                <div className="lg:max-w-sm">
+              <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start lg:gap-12">
+                <div className="lg:max-w-md">
                   <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-yellow/30">
                     <CircleDollarSign className="h-6 w-6 text-brand-navy" />
                   </div>
                   <p className="mt-5 text-xs font-semibold uppercase tracking-[0.22em] text-brand-green">
                     Smart sending
                   </p>
-                  <h2 className="mt-2 font-heading text-3xl text-brand-navy">
+                  <h2 className="mt-2 text-[28px] font-heading text-brand-navy min-[600px]:text-3xl">
                     Move more value with less friction
                   </h2>
-                  <p className="mt-3 text-sm leading-7 text-brand-navy/70">
+                  <p className="mt-3 text-[12px] leading-6 text-brand-navy/70 min-[600px]:text-sm min-[600px]:leading-7">
                     See the strongest route recommendation right after the send
                     form so first-time visitors get immediate clarity on where
                     their money goes furthest.
                   </p>
                 </div>
 
-                <div className="space-y-4">
-                  <p className="text-sm leading-7 text-brand-navy/70">
-                    Your best live route right now is{" "}
-                    <span className="font-semibold text-brand-navy">
-                      {bestValueProvider?.name}
-                    </span>
-                    , delivering up to{" "}
-                    <span className="font-semibold text-brand-green">
-                      {formatNaira(bestValueProvider?.amountReceived ?? 1, {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                      })}
-                    </span>{" "}
-                    on this{" "}
-                    <span className="font-semibold text-brand-navy">
-                      {formatCurrency(comparison.amount, comparison.sourceCurrency, {
-                        minimumFractionDigits: 0,
-                        maximumFractionDigits: 0
-                      })}
-                    </span>{" "}
-                    transfer.
-                  </p>
-                  <p className="text-sm leading-7 text-brand-navy/70">
-                    SaveRateAfrica compares effective value, transfer fee, and
-                    speed together so you can choose based on what matters
-                    today: urgency, cost, or payout.
-                  </p>
+                <div className="rounded-[14px] bg-[#f4faf5] p-5 min-[600px]:p-7">
+                  <div className="space-y-4">
+                    <p className="text-[12px] leading-6 text-brand-navy/70 min-[600px]:text-sm min-[600px]:leading-7">
+                      Your best live route right now is{" "}
+                      <span className="font-semibold text-brand-navy">
+                        {bestValueProvider?.name}
+                      </span>
+                      , delivering up to{" "}
+                      <span className="font-semibold text-brand-green">
+                        {formatNaira(bestValueProvider?.amountReceived ?? 1, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2
+                        })}
+                      </span>{" "}
+                      on this{" "}
+                      <span className="font-semibold text-brand-navy">
+                        {formatCurrency(comparison.amount, comparison.sourceCurrency, {
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 0
+                        })}
+                      </span>{" "}
+                      transfer.
+                    </p>
+                    <p className="text-[12px] leading-6 text-brand-navy/70 min-[600px]:text-sm min-[600px]:leading-7">
+                      SaveRateAfrica compares effective value, transfer fee, and
+                      speed together so you can choose based on what matters
+                      today: urgency, cost, or payout.
+                    </p>
 
-                  <div className="grid gap-3 sm:grid-cols-3">
-                    <div className="flex items-center gap-3 rounded-2xl bg-brand-light px-4 py-3">
-                      <CheckCircle2 className="h-5 w-5 text-brand-green" />
-                      <span className="text-sm text-brand-navy/75">
-                        Best provider right now: {comparison.savings.bestProvider}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3 rounded-2xl bg-brand-light px-4 py-3">
-                      <ShieldCheck className="h-5 w-5 text-brand-green" />
-                      <span className="text-sm text-brand-navy/75">
-                        Every provider is shown with rating, speed, and payout
-                        channel context
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3 rounded-2xl bg-brand-light px-4 py-3">
-                      <LineChart className="h-5 w-5 text-brand-green" />
-                      <span className="text-sm text-brand-navy/75">
-                        Trend signals help you avoid poor timing and guesswork
-                      </span>
+                    <div className="grid gap-3">
+                      <div className="flex items-center gap-3 rounded-[12px] bg-white px-4 py-3">
+                        <CheckCircle2 className="h-5 w-5 text-brand-green" />
+                        <span className="text-[12px] text-brand-navy/75 min-[600px]:text-sm">
+                          Best provider right now: {comparison.savings.bestProvider}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-3 rounded-[12px] bg-white px-4 py-3">
+                        <ShieldCheck className="h-5 w-5 text-brand-green" />
+                        <span className="text-[12px] text-brand-navy/75 min-[600px]:text-sm">
+                          Every provider is shown with rating, speed, and payout
+                          channel context
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-3 rounded-[12px] bg-white px-4 py-3">
+                        <LineChart className="h-5 w-5 text-brand-green" />
+                        <span className="text-[12px] text-brand-navy/75 min-[600px]:text-sm">
+                          Trend signals help you avoid poor timing and guesswork
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </section>
+          </div>
+        </section>
 
-            <section className="grid gap-6 xl:grid-cols-[1.08fr_0.92fr] xl:items-start">
-              <div id="market-timing" ref={bestTimeRef} className="scroll-mt-24">
-                <BestTimeToSend comparison={comparison} />
-              </div>
+        <section className={sectionDividerClassName}>
+          <div className={topLevelSectionInnerClassName}>
+            <div id="market-timing" ref={bestTimeRef} className="scroll-mt-24">
+              <BestTimeToSend comparison={comparison} />
+            </div>
+          </div>
+        </section>
 
-              <div id="rate-alerts" ref={alertsRef} className="scroll-mt-24">
-                <AlertsForm />
-              </div>
-            </section>
+        <section className={sectionDividerClassName}>
+          <div className={topLevelSectionInnerClassName}>
+            <div id="rate-alerts" ref={alertsRef} className="scroll-mt-24">
+              <AlertsForm />
+            </div>
+          </div>
+        </section>
 
+        <section className={sectionDividerClassName}>
+          <div className={topLevelSectionInnerClassName}>
             <section
               id="build-credit"
               ref={buildCreditRef}
-              className="scroll-mt-24 rounded-[28px] border border-brand-navy/10 bg-brand-navy p-6 text-white shadow-float sm:p-8"
+              className="scroll-mt-24 rounded-[16px] border border-brand-navy/10 bg-brand-navy px-4 py-8 text-white shadow-float min-[600px]:px-8 min-[600px]:py-10 lg:px-10 lg:py-12"
             >
-              <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+              <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-12">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-green">
                     Need more ways to save?
                   </p>
-                  <h2 className="mt-2 font-heading text-3xl">
+                  <h2 className="mt-2 text-[28px] font-heading min-[600px]:text-3xl">
                     Build credit while you send from the USA
                   </h2>
-                  <p className="mt-3 max-w-2xl text-sm leading-7 text-white/80">
+                  <p className="mt-3 max-w-2xl text-[12px] leading-6 text-white/80 min-[600px]:text-sm min-[600px]:leading-7">
                     Explore immigrant-friendly card picks that help you earn
                     rewards, improve approval odds, and strengthen your U.S.
                     credit profile.
@@ -700,7 +809,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
 
                 <div className="flex justify-start lg:justify-end">
                   <Link
-                    className="inline-flex min-h-12 items-center gap-2 rounded-2xl bg-brand-yellow px-5 text-sm font-bold text-brand-navy transition hover:shadow-float"
+                    className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-brand-yellow px-5 text-sm font-bold text-brand-navy transition hover:shadow-float min-[600px]:w-auto"
                     href="/credit-cards"
                   >
                     Explore credit cards
@@ -709,31 +818,39 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                 </div>
               </div>
             </section>
+          </div>
+        </section>
 
+        <section className={sectionDividerClassName}>
+          <div className={topLevelSectionInnerClassName}>
             <div id="rate-chart" ref={rateChartRef} className="scroll-mt-24">
               <RateChart />
             </div>
+          </div>
+        </section>
 
-            <section className="rounded-[28px] border border-brand-navy/10 bg-white p-6 shadow-float sm:p-8">
-              <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <section className={sectionDividerClassName}>
+          <div className={topLevelSectionInnerClassName}>
+            <section className="rounded-[16px] border border-[#c8e6c9] bg-white px-4 py-5 min-[600px]:px-6 min-[600px]:py-8 lg:px-8 lg:py-10">
+              <div className="flex flex-col gap-5">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-green">
                     Live provider reviews
                   </p>
-                  <h2 className="mt-2 font-heading text-3xl text-brand-navy">
+                  <h2 className="mt-2 text-[28px] font-heading text-brand-navy min-[600px]:text-3xl">
                     Real-time provider pulse for Nigerians sending abroad
                   </h2>
-                  <p className="mt-2 text-sm text-brand-navy/60">
+                  <p className="mt-2 text-[12px] text-brand-navy/60 min-[600px]:text-sm">
                     Updated {formatDateTime(selectedReviewComparison.updatedAt)} for the{" "}
                     {reviewCountry} corridor.
                   </p>
                 </div>
 
-                <div className="grid grid-cols-3 gap-2">
+                <div className="flex gap-2 overflow-x-auto pb-1 min-[600px]:grid min-[600px]:grid-cols-3">
                   {reviewCountries.map((country) => (
                     <button
                       key={country}
-                      className={`min-h-12 rounded-2xl px-4 text-sm font-semibold transition ${
+                      className={`min-h-11 shrink-0 rounded-2xl px-4 text-sm font-semibold transition ${
                         country === reviewCountry
                           ? "bg-brand-green text-white"
                           : "bg-brand-light text-brand-navy hover:bg-brand-navy hover:text-white"
@@ -747,11 +864,11 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                 </div>
               </div>
 
-              <div className="mt-6 grid gap-5 lg:grid-cols-3">
+              <div className="mt-6 grid gap-[14px] lg:grid-cols-3">
                 {liveReviewProviders.map((provider) => (
                   <article
                     key={`${reviewCountry}-${provider.slug}`}
-                    className="rounded-[24px] bg-brand-light p-5"
+                    className="rounded-[12px] border border-[#c8e6c9] bg-white p-6"
                   >
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex items-center gap-1">
@@ -768,13 +885,13 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                       </div>
 
                       {provider.isBestValue ? (
-                        <span className="rounded-full bg-brand-green/10 px-3 py-1 text-xs font-semibold text-brand-green">
+                        <span className="rounded-full bg-brand-green/10 px-3 py-1 text-[9px] font-semibold uppercase tracking-[0.16em] text-brand-green">
                           Best value now
                         </span>
                       ) : null}
                     </div>
 
-                    <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-brand-navy/60">
+                    <div className="mt-4 flex flex-wrap items-center gap-3 text-[12px] text-brand-navy/60 min-[600px]:text-sm">
                       <span className="font-semibold text-brand-green">
                         {provider.name}
                       </span>
@@ -782,7 +899,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                       <span>{formatCompact(provider.reviewCount)} reviews</span>
                     </div>
 
-                    <p className="mt-4 text-base leading-7 text-brand-navy/75">
+                    <p className="mt-4 text-[14px] leading-7 text-brand-navy/75 min-[600px]:text-base">
                       {provider.name} is currently delivering{" "}
                       <span className="font-semibold text-brand-green">
                         {formatNaira(provider.amountReceived, {
@@ -805,27 +922,27 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                     </p>
 
                     <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                      <div className="rounded-2xl bg-white px-4 py-3">
+                      <div className="rounded-[12px] bg-brand-light px-4 py-3">
                         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-navy/45">
                           Best for
                         </p>
-                        <p className="mt-2 text-sm font-semibold text-brand-navy">
+                        <p className="mt-2 text-[12px] font-semibold text-brand-navy min-[600px]:text-sm">
                           {provider.bestFor}
                         </p>
                       </div>
 
-                      <div className="rounded-2xl bg-white px-4 py-3">
+                      <div className="rounded-[12px] bg-brand-light px-4 py-3">
                         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-navy/45">
                           Delivery
                         </p>
-                        <p className="mt-2 text-sm font-semibold text-brand-navy">
+                        <p className="mt-2 text-[12px] font-semibold text-brand-navy min-[600px]:text-sm">
                           {provider.deliveryLabel}
                         </p>
                       </div>
                     </div>
 
                     <div className="mt-5 border-t border-brand-navy/10 pt-4">
-                      <p className="text-sm text-brand-navy/60">
+                      <p className="text-[12px] text-brand-navy/60 min-[600px]:text-sm">
                         Supported by live provider ratings and current payout data
                         for the {reviewCountry} to Nigeria route.
                       </p>
@@ -834,12 +951,16 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                 ))}
               </div>
             </section>
+          </div>
+        </section>
 
-            <section className="rounded-[28px] border border-brand-navy/10 bg-white p-6 shadow-float sm:p-8">
+        <section className={sectionDividerClassName}>
+          <div className={topLevelSectionInnerClassName}>
+            <section className="rounded-[16px] border border-brand-navy/10 bg-white px-4 py-5 shadow-float min-[600px]:px-6 min-[600px]:py-8 lg:px-8 lg:py-10">
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-green">
                 FAQ
               </p>
-              <h2 className="mt-2 font-heading text-3xl text-brand-navy">
+              <h2 className="mt-2 text-[28px] font-heading text-brand-navy min-[600px]:text-3xl">
                 Questions Nigerian diaspora senders ask most
               </h2>
 
@@ -847,12 +968,12 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                 {faqItems.map((item) => (
                   <details
                     key={item.question}
-                    className="group rounded-[24px] bg-brand-light p-5"
+                    className="group rounded-[16px] bg-brand-light p-4 min-[600px]:p-5"
                   >
-                    <summary className="cursor-pointer list-none font-semibold text-brand-navy">
+                    <summary className="cursor-pointer list-none text-[14px] font-semibold text-brand-navy min-[600px]:text-base">
                       {item.question}
                     </summary>
-                    <p className="mt-3 text-sm leading-7 text-brand-navy/70">
+                    <p className="mt-3 text-[12px] leading-6 text-brand-navy/70 min-[600px]:text-sm min-[600px]:leading-7">
                       {item.answer}
                     </p>
                   </details>
