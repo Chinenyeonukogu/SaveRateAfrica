@@ -68,7 +68,7 @@ summary::-webkit-details-marker {
 }
 
 .animate-hero-live-pulse {
-  animation: hero-live-pulse 1.6s infinite;
+  animation: hero-live-pulse 1.8s infinite;
 }
 
 @layer base {

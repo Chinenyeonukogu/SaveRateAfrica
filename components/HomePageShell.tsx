@@ -55,72 +55,77 @@ type SectionTargetKey =
   | "smartSending";
 
 interface FeatureCardDefinition {
-  accentBorderHoverClassName: string;
   ctaClassName: string;
   cta: string;
   description: string;
   icon: LucideIcon;
-  iconBackgroundClassName: string;
+  iconBoxClassName: string;
+  iconColorClassName: string;
   eyebrow: string;
   labelClassName: string;
+  stripeClassName: string;
   targetKey: SectionTargetKey;
   title: string;
 }
 
 const featureCardDefinitions: FeatureCardDefinition[] = [
   {
-    accentBorderHoverClassName: "hover:border-[#2e7d32]",
     cta: "Explore credit cards",
     ctaClassName:
-      "border-[#2e7d32] text-[#2e7d32] group-hover:bg-[#2e7d32] group-hover:text-white hover:bg-[#2e7d32] hover:text-white",
+      "border-[#a5d6a7] bg-[#f1faf2] text-[#2e7d32] group-hover:border-[#2e7d32] group-hover:bg-[#2e7d32] group-hover:text-white hover:border-[#2e7d32] hover:bg-[#2e7d32] hover:text-white",
     description:
       "Explore immigrant-friendly card picks that help you earn rewards and strengthen your U.S. credit profile.",
     eyebrow: "BUILD CREDIT",
     icon: CreditCard,
-    iconBackgroundClassName: "bg-[#2e7d32]",
+    iconBoxClassName: "bg-[#e8f5e9]",
+    iconColorClassName: "text-[#2e7d32]",
     labelClassName: "text-[#2e7d32]",
+    stripeClassName: "bg-[#2e7d32]",
     targetKey: "buildCredit",
     title: "Build credit while you send from the USA"
   },
   {
-    accentBorderHoverClassName: "hover:border-[#7c6ff7]",
     cta: "View the flow",
     ctaClassName:
-      "border-[#7c6ff7] text-[#7c6ff7] group-hover:bg-[#7c6ff7] group-hover:text-white hover:bg-[#7c6ff7] hover:text-white",
+      "border-[#ce93d8] bg-[#f3e5f5] text-[#5e35b1] group-hover:border-[#5e35b1] group-hover:bg-[#5e35b1] group-hover:text-white hover:border-[#5e35b1] hover:bg-[#5e35b1] hover:text-white",
     description:
       "See the simple path from entering your amount to choosing the provider that fits your speed and budget.",
     eyebrow: "HOW IT WORKS",
     icon: Clock3,
-    iconBackgroundClassName: "bg-[#7c6ff7]",
-    labelClassName: "text-[#7c6ff7]",
+    iconBoxClassName: "bg-[#ede7f6]",
+    iconColorClassName: "text-[#5e35b1]",
+    labelClassName: "text-[#5e35b1]",
+    stripeClassName: "bg-[#5e35b1]",
     targetKey: "howItWorks",
     title: "Understand the send journey"
   },
   {
-    accentBorderHoverClassName: "hover:border-[#4facfe]",
     cta: "Set an alert",
     ctaClassName:
-      "border-[#4facfe] text-[#4facfe] group-hover:bg-[#4facfe] group-hover:text-white hover:bg-[#4facfe] hover:text-white",
+      "border-[#81d4fa] bg-[#e1f5fe] text-[#0288d1] group-hover:border-[#0288d1] group-hover:bg-[#0288d1] group-hover:text-white hover:border-[#0288d1] hover:bg-[#0288d1] hover:text-white",
     description:
       "Choose your target NGN level and let SaveRateAfrica notify you when the corridor is favorable.",
     eyebrow: "RATE ALERTS",
     icon: BellRing,
-    iconBackgroundClassName: "bg-[#4facfe]",
-    labelClassName: "text-[#4facfe]",
+    iconBoxClassName: "bg-[#e1f5fe]",
+    iconColorClassName: "text-[#0288d1]",
+    labelClassName: "text-[#0288d1]",
+    stripeClassName: "bg-[#0288d1]",
     targetKey: "alerts",
     title: "Track your target rate"
   },
   {
-    accentBorderHoverClassName: "hover:border-[#f5576c]",
     cta: "See insights",
     ctaClassName:
-      "border-[#f5576c] text-[#f5576c] group-hover:bg-[#f5576c] group-hover:text-white hover:bg-[#f5576c] hover:text-white",
+      "border-[#ef9a9a] bg-[#fce4ec] text-[#c62828] group-hover:border-[#c62828] group-hover:bg-[#c62828] group-hover:text-white hover:border-[#c62828] hover:bg-[#c62828] hover:text-white",
     description:
       "Use best-value guidance, savings context, and timing signals before you send money home.",
     eyebrow: "SMART SENDING",
     icon: Activity,
-    iconBackgroundClassName: "bg-[#f5576c]",
-    labelClassName: "text-[#f5576c]",
+    iconBoxClassName: "bg-[#fce4ec]",
+    iconColorClassName: "text-[#c62828]",
+    labelClassName: "text-[#c62828]",
+    stripeClassName: "bg-[#c62828]",
     targetKey: "smartSending",
     title: "Get smarter route guidance"
   }
@@ -335,45 +340,50 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
 
         <section id="feature-hub" className={`${sectionDividerClassName} scroll-mt-24`}>
           <div className={topLevelSectionInnerClassName}>
-            <div className="mx-auto max-w-[1200px] rounded-[20px] border border-[#e0ede2] bg-[#f8fbf8] px-4 py-5 min-[600px]:px-6 min-[600px]:py-7 lg:px-[28px] lg:py-[32px]">
-              <div className="max-w-[520px]">
-                <p className="mb-2 text-[11px] font-medium uppercase tracking-[2px] text-[#2e7d32]">
+            <div className="mx-auto max-w-[1200px] border-t-[3px] border-[#2e7d32] bg-white px-4 py-7 min-[600px]:px-6 min-[600px]:py-8 lg:px-8 lg:py-9">
+              <div className="max-w-[480px]">
+                <p className="mb-2 text-[10px] font-semibold uppercase tracking-[2px] text-[#2e7d32]">
                   FEATURE HUB
                 </p>
-                <h2 className="mb-[5px] text-[19px] font-medium text-[#1a2e1a]">
+                <h2 className="text-[20px] font-bold tracking-[-0.3px] text-[#1a2e1a]">
                   Browse every core tool from one organized layer
                 </h2>
-                <p className="text-[12px] leading-[1.6] text-[#5a7a5a]">
+                <p className="mt-2 text-[12px] leading-[1.6] text-[#6a8a6a]">
                   Rate monitoring, credit-building support, and smart sending
                   tools — all in one place.
                 </p>
               </div>
 
-              <div className="mt-6 grid grid-cols-1 gap-3 min-[600px]:grid-cols-2 lg:grid-cols-4">
+              <div className="mt-7 grid grid-cols-1 gap-[14px] min-[600px]:grid-cols-2 lg:grid-cols-4">
                 {featureCardDefinitions.map((card) => {
                   const Icon = card.icon;
 
                   return (
                     <article
                       key={card.title}
-                      className={`group flex h-full flex-col rounded-[14px] border border-[#e0ede2] bg-white px-4 py-5 transition-all duration-200 ease-in-out hover:-translate-y-[2px] hover:shadow-[0_4px_16px_rgba(0,0,0,0.07)] ${card.accentBorderHoverClassName}`}
+                      className="group relative flex h-full flex-col overflow-hidden rounded-[14px] border-[1.5px] border-[#e0ede2] bg-[#fafcfa] px-[18px] py-[22px] transition-all duration-200 ease-in-out hover:-translate-y-[3px] hover:border-[#b0d0b8] hover:shadow-[0_6px_20px_rgba(46,125,50,0.10)]"
                     >
-                      <div className={`inline-flex h-[42px] w-[42px] items-center justify-center rounded-[11px] ${card.iconBackgroundClassName}`}>
-                        <Icon className="h-5 w-5 text-white" />
+                      <span
+                        className={`absolute left-0 top-0 h-[3px] w-full rounded-t-[14px] opacity-0 transition-opacity duration-200 group-hover:opacity-100 ${card.stripeClassName}`}
+                      />
+                      <div
+                        className={`mb-4 inline-flex h-[44px] w-[44px] items-center justify-center rounded-[12px] ${card.iconBoxClassName}`}
+                      >
+                        <Icon className={`h-5 w-5 ${card.iconColorClassName}`} />
                       </div>
                       <p
-                        className={`mt-4 text-[11px] font-medium uppercase tracking-[1.6px] ${card.labelClassName}`}
+                        className={`mb-[6px] text-[9px] font-semibold uppercase tracking-[1.5px] ${card.labelClassName}`}
                       >
                         {card.eyebrow}
                       </p>
-                      <h3 className="mt-3 text-[18px] font-medium leading-6 text-[#1a2e1a]">
+                      <h3 className="mb-2 text-[14px] font-bold leading-[1.3] text-[#1a2e1a]">
                         {card.title}
                       </h3>
-                      <p className="mt-3 flex-1 text-[12px] leading-[1.6] text-[#5a7a5a]">
+                      <p className="mb-4 flex-1 text-[11px] leading-[1.65] text-[#6a8a6a]">
                         {card.description}
                       </p>
                       <button
-                        className={`mt-auto inline-flex w-fit items-center gap-[5px] self-start rounded-full border-[1.5px] px-3 py-[6px] text-[11px] font-medium transition-colors duration-200 ${card.ctaClassName}`}
+                        className={`mt-auto inline-flex w-fit items-center gap-[5px] self-start rounded-full border-[1.5px] px-[14px] py-[6px] text-[11px] font-semibold transition-all duration-200 ${card.ctaClassName}`}
                         type="button"
                         onClick={() => scrollToSection(sectionTargets[card.targetKey])}
                       >
