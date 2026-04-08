@@ -42,7 +42,7 @@ interface HomePageShellProps {
   initialComparison: ComparisonResult;
 }
 
-type FeatureFilter = "all" | "alerts" | "credit" | "smart";
+type FeatureCategory = "alerts" | "credit" | "smart";
 type SectionTargetKey =
   | "alerts"
   | "bestTime"
@@ -53,7 +53,7 @@ type SectionTargetKey =
   | "smartSending";
 
 interface FeatureCardDefinition {
-  category: Exclude<FeatureFilter, "all">;
+  category: FeatureCategory;
   cta: string;
   description: string;
   icon: LucideIcon;
@@ -84,13 +84,6 @@ const appDownloadButtons = [
     platform: "Android",
     prefix: "Get it on"
   }
-] as const;
-
-const featureFilters = [
-  { id: "all", label: "All Features" },
-  { id: "alerts", label: "Rate Alerts" },
-  { id: "credit", label: "Build Credit" },
-  { id: "smart", label: "Smart Sending" }
 ] as const;
 
 const featureCardDefinitions: FeatureCardDefinition[] = [
@@ -293,8 +286,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
   );
   const [comparison, setComparison] = useState(initialComparison);
   const [sortBy, setSortBy] = useState<ComparisonSort>(initialComparison.sortBy);
-  const [activeFeatureFilter, setActiveFeatureFilter] =
-    useState<FeatureFilter>("all");
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [nextRefreshAt, setNextRefreshAt] = useState(initialComparison.cachedUntil);
@@ -431,9 +422,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
   const liveReviewComparisons = buildLiveReviewComparisons(comparison);
   const selectedReviewComparison = liveReviewComparisons[reviewCountry];
   const liveReviewProviders = selectedReviewComparison.providers.slice(0, 3);
-  const visibleFeatureCards = featureCardDefinitions.filter(
-    (card) => activeFeatureFilter === "all" || card.category === activeFeatureFilter
-  );
   const sectionTargets: Record<SectionTargetKey, { current: Element | null }> = {
     alerts: alertsRef,
     bestTime: bestTimeRef,
@@ -503,48 +491,30 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
         />
 
         <section className="px-4 pt-8 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-7xl rounded-[28px] border border-brand-navy/10 bg-white p-6 shadow-float sm:p-8">
-            <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+          <div className="mx-auto max-w-7xl rounded-[12px] border border-brand-navy/10 bg-white px-4 py-5 shadow-float min-[600px]:rounded-[16px] min-[600px]:px-6 min-[600px]:py-8 lg:px-10 lg:py-11">
+            <div className="max-w-2xl">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-green">
                   Feature hub
                 </p>
-                <h2 className="mt-2 font-heading text-3xl text-brand-navy">
+                <h2 className="mt-2 text-[20px] font-heading text-brand-navy min-[600px]:text-3xl">
                   Browse every core tool from one organized layer
                 </h2>
-                <p className="mt-3 max-w-2xl text-sm leading-7 text-brand-navy/70">
-                  Use the filters to jump between rate monitoring, credit-building
-                  support, and the smart sending tools already inside the
-                  homepage.
+                <p className="mt-3 text-[13px] leading-6 text-brand-navy/70">
+                  Browse rate monitoring, credit-building support, and the smart
+                  sending tools already inside the homepage.
                 </p>
-              </div>
-
-              <div className="flex flex-wrap gap-2">
-                {featureFilters.map((filter) => (
-                  <button
-                    key={filter.id}
-                    className={`min-h-12 rounded-full px-4 text-sm font-semibold transition ${
-                      activeFeatureFilter === filter.id
-                        ? "bg-brand-navy text-white"
-                        : "bg-brand-light text-brand-navy hover:bg-brand-green/10"
-                    }`}
-                    type="button"
-                    onClick={() => setActiveFeatureFilter(filter.id)}
-                  >
-                    {filter.label}
-                  </button>
-                ))}
               </div>
             </div>
 
-            <div className="mt-6 grid gap-5 lg:grid-cols-3">
-              {visibleFeatureCards.map((card) => {
+            <div className="mt-6 grid grid-cols-1 items-stretch gap-3 min-[600px]:grid-cols-2 min-[600px]:gap-[14px] lg:grid-cols-3 lg:gap-4">
+              {featureCardDefinitions.map((card) => {
                 const Icon = card.icon;
 
                 return (
                   <article
                     key={card.title}
-                    className="flex h-full flex-col rounded-[24px] bg-brand-light p-5"
+                    className="flex h-full flex-col rounded-[24px] bg-brand-light p-[18px] min-[600px]:p-5"
                   >
                     <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-brand-green shadow-float">
                       <Icon className="h-5 w-5" />
@@ -552,10 +522,10 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                     <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-green">
                       {card.eyebrow}
                     </p>
-                    <h3 className="mt-2 font-heading text-2xl text-brand-navy">
+                    <h3 className="mt-2 text-base font-heading text-brand-navy min-[600px]:text-2xl">
                       {card.title}
                     </h3>
-                    <p className="mt-3 flex-1 text-sm leading-7 text-brand-navy/70">
+                    <p className="mt-3 flex-1 text-[12px] leading-5 text-brand-navy/70 min-[600px]:text-sm min-[600px]:leading-7">
                       {card.description}
                     </p>
                     <button
