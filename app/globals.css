@@ -53,8 +53,22 @@ summary::-webkit-details-marker {
   }
 }
 
+@keyframes hero-live-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
 .animate-hero-scroll-bounce {
   animation: hero-scroll-bounce 1.2s ease infinite;
+}
+
+.animate-hero-live-pulse {
+  animation: hero-live-pulse 1.6s infinite;
 }
 
 @layer base {

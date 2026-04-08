@@ -76,12 +76,11 @@ export function HeroSection({
 
           <div className="relative grid items-center gap-8 min-[600px]:gap-[36px] lg:grid-cols-[1.02fr_0.98fr]">
             <div className="pt-0">
-              <div className="mb-[14px] inline-flex items-center gap-3 rounded-full border border-[#66bb6a]/45 bg-[#2e7d32]/25 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-white/95">
-                <span className="relative flex h-3 w-3">
-                  <span className="absolute inset-0 animate-ping rounded-full bg-[#66bb6a]" />
-                  <span className="relative rounded-full bg-[#66bb6a]" />
+              <div className="mb-[14px] inline-flex items-center rounded-full border border-[rgba(255,255,255,0.25)] bg-[rgba(255,255,255,0.12)] px-4 py-[6px] text-[11px] font-medium uppercase tracking-[1.2px] text-white">
+                <span className="mr-[6px] text-[9px] leading-none text-[#4cdf6e] animate-hero-live-pulse">
+                  ●
                 </span>
-                LIVE COMPARISON NOW
+                Real-Time Rates · Compare &amp; Save Instantly
               </div>
 
               <div className="space-y-4">
