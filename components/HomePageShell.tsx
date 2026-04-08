@@ -25,7 +25,6 @@ import { ComparisonTable } from "@/components/ComparisonTable";
 import { HeroSection } from "@/components/HeroSection";
 import { RateChart } from "@/components/RateChart";
 import { RateDisclaimer } from "@/components/RateDisclaimer";
-import { SavingsCalculator } from "@/components/SavingsCalculator";
 import {
   formatCompact,
   formatCurrency,
@@ -443,7 +442,9 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
   }, [nextRefreshAt]);
 
   function handleCompare() {
-    compareRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    document
+      .querySelector("#compare-rates")
+      ?.scrollIntoView({ behavior: "smooth" });
   }
 
   function scrollToSection(target: { current: Element | null }) {
@@ -635,12 +636,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
             <div className="mt-8">
               <RateDisclaimer />
             </div>
-          </div>
-        </section>
-
-        <section className={sectionDividerClassName}>
-          <div className={topLevelSectionInnerClassName}>
-            <SavingsCalculator comparison={comparison} />
           </div>
         </section>
 

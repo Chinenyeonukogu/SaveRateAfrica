@@ -2,7 +2,9 @@
 
 import {
   ArrowRight,
+  ArrowUpDown,
   BadgePercent,
+  ChevronDown,
   ShieldCheck,
   TimerReset,
   WalletCards
@@ -33,6 +35,16 @@ const currencySymbolByCountry: Record<
 const brandFontStyle = {
   fontFamily: '"Sora", var(--font-heading), sans-serif'
 } as const;
+const BEST_RATE = 1380.65;
+const WORST_RATE = 1370.98;
+const WORST_FEE = 8.99;
+
+function formatCalculatedNgn(value: number) {
+  return value.toLocaleString("en-NG", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
 
 export function HeroSection({
   amount,
@@ -43,6 +55,10 @@ export function HeroSection({
   onCompare
 }: HeroSectionProps) {
   const currencyMeta = currencySymbolByCountry[senderCountry];
+  const sendAmount = Number.parseFloat(amount || "0") || 0;
+  const bestPayout = sendAmount * BEST_RATE;
+  const worstPayout = (sendAmount - WORST_FEE) * WORST_RATE;
+  const savings = bestPayout - worstPayout;
 
   return (
     <section className="overflow-hidden px-4 py-16 min-[600px]:px-6 min-[600px]:py-16 lg:px-10">
@@ -103,120 +119,183 @@ export function HeroSection({
               </div>
             </div>
 
-            <div className="w-full rounded-[28px] border border-white/10 bg-white p-5 text-brand-navy shadow-float min-[600px]:p-6 lg:max-w-[440px] lg:justify-self-end">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-green">
-                    Compare now
-                  </p>
-                  <p className="mt-2 font-heading text-[22px] min-[600px]:text-2xl">
-                    Check your best NGN payout
-                  </p>
+            <div className="flex w-full flex-col items-center gap-4 lg:max-w-[440px] lg:justify-self-end">
+              <div className="w-full rounded-[28px] border border-white/10 bg-white px-4 py-[18px] text-brand-navy shadow-float min-[600px]:p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-green">
+                      Compare now
+                    </p>
+                    <p className="mt-2 font-heading text-[22px] min-[600px]:text-2xl">
+                      Check your best NGN payout
+                    </p>
+                  </div>
+                  <div className="rounded-2xl bg-brand-light px-3 py-2 font-mono text-xs font-semibold text-brand-navy">
+                    Live pulse
+                  </div>
                 </div>
-                <div className="rounded-2xl bg-brand-light px-3 py-2 font-mono text-xs font-semibold text-brand-navy">
-                  Live pulse
-                </div>
-              </div>
 
-              <div className="mt-6 space-y-5">
-                <label className="block">
-                  <span className="text-sm font-medium text-brand-navy/70">
-                    Send amount
-                  </span>
-                  <div className="mt-2 flex min-h-14 items-center rounded-2xl border border-brand-navy/10 bg-brand-light px-4">
-                    <span className="pr-3 font-mono text-[12px] font-semibold text-brand-navy/70 min-[600px]:text-base">
-                      {currencyMeta.code} {currencyMeta.symbol}
+                <div className="mt-6 space-y-5">
+                  <label className="block">
+                    <span className="text-sm font-medium text-brand-navy/70">
+                      Send amount
                     </span>
-                    <input
-                      className="w-full bg-transparent text-[22px] font-heading text-brand-navy outline-none placeholder:text-brand-navy/40 min-[600px]:text-2xl"
-                      inputMode="numeric"
-                      pattern="[0-9]*"
-                      placeholder="Enter amount"
-                      type="text"
-                      value={amount}
-                      onBlur={() => {
-                        const normalizedAmount = Math.max(
-                          Number.parseInt(amount || "500", 10) || 500,
-                          1
+                    <div className="mt-2 flex min-h-14 items-center rounded-2xl border border-brand-navy/10 bg-brand-light px-4">
+                      <span className="pr-3 font-mono text-[12px] font-semibold text-brand-navy/70 min-[600px]:text-base">
+                        {currencyMeta.code} {currencyMeta.symbol}
+                      </span>
+                      <input
+                        className="w-full bg-transparent text-[22px] font-heading text-brand-navy outline-none placeholder:text-brand-navy/40 min-[600px]:text-2xl"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        placeholder="Enter amount"
+                        type="text"
+                        value={amount}
+                        onBlur={() => {
+                          const normalizedAmount = Math.max(
+                            Number.parseInt(amount || "500", 10) || 500,
+                            1
+                          );
+                          onAmountChange(String(normalizedAmount));
+                        }}
+                        onChange={(event) =>
+                          onAmountChange(event.target.value.replace(/\D/g, ""))
+                        }
+                      />
+                    </div>
+
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {quickAmounts.map((quickAmount) => {
+                        const isActive = amount === String(quickAmount);
+
+                        return (
+                          <button
+                            key={quickAmount}
+                            className={`min-h-11 rounded-full px-4 text-sm font-semibold transition ${
+                              isActive
+                                ? "bg-brand-green text-white shadow-glow"
+                                : "bg-brand-light text-brand-navy hover:bg-brand-navy hover:text-white"
+                            }`}
+                            type="button"
+                            onClick={() => onAmountChange(String(quickAmount))}
+                          >
+                            {currencyMeta.symbol}
+                            {quickAmount.toLocaleString("en-US")}
+                          </button>
                         );
-                        onAmountChange(String(normalizedAmount));
-                      }}
-                      onChange={(event) =>
-                        onAmountChange(event.target.value.replace(/\D/g, ""))
-                      }
-                    />
+                      })}
+                    </div>
+                  </label>
+
+                  <div>
+                    <p className="text-sm font-medium text-brand-navy/70">
+                      Sender country
+                    </p>
+                    <div className="mt-2 grid grid-cols-3 gap-2">
+                      {senderCountries.map((country) => {
+                        const active = country.code === senderCountry;
+
+                        return (
+                          <button
+                            key={country.code}
+                            className={`min-h-12 rounded-2xl border px-3 text-sm font-semibold transition ${
+                              active
+                                ? "border-brand-green bg-brand-green text-white shadow-glow"
+                                : "border-brand-navy/10 bg-brand-light text-brand-navy hover:border-brand-green/30"
+                            }`}
+                            type="button"
+                            onClick={() => onSenderCountryChange(country.code)}
+                          >
+                            {country.label}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
 
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {quickAmounts.map((quickAmount) => {
-                      const isActive = amount === String(quickAmount);
-
-                      return (
-                        <button
-                          key={quickAmount}
-                          className={`min-h-11 rounded-full px-4 text-sm font-semibold transition ${
-                            isActive
-                              ? "bg-brand-green text-white shadow-glow"
-                              : "bg-brand-light text-brand-navy hover:bg-brand-navy hover:text-white"
-                          }`}
-                          type="button"
-                          onClick={() => onAmountChange(String(quickAmount))}
-                        >
-                          {currencyMeta.symbol}
-                          {quickAmount.toLocaleString("en-US")}
-                        </button>
-                      );
-                    })}
+                  <div className="rounded-2xl border border-brand-navy/10 bg-brand-light px-4 py-3">
+                    <p className="text-sm font-medium text-brand-navy/70">
+                      Recipient country
+                    </p>
+                    <div className="mt-2 flex min-h-12 items-center justify-between rounded-xl bg-white px-4">
+                      <span className="font-semibold text-brand-navy">Nigeria</span>
+                      <span className="rounded-full bg-brand-green/10 px-3 py-1 text-xs font-semibold text-brand-green">
+                        Locked corridor
+                      </span>
+                    </div>
                   </div>
-                </label>
 
-                <div>
-                  <p className="text-sm font-medium text-brand-navy/70">
-                    Sender country
-                  </p>
-                  <div className="mt-2 grid grid-cols-3 gap-2">
-                    {senderCountries.map((country) => {
-                      const active = country.code === senderCountry;
+                  <button
+                    className="inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl bg-brand-yellow px-5 text-base font-bold text-[#1a1a1a] transition hover:translate-y-[-1px] hover:shadow-float disabled:cursor-not-allowed disabled:opacity-70"
+                    type="button"
+                    onClick={onCompare}
+                  >
+                    {isLoading ? "Refreshing rates..." : "Compare Rates Now"}
+                    <ArrowRight className="h-5 w-5" />
+                  </button>
 
-                      return (
-                        <button
-                          key={country.code}
-                          className={`min-h-12 rounded-2xl border px-3 text-sm font-semibold transition ${
-                            active
-                              ? "border-brand-green bg-brand-green text-white shadow-glow"
-                              : "border-brand-navy/10 bg-brand-light text-brand-navy hover:border-brand-green/30"
-                          }`}
-                          type="button"
-                          onClick={() => onSenderCountryChange(country.code)}
-                        >
-                          {country.label}
-                        </button>
-                      );
-                    })}
+                  <div className="mt-4 border-t-[1.5px] border-[#e8f5e9] pt-4">
+                    <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[1.5px] text-[#2e7d32]">
+                      <span aria-hidden="true">💰</span>
+                      <span>Savings Calculator</span>
+                    </div>
+
+                    <h3 className="mt-3 text-[18px] font-bold text-[#1a2e1a] min-[600px]:text-[22px]">
+                      You could save up to ₦{formatCalculatedNgn(savings)}
+                    </h3>
+
+                    <p className="mb-[14px] mt-3 text-[12px] leading-[1.5] text-[#666]">
+                      Based on a USD {sendAmount.toLocaleString("en-US")} transfer,
+                      Grey Finance currently delivers more than Western Union after
+                      fees and spread.
+                    </p>
+
+                    <div className="grid grid-cols-[minmax(0,1fr)_32px_minmax(0,1fr)] items-center gap-3">
+                      <div className="min-w-0 rounded-[10px] border-[1.5px] border-[#2e7d32] bg-[#f0fbf2] px-3 py-[10px] min-[600px]:px-4 min-[600px]:py-[14px]">
+                        <p className="text-[10px] text-[#888]">Best value</p>
+                        <p className="mt-2 text-base font-bold text-[#1a2e1a]">
+                          Grey Finance
+                        </p>
+                        <p className="mt-2 text-[13px] font-semibold text-[#2e7d32]">
+                          Recipient gets ₦{formatCalculatedNgn(bestPayout)}
+                        </p>
+                      </div>
+
+                      <div className="mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-[#2e7d32] text-white">
+                        <ArrowUpDown className="h-4 w-4" />
+                      </div>
+
+                      <div className="min-w-0 rounded-[10px] border-[1.5px] border-[#c8e6c9] bg-[#f4faf5] px-3 py-[10px] min-[600px]:px-4 min-[600px]:py-[14px]">
+                        <p className="text-[10px] text-[#888]">Less efficient route</p>
+                        <p className="mt-2 text-base font-bold text-[#1a2e1a]">
+                          Western Union
+                        </p>
+                        <p className="mt-2 text-[13px] font-semibold text-[#2e7d32]">
+                          Recipient gets ₦{formatCalculatedNgn(worstPayout)}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-3 flex items-center justify-between gap-4 rounded-[8px] bg-[#e8f5e9] px-4 py-3">
+                      <span className="text-[11px] font-semibold text-[#2e7d32] min-[600px]:text-[12px]">
+                        Your savings using SaveRateAfrica
+                      </span>
+                      <span className="text-[13px] font-bold text-[#1b5e20] min-[600px]:text-[15px]">
+                        + ₦{formatCalculatedNgn(savings)}
+                      </span>
+                    </div>
                   </div>
                 </div>
-
-                <div className="rounded-2xl border border-brand-navy/10 bg-brand-light px-4 py-3">
-                  <p className="text-sm font-medium text-brand-navy/70">
-                    Recipient country
-                  </p>
-                  <div className="mt-2 flex min-h-12 items-center justify-between rounded-xl bg-white px-4">
-                    <span className="font-semibold text-brand-navy">Nigeria</span>
-                    <span className="rounded-full bg-brand-green/10 px-3 py-1 text-xs font-semibold text-brand-green">
-                      Locked corridor
-                    </span>
-                  </div>
-                </div>
-
-                <button
-                  className="inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl bg-brand-yellow px-5 text-base font-bold text-brand-navy transition hover:translate-y-[-1px] hover:shadow-float disabled:cursor-not-allowed disabled:opacity-70"
-                  type="button"
-                  onClick={onCompare}
-                >
-                  {isLoading ? "Refreshing rates..." : "Compare Rates Now"}
-                  <ArrowRight className="h-5 w-5" />
-                </button>
               </div>
+
+              <button
+                aria-label="Scroll to live comparison table"
+                className="flex h-10 w-10 items-center justify-center rounded-full border-[1.5px] border-white/30 bg-white/15 text-white animate-hero-scroll-bounce"
+                type="button"
+                onClick={onCompare}
+              >
+                <ChevronDown className="h-5 w-5" />
+              </button>
             </div>
           </div>
         </div>
