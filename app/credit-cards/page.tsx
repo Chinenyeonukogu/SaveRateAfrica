@@ -49,7 +49,7 @@ const featuredCreditCards = [
     stars: "★★★★★",
     subtitle: "Secured Visa",
     topPick: true,
-    url: "https://www.chime.com/credit-builder-account/",
+    url: "https://www.chime.com/",
     wordmark: "CHIME"
   },
   {
