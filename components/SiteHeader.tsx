@@ -346,6 +346,18 @@ function getDropdownAlignmentClass(align: NavigationItem["dropdownAlign"]) {
   return "left-1/2 -translate-x-1/2";
 }
 
+function getDedicatedSectionRoute(sectionId?: string) {
+  if (sectionId === "build-credit") {
+    return "/credit-cards";
+  }
+
+  if (sectionId === "rate-alerts") {
+    return "/alerts";
+  }
+
+  return null;
+}
+
 export function SiteHeader({
   showAnnouncementBar = false,
   showBreadcrumb = false
@@ -465,32 +477,38 @@ export function SiteHeader({
     closeDrawer();
   }
 
+  function getSectionNavigationHref(sectionId?: string, routeHref?: string, href?: string) {
+    if (sectionId && pathname === "/") {
+      return href ?? `#${sectionId}`;
+    }
+
+    const dedicatedRoute = getDedicatedSectionRoute(sectionId);
+
+    if (dedicatedRoute && pathname === dedicatedRoute) {
+      return dedicatedRoute;
+    }
+
+    if (routeHref) {
+      return routeHref;
+    }
+
+    if (sectionId) {
+      return `/#${sectionId}`;
+    }
+
+    return href ?? "/";
+  }
+
   function getNavigationHref(item: NavigationItem) {
-    if (pathname === "/") {
-      return item.href;
-    }
-
-    if (item.sectionId === "build-credit" && pathname === "/credit-cards") {
-      return "/credit-cards";
-    }
-
-    if (item.sectionId === "rate-alerts" && pathname === "/alerts") {
-      return "/alerts";
-    }
-
-    return item.routeHref ?? `/${item.href}`;
+    return getSectionNavigationHref(item.sectionId, item.routeHref, item.href);
   }
 
   function getMenuItemHref(item: DropdownLinkItem) {
-    if (pathname === "/" && item.sectionId) {
-      return item.href;
-    }
-
-    return item.routeHref ?? item.href;
+    return getSectionNavigationHref(item.sectionId, item.routeHref, item.href);
   }
 
   function getHomeHref() {
-    return pathname === "/" ? "#home" : "/#home";
+    return getSectionNavigationHref("home", "/#home", "#home");
   }
 
   function navigateTo(href: string, sectionId?: string) {
@@ -548,7 +566,7 @@ export function SiteHeader({
 
   function handleLogoClick(event: MouseEvent<HTMLAnchorElement>) {
     event.preventDefault();
-    navigateTo("#home", "home");
+    navigateTo(getHomeHref(), "home");
     setActiveSectionId("home");
   }
 
