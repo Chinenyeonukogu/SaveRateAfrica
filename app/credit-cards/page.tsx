@@ -49,7 +49,7 @@ const featuredCreditCards = [
     stars: "★★★★★",
     subtitle: "Secured Visa",
     topPick: true,
-    url: offerMap.chime.url,
+    url: "https://www.chime.com/credit-builder-account/",
     wordmark: "CHIME"
   },
   {
@@ -70,7 +70,7 @@ const featuredCreditCards = [
     stars: "★★★★½",
     subtitle: "Secured Card",
     topPick: false,
-    url: offerMap.discover.url,
+    url: "https://www.discover.com/credit-cards/secured/",
     wordmark: "DISCOVER"
   },
   {
@@ -91,7 +91,7 @@ const featuredCreditCards = [
     stars: "★★★★½",
     subtitle: "Secured",
     topPick: false,
-    url: offerMap["capital-one"].url,
+    url: "https://www.capitalone.com/credit-cards/secured-mastercard/",
     wordmark: "CAPITAL ONE"
   },
   {
@@ -112,7 +112,7 @@ const featuredCreditCards = [
     stars: "★★★★½",
     subtitle: "Visa",
     topPick: false,
-    url: offerMap.petal.url,
+    url: "https://www.petalcard.com/products/petal-2",
     wordmark: "PETAL 2"
   }
 ] as const;
@@ -169,13 +169,13 @@ export default function CreditCardsPage() {
 
       <main className="overflow-x-hidden pb-28 min-[600px]:pb-16">
         <section className="bg-[linear-gradient(135deg,#1a3a1a_0%,#2e7d32_50%,#0d2416_100%)]">
-          <div className="mx-auto max-w-[1200px] px-4 py-10 min-[600px]:px-6 min-[600px]:py-14 lg:px-10 lg:py-16">
+          <div className="mx-auto max-w-[1200px] px-5 pb-10 pt-8 min-[600px]:px-6 min-[600px]:py-14 lg:px-10 lg:py-16">
             <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/5 px-5 py-6 text-white shadow-[0_20px_60px_rgba(15,36,20,0.35)] backdrop-blur-sm min-[600px]:px-8 min-[600px]:py-10 lg:px-12 lg:py-12">
               <div className="absolute -left-10 bottom-0 h-40 w-40 rounded-full bg-white/10 blur-3xl" />
               <CreditEligibilityCounterBadge />
 
               <div className="relative max-w-3xl">
-                <h1 className="max-w-3xl font-heading text-[34px] leading-[1.02] text-white min-[600px]:text-5xl lg:text-[56px]">
+                <h1 className="max-w-3xl font-heading text-[clamp(28px,7vw,48px)] leading-[1.02] text-white min-[600px]:text-5xl lg:text-[56px]">
                   Get Approved for a Credit Card in the US — Even with No Credit
                   History
                 </h1>
@@ -185,16 +185,16 @@ export default function CreditCardsPage() {
                 </p>
 
                 <div className="mt-8">
-                  <a
+                  <button
                     className="inline-flex min-h-12 items-center gap-2 rounded-full bg-[#2e7d32] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#256a2a]"
-                    href={topPick.url}
-                    rel="noreferrer"
-                    target="_blank"
+                    disabled
+                    style={{ cursor: "default", pointerEvents: "none", opacity: 1 }}
+                    type="button"
                   >
                     <Lock className="h-4 w-4" />
                     Check if you qualify (no impact)
                     <ArrowRight className="h-4 w-4" />
-                  </a>
+                  </button>
                   <p className="mt-2 text-[11px] text-white/74">
                     Soft check only — will not affect your credit score
                   </p>
@@ -319,7 +319,7 @@ export default function CreditCardsPage() {
                     <a
                       className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-[8px] bg-[#2e7d32] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#256a2a]"
                       href={card.url}
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                       target="_blank"
                     >
                       Check if you qualify
@@ -437,7 +437,7 @@ export default function CreditCardsPage() {
               <a
                 className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#2e7d32] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#256a2a]"
                 href={topPick.url}
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 target="_blank"
               >
                 Check my eligibility
@@ -462,7 +462,7 @@ export default function CreditCardsPage() {
           <a
             className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-full bg-white px-4 text-[11px] font-bold text-[#2e7d32]"
             href={topPick.url}
-            rel="noreferrer"
+            rel="noopener noreferrer"
             target="_blank"
           >
             Check if you qualify →

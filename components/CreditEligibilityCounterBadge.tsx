@@ -1,66 +1,56 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 const NUMBER_POOL = [
   257, 300, 341, 389, 412, 468, 500, 534, 612, 689, 731, 800, 874, 923, 1000,
   1042, 1100
 ] as const;
 
-function randomBetween(min: number, max: number) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+function getWeekNumber(date: Date) {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  d.setDate(d.getDate() + 4 - (d.getDay() || 7));
+  const yearStart = new Date(d.getFullYear(), 0, 1);
 
-function pickNextNumber(currentCount: number) {
-  const availableNumbers = NUMBER_POOL.filter((number) => number !== currentCount);
-  return availableNumbers[randomBetween(0, availableNumbers.length - 1)];
+  return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
 }
 
 export function CreditEligibilityCounterBadge() {
-  const [count, setCount] = useState<(typeof NUMBER_POOL)[number]>(NUMBER_POOL[0]);
-  const [isFading, setIsFading] = useState(false);
-  const intervalTimeoutRef = useRef<number | null>(null);
-  const fadeTimeoutRef = useRef<number | null>(null);
+  const [count, setCount] = useState<string>(String(NUMBER_POOL[0]));
 
   useEffect(() => {
-    function clearTimers() {
-      if (intervalTimeoutRef.current !== null) {
-        window.clearTimeout(intervalTimeoutRef.current);
-        intervalTimeoutRef.current = null;
-      }
+    const weekKey = `${new Date().getFullYear()}-${getWeekNumber(new Date())}`;
+    const storedWeek = window.localStorage.getItem("sra_fomo_week");
+    const storedNumber = window.localStorage.getItem("sra_fomo_number");
 
-      if (fadeTimeoutRef.current !== null) {
-        window.clearTimeout(fadeTimeoutRef.current);
-        fadeTimeoutRef.current = null;
-      }
+    let display = storedNumber;
+
+    if (storedWeek !== weekKey || !storedNumber) {
+      let next: number;
+
+      do {
+        next = NUMBER_POOL[Math.floor(Math.random() * NUMBER_POOL.length)];
+      } while (String(next) === storedNumber);
+
+      window.localStorage.setItem("sra_fomo_number", String(next));
+      window.localStorage.setItem("sra_fomo_week", weekKey);
+      display = String(next);
     }
 
-    function scheduleNextTick() {
-      intervalTimeoutRef.current = window.setTimeout(() => {
-        setIsFading(true);
-
-        fadeTimeoutRef.current = window.setTimeout(() => {
-          setCount((currentCount) => pickNextNumber(currentCount));
-          setIsFading(false);
-          scheduleNextTick();
-        }, 350);
-      }, randomBetween(6000, 12000));
+    if (display) {
+      setCount(display);
     }
-
-    setCount(NUMBER_POOL[randomBetween(0, NUMBER_POOL.length - 1)]);
-    scheduleNextTick();
-
-    return clearTimers;
   }, []);
 
   return (
     <div
-      className="absolute right-6 top-6 inline-flex items-center gap-2 rounded-full px-4 py-2 text-[12px] font-semibold shadow-[0_8px_20px_rgba(8,20,10,0.18)]"
+      className="relative mb-4 inline-flex w-fit items-center gap-2 rounded-full px-3 py-[5px] text-[11px] font-semibold shadow-[0_8px_20px_rgba(8,20,10,0.18)] min-[600px]:mb-5 lg:absolute lg:right-6 lg:top-6 lg:mb-0 lg:px-4 lg:py-2 lg:text-[12px]"
       style={{
         background: "rgba(255,255,255,0.13)",
         border: "1px solid rgba(255,255,255,0.25)",
         color: "#ffffff",
-        opacity: isFading ? 0.2 : 1,
+        opacity: 1,
         transition: "opacity 350ms ease"
       }}
     >
@@ -68,7 +58,9 @@ export function CreditEligibilityCounterBadge() {
         <span className="absolute inset-0 animate-ping rounded-full bg-[#4cdf6e] opacity-75" />
         <span className="relative h-2.5 w-2.5 rounded-full bg-[#4cdf6e]" />
       </span>
-      <span style={{ color: "#a8e6b8" }}>{count}</span>
+      <span id="fomo-count" style={{ color: "#a8e6b8" }}>
+        {count}
+      </span>
       <span>
         Nigerians checked this week
       </span>
