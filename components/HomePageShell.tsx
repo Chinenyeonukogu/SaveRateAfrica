@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -12,12 +11,9 @@ import {
   CircleDollarSign,
   CreditCard,
   LineChart,
-  Menu,
-  Search,
   ShieldCheck,
   Star,
-  Waves,
-  X
+  Waves
 } from "lucide-react";
 
 import { AIAssistant } from "@/components/AIAssistant";
@@ -27,6 +23,7 @@ import { ComparisonTable } from "@/components/ComparisonTable";
 import { HeroSection } from "@/components/HeroSection";
 import { RateChart } from "@/components/RateChart";
 import { RateDisclaimer } from "@/components/RateDisclaimer";
+import { SiteHeader } from "@/components/SiteHeader";
 import {
   formatCompact,
   formatCurrency,
@@ -40,7 +37,6 @@ import {
 } from "@/lib/fetchRates";
 import { faqItems, howItWorksSteps } from "@/lib/site-data";
 import {
-  providers,
   type ComparisonSort,
   type SenderCountry
 } from "@/lib/providers";
@@ -68,30 +64,6 @@ interface FeatureCardDefinition {
   targetKey: SectionTargetKey;
   title: string;
 }
-
-const primaryNavLinks = [
-  { href: "#compare-rates", label: "Compare Rates" },
-  { href: "#how-it-works", label: "How It Works" },
-  { href: "#smart-sending", label: "Smart Sending" },
-  { href: "#build-credit", label: "Build Credit" },
-  { href: "#rate-alerts", label: "Rate Alerts" },
-  { href: "#contact-us", label: "Contact Us" }
-] as const;
-
-const appDownloadButtons = [
-  {
-    href: "/manifest.webmanifest",
-    label: "App Store",
-    platform: "iOS",
-    prefix: "Download on the"
-  },
-  {
-    href: "/manifest.webmanifest",
-    label: "Google Play",
-    platform: "Android",
-    prefix: "Get it on"
-  }
-] as const;
 
 const featureCardDefinitions: FeatureCardDefinition[] = [
   {
@@ -198,96 +170,10 @@ const featureCardIconThemes = [
 ] as const;
 
 const reviewCountries = ["USA", "UK", "Canada"] as const;
-const brandFontStyle = {
-  fontFamily: '"Sora", var(--font-heading), sans-serif'
-} as const;
 const pageShellClassName =
   "mx-auto w-full max-w-[1200px] px-4 min-[600px]:px-6 lg:px-10";
 const topLevelSectionInnerClassName = `${pageShellClassName} py-9 min-[600px]:py-[52px] lg:py-[72px]`;
 const sectionDividerClassName = "border-t border-[#e8f5e9]";
-
-function SaveRateAfricaLogo() {
-  return (
-    <Link
-      aria-label="SaveRateAfrica home"
-      className="inline-flex items-center gap-0 text-[#1a2e1a]"
-      href="/"
-      style={brandFontStyle}
-    >
-      <svg
-        aria-hidden="true"
-        className="h-8 w-8 shrink-0"
-        viewBox="0 0 32 32"
-      >
-        <defs>
-          <linearGradient id="saverate-logo-gradient" x1="0%" x2="100%" y1="0%" y2="100%">
-            <stop offset="0%" stopColor="#66bb6a" />
-            <stop offset="100%" stopColor="#2e7d32" />
-          </linearGradient>
-        </defs>
-        <circle cx="16" cy="16" fill="url(#saverate-logo-gradient)" r="16" />
-        <text
-          fill="#ffffff"
-          fontFamily="Sora, Arial, sans-serif"
-          fontSize="18"
-          fontWeight="700"
-          textAnchor="middle"
-          x="16"
-          y="22"
-        >
-          S
-        </text>
-      </svg>
-      <span className="ml-0 text-[20px] font-bold leading-none tracking-[-0.03em]">
-        Save<span className="text-[#2e7d32]">Rate</span>Africa
-      </span>
-    </Link>
-  );
-}
-
-function AppleBadgeIcon() {
-  return (
-    <svg aria-hidden="true" className="h-4 w-4 shrink-0 fill-current" viewBox="0 0 24 24">
-      <path d="M16.52 12.55c.03 2.3 2.01 3.07 2.03 3.08-.02.06-.31 1.09-1.03 2.15-.62.91-1.27 1.82-2.3 1.84-1 .02-1.33-.6-2.49-.6-1.16 0-1.53.58-2.46.62-1 .04-1.76-1-2.39-1.91-1.29-1.88-2.28-5.29-.95-7.65.66-1.17 1.87-1.91 3.16-1.93.99-.02 1.93.67 2.56.67.62 0 1.78-.83 3-.71.51.02 1.97.21 2.9 1.59-.08.05-1.73 1.01-1.76 2.85Zm-2.06-6.15c.54-.65.89-1.57.79-2.48-.77.03-1.69.52-2.24 1.16-.5.58-.92 1.5-.81 2.38.85.07 1.71-.44 2.26-1.06Z" />
-    </svg>
-  );
-}
-
-function GooglePlayBadgeIcon() {
-  return (
-    <svg aria-hidden="true" className="h-4 w-4 shrink-0" viewBox="0 0 24 24">
-      <path d="M3.5 3.2 13.7 12 3.5 20.8Z" fill="#00d2ff" />
-      <path d="M13.7 12 17.2 8.9 21 11.1c1 .56 1 1.24 0 1.8l-3.8 2.2Z" fill="#ffd54f" />
-      <path d="M3.5 3.2 17.2 8.9 13.7 12Z" fill="#66bb6a" />
-      <path d="M3.5 20.8 13.7 12 17.2 15.1Z" fill="#ef5350" />
-    </svg>
-  );
-}
-
-function AppStoreBadge({
-  href,
-  label,
-  platform,
-  prefix
-}: (typeof appDownloadButtons)[number]) {
-  const Icon = platform === "iOS" ? AppleBadgeIcon : GooglePlayBadgeIcon;
-
-  return (
-    <a
-      className="inline-flex h-9 items-center gap-2 rounded-[8px] bg-black px-[14px] py-[6px] text-white"
-      download
-      href={href}
-    >
-      <Icon />
-      <span className="flex flex-col leading-none" style={brandFontStyle}>
-        <span className="text-[7px] font-medium tracking-[0.02em] text-white/85">
-          {prefix}
-        </span>
-        <span className="mt-[2px] text-[11px] font-bold">{label}</span>
-      </span>
-    </a>
-  );
-}
 
 function buildLiveReviewComparisons(
   comparison: ComparisonResult
@@ -312,7 +198,6 @@ function buildLiveReviewComparisons(
 }
 
 export function HomePageShell({ initialComparison }: HomePageShellProps) {
-  const router = useRouter();
   const compareRef = useRef<HTMLDivElement | null>(null);
   const smartSendingRef = useRef<HTMLElement | null>(null);
   const buildCreditRef = useRef<HTMLElement | null>(null);
@@ -327,8 +212,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
   const [reviewCountry, setReviewCountry] = useState<SenderCountry>(
     initialComparison.senderCountry
   );
-  const [headerSearch, setHeaderSearch] = useState("");
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [comparison, setComparison] = useState(initialComparison);
   const [sortBy, setSortBy] = useState<ComparisonSort>(initialComparison.sortBy);
   const [isLoading, setIsLoading] = useState(false);
@@ -479,156 +362,10 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
     smartSending: smartSendingRef
   };
 
-  function handleHeaderSearchSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    const normalizedQuery = headerSearch.trim().toLowerCase();
-
-    if (!normalizedQuery) {
-      return;
-    }
-
-    const matchedProvider = providers.find((provider) => {
-      const normalizedName = provider.name.toLowerCase();
-      const normalizedSlug = provider.slug.replace(/-/g, " ").toLowerCase();
-
-      return (
-        normalizedName.includes(normalizedQuery) ||
-        normalizedSlug.includes(normalizedQuery)
-      );
-    });
-
-    if (matchedProvider) {
-      setHeaderSearch("");
-      setIsMobileMenuOpen(false);
-      router.push(`/providers/${matchedProvider.slug}`);
-      return;
-    }
-
-    if (normalizedQuery.includes("compare") || normalizedQuery.includes("rate")) {
-      handleCompare();
-    } else if (normalizedQuery.includes("how")) {
-      scrollToSection(sectionTargets.howItWorks);
-    } else if (normalizedQuery.includes("smart")) {
-      scrollToSection(sectionTargets.smartSending);
-    } else if (normalizedQuery.includes("credit")) {
-      scrollToSection(sectionTargets.buildCredit);
-    } else if (normalizedQuery.includes("alert")) {
-      scrollToSection(sectionTargets.alerts);
-    } else if (normalizedQuery.includes("contact")) {
-      document
-        .querySelector("#contact-us")
-        ?.scrollIntoView({ behavior: "smooth" });
-    } else {
-      router.push("/providers");
-    }
-
-    setHeaderSearch("");
-    setIsMobileMenuOpen(false);
-  }
-
   return (
     <>
       <main className="overflow-x-hidden pb-32 md:pb-20">
-        <div className="bg-[#2e7d32]">
-          <div className="mx-auto max-w-[1200px] px-5 py-[10px] text-center text-[13px] text-white">
-            <span>
-              ✦ Real-time NGN rates · No hidden fees · Compare 10+ providers and
-              save on every transfer.{" "}
-            </span>
-            <Link
-              className="font-bold underline underline-offset-2"
-              href="#compare-rates"
-            >
-              Compare now →
-            </Link>
-          </div>
-        </div>
-
-        <header className="border-b border-[#dcedc8] bg-white">
-          <div className={pageShellClassName}>
-            <div className="flex h-[60px] items-center justify-between gap-4">
-              <div className="shrink-0">
-                <SaveRateAfricaLogo />
-              </div>
-
-              <nav
-                aria-label="Primary"
-                className="hidden min-w-0 flex-1 items-center justify-center gap-4 overflow-x-auto min-[600px]:flex"
-              >
-                {primaryNavLinks.map((item) => (
-                  <Link
-                    key={item.label}
-                    className="shrink-0 whitespace-nowrap text-[13px] font-medium text-[#2e4a2e] underline-offset-[6px] decoration-[#2e7d32] hover:underline"
-                    href={item.href}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </nav>
-
-              <div className="hidden shrink-0 items-center gap-2 min-[600px]:flex">
-                {appDownloadButtons.map((button) => (
-                  <AppStoreBadge key={button.platform} {...button} />
-                ))}
-              </div>
-
-              <button
-                aria-expanded={isMobileMenuOpen}
-                aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-                className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-[#dcedc8] text-brand-navy min-[600px]:hidden"
-                type="button"
-                onClick={() => setIsMobileMenuOpen((current) => !current)}
-              >
-                {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-              </button>
-            </div>
-
-            {isMobileMenuOpen ? (
-              <div className="border-t border-[#e8f5e9] pb-4 pt-4 min-[600px]:hidden">
-                <nav aria-label="Mobile primary" className="grid gap-2">
-                  {primaryNavLinks.map((item) => (
-                    <Link
-                      key={item.label}
-                      className="inline-flex min-h-11 items-center rounded-xl px-3 text-sm font-medium text-[#2e4a2e] hover:bg-brand-light"
-                      href={item.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                </nav>
-
-                <div className="mt-4 flex flex-col gap-2">
-                  {appDownloadButtons.map((button) => (
-                    <AppStoreBadge key={button.platform} {...button} />
-                  ))}
-                </div>
-              </div>
-            ) : null}
-
-            <form
-              className="border-t border-[#e8f5e9] py-3"
-              role="search"
-              onSubmit={handleHeaderSearchSubmit}
-            >
-              <label className="sr-only" htmlFor="site-search">
-                Search SaveRateAfrica
-              </label>
-              <div className="relative">
-                <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-brand-navy/45" />
-                <input
-                  id="site-search"
-                  className="min-h-11 w-full rounded-[14px] border border-[#dcedc8] bg-[#f4faf5] pl-11 pr-4 text-sm text-brand-navy outline-none placeholder:text-brand-navy/45 focus:border-[#2e7d32]"
-                  placeholder="Search providers, rates, or sections"
-                  type="search"
-                  value={headerSearch}
-                  onChange={(event) => setHeaderSearch(event.target.value)}
-                />
-              </div>
-            </form>
-          </div>
-        </header>
+        <SiteHeader showAnnouncementBar />
 
         <HeroSection
           amount={amount}
@@ -639,7 +376,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
           onSenderCountryChange={setSenderCountry}
         />
 
-        <section className={sectionDividerClassName}>
+        <section id="feature-hub" className={`${sectionDividerClassName} scroll-mt-24`}>
           <div className={topLevelSectionInnerClassName}>
             <div className="rounded-[16px] bg-[#f4faf5] px-4 py-5 min-[600px]:px-5 min-[600px]:py-7 lg:px-8 lg:py-9">
               <div className="max-w-2xl">

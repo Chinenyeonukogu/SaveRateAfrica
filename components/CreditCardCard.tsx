@@ -8,7 +8,7 @@ interface CreditCardCardProps {
 
 export function CreditCardCard({ offer }: CreditCardCardProps) {
   return (
-    <article className="rounded-[30px] border border-brand-navy/10 bg-white p-5 shadow-float sm:p-6">
+    <article className="overflow-hidden rounded-[14px] border border-brand-navy/10 bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.06)] transition-[box-shadow,transform] duration-200 hover:-translate-y-[2px] hover:shadow-[0_8px_24px_rgba(0,0,0,0.10)] sm:p-6">
       <div className="grid gap-6 lg:grid-cols-[300px_1fr] lg:items-center">
         <div
           className="rounded-[28px] p-6 text-white shadow-float"
@@ -78,7 +78,7 @@ export function CreditCardCard({ offer }: CreditCardCardProps) {
 
           <div className="mt-6 flex flex-wrap items-center gap-4">
             <a
-              className="inline-flex min-h-12 items-center gap-2 rounded-2xl bg-brand-yellow px-5 text-sm font-bold text-brand-navy transition hover:translate-y-[-1px] hover:shadow-float"
+              className="inline-flex min-h-12 items-center gap-2 rounded-[8px] bg-brand-yellow px-5 py-3 text-sm font-bold text-[#1a1a1a] transition hover:opacity-[0.88]"
               href={offer.url}
               rel="noreferrer"
               target="_blank"

@@ -61,7 +61,7 @@ export function HeroSection({
   const savings = bestPayout - worstPayout;
 
   return (
-    <section className="overflow-hidden px-4 pb-10 pt-10 min-[600px]:px-6 lg:px-10">
+    <section className="overflow-hidden px-4 pb-5 pt-5 min-[600px]:px-6 min-[600px]:pb-7 min-[600px]:pt-7 lg:px-10 lg:pb-10 lg:pt-10">
       <div className="mx-auto max-w-[1200px] rounded-[32px] bg-hero-mesh px-5 py-8 text-white shadow-glow min-[600px]:px-8 min-[600px]:py-10 lg:px-12 lg:py-14">
         <div className="relative overflow-hidden">
           <div className="absolute inset-0 opacity-30">
@@ -71,9 +71,9 @@ export function HeroSection({
             <div className="absolute inset-y-0 right-0 w-1/2 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.06)_50%,transparent_100%)] bg-[length:18px_18px]" />
           </div>
 
-          <div className="relative grid gap-9 lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:gap-9">
-            <div className="space-y-6">
-              <div className="inline-flex items-center gap-3 rounded-full border border-[#66bb6a]/45 bg-[#2e7d32]/25 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-white/95">
+          <div className="relative grid items-center gap-8 min-[600px]:gap-[36px] lg:grid-cols-[1.02fr_0.98fr]">
+            <div className="pt-0">
+              <div className="mb-[14px] inline-flex items-center gap-3 rounded-full border border-[#66bb6a]/45 bg-[#2e7d32]/25 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-white/95">
                 <span className="relative flex h-3 w-3">
                   <span className="absolute inset-0 animate-ping rounded-full bg-[#66bb6a]" />
                   <span className="relative rounded-full bg-[#66bb6a]" />
@@ -83,7 +83,7 @@ export function HeroSection({
 
               <div className="space-y-4">
                 <h1
-                  className="max-w-3xl font-heading text-[34px] leading-[0.95] min-[600px]:text-5xl lg:text-6xl"
+                  className="mt-0 max-w-3xl font-heading text-[34px] leading-[0.95] min-[600px]:text-5xl lg:text-6xl"
                   style={brandFontStyle}
                 >
                   Send Money to Nigeria. Compare and save instantly.
@@ -119,7 +119,7 @@ export function HeroSection({
               </div>
             </div>
 
-            <div className="flex w-full flex-col items-center gap-3 lg:max-w-[440px] lg:justify-self-end">
+              <div className="flex w-full self-center flex-col items-center gap-3 lg:max-w-[440px] lg:justify-self-end">
               <div className="w-full rounded-[28px] border border-white/10 bg-white px-[18px] py-4 text-brand-navy shadow-float">
                 <div className="mb-[10px] flex items-center justify-between gap-3">
                   <div>
