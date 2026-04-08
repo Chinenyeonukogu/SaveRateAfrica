@@ -70,21 +70,28 @@ interface FeatureCardDefinition {
   title: string;
 }
 
-const utilityLinks = [
-  { href: "#contact-us", label: "Contact Us" },
-  { href: "#rate-alerts", label: "Rate Alerts" }
-] as const;
-
 const primaryNavLinks = [
   { href: "#compare-rates", label: "Compare Rates" },
   { href: "#how-it-works", label: "How It Works" },
   { href: "#smart-sending", label: "Smart Sending" },
-  { href: "#build-credit", label: "Build Credit" }
+  { href: "#build-credit", label: "Build Credit" },
+  { href: "#rate-alerts", label: "Rate Alerts" },
+  { href: "#contact-us", label: "Contact Us" }
 ] as const;
 
 const appDownloadButtons = [
-  { href: "/manifest.webmanifest", label: "iOS App", variant: "light" },
-  { href: "/manifest.webmanifest", label: "Android App", variant: "bold" }
+  {
+    href: "/manifest.webmanifest",
+    label: "App Store",
+    platform: "iOS",
+    prefix: "Download on the"
+  },
+  {
+    href: "/manifest.webmanifest",
+    label: "Google Play",
+    platform: "Android",
+    prefix: "Get it on"
+  }
 ] as const;
 
 const featureStripItems: FeatureStripItem[] = [
@@ -224,6 +231,92 @@ const featureCardDefinitions: FeatureCardDefinition[] = [
 ];
 
 const reviewCountries = ["USA", "UK", "Canada"] as const;
+const brandFontStyle = {
+  fontFamily: '"Sora", var(--font-heading), sans-serif'
+} as const;
+
+function SaveRateAfricaLogo() {
+  return (
+    <Link
+      aria-label="SaveRateAfrica home"
+      className="inline-flex items-center gap-0 text-[#1a2e1a]"
+      href="/"
+      style={brandFontStyle}
+    >
+      <svg
+        aria-hidden="true"
+        className="h-8 w-8 shrink-0"
+        viewBox="0 0 32 32"
+      >
+        <defs>
+          <linearGradient id="saverate-logo-gradient" x1="0%" x2="100%" y1="0%" y2="100%">
+            <stop offset="0%" stopColor="#66bb6a" />
+            <stop offset="100%" stopColor="#2e7d32" />
+          </linearGradient>
+        </defs>
+        <circle cx="16" cy="16" fill="url(#saverate-logo-gradient)" r="16" />
+        <text
+          fill="#ffffff"
+          fontFamily="Sora, Arial, sans-serif"
+          fontSize="18"
+          fontWeight="700"
+          textAnchor="middle"
+          x="16"
+          y="22"
+        >
+          S
+        </text>
+      </svg>
+      <span className="ml-0 text-[20px] font-bold leading-none tracking-[-0.03em]">
+        Save<span className="text-[#2e7d32]">Rate</span>Africa
+      </span>
+    </Link>
+  );
+}
+
+function AppleBadgeIcon() {
+  return (
+    <svg aria-hidden="true" className="h-4 w-4 shrink-0 fill-current" viewBox="0 0 24 24">
+      <path d="M16.52 12.55c.03 2.3 2.01 3.07 2.03 3.08-.02.06-.31 1.09-1.03 2.15-.62.91-1.27 1.82-2.3 1.84-1 .02-1.33-.6-2.49-.6-1.16 0-1.53.58-2.46.62-1 .04-1.76-1-2.39-1.91-1.29-1.88-2.28-5.29-.95-7.65.66-1.17 1.87-1.91 3.16-1.93.99-.02 1.93.67 2.56.67.62 0 1.78-.83 3-.71.51.02 1.97.21 2.9 1.59-.08.05-1.73 1.01-1.76 2.85Zm-2.06-6.15c.54-.65.89-1.57.79-2.48-.77.03-1.69.52-2.24 1.16-.5.58-.92 1.5-.81 2.38.85.07 1.71-.44 2.26-1.06Z" />
+    </svg>
+  );
+}
+
+function GooglePlayBadgeIcon() {
+  return (
+    <svg aria-hidden="true" className="h-4 w-4 shrink-0" viewBox="0 0 24 24">
+      <path d="M3.5 3.2 13.7 12 3.5 20.8Z" fill="#00d2ff" />
+      <path d="M13.7 12 17.2 8.9 21 11.1c1 .56 1 1.24 0 1.8l-3.8 2.2Z" fill="#ffd54f" />
+      <path d="M3.5 3.2 17.2 8.9 13.7 12Z" fill="#66bb6a" />
+      <path d="M3.5 20.8 13.7 12 17.2 15.1Z" fill="#ef5350" />
+    </svg>
+  );
+}
+
+function AppStoreBadge({
+  href,
+  label,
+  platform,
+  prefix
+}: (typeof appDownloadButtons)[number]) {
+  const Icon = platform === "iOS" ? AppleBadgeIcon : GooglePlayBadgeIcon;
+
+  return (
+    <a
+      className="inline-flex h-9 items-center gap-2 rounded-[8px] bg-black px-[14px] py-[6px] text-white"
+      download
+      href={href}
+    >
+      <Icon />
+      <span className="flex flex-col leading-none" style={brandFontStyle}>
+        <span className="text-[8px] font-medium tracking-[0.02em] text-white/85">
+          {prefix}
+        </span>
+        <span className="mt-[2px] text-[14px] font-bold">{label}</span>
+      </span>
+    </a>
+  );
+}
 
 function buildLiveReviewComparisons(
   comparison: ComparisonResult
@@ -418,87 +511,70 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
   return (
     <>
       <main className="pb-32 md:pb-16">
-        <header className="px-4 pt-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-7xl">
-            <div className="rounded-[28px] border border-brand-navy/10 bg-white/95 px-4 py-4 shadow-float backdrop-blur sm:px-5">
-              <div className="flex flex-col gap-4">
-                <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-                  <div className="flex flex-wrap items-center justify-between gap-4 xl:flex-nowrap">
-                    <Link
-                      className="font-heading text-2xl text-brand-navy sm:text-3xl"
-                      href="/"
-                    >
-                      SaveRateAfrica
-                    </Link>
+        <div className="bg-[#2e7d32]">
+          <div className="mx-auto max-w-7xl px-4 py-[10px] text-center text-[13px] text-white">
+            <span>
+              ✦ Real-time NGN rates · No hidden fees · Compare 10+ providers and
+              save on every transfer.{" "}
+            </span>
+            <Link
+              className="font-bold underline underline-offset-2"
+              href="#compare-rates"
+            >
+              Compare now →
+            </Link>
+          </div>
+        </div>
 
-                    <div className="flex flex-wrap items-center gap-2 rounded-[20px] border border-brand-green/20 bg-brand-green/10 p-1">
-                      {utilityLinks.map((item) => (
-                        <Link
-                          key={item.label}
-                          className="inline-flex min-h-10 items-center rounded-2xl px-4 text-sm font-semibold text-brand-navy hover:bg-white hover:text-brand-green"
-                          href={item.href}
-                        >
-                          {item.label}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
+        <header className="border-b border-[#dcedc8] bg-white">
+          <div className="mx-auto max-w-7xl px-4">
+            <div className="flex flex-col gap-3 py-3 xl:h-[52px] xl:flex-row xl:items-center xl:justify-between xl:gap-6 xl:py-0">
+              <div className="shrink-0">
+                <SaveRateAfricaLogo />
+              </div>
 
-                  <div className="flex flex-wrap items-center gap-2 xl:justify-end">
-                    {appDownloadButtons.map((button) => (
-                      <a
-                        key={button.label}
-                        className={`inline-flex min-h-11 items-center rounded-2xl px-4 text-sm font-semibold xl:min-h-12 xl:px-5 ${
-                          button.variant === "bold"
-                            ? "bg-brand-yellow text-brand-navy"
-                            : "bg-brand-light text-brand-navy"
-                        }`}
-                        download
-                        href={button.href}
-                      >
-                        {button.label}
-                      </a>
-                    ))}
-                  </div>
-                </div>
+              <nav
+                aria-label="Primary"
+                className="flex min-w-0 flex-1 gap-4 overflow-x-auto xl:justify-center"
+              >
+                {primaryNavLinks.map((item) => (
+                  <Link
+                    key={item.label}
+                    className="shrink-0 whitespace-nowrap text-[13px] font-medium text-[#2e4a2e] underline-offset-[6px] decoration-[#2e7d32] hover:underline"
+                    href={item.href}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </nav>
 
-                <nav
-                  aria-label="Primary"
-                  className="flex gap-2 overflow-x-auto xl:justify-center"
-                >
-                  {primaryNavLinks.map((item) => (
-                    <Link
-                      key={item.label}
-                      className="inline-flex min-h-11 shrink-0 items-center rounded-full px-4 text-sm font-semibold text-brand-navy hover:bg-brand-light hover:text-brand-green"
-                      href={item.href}
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                </nav>
+              <div className="flex shrink-0 flex-wrap items-center gap-2">
+                {appDownloadButtons.map((button) => (
+                  <AppStoreBadge key={button.platform} {...button} />
+                ))}
               </div>
             </div>
           </div>
         </header>
 
-        <section className="px-4 pt-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-7xl overflow-hidden rounded-[28px] border border-brand-navy/10 bg-white shadow-float">
-            <div className="flex gap-2 overflow-x-auto px-4 py-4 lg:grid lg:grid-cols-6 lg:gap-0 lg:px-0 lg:py-0">
+        <section className="border-y border-[#dcedc8] bg-white">
+          <div className="mx-auto max-w-7xl">
+            <div className="flex overflow-x-auto">
               {featureStripItems.map((item) => {
                 const Icon = item.icon;
 
                 return (
                   <article
                     key={item.title}
-                    className="min-w-[220px] shrink-0 rounded-[24px] bg-brand-light/65 p-4 lg:min-w-0 lg:rounded-none lg:bg-transparent lg:px-5 lg:py-5 lg:first:border-l-0 lg:border-l lg:border-brand-navy/10"
+                    className="min-w-[180px] shrink-0 border-r border-[#dcedc8] px-[14px] py-3 last:border-r-0 lg:min-w-0 lg:flex-1"
                   >
-                    <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-brand-green shadow-float">
-                      <Icon className="h-5 w-5" />
+                    <div className="inline-flex h-4 w-4 items-center justify-center text-[#2e7d32]">
+                      <Icon className="h-4 w-4" />
                     </div>
-                    <h2 className="mt-4 text-base font-heading text-brand-navy">
+                    <h2 className="mt-2 text-[12px] font-bold text-[#1a2e1a]">
                       {item.title}
                     </h2>
-                    <p className="mt-2 text-sm leading-6 text-brand-navy/70">
+                    <p className="mt-1 text-[10px] leading-4 text-brand-navy/55">
                       {item.description}
                     </p>
                   </article>

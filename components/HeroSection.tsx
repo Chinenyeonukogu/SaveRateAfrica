@@ -30,6 +30,10 @@ const currencySymbolByCountry: Record<
   Canada: { code: "CAD", symbol: "CA$" }
 };
 
+const brandFontStyle = {
+  fontFamily: '"Sora", var(--font-heading), sans-serif'
+} as const;
+
 export function HeroSection({
   amount,
   senderCountry,
@@ -53,16 +57,19 @@ export function HeroSection({
 
           <div className="relative grid gap-8 lg:grid-cols-[1.02fr_0.98fr] lg:items-center">
             <div className="space-y-6">
-              <div className="inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-white/90">
+              <div className="inline-flex items-center gap-3 rounded-full border border-[#66bb6a]/45 bg-[#2e7d32]/25 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-white/95">
                 <span className="relative flex h-3 w-3">
-                  <span className="absolute inset-0 animate-ping rounded-full bg-brand-yellow/80" />
-                  <span className="relative rounded-full bg-brand-yellow" />
+                  <span className="absolute inset-0 animate-ping rounded-full bg-[#66bb6a]" />
+                  <span className="relative rounded-full bg-[#66bb6a]" />
                 </span>
-                Live comparison now
+                LIVE COMPARISON NOW
               </div>
 
               <div className="space-y-4">
-                <h1 className="max-w-3xl font-heading text-4xl leading-[0.95] sm:text-5xl lg:text-6xl">
+                <h1
+                  className="max-w-3xl font-heading text-4xl leading-[0.95] sm:text-5xl lg:text-6xl"
+                  style={brandFontStyle}
+                >
                   Send Money to Nigeria. Compare and save instantly.
                 </h1>
                 <p className="max-w-2xl text-base leading-7 text-white/80 sm:text-lg">
