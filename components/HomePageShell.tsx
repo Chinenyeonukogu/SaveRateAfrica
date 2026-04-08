@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -12,6 +13,7 @@ import {
   CreditCard,
   LineChart,
   Menu,
+  Search,
   ShieldCheck,
   Star,
   Waves,
@@ -37,7 +39,11 @@ import {
   type ComparisonResult
 } from "@/lib/fetchRates";
 import { faqItems, howItWorksSteps } from "@/lib/site-data";
-import type { ComparisonSort, SenderCountry } from "@/lib/providers";
+import {
+  providers,
+  type ComparisonSort,
+  type SenderCountry
+} from "@/lib/providers";
 
 interface HomePageShellProps {
   initialComparison: ComparisonResult;
@@ -306,6 +312,7 @@ function buildLiveReviewComparisons(
 }
 
 export function HomePageShell({ initialComparison }: HomePageShellProps) {
+  const router = useRouter();
   const compareRef = useRef<HTMLDivElement | null>(null);
   const smartSendingRef = useRef<HTMLElement | null>(null);
   const buildCreditRef = useRef<HTMLElement | null>(null);
@@ -320,6 +327,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
   const [reviewCountry, setReviewCountry] = useState<SenderCountry>(
     initialComparison.senderCountry
   );
+  const [headerSearch, setHeaderSearch] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [comparison, setComparison] = useState(initialComparison);
   const [sortBy, setSortBy] = useState<ComparisonSort>(initialComparison.sortBy);
@@ -471,6 +479,54 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
     smartSending: smartSendingRef
   };
 
+  function handleHeaderSearchSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const normalizedQuery = headerSearch.trim().toLowerCase();
+
+    if (!normalizedQuery) {
+      return;
+    }
+
+    const matchedProvider = providers.find((provider) => {
+      const normalizedName = provider.name.toLowerCase();
+      const normalizedSlug = provider.slug.replace(/-/g, " ").toLowerCase();
+
+      return (
+        normalizedName.includes(normalizedQuery) ||
+        normalizedSlug.includes(normalizedQuery)
+      );
+    });
+
+    if (matchedProvider) {
+      setHeaderSearch("");
+      setIsMobileMenuOpen(false);
+      router.push(`/providers/${matchedProvider.slug}`);
+      return;
+    }
+
+    if (normalizedQuery.includes("compare") || normalizedQuery.includes("rate")) {
+      handleCompare();
+    } else if (normalizedQuery.includes("how")) {
+      scrollToSection(sectionTargets.howItWorks);
+    } else if (normalizedQuery.includes("smart")) {
+      scrollToSection(sectionTargets.smartSending);
+    } else if (normalizedQuery.includes("credit")) {
+      scrollToSection(sectionTargets.buildCredit);
+    } else if (normalizedQuery.includes("alert")) {
+      scrollToSection(sectionTargets.alerts);
+    } else if (normalizedQuery.includes("contact")) {
+      document
+        .querySelector("#contact-us")
+        ?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      router.push("/providers");
+    }
+
+    setHeaderSearch("");
+    setIsMobileMenuOpen(false);
+  }
+
   return (
     <>
       <main className="overflow-x-hidden pb-32 md:pb-20">
@@ -550,6 +606,27 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                 </div>
               </div>
             ) : null}
+
+            <form
+              className="border-t border-[#e8f5e9] py-3"
+              role="search"
+              onSubmit={handleHeaderSearchSubmit}
+            >
+              <label className="sr-only" htmlFor="site-search">
+                Search SaveRateAfrica
+              </label>
+              <div className="relative">
+                <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-brand-navy/45" />
+                <input
+                  id="site-search"
+                  className="min-h-11 w-full rounded-[14px] border border-[#dcedc8] bg-[#f4faf5] pl-11 pr-4 text-sm text-brand-navy outline-none placeholder:text-brand-navy/45 focus:border-[#2e7d32]"
+                  placeholder="Search providers, rates, or sections"
+                  type="search"
+                  value={headerSearch}
+                  onChange={(event) => setHeaderSearch(event.target.value)}
+                />
+              </div>
+            </form>
           </div>
         </header>
 
