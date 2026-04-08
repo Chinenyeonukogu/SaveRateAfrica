@@ -5,7 +5,6 @@ import {
   Bot,
   MessageSquareText,
   SendHorizonal,
-  Sparkles,
   X
 } from "lucide-react";
 
@@ -183,13 +182,19 @@ export function AIAssistant({ comparison }: AIAssistantProps) {
     <>
       <button
         aria-controls="ask-ai-panel"
+        aria-label="Ask AI"
         aria-expanded={isOpen}
-        className="fixed bottom-28 right-4 z-40 inline-flex min-h-14 items-center gap-2 rounded-full bg-brand-green px-5 text-sm font-bold text-white shadow-glow transition hover:-translate-y-1 hover:bg-[#06d45a] md:bottom-6 md:right-6"
+        className="group fixed bottom-5 right-5 z-[999] flex h-11 w-11 items-center justify-center rounded-full bg-[#2e7d32] text-[18px] text-white shadow-[0_2px_8px_rgba(0,0,0,0.18)] transition-[transform,box-shadow] duration-200 hover:scale-[1.08] hover:shadow-[0_4px_16px_rgba(46,125,50,0.3)] max-[599px]:bottom-4 max-[599px]:right-4 max-[599px]:h-10 max-[599px]:w-10 max-[599px]:text-[16px]"
         type="button"
         onClick={() => setIsOpen(true)}
       >
-        <Sparkles className="h-4 w-4" />
-        ✨ Ask AI
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute right-[52px] top-1/2 -translate-y-1/2 whitespace-nowrap rounded-[4px] bg-[#1a2e1a] px-[10px] py-1 text-[11px] text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+        >
+          Ask AI
+        </span>
+        <span aria-hidden="true">✦</span>
       </button>
 
       <div

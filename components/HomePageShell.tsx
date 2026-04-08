@@ -791,17 +791,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
             </section>
           </div>
         </section>
-
-        <div className="fixed inset-x-4 bottom-24 z-30 md:hidden">
-          <button
-            className="inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-[22px] bg-brand-yellow px-5 text-base font-bold text-brand-navy shadow-float"
-            type="button"
-            onClick={handleCompare}
-          >
-            Compare Now
-            <ArrowRight className="h-5 w-5" />
-          </button>
-        </div>
       </main>
       <AIAssistant comparison={comparison} />
     </>
