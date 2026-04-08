@@ -2,10 +2,8 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Menu, Search, X } from "lucide-react";
-import { useEffect, useRef, useState, type FormEvent, type MouseEvent } from "react";
-
-import { providers } from "@/lib/providers";
+import { Menu, X } from "lucide-react";
+import { useEffect, useState, type MouseEvent } from "react";
 
 interface SiteHeaderProps {
   showAnnouncementBar?: boolean;
@@ -14,66 +12,47 @@ interface SiteHeaderProps {
 
 interface NavigationItem {
   href: string;
-  keywords: string[];
   label: string;
   routeHref?: string;
-  searchHref?: string;
   sectionId?: string;
 }
 
 const navigationItems: NavigationItem[] = [
   {
     href: "#compare-rates",
-    keywords: ["compare", "rates", "providers"],
     label: "Compare Rates",
     routeHref: "/#compare-rates",
     sectionId: "compare-rates"
   },
   {
     href: "#how-it-works",
-    keywords: ["how", "works", "steps"],
     label: "How It Works",
     routeHref: "/#how-it-works",
     sectionId: "how-it-works"
   },
   {
     href: "#smart-sending",
-    keywords: ["smart", "sending", "ai"],
     label: "Smart Sending",
     routeHref: "/#smart-sending",
     sectionId: "smart-sending"
   },
   {
     href: "#build-credit",
-    keywords: ["credit", "build"],
     label: "Build Credit",
-    routeHref: "/credit-cards",
-    searchHref: "/credit-cards",
+    routeHref: "/#build-credit",
     sectionId: "build-credit"
   },
   {
     href: "#rate-alerts",
-    keywords: ["alert", "notify"],
     label: "Rate Alerts",
     routeHref: "/#rate-alerts",
     sectionId: "rate-alerts"
   },
   {
     href: "#contact",
-    keywords: ["contact"],
     label: "Contact Us",
     routeHref: "/#contact",
     sectionId: "contact"
-  }
-];
-
-const searchOnlyTargets: NavigationItem[] = [
-  {
-    href: "#feature-hub",
-    keywords: ["feature", "features", "tool", "tools"],
-    label: "Feature Hub",
-    routeHref: "/#feature-hub",
-    sectionId: "feature-hub"
   }
 ];
 
@@ -95,7 +74,8 @@ const appDownloadButtons = [
 const brandFontStyle = {
   fontFamily: '"Sora", var(--font-heading), sans-serif'
 } as const;
-const pageShellClassName =
+const headerShellClassName = "mx-auto w-full max-w-[1200px] px-4 lg:px-6";
+const breadcrumbShellClassName =
   "mx-auto w-full max-w-[1200px] px-4 min-[600px]:px-6 lg:px-10";
 
 function SaveRateAfricaLogo({
@@ -202,28 +182,7 @@ export function SiteHeader({
   const [activeSectionId, setActiveSectionId] = useState<string | null>(
     pathname === "/" ? "home" : null
   );
-  const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
-  const [noResultsQuery, setNoResultsQuery] = useState<string | null>(null);
-  const noResultsTimeoutRef = useRef<number | null>(null);
-  const mobileSearchInputRef = useRef<HTMLInputElement | null>(null);
-
-  useEffect(() => {
-    if (!isMobileSearchOpen) {
-      return;
-    }
-
-    mobileSearchInputRef.current?.focus();
-  }, [isMobileSearchOpen]);
-
-  useEffect(() => {
-    return () => {
-      if (noResultsTimeoutRef.current) {
-        window.clearTimeout(noResultsTimeoutRef.current);
-      }
-    };
-  }, []);
 
   useEffect(() => {
     if (pathname !== "/") {
@@ -265,15 +224,10 @@ export function SiteHeader({
 
   function closeMobilePanels() {
     setIsMobileMenuOpen(false);
-    setIsMobileSearchOpen(false);
   }
 
   function getNavigationHref(item: NavigationItem) {
     return pathname === "/" ? item.href : item.routeHref ?? `/${item.href}`;
-  }
-
-  function getSearchHref(item: NavigationItem) {
-    return item.searchHref ?? getNavigationHref(item);
   }
 
   function getHomeHref() {
@@ -282,8 +236,6 @@ export function SiteHeader({
 
   function navigateTo(href: string, sectionId?: string) {
     closeMobilePanels();
-    setSearchQuery("");
-    setNoResultsQuery(null);
 
     if (sectionId && pathname === "/") {
       const targetElement = document.getElementById(sectionId);
@@ -325,57 +277,6 @@ export function SiteHeader({
     setActiveSectionId("home");
   }
 
-  function showNoResults(query: string) {
-    if (noResultsTimeoutRef.current) {
-      window.clearTimeout(noResultsTimeoutRef.current);
-    }
-
-    setNoResultsQuery(query);
-    noResultsTimeoutRef.current = window.setTimeout(() => {
-      setNoResultsQuery(null);
-    }, 2500);
-  }
-
-  function handleSearchSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    const trimmedQuery = searchQuery.trim();
-    const normalizedQuery = trimmedQuery.toLowerCase();
-
-    if (!normalizedQuery) {
-      return;
-    }
-
-    const matchedProvider = providers.find((provider) => {
-      const normalizedName = provider.name.toLowerCase();
-      const normalizedSlug = provider.slug.replace(/-/g, " ").toLowerCase();
-
-      return (
-        normalizedName.includes(normalizedQuery) ||
-        normalizedSlug.includes(normalizedQuery)
-      );
-    });
-
-    if (matchedProvider) {
-      closeMobilePanels();
-      setSearchQuery("");
-      setNoResultsQuery(null);
-      router.push(`/providers/${matchedProvider.slug}`);
-      return;
-    }
-
-    const matchedTarget = [...navigationItems, ...searchOnlyTargets].find((item) =>
-      item.keywords.some((keyword) => normalizedQuery.includes(keyword))
-    );
-
-    if (matchedTarget) {
-      navigateTo(getSearchHref(matchedTarget), matchedTarget.sectionId);
-      return;
-    }
-
-    showNoResults(trimmedQuery);
-  }
-
   function isActiveNavigationItem(item: NavigationItem) {
     if (pathname === "/") {
       return activeSectionId === item.sectionId;
@@ -409,16 +310,16 @@ export function SiteHeader({
         </div>
       ) : null}
 
-      <header className="sticky top-0 z-[1000] border-b border-[#c8e6c9] bg-white shadow-[0_1px_8px_rgba(46,125,50,0.08)]">
-        <div className={pageShellClassName}>
-          <div className="flex h-[60px] items-center justify-between gap-4">
-            <div className="shrink-0">
+      <header className="sticky top-0 z-[1000] border-b border-[#c8e6c9] bg-white shadow-[0_1px_8px_rgba(46,125,50,0.06)]">
+        <div className={headerShellClassName}>
+          <div className="relative flex h-14 flex-nowrap items-center justify-between gap-4 overflow-visible whitespace-nowrap lg:overflow-hidden">
+            <div className="mr-5 shrink-0">
               <SaveRateAfricaLogo href={getHomeHref()} onClick={handleLogoClick} />
             </div>
 
             <nav
               aria-label="Primary"
-              className="hidden min-w-0 flex-1 items-center justify-center gap-5 lg:flex"
+              className="hidden min-w-0 flex-1 flex-nowrap items-center justify-center gap-1 whitespace-nowrap lg:flex"
             >
               {navigationItems.map((item) => {
                 const isActive = isActiveNavigationItem(item);
@@ -426,7 +327,7 @@ export function SiteHeader({
                 return (
                   <Link
                     key={item.label}
-                    className={`inline-flex h-[60px] items-center border-b-2 text-[13px] font-medium transition ${
+                    className={`inline-flex items-center whitespace-nowrap border-b-2 px-[10px] py-[6px] text-[13px] font-medium transition ${
                       isActive
                         ? "active border-[#2e7d32] text-[#2e7d32]"
                         : "border-transparent text-[#2e4a2e] hover:text-[#2e7d32]"
@@ -440,30 +341,7 @@ export function SiteHeader({
               })}
             </nav>
 
-            <div className="hidden shrink-0 items-center gap-3 lg:flex">
-              <form className="relative" role="search" onSubmit={handleSearchSubmit}>
-                <label className="sr-only" htmlFor="desktop-site-search">
-                  Search SaveRateAfrica
-                </label>
-                <div className="group flex w-[180px] items-center gap-[6px] rounded-full border border-[#e0e0e0] bg-[#f4f4f4] px-[14px] py-[5px] pl-[10px] transition-[width,border-color,background-color,box-shadow] duration-200 ease-out focus-within:w-[240px] focus-within:border-[#2e7d32] focus-within:bg-white focus-within:shadow-[0_0_0_3px_rgba(46,125,50,0.08)]">
-                  <Search className="h-[14px] w-[14px] shrink-0 text-[#888] transition group-focus-within:text-[#2e7d32]" />
-                  <input
-                    id="desktop-site-search"
-                    className="w-full border-none bg-transparent text-[12px] text-[#1a2e1a] outline-none placeholder:text-[#aaa]"
-                    placeholder="Search SaveRateAfrica"
-                    type="search"
-                    value={searchQuery}
-                    onChange={(event) => setSearchQuery(event.target.value)}
-                  />
-                </div>
-
-                {noResultsQuery ? (
-                  <div className="pointer-events-none absolute left-0 top-full z-10 mt-2 rounded-[6px] bg-[#1a2e1a] px-3 py-[5px] text-[11px] text-white">
-                    No results for &apos;{noResultsQuery}&apos;
-                  </div>
-                ) : null}
-              </form>
-
+            <div className="ml-4 hidden shrink-0 items-center gap-2 lg:flex">
               <div className="flex items-center gap-2">
                 {appDownloadButtons.map((button) => (
                   <AppStoreBadge key={button.platform} {...button} />
@@ -471,75 +349,30 @@ export function SiteHeader({
               </div>
             </div>
 
-            <div className="flex items-center gap-2 lg:hidden">
-              <button
-                aria-expanded={isMobileSearchOpen}
-                aria-label={isMobileSearchOpen ? "Close search" : "Open search"}
-                className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-[#dcedc8] text-[#1a2e1a]"
-                type="button"
-                onClick={() => {
-                  setIsMobileSearchOpen((current) => !current);
-                  setIsMobileMenuOpen(false);
-                }}
-              >
-                <Search className="h-5 w-5" />
-              </button>
-
+            <div className="flex shrink-0 items-center lg:hidden">
               <button
                 aria-expanded={isMobileMenuOpen}
                 aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-                className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-[#dcedc8] text-[#1a2e1a]"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-[#dcedc8] text-[#1a2e1a]"
                 type="button"
                 onClick={() => {
                   setIsMobileMenuOpen((current) => !current);
-                  setIsMobileSearchOpen(false);
                 }}
               >
                 {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </button>
             </div>
-          </div>
-        </div>
-
-        {isMobileSearchOpen ? (
-          <div className="border-t border-[#e8f5e9] bg-white px-4 py-3 min-[600px]:px-6">
-            <form className="relative" role="search" onSubmit={handleSearchSubmit}>
-              <label className="sr-only" htmlFor="mobile-site-search">
-                Search SaveRateAfrica
-              </label>
-              <div className="group flex w-full items-center gap-[6px] rounded-full border border-[#e0e0e0] bg-[#f4f4f4] px-[14px] py-[5px] pl-[10px] transition-[border-color,background-color,box-shadow] duration-200 ease-out focus-within:border-[#2e7d32] focus-within:bg-white focus-within:shadow-[0_0_0_3px_rgba(46,125,50,0.08)]">
-                <Search className="h-[14px] w-[14px] shrink-0 text-[#888] transition group-focus-within:text-[#2e7d32]" />
-                <input
-                  ref={mobileSearchInputRef}
-                  id="mobile-site-search"
-                  className="w-full border-none bg-transparent text-[12px] text-[#1a2e1a] outline-none placeholder:text-[#aaa]"
-                  placeholder="Search SaveRateAfrica"
-                  type="search"
-                  value={searchQuery}
-                  onChange={(event) => setSearchQuery(event.target.value)}
-                />
-              </div>
-
-              {noResultsQuery ? (
-                <div className="pointer-events-none absolute left-0 top-full z-10 mt-2 rounded-[6px] bg-[#1a2e1a] px-3 py-[5px] text-[11px] text-white">
-                  No results for &apos;{noResultsQuery}&apos;
-                </div>
-              ) : null}
-            </form>
-          </div>
-        ) : null}
-
-        {isMobileMenuOpen ? (
-          <div className="border-t border-[#e8f5e9] bg-white lg:hidden">
-            <nav aria-label="Mobile primary" className="grid">
+            {isMobileMenuOpen ? (
+              <div className="absolute left-0 right-0 top-14 z-[999] rounded-b-[12px] border border-[#c8e6c9] bg-white px-5 py-4 shadow-[0_8px_24px_rgba(0,0,0,0.08)] lg:hidden">
+                <nav aria-label="Mobile primary" className="grid">
               {navigationItems.map((item) => {
                 const isActive = isActiveNavigationItem(item);
 
                 return (
                   <Link
                     key={item.label}
-                    className={`inline-flex min-h-11 items-center border-b border-[#e8f5e9] px-4 py-3 text-[13px] font-medium ${
-                      isActive ? "active text-[#2e7d32]" : "text-[#2e4a2e]"
+                    className={`block border-b border-[#e8f5e9] py-3 text-[15px] ${
+                      isActive ? "active text-[#2e7d32]" : "text-[#1a2e1a]"
                     }`}
                     href={getNavigationHref(item)}
                     onClick={(event) => handleNavClick(event, item)}
@@ -548,20 +381,22 @@ export function SiteHeader({
                   </Link>
                 );
               })}
-            </nav>
+                </nav>
 
-            <div className="flex flex-col gap-2 px-4 py-3">
-              {appDownloadButtons.map((button) => (
-                <AppStoreBadge key={button.platform} {...button} />
-              ))}
-            </div>
+                <div className="flex flex-col gap-2 pt-4">
+                  {appDownloadButtons.map((button) => (
+                    <AppStoreBadge key={button.platform} {...button} />
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </div>
-        ) : null}
+        </div>
       </header>
 
       {showBreadcrumb ? (
         <div className="bg-[#f4faf5]">
-          <div className={`${pageShellClassName} py-2 text-[12px] text-[#5a7a5a]`}>
+          <div className={`${breadcrumbShellClassName} py-2 text-[12px] text-[#5a7a5a]`}>
             <Link className="hover:text-[#2e7d32]" href="/">
               Home
             </Link>
