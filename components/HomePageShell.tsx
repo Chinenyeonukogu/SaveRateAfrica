@@ -127,29 +127,6 @@ const featureStripItems: FeatureStripItem[] = [
   }
 ];
 
-const statsStrip = [
-  {
-    label: "Providers",
-    value: "10+",
-    description: "Live providers compared"
-  },
-  {
-    label: "Refresh",
-    value: "5 min",
-    description: "Automatic data refresh"
-  },
-  {
-    label: "Accuracy",
-    value: "98%",
-    description: "Rate accuracy benchmark"
-  },
-  {
-    label: "Hidden Fees",
-    value: "$0",
-    description: "Transparent pricing focus"
-  }
-] as const;
-
 const featureFilters = [
   { id: "all", label: "All Features" },
   { id: "alerts", label: "Rate Alerts" },
@@ -592,27 +569,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
           onCompare={handleCompare}
           onSenderCountryChange={setSenderCountry}
         />
-
-        <section className="px-4 pt-4 sm:px-6 lg:px-8">
-          <div className="mx-auto grid max-w-7xl gap-3 sm:grid-cols-2 xl:grid-cols-4">
-            {statsStrip.map((stat) => (
-              <article
-                key={stat.label}
-                className="rounded-[24px] border border-brand-navy/10 bg-white px-5 py-4 shadow-float"
-              >
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-green">
-                  {stat.label}
-                </p>
-                <div className="mt-2 flex items-end justify-between gap-3">
-                  <p className="font-heading text-3xl text-brand-navy">{stat.value}</p>
-                  <p className="text-right text-sm leading-5 text-brand-navy/60">
-                    {stat.description}
-                  </p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
 
         <section className="px-4 pt-8 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl rounded-[28px] border border-brand-navy/10 bg-white p-6 shadow-float sm:p-8">

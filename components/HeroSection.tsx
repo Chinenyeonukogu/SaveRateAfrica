@@ -94,7 +94,7 @@ export function HeroSection({
                 <div className="inline-flex min-h-12 items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4">
                   <BadgePercent className="h-4 w-4" />
                   <span>
-                    98% Rate Accuracy
+                    99% Currency Rate Accuracy
                     <span className="ml-1 text-white/70">
                       Verified against provider rates daily
                     </span>
