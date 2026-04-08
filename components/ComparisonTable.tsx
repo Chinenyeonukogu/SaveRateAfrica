@@ -1,14 +1,6 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import { Activity, BadgePercent, Waves } from "lucide-react";
 
-import {
-  formatDateTime,
-  formatRate,
-  formatRefreshCountdown,
-  formatRelativeTime
-} from "@/lib/format";
+import { formatDateTime, formatRate } from "@/lib/format";
 import type { ComparisonResult } from "@/lib/fetchRates";
 import type { ComparisonSort } from "@/lib/providers";
 
@@ -21,32 +13,6 @@ interface ComparisonTableProps {
   isLoading: boolean;
   nextRefreshAt: string;
   onSortChange: (value: ComparisonSort) => void;
-}
-
-function getFreshnessState(updatedAt: string, now: number) {
-  const ageMs = Math.max(now - new Date(updatedAt).getTime(), 0);
-
-  if (ageMs < 5 * 60_000) {
-    return {
-      label: "Live",
-      dotClassName: "bg-brand-green",
-      textClassName: "text-brand-green"
-    };
-  }
-
-  if (ageMs < 10 * 60_000) {
-    return {
-      label: "Recent",
-      dotClassName: "bg-brand-yellow",
-      textClassName: "text-[#A46D00]"
-    };
-  }
-
-  return {
-    label: "Delayed",
-    dotClassName: "bg-brand-coral",
-    textClassName: "text-brand-coral"
-  };
 }
 
 function LoadingSkeletonCards() {
@@ -100,28 +66,12 @@ export function ComparisonTable({
   comparison,
   errorMessage,
   isLoading,
-  nextRefreshAt,
+  nextRefreshAt: _nextRefreshAt,
   onSortChange
 }: ComparisonTableProps) {
-  const snapshotNow = new Date(comparison.updatedAt).getTime();
-  const initialNow = Number.isFinite(snapshotNow) ? snapshotNow : 0;
-  const [now, setNow] = useState(initialNow);
   const bestValueProvider =
     comparison.providers.find((provider) => provider.isBestValue) ??
     comparison.providers[0];
-  const freshness = getFreshnessState(comparison.updatedAt, now);
-
-  useEffect(() => {
-    setNow(Date.now());
-
-    const intervalId = window.setInterval(() => {
-      setNow(Date.now());
-    }, 1000);
-
-    return () => {
-      window.clearInterval(intervalId);
-    };
-  }, []);
 
   return (
     <section>
@@ -204,24 +154,6 @@ export function ComparisonTable({
               sourceCurrency={comparison.sourceCurrency}
             />
           ))}
-        </div>
-      </div>
-
-      <div className="mt-6 flex flex-col gap-2 text-xs text-brand-navy/55 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-wrap items-center gap-3">
-          <span
-            className={`inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 font-semibold ${freshness.textClassName}`}
-          >
-            <span className={`h-2.5 w-2.5 rounded-full ${freshness.dotClassName}`} />
-            {freshness.label}
-          </span>
-          <span>Rates updated {formatRelativeTime(comparison.updatedAt, now)}</span>
-        </div>
-        <div className="flex flex-wrap items-center gap-3">
-          <span>Refreshing in {formatRefreshCountdown(nextRefreshAt, now)}</span>
-          <span>
-            Source updated {formatRelativeTime(comparison.sourceUpdatedAt, now)}
-          </span>
         </div>
       </div>
     </section>
