@@ -112,7 +112,7 @@ const featuredCreditCards = [
     stars: "★★★★½",
     subtitle: "Visa",
     topPick: false,
-    url: "https://www.petalcard.com/products/petal-2",
+    url: "https://www.petalcard.com/petal-2",
     wordmark: "PETAL 2"
   }
 ] as const;
