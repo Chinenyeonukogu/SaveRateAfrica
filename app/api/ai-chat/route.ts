@@ -1,21 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import {
+  buildAssistantPromptContext,
+  buildSmartAssistantReply,
+  detectAssistantIntent,
+  SAVE_RATE_AI_SYSTEM_PROMPT,
+  shouldReplyDeterministically
+} from "@/lib/aiAssistant";
+import {
   buildGeminiHistory,
-  finalizeAIReply,
   GEMINI_MODEL,
   getGeminiClient,
   hasGeminiApiKey,
   type ChatMessageInput
 } from "@/lib/gemini";
 import { getAIContext } from "@/lib/getAIContext";
-import { buildManualChatReply } from "@/lib/marketSnapshot";
+import type { ComparisonResult } from "@/lib/fetchRates";
 import { isSenderCountry, type SenderCountry } from "@/lib/providers";
 
 export const runtime = "nodejs";
 
 interface ChatRequestPayload {
   amount?: number;
+  comparison?: ComparisonResult;
   history?: ChatMessageInput[];
   message?: string;
   senderCountry?: SenderCountry;
@@ -31,12 +38,6 @@ function getRequestSenderCountry(value?: string): SenderCountry {
   return value && isSenderCountry(value) ? value : "USA";
 }
 
-function detectUnsupportedRateRequest(message: string) {
-  return /\b(eur|€|aud|nzd|jpy|yen|inr|rupee|kes|ghs|zar|xof|xaf|btc|usdt)\b/i.test(
-    message
-  ) || /₦\s*\d|ngn\s*\d/i.test(message);
-}
-
 function detectRequestedAmount(message: string, fallbackAmount: number) {
   const match = message.match(
     /(?:\$|usd|£|gbp|cad\s*|ca\$)\s*([0-9][0-9,]*(?:\.[0-9]+)?)/i
@@ -50,16 +51,16 @@ function detectRequestedAmount(message: string, fallbackAmount: number) {
   return Number.isFinite(parsedValue) && parsedValue > 0 ? parsedValue : fallbackAmount;
 }
 
-function buildSystemInstruction(marketSnapshot: string, senderCountry: SenderCountry) {
-  return [
-    "You are SaveRateAfrica's AI remittance analyst for Nigerians in the diaspora.",
-    "Use only the verified market snapshot below. Do not invent rates, providers, or corridors.",
-    `The user's current sender market is ${senderCountry}.`,
-    "If the user asks for any rate, currency, or corridor not covered in the snapshot, reply with: 'I only provide verified live data. Based on my current records, [Provider] is your best bet.' Then sign off with 'SaveRate AI 🤖 🇳🇬'.",
-    "Keep answers concise, practical, and culturally warm.",
-    "Always use ₦ and $ symbols correctly when relevant, and always end with 'SaveRate AI 🤖 🇳🇬'.",
-    marketSnapshot
-  ].join("\n\n");
+function hasComparisonSnapshot(value?: ComparisonResult): value is ComparisonResult {
+  return Boolean(
+    value &&
+      Array.isArray(value.providers) &&
+      value.providers.length > 0 &&
+      value.liveBaseRates &&
+      value.updatedAt &&
+      value.sourceUpdatedAt &&
+      value.cachedUntil
+  );
 }
 
 export async function POST(request: NextRequest) {
@@ -79,18 +80,26 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const amount = detectRequestedAmount(message, getRequestAmount(payload.amount));
+    const amount = detectRequestedAmount(
+      message,
+      getRequestAmount(payload.amount ?? payload.comparison?.amount)
+    );
     const context = await getAIContext({
       amount,
       baseUrl: new URL(request.url).origin
     });
+    const liveComparison = hasComparisonSnapshot(payload.comparison)
+      ? payload.comparison
+      : context.comparisons[senderCountry];
     const corridor = context.snapshot.corridors[senderCountry];
+    const intent = detectAssistantIntent(message, liveComparison);
+    const manualReply = buildSmartAssistantReply(message, liveComparison);
 
-    if (detectUnsupportedRateRequest(message)) {
+    if (shouldReplyDeterministically(intent)) {
       return NextResponse.json(
         {
-          message: `I only provide verified live data. Based on my current records, ${corridor.bestProvider} is your best bet. SaveRate AI 🤖 🇳🇬`,
-          mode: "guardrail",
+          message: manualReply,
+          mode: "manual",
           snapshot: corridor,
           source: "manual-analyst-view"
         },
@@ -101,8 +110,6 @@ export async function POST(request: NextRequest) {
         }
       );
     }
-
-    const manualReply = buildManualChatReply(message, corridor);
 
     if (!hasGeminiApiKey()) {
       return NextResponse.json(
@@ -125,22 +132,19 @@ export async function POST(request: NextRequest) {
       const chat = ai.chats.create({
         model: GEMINI_MODEL,
         config: {
-          systemInstruction: buildSystemInstruction(
-            context.marketSnapshot,
-            senderCountry
-          ),
+          systemInstruction: SAVE_RATE_AI_SYSTEM_PROMPT,
           temperature: 0.35,
           maxOutputTokens: 220
         },
         history: buildGeminiHistory(payload.history ?? [])
       });
       const response = await chat.sendMessage({
-        message
+        message: buildAssistantPromptContext(liveComparison, message, intent)
       });
 
       return NextResponse.json(
         {
-          message: finalizeAIReply(response.text),
+          message: response.text?.replace(/\s+\n/g, "\n").trim() || manualReply,
           mode: context.source === "api" ? "gemini" : "manual",
           snapshot: corridor,
           source:
@@ -184,4 +188,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-

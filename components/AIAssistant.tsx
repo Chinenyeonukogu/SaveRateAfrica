@@ -9,9 +9,10 @@ import {
   X
 } from "lucide-react";
 
+import { buildSmartAssistantReply } from "@/lib/aiAssistant";
 import { formatCurrency, formatNaira } from "@/lib/format";
 import type { ComparisonResult } from "@/lib/fetchRates";
-import { buildCorridorInsight, buildManualChatReply } from "@/lib/marketSnapshot";
+import { buildCorridorInsight } from "@/lib/marketSnapshot";
 
 interface AssistantMessage {
   content: string;
@@ -29,6 +30,25 @@ interface AIAssistantProps {
   comparison: ComparisonResult;
 }
 
+const suggestionChips = [
+  {
+    label: "Fastest provider now",
+    prompt: "Fastest provider now"
+  },
+  {
+    label: "Best rate for $500",
+    prompt: "Best rate for $500"
+  },
+  {
+    label: "Cheapest to send today",
+    prompt: "Cheapest to send today"
+  },
+  {
+    label: "LemFi vs Wise",
+    prompt: "Compare LemFi vs Wise for $500"
+  }
+] as const;
+
 export function AIAssistant({ comparison }: AIAssistantProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
@@ -36,7 +56,7 @@ export function AIAssistant({ comparison }: AIAssistantProps) {
   const [messages, setMessages] = useState<AssistantMessage[]>([
     {
       content:
-        "Ask me who is best today, whether you should wait, or how much your transfer could deliver. SaveRate AI 🤖 🇳🇬",
+        "Ask about rates, fees, fastest providers, or your exact NGN payout and I’ll use the live comparison data on this page.",
       id: "intro",
       role: "assistant",
       source: "manual-analyst-view"
@@ -79,10 +99,8 @@ export function AIAssistant({ comparison }: AIAssistantProps) {
     };
   }, [isOpen]);
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    const trimmedInput = input.trim();
+  async function submitMessage(rawMessage: string) {
+    const trimmedInput = rawMessage.trim();
 
     if (!trimmedInput || isLoading) {
       return;
@@ -106,6 +124,7 @@ export function AIAssistant({ comparison }: AIAssistantProps) {
         },
         body: JSON.stringify({
           amount: comparison.amount,
+          comparison,
           history: messages
             .filter((message) => message.id !== "intro")
             .map((message) => ({
@@ -132,10 +151,7 @@ export function AIAssistant({ comparison }: AIAssistantProps) {
         }
       ]);
     } catch {
-      const fallbackReply = buildManualChatReply(
-        trimmedInput,
-        buildCorridorInsight(comparison)
-      );
+      const fallbackReply = buildSmartAssistantReply(trimmedInput, comparison);
 
       setMessages((currentMessages) => [
         ...currentMessages,
@@ -149,6 +165,16 @@ export function AIAssistant({ comparison }: AIAssistantProps) {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    await submitMessage(input);
+  }
+
+  async function handleChipClick(prompt: string) {
+    setInput(prompt);
+    await submitMessage(prompt);
   }
 
   const corridorInsight = buildCorridorInsight(comparison);
@@ -186,13 +212,11 @@ export function AIAssistant({ comparison }: AIAssistantProps) {
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-brand-green">
                   <Bot className="h-4 w-4" />
-                  SaveRate AI 🤖
+                  SaveRateAI
                 </div>
-                <h2 className="mt-3 text-2xl font-heading">
-                  Your remittance analyst
-                </h2>
-                <p className="mt-2 text-sm text-white/75">
-                  Verified with live rates from SaveRateAfrica. Powered by Gemini AI.
+                <h2 className="mt-3 text-2xl font-heading">SaveRateAI</h2>
+                <p className="mt-2 text-[10px] text-[#888]">
+                  Powered by live provider data · Updated 5 min ago
                 </p>
               </div>
 
@@ -269,10 +293,22 @@ export function AIAssistant({ comparison }: AIAssistantProps) {
 
           <form className="border-t border-white/10 p-4" onSubmit={handleSubmit}>
             <div className="rounded-[24px] border border-white/10 bg-white/5 p-2">
+              <div className="flex flex-wrap gap-[6px] px-3 pb-2 pt-1">
+                {suggestionChips.map((chip) => (
+                  <button
+                    key={chip.label}
+                    className="rounded-full bg-[#e8f5e9] px-3 py-[5px] text-[11px] text-[#2e7d32]"
+                    type="button"
+                    onClick={() => void handleChipClick(chip.prompt)}
+                  >
+                    {chip.label}
+                  </button>
+                ))}
+              </div>
               <textarea
                 aria-label="Ask SaveRate AI about your current transfer"
                 className="min-h-24 w-full resize-none bg-transparent px-3 py-2 text-sm text-white outline-none placeholder:text-white/40"
-                placeholder="Ask who is best today, whether you should wait, or how much your transfer could land."
+                placeholder="Ask about rates, fees, or fastest provider..."
                 value={input}
                 onChange={(event) => setInput(event.target.value)}
               />
