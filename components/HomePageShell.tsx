@@ -26,13 +26,18 @@ import { HeroSection } from "@/components/HeroSection";
 import { RateChart } from "@/components/RateChart";
 import { RateDisclaimer } from "@/components/RateDisclaimer";
 import { SavingsCalculator } from "@/components/SavingsCalculator";
-import { formatCurrency, formatNaira } from "@/lib/format";
+import {
+  formatCompact,
+  formatCurrency,
+  formatDateTime,
+  formatNaira
+} from "@/lib/format";
 import {
   buildComparisonFromLiveRates,
   fetchRates,
   type ComparisonResult
 } from "@/lib/fetchRates";
-import { faqItems, howItWorksSteps, providerReviews } from "@/lib/site-data";
+import { faqItems, howItWorksSteps } from "@/lib/site-data";
 import type { ComparisonSort, SenderCountry } from "@/lib/providers";
 
 interface HomePageShellProps {
@@ -218,6 +223,30 @@ const featureCardDefinitions: FeatureCardDefinition[] = [
   }
 ];
 
+const reviewCountries = ["USA", "UK", "Canada"] as const;
+
+function buildLiveReviewComparisons(
+  comparison: ComparisonResult
+): Record<SenderCountry, ComparisonResult> {
+  return Object.fromEntries(
+    reviewCountries.map((country) => [
+      country,
+      buildComparisonFromLiveRates({
+        amount: comparison.amount,
+        senderCountry: country,
+        sortBy: "best-rate",
+        liveBaseRates: {
+          provider: comparison.rateProvider,
+          updatedAt: comparison.updatedAt,
+          sourceUpdatedAt: comparison.sourceUpdatedAt,
+          cachedUntil: comparison.cachedUntil,
+          rates: comparison.liveBaseRates
+        }
+      })
+    ])
+  ) as Record<SenderCountry, ComparisonResult>;
+}
+
 export function HomePageShell({ initialComparison }: HomePageShellProps) {
   const compareRef = useRef<HTMLDivElement | null>(null);
   const smartSendingRef = useRef<HTMLElement | null>(null);
@@ -367,12 +396,12 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
     setSortBy(nextSort);
   }
 
-  const filteredReviews = providerReviews.filter(
-    (review) => review.country === reviewCountry
-  );
   const bestValueProvider =
     comparison.providers.find((provider) => provider.isBestValue) ??
     comparison.providers[0];
+  const liveReviewComparisons = buildLiveReviewComparisons(comparison);
+  const selectedReviewComparison = liveReviewComparisons[reviewCountry];
+  const liveReviewProviders = selectedReviewComparison.providers.slice(0, 3);
   const visibleFeatureCards = featureCardDefinitions.filter(
     (card) => activeFeatureFilter === "all" || card.category === activeFeatureFilter
   );
@@ -755,15 +784,19 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
               <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-green">
-                    Provider reviews
+                    Live provider reviews
                   </p>
                   <h2 className="mt-2 font-heading text-3xl text-brand-navy">
-                    Built for Nigerians sending from North America and the UK
+                    Real-time provider pulse for Nigerians sending abroad
                   </h2>
+                  <p className="mt-2 text-sm text-brand-navy/60">
+                    Updated {formatDateTime(selectedReviewComparison.updatedAt)} for the{" "}
+                    {reviewCountry} corridor.
+                  </p>
                 </div>
 
                 <div className="grid grid-cols-3 gap-2">
-                  {(["USA", "UK", "Canada"] as const).map((country) => (
+                  {reviewCountries.map((country) => (
                     <button
                       key={country}
                       className={`min-h-12 rounded-2xl px-4 text-sm font-semibold transition ${
@@ -781,33 +814,86 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
               </div>
 
               <div className="mt-6 grid gap-5 lg:grid-cols-3">
-                {filteredReviews.map((review) => (
+                {liveReviewProviders.map((provider) => (
                   <article
-                    key={`${review.country}-${review.name}`}
+                    key={`${reviewCountry}-${provider.slug}`}
                     className="rounded-[24px] bg-brand-light p-5"
                   >
-                    <div className="flex items-center gap-1">
-                      {Array.from({ length: 5 }).map((_, index) => (
-                        <Star
-                          key={`${review.name}-${index}`}
-                          className={`h-4 w-4 ${
-                            index < review.rating
-                              ? "fill-brand-yellow text-brand-yellow"
-                              : "text-brand-navy/20"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <p className="mt-4 text-base leading-7 text-brand-navy/75">
-                      "{review.quote}"
-                    </p>
-                    <div className="mt-5 border-t border-brand-navy/10 pt-4">
-                      <p className="font-semibold text-brand-navy">{review.name}</p>
-                      <p className="text-sm text-brand-navy/60">
-                        {review.role} · uses{" "}
-                        <span className="font-semibold text-brand-green">
-                          {review.provider}
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-1">
+                        {Array.from({ length: 5 }).map((_, index) => (
+                          <Star
+                            key={`${provider.slug}-${index}`}
+                            className={`h-4 w-4 ${
+                              index < provider.rating
+                                ? "fill-brand-yellow text-brand-yellow"
+                                : "text-brand-navy/20"
+                            }`}
+                          />
+                        ))}
+                      </div>
+
+                      {provider.isBestValue ? (
+                        <span className="rounded-full bg-brand-green/10 px-3 py-1 text-xs font-semibold text-brand-green">
+                          Best value now
                         </span>
+                      ) : null}
+                    </div>
+
+                    <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-brand-navy/60">
+                      <span className="font-semibold text-brand-green">
+                        {provider.name}
+                      </span>
+                      <span>{provider.rating.toFixed(1)} rating</span>
+                      <span>{formatCompact(provider.reviewCount)} reviews</span>
+                    </div>
+
+                    <p className="mt-4 text-base leading-7 text-brand-navy/75">
+                      {provider.name} is currently delivering{" "}
+                      <span className="font-semibold text-brand-green">
+                        {formatNaira(provider.amountReceived, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2
+                        })}
+                      </span>{" "}
+                      on a{" "}
+                      <span className="font-semibold text-brand-navy">
+                        {formatCurrency(
+                          selectedReviewComparison.amount,
+                          selectedReviewComparison.sourceCurrency,
+                          {
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0
+                          }
+                        )}
+                      </span>{" "}
+                      send from {reviewCountry}. {provider.trustNote}
+                    </p>
+
+                    <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                      <div className="rounded-2xl bg-white px-4 py-3">
+                        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-navy/45">
+                          Best for
+                        </p>
+                        <p className="mt-2 text-sm font-semibold text-brand-navy">
+                          {provider.bestFor}
+                        </p>
+                      </div>
+
+                      <div className="rounded-2xl bg-white px-4 py-3">
+                        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-navy/45">
+                          Delivery
+                        </p>
+                        <p className="mt-2 text-sm font-semibold text-brand-navy">
+                          {provider.deliveryLabel}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-5 border-t border-brand-navy/10 pt-4">
+                      <p className="text-sm text-brand-navy/60">
+                        Supported by live provider ratings and current payout data
+                        for the {reviewCountry} to Nigeria route.
                       </p>
                     </div>
                   </article>
