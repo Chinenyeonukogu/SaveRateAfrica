@@ -1,6 +1,3 @@
-import { Activity, BadgePercent, Waves } from "lucide-react";
-
-import { formatDateTime, formatRate } from "@/lib/format";
 import type { ComparisonResult } from "@/lib/fetchRates";
 import type { ComparisonSort } from "@/lib/providers";
 
@@ -69,13 +66,9 @@ export function ComparisonTable({
   nextRefreshAt: _nextRefreshAt,
   onSortChange
 }: ComparisonTableProps) {
-  const bestValueProvider =
-    comparison.providers.find((provider) => provider.isBestValue) ??
-    comparison.providers[0];
-
   return (
     <section>
-      <div className="mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+      <div className="mb-8">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-green">
             Live comparison table
@@ -84,45 +77,9 @@ export function ComparisonTable({
             Compare fees, speed, and real payout value
           </h2>
           <p className="mt-4 max-w-2xl text-[12px] leading-6 text-brand-navy/70 min-[600px]:text-base">
-            We rank providers by the NGN your recipient actually gets after fees,
-            so you are not fooled by headline rates.
+            Every provider is ranked by the exact amount your recipient receives in
+            Nigeria
           </p>
-        </div>
-
-        <div className="grid gap-3 sm:grid-cols-3 lg:min-w-[420px]">
-          <div className="rounded-[12px] border border-[#c8e6c9] bg-white p-4 shadow-float">
-            <div className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-green/10">
-              <Waves className="h-5 w-5 text-brand-green" />
-            </div>
-            <p className="mt-3 text-xs font-semibold uppercase tracking-[0.16em] text-brand-navy/50">
-              Mid-market
-            </p>
-            <p className="mt-2 font-mono text-lg text-brand-navy">
-              {formatRate(comparison.baseMidMarketRate, comparison.sourceCurrency)}
-            </p>
-          </div>
-          <div className="rounded-[12px] border border-[#c8e6c9] bg-white p-4 shadow-float">
-            <div className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-yellow/30">
-              <BadgePercent className="h-5 w-5 text-brand-navy" />
-            </div>
-            <p className="mt-3 text-xs font-semibold uppercase tracking-[0.16em] text-brand-navy/50">
-              Top performer
-            </p>
-            <p className="mt-2 text-lg font-semibold text-brand-navy">
-              {bestValueProvider?.name}
-            </p>
-          </div>
-          <div className="rounded-[12px] border border-[#c8e6c9] bg-white p-4 shadow-float">
-            <div className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-coral/10">
-              <Activity className="h-5 w-5 text-brand-coral" />
-            </div>
-            <p className="mt-3 text-xs font-semibold uppercase tracking-[0.16em] text-brand-navy/50">
-              Refreshed
-            </p>
-            <p className="mt-2 text-lg font-semibold text-brand-navy">
-              {formatDateTime(comparison.updatedAt)}
-            </p>
-          </div>
         </div>
       </div>
 
