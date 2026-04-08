@@ -16,6 +16,8 @@ interface NavigationItem {
   href: string;
   keywords: string[];
   label: string;
+  routeHref?: string;
+  searchHref?: string;
   sectionId?: string;
 }
 
@@ -24,36 +26,43 @@ const navigationItems: NavigationItem[] = [
     href: "#compare-rates",
     keywords: ["compare", "rates", "providers"],
     label: "Compare Rates",
+    routeHref: "/#compare-rates",
     sectionId: "compare-rates"
   },
   {
     href: "#how-it-works",
     keywords: ["how", "works", "steps"],
     label: "How It Works",
+    routeHref: "/#how-it-works",
     sectionId: "how-it-works"
   },
   {
     href: "#smart-sending",
     keywords: ["smart", "sending", "ai"],
     label: "Smart Sending",
+    routeHref: "/#smart-sending",
     sectionId: "smart-sending"
   },
   {
     href: "#build-credit",
     keywords: ["credit", "build"],
     label: "Build Credit",
+    routeHref: "/credit-cards",
+    searchHref: "/credit-cards",
     sectionId: "build-credit"
   },
   {
     href: "#rate-alerts",
     keywords: ["alert", "notify"],
     label: "Rate Alerts",
+    routeHref: "/#rate-alerts",
     sectionId: "rate-alerts"
   },
   {
     href: "#contact",
     keywords: ["contact"],
     label: "Contact Us",
+    routeHref: "/#contact",
     sectionId: "contact"
   }
 ];
@@ -63,6 +72,7 @@ const searchOnlyTargets: NavigationItem[] = [
     href: "#feature-hub",
     keywords: ["feature", "features", "tool", "tools"],
     label: "Feature Hub",
+    routeHref: "/#feature-hub",
     sectionId: "feature-hub"
   }
 ];
@@ -89,15 +99,17 @@ const pageShellClassName =
   "mx-auto w-full max-w-[1200px] px-4 min-[600px]:px-6 lg:px-10";
 
 function SaveRateAfricaLogo({
+  href,
   onClick
 }: {
+  href: string;
   onClick: (event: MouseEvent<HTMLAnchorElement>) => void;
 }) {
   return (
     <a
       aria-label="SaveRateAfrica home"
       className="inline-flex items-center gap-0 text-[#1a2e1a]"
-      href="#home"
+      href={href}
       onClick={onClick}
       style={brandFontStyle}
     >
@@ -256,6 +268,18 @@ export function SiteHeader({
     setIsMobileSearchOpen(false);
   }
 
+  function getNavigationHref(item: NavigationItem) {
+    return pathname === "/" ? item.href : item.routeHref ?? `/${item.href}`;
+  }
+
+  function getSearchHref(item: NavigationItem) {
+    return item.searchHref ?? getNavigationHref(item);
+  }
+
+  function getHomeHref() {
+    return pathname === "/" ? "#home" : "/#home";
+  }
+
   function navigateTo(href: string, sectionId?: string) {
     closeMobilePanels();
     setSearchQuery("");
@@ -276,7 +300,7 @@ export function SiteHeader({
       return;
     }
 
-    router.push(`/${href}`);
+    router.push(href.startsWith("/") ? href : `/${href}`);
   }
 
   function handleNavClick(
@@ -285,8 +309,10 @@ export function SiteHeader({
   ) {
     if (item.sectionId) {
       event.preventDefault();
-      navigateTo(item.href, item.sectionId);
-      setActiveSectionId(item.sectionId);
+      navigateTo(getNavigationHref(item), item.sectionId);
+      if (pathname === "/") {
+        setActiveSectionId(item.sectionId);
+      }
       return;
     }
 
@@ -343,7 +369,7 @@ export function SiteHeader({
     );
 
     if (matchedTarget) {
-      navigateTo(matchedTarget.href, matchedTarget.sectionId);
+      navigateTo(getSearchHref(matchedTarget), matchedTarget.sectionId);
       return;
     }
 
@@ -351,7 +377,11 @@ export function SiteHeader({
   }
 
   function isActiveNavigationItem(item: NavigationItem) {
-    return pathname === "/" && activeSectionId === item.sectionId;
+    if (pathname === "/") {
+      return activeSectionId === item.sectionId;
+    }
+
+    return pathname === "/credit-cards" && item.sectionId === "build-credit";
   }
 
   return (
@@ -365,7 +395,7 @@ export function SiteHeader({
             </span>
             <Link
               className="font-bold underline underline-offset-2"
-              href="#compare-rates"
+              href={pathname === "/" ? "#compare-rates" : "/#compare-rates"}
               onClick={(event) => {
                 if (pathname === "/") {
                   event.preventDefault();
@@ -383,7 +413,7 @@ export function SiteHeader({
         <div className={pageShellClassName}>
           <div className="flex h-[60px] items-center justify-between gap-4">
             <div className="shrink-0">
-              <SaveRateAfricaLogo onClick={handleLogoClick} />
+              <SaveRateAfricaLogo href={getHomeHref()} onClick={handleLogoClick} />
             </div>
 
             <nav
@@ -401,7 +431,7 @@ export function SiteHeader({
                         ? "active border-[#2e7d32] text-[#2e7d32]"
                         : "border-transparent text-[#2e4a2e] hover:text-[#2e7d32]"
                     }`}
-                    href={item.href}
+                    href={getNavigationHref(item)}
                     onClick={(event) => handleNavClick(event, item)}
                   >
                     {item.label}
@@ -511,7 +541,7 @@ export function SiteHeader({
                     className={`inline-flex min-h-11 items-center border-b border-[#e8f5e9] px-4 py-3 text-[13px] font-medium ${
                       isActive ? "active text-[#2e7d32]" : "text-[#2e4a2e]"
                     }`}
-                    href={item.href}
+                    href={getNavigationHref(item)}
                     onClick={(event) => handleNavClick(event, item)}
                   >
                     {item.label}
