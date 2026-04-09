@@ -21,6 +21,8 @@ export function ProviderCard({
 }: ProviderCardProps) {
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const hasFee = provider.fee > 0;
+  const providerCtaLabel = `Go to ${provider.name}`;
+  const providerRedirectNote = `You will be redirected to ${provider.name}'s website`;
 
   return (
     <motion.article
@@ -69,15 +71,20 @@ export function ProviderCard({
           </div>
         </div>
 
-        <a
-          className="hidden min-h-12 items-center gap-2 rounded-2xl bg-brand-green px-4 text-sm font-semibold text-white transition hover:translate-y-[-1px] hover:shadow-glow md:inline-flex"
-          href={provider.sendUrl}
-          rel="noreferrer"
-          target="_blank"
-        >
-          Send Now
-          <ArrowUpRight className="h-4 w-4" />
-        </a>
+        <div className="hidden flex-col items-center self-center md:flex">
+          <a
+            className="inline-flex min-h-12 min-w-[180px] items-center justify-center gap-2 whitespace-nowrap rounded-[8px] bg-[#2e7d32] px-[18px] py-[10px] text-[13px] font-bold text-white transition hover:bg-[#1b5e20]"
+            href={provider.sendUrl}
+            rel="noreferrer"
+            target="_blank"
+          >
+            {providerCtaLabel}
+            <ArrowUpRight className="h-4 w-4" />
+          </a>
+          <span className="mt-1 block text-center text-[10px] text-[#8a9a8a]">
+            {providerRedirectNote}
+          </span>
+        </div>
       </div>
 
       <div
@@ -109,7 +116,7 @@ export function ProviderCard({
             {isTooltipOpen ? (
               <div className="absolute left-0 top-full z-20 mt-2 w-64 rounded-2xl bg-brand-navy px-4 py-3 text-xs font-medium leading-5 text-white shadow-float">
                 This rate is estimated based on {provider.name}&apos;s published
-                spread. Click Send Now to see exact rate.
+                spread. Click {providerCtaLabel} to see exact rate.
               </div>
             ) : null}
           </div>
@@ -174,15 +181,20 @@ export function ProviderCard({
           </div>
         </div>
 
-        <a
-          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-brand-green px-4 text-sm font-semibold text-white transition hover:translate-y-[-1px] hover:shadow-glow md:hidden"
-          href={provider.sendUrl}
-          rel="noreferrer"
-          target="_blank"
-        >
-          Send Now
-          <ArrowUpRight className="h-4 w-4" />
-        </a>
+        <div className="flex flex-col items-center md:hidden">
+          <a
+            className="inline-flex min-h-12 min-w-[180px] items-center justify-center gap-2 whitespace-nowrap rounded-[8px] bg-[#2e7d32] px-[18px] py-[10px] text-[13px] font-bold text-white transition hover:bg-[#1b5e20]"
+            href={provider.sendUrl}
+            rel="noreferrer"
+            target="_blank"
+          >
+            {providerCtaLabel}
+            <ArrowUpRight className="h-4 w-4" />
+          </a>
+          <span className="mt-1 block text-center text-[10px] text-[#8a9a8a]">
+            {providerRedirectNote}
+          </span>
+        </div>
       </div>
     </motion.article>
   );
