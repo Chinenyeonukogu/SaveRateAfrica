@@ -70,10 +70,10 @@ export function HeroSection({
   return (
     <section
       id="home"
-      className="overflow-hidden bg-[linear-gradient(140deg,#1b5e20_0%,#2e7d32_35%,#1a3a22_70%,#0d2010_100%)]"
+      className="mx-3 my-3 overflow-hidden rounded-[10px] bg-[linear-gradient(140deg,#1b5e20_0%,#2e7d32_35%,#1a3a22_70%,#0d2010_100%)] min-[600px]:mx-4 min-[600px]:my-4 min-[600px]:rounded-[12px] lg:mx-auto lg:my-6 lg:max-w-[1200px] lg:rounded-[16px]"
     >
-      <div className="mx-auto max-w-[1200px] px-4 py-6 text-white min-[600px]:px-6 min-[600px]:py-10 lg:px-10 lg:py-11">
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_400px] lg:gap-10 lg:items-start">
+      <div className="px-5 py-7 text-white min-[600px]:px-7 min-[600px]:py-9 lg:px-10 lg:pb-11 lg:pt-12">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_420px] lg:gap-10 lg:items-start">
           <div className="pt-0">
             <div className="mb-[18px] inline-flex w-fit items-center rounded-full border border-white/20 bg-white/10 px-[14px] py-[5px] text-[10px] font-medium uppercase tracking-[0.8px] text-[#a5d6a7]">
               <span className="mr-[6px] inline-flex h-[6px] w-[6px] rounded-full bg-[#69f0ae] animate-hero-live-pulse" />
@@ -114,7 +114,7 @@ export function HeroSection({
             ) : null}
           </div>
 
-          <div className="flex w-full flex-col items-center gap-3 lg:w-[400px] lg:justify-self-end">
+          <div className="flex w-full flex-col items-center gap-3 lg:w-[420px] lg:justify-self-end">
             <div className="w-full rounded-[14px] bg-white p-[22px] text-[#1a2e1a] shadow-[0_8px_32px_rgba(0,0,0,0.18)]">
               <p className="mb-1 text-[9px] font-semibold uppercase tracking-[1.8px] text-[#2e7d32]">
                 COMPARE NOW

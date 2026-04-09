@@ -103,8 +103,7 @@ const slimFeatureItems: SlimFeatureItemDefinition[] = [
 ];
 
 const reviewCountries = ["USA", "UK", "Canada"] as const;
-const pageShellClassName =
-  "mx-auto w-full max-w-[1200px] px-4 min-[600px]:px-6 lg:px-10";
+const pageShellClassName = "mx-auto w-full max-w-[1200px] px-6";
 const topLevelSectionInnerClassName = `${pageShellClassName} py-9 min-[600px]:py-[52px] lg:py-[72px]`;
 const sectionDividerClassName = "border-t border-[#e8f5e9]";
 

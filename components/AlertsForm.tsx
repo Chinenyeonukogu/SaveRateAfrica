@@ -75,7 +75,7 @@ export function AlertsForm({
     <div
       className={
         isHero
-          ? "alert-hero-card mt-6 max-w-full rounded-[14px] bg-white p-[22px] shadow-[0_8px_32px_rgba(0,0,0,0.18)] lg:max-w-[460px]"
+          ? "alert-hero-card mt-6 w-full max-w-full rounded-[14px] bg-white p-[22px] shadow-[0_8px_32px_rgba(0,0,0,0.18)]"
           : undefined
       }
     >
