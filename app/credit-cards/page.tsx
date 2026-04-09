@@ -433,17 +433,6 @@ export default function CreditCardsPage() {
               </table>
             </div>
 
-            <div className="px-5 pb-8 text-center min-[600px]:px-8">
-              <a
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#2e7d32] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#256a2a]"
-                href={topPick.url}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                Check my eligibility
-                <ArrowRight className="h-4 w-4" />
-              </a>
-            </div>
           </div>
 
           <div className="mt-6 rounded-[16px] border border-[#e8f5e9] bg-white px-5 py-4 text-center text-sm leading-7 text-[#5d6b5f] min-[600px]:px-6">
