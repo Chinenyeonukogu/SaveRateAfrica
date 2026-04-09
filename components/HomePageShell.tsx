@@ -46,12 +46,10 @@ interface HomePageShellProps {
 }
 
 interface SlimFeatureItemDefinition {
-  anchorHref?: string;
   icon: LucideIcon;
   iconBoxClassName: string;
   iconColorClassName: string;
   kind: "ai" | "link";
-  sectionId?: string;
   subtitle: string;
   title: string;
   href?: string;
@@ -69,11 +67,10 @@ const slimFeatureItems: SlimFeatureItemDefinition[] = [
   },
   {
     kind: "link",
-    anchorHref: "#how-it-works",
+    href: "/#how-it-works",
     icon: Clock3,
     iconBoxClassName: "bg-[#ede7f6]",
     iconColorClassName: "text-[#5e35b1]",
-    sectionId: "how-it-works",
     subtitle: "Your 3-step send journey",
     title: "How It Works"
   },
@@ -88,11 +85,10 @@ const slimFeatureItems: SlimFeatureItemDefinition[] = [
   },
   {
     kind: "link",
-    anchorHref: "#smart-sending",
+    href: "/#smart-sending",
     icon: Activity,
     iconBoxClassName: "bg-[#fce4ec]",
     iconColorClassName: "text-[#c62828]",
-    sectionId: "smart-sending",
     subtitle: "Best time and route guidance",
     title: "Smart Sending"
   },
@@ -267,16 +263,33 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
     };
   }, [nextRefreshAt]);
 
+  useEffect(() => {
+    function scrollToHashTarget() {
+      const targetId = window.location.hash.replace("#", "");
+
+      if (targetId !== "how-it-works" && targetId !== "smart-sending") {
+        return;
+      }
+
+      window.requestAnimationFrame(() => {
+        document
+          .getElementById(targetId)
+          ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+
+    scrollToHashTarget();
+    window.addEventListener("hashchange", scrollToHashTarget);
+
+    return () => {
+      window.removeEventListener("hashchange", scrollToHashTarget);
+    };
+  }, []);
+
   function handleCompare() {
     document
       .querySelector("#compare-rates")
       ?.scrollIntoView({ behavior: "smooth" });
-  }
-
-  function handleFeatureStripSectionClick(sectionId: string) {
-    document
-      .getElementById(sectionId)
-      ?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   function handleSortChange(nextSort: ComparisonSort) {
@@ -343,18 +356,10 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                 }
 
                 return (
-                  <a
+                  <Link
                     key={item.title}
                     className={itemClassName}
-                    href={item.anchorHref ?? item.href ?? "/"}
-                    onClick={(event) => {
-                      if (!item.sectionId) {
-                        return;
-                      }
-
-                      event.preventDefault();
-                      handleFeatureStripSectionClick(item.sectionId);
-                    }}
+                    href={item.href ?? "/"}
                   >
                     <div
                       className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] transition-transform duration-[180ms] group-hover:scale-[1.06] ${item.iconBoxClassName}`}
@@ -369,7 +374,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                         {item.subtitle}
                       </span>
                     </div>
-                  </a>
+                  </Link>
                 );
               })}
             </div>
