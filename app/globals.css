@@ -43,16 +43,6 @@ summary::-webkit-details-marker {
   border-radius: 999px;
 }
 
-@keyframes hero-scroll-bounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(4px);
-  }
-}
-
 @keyframes hero-live-pulse {
   0%,
   100% {
@@ -61,10 +51,6 @@ summary::-webkit-details-marker {
   50% {
     opacity: 0.3;
   }
-}
-
-.animate-hero-scroll-bounce {
-  animation: hero-scroll-bounce 1.2s ease infinite;
 }
 
 .animate-hero-live-pulse {

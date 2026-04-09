@@ -5,7 +5,6 @@ import type { MutableRefObject, ReactNode } from "react";
 import {
   ArrowRight,
   ArrowUpDown,
-  ChevronDown,
 } from "lucide-react";
 
 import { senderCountries, type SenderCountry } from "@/lib/providers";
@@ -279,14 +278,6 @@ export function HeroSection({
               </div>
             </div>
 
-            <button
-              aria-label="Scroll to live comparison table"
-              className="flex h-10 w-10 items-center justify-center rounded-full border-[1.5px] border-white/30 bg-white/15 text-white animate-hero-scroll-bounce"
-              type="button"
-              onClick={onCompare}
-            >
-              <ChevronDown className="h-5 w-5" />
-            </button>
           </div>
         </div>
       </div>
