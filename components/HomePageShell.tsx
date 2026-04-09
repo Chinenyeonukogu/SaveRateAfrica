@@ -45,89 +45,52 @@ interface HomePageShellProps {
   initialComparison: ComparisonResult;
 }
 
-type SectionTargetKey =
-  | "alerts"
-  | "bestTime"
-  | "buildCredit"
-  | "compare"
-  | "howItWorks"
-  | "rateChart"
-  | "smartSending";
-
-interface FeatureCardDefinition {
-  ctaClassName: string;
-  cta: string;
-  description: string;
+interface SlimFeatureItemDefinition {
+  href: string;
   icon: LucideIcon;
   iconBoxClassName: string;
   iconColorClassName: string;
-  eyebrow: string;
-  labelClassName: string;
-  stripeClassName: string;
-  targetKey: SectionTargetKey;
+  hoverClassName: string;
+  subtitle: string;
   title: string;
 }
 
-const featureCardDefinitions: FeatureCardDefinition[] = [
+const slimFeatureItems: SlimFeatureItemDefinition[] = [
   {
-    cta: "Explore credit cards",
-    ctaClassName:
-      "border-[#a5d6a7] bg-[#f1faf2] text-[#2e7d32] group-hover:border-[#2e7d32] group-hover:bg-[#2e7d32] group-hover:text-white hover:border-[#2e7d32] hover:bg-[#2e7d32] hover:text-white",
-    description:
-      "Explore immigrant-friendly card picks that help you earn rewards and strengthen your U.S. credit profile.",
-    eyebrow: "BUILD CREDIT",
+    href: "/credit-cards",
     icon: CreditCard,
     iconBoxClassName: "bg-[#e8f5e9]",
     iconColorClassName: "text-[#2e7d32]",
-    labelClassName: "text-[#2e7d32]",
-    stripeClassName: "bg-[#2e7d32]",
-    targetKey: "buildCredit",
-    title: "Build credit while you send from the USA"
+    hoverClassName: "hover:bg-[#f4faf5]",
+    subtitle: "Cards for the Nigerian diaspora",
+    title: "Build Credit"
   },
   {
-    cta: "View the flow",
-    ctaClassName:
-      "border-[#ce93d8] bg-[#f3e5f5] text-[#5e35b1] group-hover:border-[#5e35b1] group-hover:bg-[#5e35b1] group-hover:text-white hover:border-[#5e35b1] hover:bg-[#5e35b1] hover:text-white",
-    description:
-      "See the simple path from entering your amount to choosing the provider that fits your speed and budget.",
-    eyebrow: "HOW IT WORKS",
+    href: "/#how-it-works",
     icon: Clock3,
     iconBoxClassName: "bg-[#ede7f6]",
     iconColorClassName: "text-[#5e35b1]",
-    labelClassName: "text-[#5e35b1]",
-    stripeClassName: "bg-[#5e35b1]",
-    targetKey: "howItWorks",
-    title: "Understand the send journey"
+    hoverClassName: "hover:bg-[#f9f7ff]",
+    subtitle: "Your 3-step send journey",
+    title: "How It Works"
   },
   {
-    cta: "Set an alert",
-    ctaClassName:
-      "border-[#81d4fa] bg-[#e1f5fe] text-[#0288d1] group-hover:border-[#0288d1] group-hover:bg-[#0288d1] group-hover:text-white hover:border-[#0288d1] hover:bg-[#0288d1] hover:text-white",
-    description:
-      "Choose your target NGN level and let SaveRateAfrica notify you when the corridor is favorable.",
-    eyebrow: "RATE ALERTS",
+    href: "/alerts",
     icon: BellRing,
     iconBoxClassName: "bg-[#e1f5fe]",
     iconColorClassName: "text-[#0288d1]",
-    labelClassName: "text-[#0288d1]",
-    stripeClassName: "bg-[#0288d1]",
-    targetKey: "alerts",
-    title: "Track your target rate"
+    hoverClassName: "hover:bg-[#f0f9ff]",
+    subtitle: "Get notified at your target",
+    title: "Rate Alerts"
   },
   {
-    cta: "See insights",
-    ctaClassName:
-      "border-[#ef9a9a] bg-[#fce4ec] text-[#c62828] group-hover:border-[#c62828] group-hover:bg-[#c62828] group-hover:text-white hover:border-[#c62828] hover:bg-[#c62828] hover:text-white",
-    description:
-      "Use best-value guidance, savings context, and timing signals before you send money home.",
-    eyebrow: "SMART SENDING",
+    href: "/#smart-sending",
     icon: Activity,
     iconBoxClassName: "bg-[#fce4ec]",
     iconColorClassName: "text-[#c62828]",
-    labelClassName: "text-[#c62828]",
-    stripeClassName: "bg-[#c62828]",
-    targetKey: "smartSending",
-    title: "Get smarter route guidance"
+    hoverClassName: "hover:bg-[#fff5f7]",
+    subtitle: "Best time and route guidance",
+    title: "Smart Sending"
   }
 ];
 
@@ -162,7 +125,6 @@ function buildLiveReviewComparisons(
 export function HomePageShell({ initialComparison }: HomePageShellProps) {
   const compareRef = useRef<HTMLDivElement | null>(null);
   const smartSendingRef = useRef<HTMLElement | null>(null);
-  const buildCreditRef = useRef<HTMLElement | null>(null);
   const alertsRef = useRef<HTMLDivElement | null>(null);
   const bestTimeRef = useRef<HTMLDivElement | null>(null);
   const howItWorksRef = useRef<HTMLElement | null>(null);
@@ -300,10 +262,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
       ?.scrollIntoView({ behavior: "smooth" });
   }
 
-  function scrollToSection(target: { current: Element | null }) {
-    target.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-
   function handleSortChange(nextSort: ComparisonSort) {
     setSortBy(nextSort);
   }
@@ -314,15 +272,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
   const liveReviewComparisons = buildLiveReviewComparisons(comparison);
   const selectedReviewComparison = liveReviewComparisons[reviewCountry];
   const liveReviewProviders = selectedReviewComparison.providers.slice(0, 3);
-  const sectionTargets: Record<SectionTargetKey, { current: Element | null }> = {
-    alerts: alertsRef,
-    bestTime: bestTimeRef,
-    buildCredit: buildCreditRef,
-    compare: compareRef,
-    howItWorks: howItWorksRef,
-    rateChart: rateChartRef,
-    smartSending: smartSendingRef
-  };
 
   return (
     <>
@@ -340,62 +289,40 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
           onSenderCountryChange={setSenderCountry}
         />
 
-        <section id="feature-hub" className={`${sectionDividerClassName} scroll-mt-24`}>
-          <div className={topLevelSectionInnerClassName}>
-            <div className="mx-auto max-w-[1200px] border-t-[3px] border-[#2e7d32] bg-white px-4 py-7 min-[600px]:px-6 min-[600px]:py-8 lg:px-8 lg:py-9">
-              <div className="max-w-[480px]">
-                <p className="mb-2 text-[10px] font-semibold uppercase tracking-[2px] text-[#2e7d32]">
-                  FEATURE HUB
-                </p>
-                <h2 className="text-[20px] font-bold tracking-[-0.3px] text-[#1a2e1a]">
-                  Browse every core tool from one organized layer
-                </h2>
-                <p className="mt-2 text-[12px] leading-[1.6] text-[#6a8a6a]">
-                  Rate monitoring, credit-building support, and smart sending
-                  tools — all in one place.
-                </p>
-              </div>
+        <section id="feature-hub" className="scroll-mt-24">
+          <div className="border-y border-[#e0ede2] bg-white">
+            <div className="mx-auto grid max-w-[1200px] grid-cols-1 min-[600px]:grid-cols-2 lg:grid-cols-4">
+              {slimFeatureItems.map((item, index) => {
+                const Icon = item.icon;
+                const tabletBorderClassName =
+                  index % 2 === 1 ? "min-[600px]:border-r-0" : "min-[600px]:border-r";
+                const tabletBottomClassName =
+                  index > 1 ? "min-[600px]:border-b-0" : "min-[600px]:border-b";
+                const desktopBorderClassName = index === 3 ? "lg:border-r-0" : "lg:border-r";
 
-              <div className="mt-7 grid grid-cols-1 gap-[14px] min-[600px]:grid-cols-2 lg:grid-cols-4">
-                {featureCardDefinitions.map((card) => {
-                  const Icon = card.icon;
-
-                  return (
-                    <article
-                      key={card.title}
-                      className="group relative flex h-full flex-col overflow-hidden rounded-[14px] border-[1.5px] border-[#e0ede2] bg-[#fafcfa] px-[18px] py-[22px] transition-all duration-200 ease-in-out hover:-translate-y-[3px] hover:border-[#b0d0b8] hover:shadow-[0_6px_20px_rgba(46,125,50,0.10)]"
+                return (
+                  <Link
+                    key={item.title}
+                    className={`group flex items-center gap-[14px] border-[#e0ede2] px-6 py-5 no-underline transition-colors duration-200 ${item.hoverClassName} border-b last:border-b-0 ${tabletBorderClassName} ${tabletBottomClassName} lg:border-b-0 ${desktopBorderClassName}`}
+                    href={item.href}
+                  >
+                    <div
+                      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] ${item.iconBoxClassName}`}
                     >
-                      <span
-                        className={`absolute left-0 top-0 h-[3px] w-full rounded-t-[14px] opacity-0 transition-opacity duration-200 group-hover:opacity-100 ${card.stripeClassName}`}
-                      />
-                      <div
-                        className={`mb-4 inline-flex h-[44px] w-[44px] items-center justify-center rounded-[12px] ${card.iconBoxClassName}`}
-                      >
-                        <Icon className={`h-5 w-5 ${card.iconColorClassName}`} />
-                      </div>
-                      <p
-                        className={`mb-[6px] text-[9px] font-semibold uppercase tracking-[1.5px] ${card.labelClassName}`}
-                      >
-                        {card.eyebrow}
-                      </p>
-                      <h3 className="mb-2 text-[14px] font-bold leading-[1.3] text-[#1a2e1a]">
-                        {card.title}
-                      </h3>
-                      <p className="mb-4 flex-1 text-[11px] leading-[1.65] text-[#6a8a6a]">
-                        {card.description}
-                      </p>
-                      <button
-                        className={`mt-auto inline-flex w-fit items-center gap-[5px] self-start rounded-full border-[1.5px] px-[14px] py-[6px] text-[11px] font-semibold transition-all duration-200 ${card.ctaClassName}`}
-                        type="button"
-                        onClick={() => scrollToSection(sectionTargets[card.targetKey])}
-                      >
-                        {card.cta}
-                        <ArrowRight className="h-3.5 w-3.5" />
-                      </button>
-                    </article>
-                  );
-                })}
-              </div>
+                      <Icon className={`h-5 w-5 ${item.iconColorClassName}`} />
+                    </div>
+                    <div className="flex min-w-0 flex-1 flex-col gap-[2px]">
+                      <span className="text-[13px] font-bold leading-[1.2] text-[#1a2e1a]">
+                        {item.title}
+                      </span>
+                      <span className="text-[11px] leading-[1.4] text-[#6a8a6a]">
+                        {item.subtitle}
+                      </span>
+                    </div>
+                    <ArrowRight className="ml-auto h-4 w-4 shrink-0 text-[#c8e6c9] transition-colors duration-200 group-hover:text-[#2e7d32]" />
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </section>
