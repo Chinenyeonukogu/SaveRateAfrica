@@ -330,6 +330,8 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
         <SiteHeader showAnnouncementBar />
 
         <HeroSection
+          alertsAnchorRef={alertsRef}
+          alertsContent={<AlertsForm variant="hero" />}
           amount={amount}
           isLoading={isLoading}
           senderCountry={senderCountry}
@@ -545,14 +547,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
           <div className={topLevelSectionInnerClassName}>
             <div id="market-timing" ref={bestTimeRef} className="scroll-mt-24">
               <BestTimeToSend comparison={comparison} />
-            </div>
-          </div>
-        </section>
-
-        <section id="rate-alerts" className={`${sectionDividerClassName} scroll-mt-24`}>
-          <div className={topLevelSectionInnerClassName}>
-            <div ref={alertsRef}>
-              <AlertsForm />
             </div>
           </div>
         </section>

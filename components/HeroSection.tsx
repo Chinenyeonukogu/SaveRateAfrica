@@ -1,5 +1,7 @@
 "use client";
 
+import type { MutableRefObject, ReactNode } from "react";
+
 import {
   ArrowRight,
   ArrowUpDown,
@@ -9,6 +11,8 @@ import {
 import { senderCountries, type SenderCountry } from "@/lib/providers";
 
 interface HeroSectionProps {
+  alertsAnchorRef?: MutableRefObject<HTMLDivElement | null>;
+  alertsContent?: ReactNode;
   amount: string;
   senderCountry: SenderCountry;
   isLoading: boolean;
@@ -49,6 +53,8 @@ function formatCalculatedNgn(value: number) {
 }
 
 export function HeroSection({
+  alertsAnchorRef,
+  alertsContent,
   amount,
   senderCountry,
   isLoading,
@@ -97,6 +103,16 @@ export function HeroSection({
                 </div>
               ))}
             </div>
+
+            {alertsContent ? (
+              <div
+                id="rate-alerts"
+                ref={alertsAnchorRef}
+                className="scroll-mt-24"
+              >
+                {alertsContent}
+              </div>
+            ) : null}
           </div>
 
           <div className="flex w-full flex-col items-center gap-3 lg:w-[400px] lg:justify-self-end">
