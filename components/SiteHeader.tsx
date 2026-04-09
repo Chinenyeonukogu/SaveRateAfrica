@@ -408,12 +408,10 @@ export function SiteHeader({
       <header className="sticky top-0 z-[1000] border-b border-[#c8e6c9] bg-white shadow-[0_1px_8px_rgba(46,125,50,0.06)]">
         <div className={headerShellClassName}>
           <div className="relative flex h-[60px] items-center justify-between gap-4">
-            <div className="mr-5 shrink-0">
+            <div className="flex min-w-0 flex-1 items-center">
               <SaveRateAfricaLogo href={getHomeHref()} onClick={handleLogoClick} />
-            </div>
-
-            <nav aria-label="Primary" className="hidden min-w-0 flex-1 lg:flex">
-              <ul className="flex min-w-0 flex-1 items-center justify-center gap-1 whitespace-nowrap">
+              <nav aria-label="Primary" className="ml-3 hidden min-w-0 lg:flex">
+                <ul className="flex min-w-0 items-center gap-1 whitespace-nowrap">
                 {navigationItems.map((item) => {
                   const isActive = isActiveNavigationItem(item);
 
@@ -425,15 +423,27 @@ export function SiteHeader({
                             ? "active border-[#2e7d32] text-[#2e7d32]"
                             : "border-transparent text-[#2e4a2e] hover:text-[#2e7d32]"
                         }`}
-                        href={item.routeHref ?? "/#contact"}
+                        href={getNavigationHref(item)}
+                        onClick={(event) => {
+                          if (!item.sectionId) {
+                            return;
+                          }
+
+                          event.preventDefault();
+                          navigateTo(getNavigationHref(item), item.sectionId);
+                          if (pathname === "/") {
+                            setActiveSectionId(item.sectionId);
+                          }
+                        }}
                       >
                         <span>{item.label}</span>
                       </Link>
                     </li>
                   );
                 })}
-              </ul>
-            </nav>
+                </ul>
+              </nav>
+            </div>
 
             <div className="hidden shrink-0 items-center gap-2 lg:flex">
               <div className="relative flex items-center">
