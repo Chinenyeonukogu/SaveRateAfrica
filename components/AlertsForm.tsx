@@ -75,26 +75,26 @@ export function AlertsForm({
     <div
       className={
         isHero
-          ? "alert-hero-card mt-6 max-w-full rounded-[14px] border border-[rgba(255,255,255,0.2)] bg-[rgba(255,255,255,0.07)] px-4 py-4 min-[600px]:px-[22px] min-[600px]:py-5 lg:max-w-[460px]"
+          ? "alert-hero-card mt-6 max-w-full rounded-[14px] bg-white p-[22px] shadow-[0_8px_32px_rgba(0,0,0,0.18)] lg:max-w-[460px]"
           : undefined
       }
     >
       {isHero ? (
         <div className="mb-4">
           <div className="flex items-start">
-            <div className="mr-[10px] flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-[rgba(105,240,174,0.25)] bg-[rgba(105,240,174,0.15)] text-[15px] text-[#a8e6b8]">
+            <div className="mr-[10px] flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-[#c8e6c9] bg-[#e8f5e9] text-[15px] text-[#2e7d32]">
               <BellRing className="h-4 w-4" />
             </div>
             <div className="min-w-0">
-              <p className="text-[9px] font-bold uppercase tracking-[1.5px] text-[#a8e6b8]">
+              <p className="text-[9px] font-bold uppercase tracking-[1.5px] text-[#2e7d32]">
                 RATE ALERTS
               </p>
-              <h3 className="mt-1 text-[15px] font-bold leading-[1.3] text-white">
+              <h3 className="mt-1 text-[15px] font-bold leading-[1.3] text-[#1a2e1a]">
                 Get notified when NGN hits your target
               </h3>
             </div>
           </div>
-          <p className="mt-[6px] text-[11px] leading-[1.6] text-white/55">
+          <p className="mt-[6px] text-[11px] leading-[1.6] text-[#5a7a5a]">
             Set your ideal rate and we alert you instantly — free for 1 alert per
             month, unlimited on Premium.
           </p>
@@ -138,13 +138,9 @@ export function AlertsForm({
             {(["email", "sms"] as const).map((value) => (
               <button
                 key={value}
-                className={`toggle-btn min-h-11 rounded-[8px] capitalize transition ${
+                className={`toggle-btn min-h-11 capitalize transition ${
                   isHero
-                    ? `rounded-full border px-4 py-[6px] text-[11px] font-semibold ${
-                        value === channel
-                          ? "border-white/40 bg-white/15 text-white"
-                          : "border-white/20 bg-transparent text-white/55"
-                      }`
+                    ? "rounded-full px-4 py-[6px] text-[11px] font-semibold"
                     : `text-[12px] font-semibold min-[600px]:min-h-12 min-[600px]:text-sm ${
                         value === channel
                           ? "bg-brand-navy text-white"
@@ -171,25 +167,23 @@ export function AlertsForm({
         >
           <label
             className={`${
-              isHero
-                ? "space-y-1"
-                : "space-y-2 text-[12px] font-medium text-brand-navy/70 min-[600px]:text-sm"
+                isHero
+                  ? "space-y-1"
+                  : "space-y-2 text-[12px] font-medium text-brand-navy/70 min-[600px]:text-sm"
             }`}
           >
             <span
               className={
                 isHero
-                  ? "block text-[9px] font-semibold uppercase tracking-[0.8px] text-white/40"
+                  ? "block text-[10px] font-semibold uppercase tracking-[0.8px] text-[#8a9a8a]"
                   : undefined
               }
-            >
-              Target rate
-            </span>
+              >
+                Target rate
+              </span>
             <input
               className={`alert-input min-h-12 w-full rounded-[8px] px-[14px] py-[11px] outline-none ${
-                isHero
-                  ? "border border-white/20 bg-white/10 font-semibold text-white placeholder:text-white/30"
-                  : "border border-[#c8e6c9] bg-white font-mono"
+                isHero ? "" : "border border-[#c8e6c9] bg-white font-mono"
               }`}
               inputMode="decimal"
               placeholder="1600"
@@ -210,7 +204,7 @@ export function AlertsForm({
               <span
                 className={
                   isHero
-                    ? "block text-[9px] font-semibold uppercase tracking-[0.8px] text-white/40"
+                    ? "block text-[10px] font-semibold uppercase tracking-[0.8px] text-[#8a9a8a]"
                     : undefined
                 }
               >
@@ -218,9 +212,7 @@ export function AlertsForm({
               </span>
               <input
                 className={`alert-input min-h-12 w-full rounded-[8px] px-[14px] py-[11px] outline-none ${
-                  isHero
-                    ? "border border-white/20 bg-white/10 font-semibold text-white placeholder:text-white/30"
-                    : "border border-[#c8e6c9] bg-white"
+                  isHero ? "" : "border border-[#c8e6c9] bg-white"
                 }`}
                 placeholder="you@example.com"
                 type="email"
@@ -239,7 +231,7 @@ export function AlertsForm({
               <span
                 className={
                   isHero
-                    ? "block text-[9px] font-semibold uppercase tracking-[0.8px] text-white/40"
+                    ? "block text-[10px] font-semibold uppercase tracking-[0.8px] text-[#8a9a8a]"
                     : undefined
                 }
               >
@@ -247,9 +239,7 @@ export function AlertsForm({
               </span>
               <input
                 className={`alert-input min-h-12 w-full rounded-[8px] px-[14px] py-[11px] outline-none ${
-                  isHero
-                    ? "border border-white/20 bg-white/10 font-semibold text-white placeholder:text-white/30"
-                    : "border border-[#c8e6c9] bg-white"
+                  isHero ? "" : "border border-[#c8e6c9] bg-white"
                 }`}
                 placeholder="+1 555 555 5555"
                 type="tel"
@@ -274,13 +264,13 @@ export function AlertsForm({
 
         <label
           className={`mt-[10px] flex items-start gap-3 text-[10px] leading-4 ${
-            isHero ? "text-white/38" : "text-brand-navy/70"
+            isHero ? "text-[#8a9a8a]" : "text-brand-navy/70"
           }`}
         >
           <input
             checked={consent}
             className={`mt-1 h-4 w-4 rounded ${
-              isHero ? "border-white/20 bg-transparent text-[#69f0ae]" : "border-brand-navy/20 text-brand-green"
+              isHero ? "border-[#c8e6c9] bg-white text-[#2e7d32]" : "border-brand-navy/20 text-brand-green"
             }`}
             type="checkbox"
             onChange={(event) => setConsent(event.target.checked)}
@@ -292,17 +282,17 @@ export function AlertsForm({
         </label>
 
         {isHero ? (
-          <div className="mt-[14px] border-t border-white/10 pt-[14px]">
+          <div className="mt-[14px] border-t border-[#e0ede2] pt-[14px]">
             <div className="grid gap-2 min-[600px]:grid-cols-3">
               {heroAlertBadges.map((badge) => (
                 <div
                   key={badge.title}
-                  className="flex items-center gap-[6px] rounded-[8px] border border-white/12 bg-white/5 px-[10px] py-[6px]"
+                  className="flex items-center gap-[6px] rounded-[8px] border border-[#e0ede2] bg-[#f4faf5] px-[10px] py-[6px]"
                 >
                   <span className="text-sm">{badge.icon}</span>
                   <div>
-                    <p className="text-[11px] font-bold text-white/85">{badge.title}</p>
-                    <p className="text-[9px] text-white/40">{badge.subtitle}</p>
+                    <p className="text-[11px] font-bold text-[#1a2e1a]">{badge.title}</p>
+                    <p className="text-[9px] text-[#6a8a6a]">{badge.subtitle}</p>
                   </div>
                 </div>
               ))}

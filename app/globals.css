@@ -72,36 +72,41 @@ summary::-webkit-details-marker {
 }
 
 .alert-hero-card .toggle-btn {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.55);
+  background: #f4faf5;
+  border: 1px solid #e0ede2;
+  color: #4a6a4a;
+  border-radius: 999px;
 }
 
 .alert-hero-card .toggle-btn[data-state="active"] {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.4);
+  background: #1a2e1a;
+  border-color: #1a2e1a;
   color: #ffffff;
 }
 
 .alert-hero-card .alert-input {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+  background: #ffffff;
+  border: 1.5px solid #e0ede2;
+  border-radius: 8px;
+  color: #1a2e1a;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .alert-hero-card .alert-input:focus {
-  background: rgba(105, 240, 174, 0.08);
-  border-color: #69f0ae;
+  background: #ffffff;
+  border-color: #2e7d32;
+  outline: none;
 }
 
 .alert-hero-card .alert-input::placeholder {
-  color: rgba(255, 255, 255, 0.3);
+  color: #b0c4b0;
 }
 
 .alert-hero-card .gdpr-text {
   font-size: 10px;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.38);
+  color: #8a9a8a;
 }
 
 @layer base {
