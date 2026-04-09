@@ -38,96 +38,6 @@ interface NavigationItem {
 
 const navigationItems: NavigationItem[] = [
   {
-    dropdownAlign: "left",
-    dropdownItems: [
-      {
-        description: "Pick amount and sending country",
-        href: "#how-it-works",
-        routeHref: "/#how-it-works",
-        sectionId: "how-it-works",
-        title: "Enter Your Amount"
-      },
-      {
-        description: "Rate, fee, speed side by side",
-        href: "#how-it-works",
-        routeHref: "/#how-it-works",
-        sectionId: "how-it-works",
-        title: "Compare Live Offers"
-      },
-      {
-        description: "We never hold funds — you send direct",
-        href: "#how-it-works",
-        routeHref: "/#how-it-works",
-        sectionId: "how-it-works",
-        title: "Click & Send"
-      }
-    ],
-    dropdownTitle: "Send in 3 Simple Steps",
-    href: "#how-it-works",
-    label: "How It Works",
-    routeHref: "/#how-it-works",
-    sectionId: "how-it-works"
-  },
-  {
-    dropdownAlign: "center",
-    dropdownItems: [
-      {
-        description: "AI picks the best provider for you now",
-        href: "#smart-sending",
-        routeHref: "/#smart-sending",
-        sectionId: "smart-sending",
-        title: "Route Guidance"
-      },
-      {
-        description: "Watch NGN signals before you send",
-        href: "#smart-sending",
-        routeHref: "/#smart-sending",
-        sectionId: "smart-sending",
-        title: "Market Timing"
-      },
-      {
-        description: "7, 30, 90-day NGN rate patterns",
-        href: "#smart-sending",
-        routeHref: "/#smart-sending",
-        sectionId: "smart-sending",
-        title: "Trend Tracking"
-      }
-    ],
-    dropdownTitle: "Send at the Right Moment",
-    href: "#smart-sending",
-    label: "Smart Sending",
-    routeHref: "/#smart-sending",
-    sectionId: "smart-sending"
-  },
-  {
-    dropdownAlign: "center",
-    dropdownItems: [
-      {
-        description: "Best cards for no credit history",
-        href: "/credit-cards",
-        routeHref: "/credit-cards",
-        title: "Credit Card Comparison"
-      },
-      {
-        description: "Soft check — no score impact",
-        href: "/credit-cards",
-        routeHref: "/credit-cards",
-        title: "Check Eligibility"
-      },
-      {
-        description: "Step-by-step for new US arrivals",
-        href: "/credit-cards",
-        routeHref: "/credit-cards",
-        title: "How Credit Building Works"
-      }
-    ],
-    dropdownTitle: "Build U.S. Credit as a Nigerian",
-    href: "#build-credit",
-    label: "Build Credit",
-    routeHref: "/#build-credit",
-    sectionId: "build-credit"
-  },
-  {
     dropdownAlign: "right",
     dropdownItems: [
       {
@@ -287,14 +197,6 @@ function getDropdownAlignmentClass(align: NavigationItem["dropdownAlign"]) {
   return "left-1/2 -translate-x-1/2";
 }
 
-function getDedicatedSectionRoute(sectionId?: string) {
-  if (sectionId === "build-credit") {
-    return "/credit-cards";
-  }
-
-  return null;
-}
-
 export function SiteHeader({
   showAnnouncementBar = false,
   showBreadcrumb = false
@@ -417,12 +319,6 @@ export function SiteHeader({
   function getSectionNavigationHref(sectionId?: string, routeHref?: string, href?: string) {
     if (sectionId && pathname === "/") {
       return href ?? `#${sectionId}`;
-    }
-
-    const dedicatedRoute = getDedicatedSectionRoute(sectionId);
-
-    if (dedicatedRoute && pathname === dedicatedRoute) {
-      return dedicatedRoute;
     }
 
     if (routeHref) {
@@ -574,10 +470,6 @@ export function SiteHeader({
   function isActiveNavigationItem(item: NavigationItem) {
     if (pathname === "/") {
       return activeSectionId === item.sectionId;
-    }
-
-    if (pathname === "/credit-cards") {
-      return item.sectionId === "build-credit";
     }
 
     return false;
