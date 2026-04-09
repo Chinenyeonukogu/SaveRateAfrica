@@ -305,8 +305,9 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
 
   return (
     <>
+      <SiteHeader showAnnouncementBar />
+
       <main className="overflow-x-hidden pb-32 md:pb-20">
-        <SiteHeader showAnnouncementBar />
 
         <section id="feature-hub" className="hidden scroll-mt-24 min-[600px]:block">
           <div className="w-full border-b border-[#e0ede2] bg-white">
