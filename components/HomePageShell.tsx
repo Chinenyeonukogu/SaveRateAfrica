@@ -553,42 +553,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
 
         <section className={sectionDividerClassName}>
           <div className={topLevelSectionInnerClassName}>
-            <section
-              id="build-credit"
-              ref={buildCreditRef}
-              className="scroll-mt-24 rounded-[16px] border border-brand-navy/10 bg-brand-navy px-4 py-8 text-white shadow-float min-[600px]:px-8 min-[600px]:py-10 lg:px-10 lg:py-12"
-            >
-              <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-12">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-green">
-                    Need more ways to save?
-                  </p>
-                  <h2 className="mt-2 text-[28px] font-heading min-[600px]:text-3xl">
-                    Build credit while you send from the USA
-                  </h2>
-                  <p className="mt-3 max-w-2xl text-[12px] leading-6 text-white/80 min-[600px]:text-sm min-[600px]:leading-7">
-                    Explore immigrant-friendly card picks that help you earn
-                    rewards, improve approval odds, and strengthen your U.S.
-                    credit profile.
-                  </p>
-                </div>
-
-                <div className="flex justify-start lg:justify-end">
-                  <Link
-                    className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-brand-yellow px-5 text-sm font-bold text-brand-navy transition hover:shadow-float min-[600px]:w-auto"
-                    href="/credit-cards"
-                  >
-                    Explore credit cards
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </div>
-              </div>
-            </section>
-          </div>
-        </section>
-
-        <section className={sectionDividerClassName}>
-          <div className={topLevelSectionInnerClassName}>
             <div id="rate-chart" ref={rateChartRef} className="scroll-mt-24">
               <RateChart />
             </div>
