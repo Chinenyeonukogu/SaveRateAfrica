@@ -405,7 +405,7 @@ export function SiteHeader({
         </div>
       ) : null}
 
-      <header className="sticky top-0 z-[1000] border-b border-[#c8e6c9] bg-white shadow-[0_1px_8px_rgba(46,125,50,0.06)]">
+      <header className="sticky top-0 z-[1000] border-b border-[#e0ede2] bg-white shadow-[0_2px_8px_rgba(46,125,50,0.08)]">
         <div className={headerShellClassName}>
           <div className="relative flex h-[60px] items-center justify-between gap-4">
             <div className="flex min-w-0 flex-1 items-center">
@@ -420,7 +420,7 @@ export function SiteHeader({
                       <Link
                         className={`inline-flex h-[60px] cursor-pointer items-center border-b-2 px-[10px] py-[6px] text-[13px] font-medium transition ${
                           isActive
-                            ? "active border-[#2e7d32] text-[#2e7d32]"
+                            ? "active border-[#1b5e20] font-semibold text-[#1b5e20]"
                             : "border-transparent text-[#2e4a2e] hover:text-[#2e7d32]"
                         }`}
                         href={getNavigationHref(item)}
@@ -597,7 +597,7 @@ export function SiteHeader({
               <div key={item.label} className="border-b border-[#e8f5e9]">
                 <Link
                   className={`block cursor-pointer py-3 text-[15px] ${
-                    isActive ? "text-[#2e7d32]" : "text-[#1a2e1a]"
+                    isActive ? "font-semibold text-[#1b5e20]" : "text-[#1a2e1a]"
                   }`}
                   href={item.routeHref ?? "/#contact"}
                   onClick={closeDrawer}
