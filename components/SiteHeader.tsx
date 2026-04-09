@@ -41,37 +41,6 @@ const navigationItems: NavigationItem[] = [
     dropdownAlign: "left",
     dropdownItems: [
       {
-        description: "See all 14 providers ranked by payout",
-        href: "#compare-rates",
-        routeHref: "/#compare-rates",
-        sectionId: "compare-rates",
-        title: "Live Rate Comparison"
-      },
-      {
-        description: "See how much you save vs Western Union",
-        href: "#compare-rates",
-        routeHref: "/#compare-rates",
-        sectionId: "compare-rates",
-        title: "Savings Calculator"
-      },
-      {
-        description: "Grey Finance, LemFi, Sendwave and more",
-        href: "#compare-rates",
-        routeHref: "/#compare-rates",
-        sectionId: "compare-rates",
-        title: "Rate by Provider"
-      }
-    ],
-    dropdownTitle: "Find Your Best NGN Rate",
-    href: "#compare-rates",
-    label: "Compare Rates",
-    routeHref: "/#compare-rates",
-    sectionId: "compare-rates"
-  },
-  {
-    dropdownAlign: "left",
-    dropdownItems: [
-      {
         description: "Pick amount and sending country",
         href: "#how-it-works",
         routeHref: "/#how-it-works",
@@ -157,34 +126,6 @@ const navigationItems: NavigationItem[] = [
     label: "Build Credit",
     routeHref: "/#build-credit",
     sectionId: "build-credit"
-  },
-  {
-    dropdownAlign: "right",
-    dropdownItems: [
-      {
-        description: "Get notified by SMS or email",
-        href: "/alerts",
-        routeHref: "/alerts",
-        title: "Set a Rate Alert"
-      },
-      {
-        description: "Track the dollar corridor",
-        href: "/alerts",
-        routeHref: "/alerts",
-        title: "USD to NGN Alerts"
-      },
-      {
-        description: "For UK and Canada senders",
-        href: "/alerts",
-        routeHref: "/alerts",
-        title: "GBP & CAD Alerts"
-      }
-    ],
-    dropdownTitle: "Never Miss Your Target Rate",
-    href: "#rate-alerts",
-    label: "Rate Alerts",
-    routeHref: "/#rate-alerts",
-    sectionId: "rate-alerts"
   },
   {
     dropdownAlign: "right",
@@ -349,10 +290,6 @@ function getDropdownAlignmentClass(align: NavigationItem["dropdownAlign"]) {
 function getDedicatedSectionRoute(sectionId?: string) {
   if (sectionId === "build-credit") {
     return "/credit-cards";
-  }
-
-  if (sectionId === "rate-alerts") {
-    return "/alerts";
   }
 
   return null;
@@ -641,10 +578,6 @@ export function SiteHeader({
 
     if (pathname === "/credit-cards") {
       return item.sectionId === "build-credit";
-    }
-
-    if (pathname === "/alerts") {
-      return item.sectionId === "rate-alerts";
     }
 
     return false;
