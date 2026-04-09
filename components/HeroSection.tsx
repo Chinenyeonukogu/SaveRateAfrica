@@ -71,9 +71,9 @@ export function HeroSection({
   return (
     <section
       id="home"
-      className="overflow-hidden px-4 pb-6 pt-6 min-[600px]:px-6 min-[600px]:pb-8 min-[600px]:pt-7 lg:px-10 lg:pb-11 lg:pt-12"
+      className="overflow-hidden bg-[linear-gradient(140deg,#1b5e20_0%,#2e7d32_35%,#1a3a22_70%,#0d2010_100%)]"
     >
-      <div className="mx-auto max-w-[1200px] overflow-hidden rounded-[28px] bg-[linear-gradient(140deg,#1b5e20_0%,#2e7d32_35%,#1a3a22_70%,#0d2010_100%)] px-4 py-6 text-white shadow-glow min-[600px]:px-8 min-[600px]:py-10 lg:px-8 lg:py-11">
+      <div className="mx-auto max-w-[1200px] px-4 py-6 text-white min-[600px]:px-6 min-[600px]:py-10 lg:px-10 lg:py-11">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_400px] lg:gap-10 lg:items-start">
           <div className="pt-0">
             <div className="mb-[18px] inline-flex w-fit items-center rounded-full border border-white/20 bg-white/10 px-[14px] py-[5px] text-[10px] font-medium uppercase tracking-[0.8px] text-[#a5d6a7]">

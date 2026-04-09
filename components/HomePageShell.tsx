@@ -7,6 +7,7 @@ import {
   Activity,
   ArrowRight,
   BellRing,
+  Bot,
   CheckCircle2,
   Clock3,
   CircleDollarSign,
@@ -46,51 +47,59 @@ interface HomePageShellProps {
 }
 
 interface SlimFeatureItemDefinition {
-  href: string;
   icon: LucideIcon;
   iconBoxClassName: string;
   iconColorClassName: string;
-  hoverClassName: string;
+  kind: "ai" | "link";
   subtitle: string;
   title: string;
+  href?: string;
 }
 
 const slimFeatureItems: SlimFeatureItemDefinition[] = [
   {
+    kind: "link",
     href: "/credit-cards",
     icon: CreditCard,
     iconBoxClassName: "bg-[#e8f5e9]",
     iconColorClassName: "text-[#2e7d32]",
-    hoverClassName: "hover:bg-[#f4faf5]",
     subtitle: "Cards for the Nigerian diaspora",
     title: "Build Credit"
   },
   {
+    kind: "link",
     href: "/#how-it-works",
     icon: Clock3,
     iconBoxClassName: "bg-[#ede7f6]",
     iconColorClassName: "text-[#5e35b1]",
-    hoverClassName: "hover:bg-[#f9f7ff]",
     subtitle: "Your 3-step send journey",
     title: "How It Works"
   },
   {
+    kind: "link",
     href: "/alerts",
     icon: BellRing,
     iconBoxClassName: "bg-[#e1f5fe]",
     iconColorClassName: "text-[#0288d1]",
-    hoverClassName: "hover:bg-[#f0f9ff]",
     subtitle: "Get notified at your target",
     title: "Rate Alerts"
   },
   {
+    kind: "link",
     href: "/#smart-sending",
     icon: Activity,
     iconBoxClassName: "bg-[#fce4ec]",
     iconColorClassName: "text-[#c62828]",
-    hoverClassName: "hover:bg-[#fff5f7]",
     subtitle: "Best time and route guidance",
     title: "Smart Sending"
+  },
+  {
+    kind: "ai",
+    icon: Bot,
+    iconBoxClassName: "bg-[#f4faf5]",
+    iconColorClassName: "text-[#2e7d32]",
+    subtitle: "Open the live assistant",
+    title: "Ask AI"
   }
 ];
 
@@ -278,6 +287,81 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
       <main className="overflow-x-hidden pb-32 md:pb-20">
         <SiteHeader showAnnouncementBar />
 
+        <section id="feature-hub" className="hidden scroll-mt-24 min-[600px]:block">
+          <div className="border-b border-[#e0ede2] bg-white shadow-[0_2px_8px_rgba(46,125,50,0.06)]">
+            <div className="grid w-full min-[600px]:grid-cols-3 lg:grid-cols-5">
+              {slimFeatureItems.map((item, index) => {
+                const Icon = item.icon;
+                const tabletRightBorderClassName =
+                  index === 0 || index === 1 || index === 3
+                    ? "min-[600px]:max-[1023px]:border-r"
+                    : "";
+                const tabletBottomBorderClassName =
+                  index < 3 ? "min-[600px]:max-[1023px]:border-b" : "";
+                const desktopRightBorderClassName =
+                  index < slimFeatureItems.length - 1 ? "lg:border-r" : "";
+                const itemClassName = `group flex items-center gap-[14px] border-[#e0ede2] px-6 py-[14px] no-underline transition-colors duration-200 hover:bg-[#f4faf5] ${tabletRightBorderClassName} ${tabletBottomBorderClassName} ${desktopRightBorderClassName}`;
+
+                if (item.kind === "ai") {
+                  return (
+                    <AIAssistant
+                      key={item.title}
+                      comparison={comparison}
+                      floatingButtonClassName="min-[600px]:hidden"
+                      renderTrigger={(openPanel) => (
+                        <button
+                          className={itemClassName}
+                          type="button"
+                          onClick={openPanel}
+                        >
+                          <div
+                            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] ${item.iconBoxClassName}`}
+                          >
+                            <Icon className={`h-5 w-5 ${item.iconColorClassName}`} />
+                          </div>
+                          <div className="flex min-w-0 flex-1 flex-col gap-[2px] text-left">
+                            <span className="text-[12px] font-bold leading-[1.2] text-[#1a2e1a]">
+                              {item.title}
+                            </span>
+                            <span className="text-[10px] leading-[1.4] text-[#6a8a6a]">
+                              {item.subtitle}
+                            </span>
+                          </div>
+                          <ArrowRight className="ml-auto h-[14px] w-[14px] shrink-0 text-[#c8e6c9] transition-colors duration-200 group-hover:text-[#2e7d32]" />
+                        </button>
+                      )}
+                      showFloatingButton
+                    />
+                  );
+                }
+
+                return (
+                  <Link
+                    key={item.title}
+                    className={itemClassName}
+                    href={item.href ?? "/"}
+                  >
+                    <div
+                      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] ${item.iconBoxClassName}`}
+                    >
+                      <Icon className={`h-5 w-5 ${item.iconColorClassName}`} />
+                    </div>
+                    <div className="flex min-w-0 flex-1 flex-col gap-[2px]">
+                      <span className="text-[12px] font-bold leading-[1.2] text-[#1a2e1a]">
+                        {item.title}
+                      </span>
+                      <span className="text-[10px] leading-[1.4] text-[#6a8a6a]">
+                        {item.subtitle}
+                      </span>
+                    </div>
+                    <ArrowRight className="ml-auto h-[14px] w-[14px] shrink-0 text-[#c8e6c9] transition-colors duration-200 group-hover:text-[#2e7d32]" />
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
         <HeroSection
           alertsAnchorRef={alertsRef}
           alertsContent={<AlertsForm variant="hero" />}
@@ -288,44 +372,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
           onCompare={handleCompare}
           onSenderCountryChange={setSenderCountry}
         />
-
-        <section id="feature-hub" className="scroll-mt-24">
-          <div className="border-y border-[#e0ede2] bg-white">
-            <div className="mx-auto grid max-w-[1200px] grid-cols-1 min-[600px]:grid-cols-2 lg:grid-cols-4">
-              {slimFeatureItems.map((item, index) => {
-                const Icon = item.icon;
-                const tabletBorderClassName =
-                  index % 2 === 1 ? "min-[600px]:border-r-0" : "min-[600px]:border-r";
-                const tabletBottomClassName =
-                  index > 1 ? "min-[600px]:border-b-0" : "min-[600px]:border-b";
-                const desktopBorderClassName = index === 3 ? "lg:border-r-0" : "lg:border-r";
-
-                return (
-                  <Link
-                    key={item.title}
-                    className={`group flex items-center gap-[14px] border-[#e0ede2] px-6 py-5 no-underline transition-colors duration-200 ${item.hoverClassName} border-b last:border-b-0 ${tabletBorderClassName} ${tabletBottomClassName} lg:border-b-0 ${desktopBorderClassName}`}
-                    href={item.href}
-                  >
-                    <div
-                      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] ${item.iconBoxClassName}`}
-                    >
-                      <Icon className={`h-5 w-5 ${item.iconColorClassName}`} />
-                    </div>
-                    <div className="flex min-w-0 flex-1 flex-col gap-[2px]">
-                      <span className="text-[13px] font-bold leading-[1.2] text-[#1a2e1a]">
-                        {item.title}
-                      </span>
-                      <span className="text-[11px] leading-[1.4] text-[#6a8a6a]">
-                        {item.subtitle}
-                      </span>
-                    </div>
-                    <ArrowRight className="ml-auto h-4 w-4 shrink-0 text-[#c8e6c9] transition-colors duration-200 group-hover:text-[#2e7d32]" />
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        </section>
 
         <section id="compare-rates" className={`${sectionDividerClassName} scroll-mt-24`}>
           <div className={topLevelSectionInnerClassName}>
@@ -640,7 +686,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
           </div>
         </section>
       </main>
-      <AIAssistant comparison={comparison} />
     </>
   );
 }
