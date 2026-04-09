@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ChevronDown, Menu, Search, X } from "lucide-react";
+import { Menu, Search, X } from "lucide-react";
 import {
   useEffect,
   useRef,
@@ -18,18 +18,7 @@ interface SiteHeaderProps {
   showBreadcrumb?: boolean;
 }
 
-interface DropdownLinkItem {
-  description: string;
-  href: string;
-  routeHref?: string;
-  sectionId?: string;
-  title: string;
-}
-
 interface NavigationItem {
-  dropdownAlign: "center" | "left" | "right";
-  dropdownItems: DropdownLinkItem[];
-  dropdownTitle: string;
   href: string;
   label: string;
   routeHref?: string;
@@ -38,31 +27,6 @@ interface NavigationItem {
 
 const navigationItems: NavigationItem[] = [
   {
-    dropdownAlign: "right",
-    dropdownItems: [
-      {
-        description: "We respond within 24 hours",
-        href: "#contact",
-        routeHref: "/#contact",
-        sectionId: "contact",
-        title: "Send a Message"
-      },
-      {
-        description: "Most common sender questions",
-        href: "#faq",
-        routeHref: "/#faq",
-        sectionId: "faq",
-        title: "FAQ"
-      },
-      {
-        description: "Our mission and data sources",
-        href: "#contact",
-        routeHref: "/#contact",
-        sectionId: "contact",
-        title: "About SaveRateAfrica"
-      }
-    ],
-    dropdownTitle: "Get in Touch",
     href: "#contact",
     label: "Contact Us",
     routeHref: "/#contact",
@@ -185,18 +149,6 @@ function AppStoreBadge({
   );
 }
 
-function getDropdownAlignmentClass(align: NavigationItem["dropdownAlign"]) {
-  if (align === "left") {
-    return "left-0";
-  }
-
-  if (align === "right") {
-    return "right-0";
-  }
-
-  return "left-1/2 -translate-x-1/2";
-}
-
 export function SiteHeader({
   showAnnouncementBar = false,
   showBreadcrumb = false
@@ -207,7 +159,6 @@ export function SiteHeader({
     pathname === "/" ? "home" : null
   );
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [openDrawerSection, setOpenDrawerSection] = useState<string | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [noResultsQuery, setNoResultsQuery] = useState<string | null>(null);
@@ -282,7 +233,6 @@ export function SiteHeader({
       setSearchQuery("");
       setNoResultsQuery(null);
       setIsDrawerOpen(false);
-      setOpenDrawerSection(null);
     }
 
     window.addEventListener("keydown", handleEscape);
@@ -308,7 +258,6 @@ export function SiteHeader({
 
   function closeDrawer() {
     setIsDrawerOpen(false);
-    setOpenDrawerSection(null);
   }
 
   function closePanels() {
@@ -336,10 +285,6 @@ export function SiteHeader({
     return getSectionNavigationHref(item.sectionId, item.routeHref, item.href);
   }
 
-  function getMenuItemHref(item: DropdownLinkItem) {
-    return getSectionNavigationHref(item.sectionId, item.routeHref, item.href);
-  }
-
   function getHomeHref() {
     return getSectionNavigationHref("home", "/#home", "#home");
   }
@@ -363,38 +308,6 @@ export function SiteHeader({
     }
 
     router.push(href.startsWith("/") ? href : `/${href}`);
-  }
-
-  function handleTopLevelClick(
-    event: MouseEvent<HTMLAnchorElement>,
-    item: NavigationItem
-  ) {
-    if (item.sectionId) {
-      event.preventDefault();
-      navigateTo(getNavigationHref(item), item.sectionId);
-      if (pathname === "/") {
-        setActiveSectionId(item.sectionId);
-      }
-      return;
-    }
-
-    closePanels();
-  }
-
-  function handleMenuItemClick(
-    event: MouseEvent<HTMLAnchorElement>,
-    item: DropdownLinkItem
-  ) {
-    if (item.sectionId) {
-      event.preventDefault();
-      navigateTo(getMenuItemHref(item), item.sectionId);
-      if (pathname === "/") {
-        setActiveSectionId(item.sectionId);
-      }
-      return;
-    }
-
-    closePanels();
   }
 
   function handleLogoClick(event: MouseEvent<HTMLAnchorElement>) {
@@ -440,13 +353,10 @@ export function SiteHeader({
       return;
     }
 
-    const dropdownItems = navigationItems.flatMap((item) => item.dropdownItems);
-    const matchedNavTarget = [...navigationItems, ...dropdownItems].find((item) => {
+    const matchedNavTarget = navigationItems.find((item) => {
       const haystack = [
-        "dropdownTitle" in item ? item.dropdownTitle : "",
-        "label" in item ? item.label : "",
-        "title" in item ? item.title : "",
-        "description" in item ? item.description : ""
+        item.label,
+        item.sectionId ?? ""
       ]
         .join(" ")
         .toLowerCase();
@@ -455,12 +365,7 @@ export function SiteHeader({
     });
 
     if (matchedNavTarget) {
-      if ("dropdownItems" in matchedNavTarget) {
-        navigateTo(getNavigationHref(matchedNavTarget), matchedNavTarget.sectionId);
-        return;
-      }
-
-      navigateTo(getMenuItemHref(matchedNavTarget), matchedNavTarget.sectionId);
+      navigateTo(getNavigationHref(matchedNavTarget), matchedNavTarget.sectionId);
       return;
     }
 
@@ -473,27 +378,6 @@ export function SiteHeader({
     }
 
     return false;
-  }
-
-  function renderDropdownItem(item: DropdownLinkItem) {
-    return (
-      <Link
-        key={item.title}
-        className="flex items-start gap-3 rounded-[8px] px-3 py-2.5 no-underline transition hover:bg-[#f4faf5]"
-        href={getMenuItemHref(item)}
-        onClick={(event) => handleMenuItemClick(event, item)}
-      >
-        <div className="mt-[5px] shrink-0 text-[8px] text-[#2e7d32]">●</div>
-        <div>
-          <span className="block text-[13px] font-semibold text-[#1a2e1a]">
-            {item.title}
-          </span>
-          <span className="mt-[2px] block text-[11px] text-[#5a7a5a]">
-            {item.description}
-          </span>
-        </div>
-      </Link>
-    );
   }
 
   return (
@@ -534,32 +418,17 @@ export function SiteHeader({
                   const isActive = isActiveNavigationItem(item);
 
                   return (
-                    <li key={item.label} className="group/nav relative list-none">
+                    <li key={item.label} className="list-none">
                       <Link
-                        className={`inline-flex h-[60px] items-center gap-1 border-b-2 px-[10px] py-[6px] text-[13px] font-medium transition ${
+                        className={`inline-flex h-[60px] cursor-pointer items-center border-b-2 px-[10px] py-[6px] text-[13px] font-medium transition ${
                           isActive
                             ? "active border-[#2e7d32] text-[#2e7d32]"
                             : "border-transparent text-[#2e4a2e] hover:text-[#2e7d32]"
                         }`}
-                        href={getNavigationHref(item)}
-                        onClick={(event) => handleTopLevelClick(event, item)}
+                        href={item.routeHref ?? "/#contact"}
                       >
                         <span>{item.label}</span>
-                        <ChevronDown className="h-3.5 w-3.5" />
                       </Link>
-
-                      <div
-                        className={`pointer-events-none absolute top-[60px] z-[999] min-w-[280px] rounded-b-[12px] border border-[#c8e6c9] bg-white px-6 py-5 opacity-0 shadow-[0_8px_32px_rgba(0,0,0,0.1)] transition duration-200 group-hover/nav:pointer-events-auto group-hover/nav:translate-y-0 group-hover/nav:opacity-100 group-focus-within/nav:pointer-events-auto group-focus-within/nav:translate-y-0 group-focus-within/nav:opacity-100 ${getDropdownAlignmentClass(item.dropdownAlign)} -translate-y-2`}
-                      >
-                        <p className="mb-3 text-[13px] font-semibold text-[#1a2e1a]">
-                          {item.dropdownTitle}
-                        </p>
-                        <div className="space-y-1">
-                          {item.dropdownItems.map((dropdownItem) =>
-                            renderDropdownItem(dropdownItem)
-                          )}
-                        </div>
-                      </div>
                     </li>
                   );
                 })}
@@ -648,7 +517,6 @@ export function SiteHeader({
                 onClick={() => {
                   closeSearch();
                   setIsDrawerOpen((current) => !current);
-                  setOpenDrawerSection(null);
                 }}
               >
                 {isDrawerOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -714,54 +582,18 @@ export function SiteHeader({
         <div className="space-y-1">
           {navigationItems.map((item) => {
             const isActive = isActiveNavigationItem(item);
-            const isOpen = openDrawerSection === item.label;
 
             return (
               <div key={item.label} className="border-b border-[#e8f5e9]">
-                <button
-                  className={`flex w-full items-center justify-between py-3 text-left text-[15px] ${
+                <Link
+                  className={`block cursor-pointer py-3 text-[15px] ${
                     isActive ? "text-[#2e7d32]" : "text-[#1a2e1a]"
                   }`}
-                  type="button"
-                  onClick={() =>
-                    setOpenDrawerSection((current) =>
-                      current === item.label ? null : item.label
-                    )
-                  }
+                  href={item.routeHref ?? "/#contact"}
+                  onClick={closeDrawer}
                 >
-                  <span>{item.label}</span>
-                  <ChevronDown
-                    className={`h-4 w-4 transition-transform ${isOpen ? "rotate-180" : ""}`}
-                  />
-                </button>
-
-                {isOpen ? (
-                  <div className="pb-3">
-                    <p className="px-3 pb-2 text-[12px] font-semibold text-[#1a2e1a]">
-                      {item.dropdownTitle}
-                    </p>
-                    <div className="space-y-1">
-                      {item.dropdownItems.map((dropdownItem) => (
-                        <Link
-                          key={dropdownItem.title}
-                          className="flex items-start gap-3 rounded-[8px] px-3 py-2.5 no-underline transition hover:bg-[#f4faf5]"
-                          href={getMenuItemHref(dropdownItem)}
-                          onClick={(event) => handleMenuItemClick(event, dropdownItem)}
-                        >
-                          <div className="mt-[5px] shrink-0 text-[8px] text-[#2e7d32]">●</div>
-                          <div>
-                            <span className="block text-[13px] font-semibold text-[#1a2e1a]">
-                              {dropdownItem.title}
-                            </span>
-                            <span className="mt-[2px] block text-[11px] text-[#5a7a5a]">
-                              {dropdownItem.description}
-                            </span>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                ) : null}
+                  {item.label}
+                </Link>
               </div>
             );
           })}
