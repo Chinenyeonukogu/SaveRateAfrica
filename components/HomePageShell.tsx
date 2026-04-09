@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
   Activity,
-  ArrowRight,
   BellRing,
   Bot,
   CheckCircle2,
@@ -288,8 +287,8 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
         <SiteHeader showAnnouncementBar />
 
         <section id="feature-hub" className="hidden scroll-mt-24 min-[600px]:block">
-          <div className="border-b border-[#e0ede2] bg-white shadow-[0_2px_8px_rgba(46,125,50,0.06)]">
-            <div className="grid w-full min-[600px]:grid-cols-3 lg:grid-cols-5">
+          <div className="w-full border-b border-[#e0ede2] bg-white">
+            <div className="mx-auto grid max-w-[1100px] min-[600px]:grid-cols-3 min-[600px]:px-4 lg:grid-cols-5 lg:px-7">
               {slimFeatureItems.map((item, index) => {
                 const Icon = item.icon;
                 const tabletRightBorderClassName =
@@ -300,7 +299,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                   index < 3 ? "min-[600px]:max-[1023px]:border-b" : "";
                 const desktopRightBorderClassName =
                   index < slimFeatureItems.length - 1 ? "lg:border-r" : "";
-                const itemClassName = `group flex items-center gap-[14px] border-[#e0ede2] px-6 py-[14px] no-underline transition-colors duration-200 hover:bg-[#f4faf5] ${tabletRightBorderClassName} ${tabletBottomBorderClassName} ${desktopRightBorderClassName}`;
+                const itemClassName = `group flex cursor-pointer items-center gap-3 border-[#e8f0e8] px-5 py-[14px] no-underline transition-colors duration-200 hover:bg-[#f4faf5] ${tabletRightBorderClassName} ${tabletBottomBorderClassName} ${desktopRightBorderClassName}`;
 
                 if (item.kind === "ai") {
                   return (
@@ -315,19 +314,18 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                           onClick={openPanel}
                         >
                           <div
-                            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] ${item.iconBoxClassName}`}
+                            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] transition-transform duration-[180ms] group-hover:scale-[1.06] ${item.iconBoxClassName}`}
                           >
                             <Icon className={`h-5 w-5 ${item.iconColorClassName}`} />
                           </div>
                           <div className="flex min-w-0 flex-1 flex-col gap-[2px] text-left">
-                            <span className="text-[12px] font-bold leading-[1.2] text-[#1a2e1a]">
+                            <span className="whitespace-nowrap text-[12px] font-bold leading-[1.3] text-[#1a2e1a] transition-colors duration-[180ms] group-hover:text-[#1b5e20]">
                               {item.title}
                             </span>
-                            <span className="text-[10px] leading-[1.4] text-[#6a8a6a]">
+                            <span className="overflow-hidden text-ellipsis whitespace-nowrap text-[10px] leading-[1.4] text-[#7a9a7a]">
                               {item.subtitle}
                             </span>
                           </div>
-                          <ArrowRight className="ml-auto h-[14px] w-[14px] shrink-0 text-[#c8e6c9] transition-colors duration-200 group-hover:text-[#2e7d32]" />
                         </button>
                       )}
                       showFloatingButton
@@ -342,19 +340,18 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                     href={item.href ?? "/"}
                   >
                     <div
-                      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] ${item.iconBoxClassName}`}
+                      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] transition-transform duration-[180ms] group-hover:scale-[1.06] ${item.iconBoxClassName}`}
                     >
                       <Icon className={`h-5 w-5 ${item.iconColorClassName}`} />
                     </div>
                     <div className="flex min-w-0 flex-1 flex-col gap-[2px]">
-                      <span className="text-[12px] font-bold leading-[1.2] text-[#1a2e1a]">
+                      <span className="whitespace-nowrap text-[12px] font-bold leading-[1.3] text-[#1a2e1a] transition-colors duration-[180ms] group-hover:text-[#1b5e20]">
                         {item.title}
                       </span>
-                      <span className="text-[10px] leading-[1.4] text-[#6a8a6a]">
+                      <span className="overflow-hidden text-ellipsis whitespace-nowrap text-[10px] leading-[1.4] text-[#7a9a7a]">
                         {item.subtitle}
                       </span>
                     </div>
-                    <ArrowRight className="ml-auto h-[14px] w-[14px] shrink-0 text-[#c8e6c9] transition-colors duration-200 group-hover:text-[#2e7d32]" />
                   </Link>
                 );
               })}
