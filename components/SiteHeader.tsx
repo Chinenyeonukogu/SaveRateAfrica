@@ -474,9 +474,9 @@ export function SiteHeader({
                   const isActive = isActiveNavigationItem(item);
 
                   return (
-                    <li key={item.label} className="min-w-0 max-w-[170px] flex-1 list-none">
+                    <li key={item.label} className="min-w-0 max-w-[190px] flex-1 list-none">
                       <Link
-                        className={`group flex min-w-0 items-center gap-2 rounded-[14px] border px-3 py-[7px] transition-colors ${
+                        className={`group flex min-w-0 items-center gap-2 rounded-[14px] border px-5 py-2 transition-colors ${
                           isActive
                             ? "border-[#c8e6c9] bg-[#f4faf5] text-[#1b5e20] shadow-[0_0_0_1px_rgba(46,125,50,0.08)]"
                             : "border-transparent bg-white text-[#2e4a2e] hover:border-[#dcedc8] hover:bg-[#f8fcf8]"
@@ -527,7 +527,11 @@ export function SiteHeader({
               >
                 {contactNavigationItem.label}
               </Link>
-              <div className="relative flex items-center">
+              <div
+                className={`relative flex items-center rounded-full transition-colors ${
+                  isSearchOpen ? "border-[0.5px] border-[#1a5c2a] bg-white pl-1.5 pr-3" : ""
+                }`}
+              >
                 <button
                   aria-expanded={isSearchOpen}
                   aria-label={isSearchOpen ? "Close search" : "Open search"}
@@ -543,18 +547,19 @@ export function SiteHeader({
                 </button>
 
                 <div
-                  className={`overflow-hidden transition-[width,opacity,margin] duration-200 ease-out ${
-                    isSearchOpen ? "ml-2 w-[260px] opacity-100" : "w-0 opacity-0"
+                  className={`overflow-hidden ${
+                    isSearchOpen ? "ml-1.5 w-[200px] max-w-[200px] opacity-100" : "w-0 max-w-0 opacity-0"
                   }`}
+                  style={{ transition: "width 0.3s ease, opacity 0.3s ease, margin 0.3s ease" }}
                 >
                   <form
-                    className="flex items-center rounded-[6px] border border-[#c8e6c9] bg-white px-3 py-1.5"
+                    className="flex items-center gap-2 border-b-2 border-[#1a5c2a] bg-white py-1"
                     role="search"
                     onSubmit={handleSearchSubmit}
                   >
                     <input
                       ref={desktopSearchInputRef}
-                      className="w-full border-none bg-transparent text-[13px] text-[#1a2e1a] outline-none placeholder:text-[#7a8d7a]"
+                      className="w-full border-none bg-transparent pb-1 text-[13px] text-[#1a2e1a] outline-none placeholder:text-[#7a8d7a]"
                       placeholder="Search SaveRateAfrica..."
                       type="text"
                       value={searchQuery}
@@ -562,7 +567,7 @@ export function SiteHeader({
                     />
                     <button
                       aria-label="Close search"
-                      className="ml-2 text-[13px] text-[#2e4a2e]"
+                      className="shrink-0 pb-1 text-[13px] text-[#2e4a2e]"
                       type="button"
                       onClick={closeSearch}
                     >
