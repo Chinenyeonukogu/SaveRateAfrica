@@ -477,7 +477,7 @@ export function SiteHeader({
     return (
       <Link
         aria-label={item.label}
-        className={`group inline-flex h-11 w-11 items-center justify-center rounded-[14px] border p-[3px] transition-colors ${
+        className={`group flex min-w-0 items-center gap-2 rounded-[14px] border px-2.5 py-[3px] transition-colors ${
           isActive
             ? "border-[#c8e6c9] bg-[#f4faf5] shadow-[0_0_0_1px_rgba(46,125,50,0.08)]"
             : "border-transparent bg-white hover:border-[#dcedc8] hover:bg-[#f8fcf8]"
@@ -487,6 +487,15 @@ export function SiteHeader({
         onClick={(event) => handleNavigationClick(event, item)}
       >
         {renderFeatureIcon(item)}
+        <span
+          className={`block min-w-0 truncate text-[11px] leading-[1.2] ${
+            isActive
+              ? "font-bold text-[#1b5e20]"
+              : "font-semibold text-[#1a2e1a] group-hover:text-[#1b5e20]"
+          }`}
+        >
+          {item.label}
+        </span>
       </Link>
     );
   }
@@ -561,11 +570,11 @@ export function SiteHeader({
 
               <nav
                 aria-label="Tablet primary"
-                className="ml-3 hidden shrink-0 items-center md:flex lg:hidden"
+                className="ml-3 hidden min-w-0 flex-1 items-center md:flex lg:hidden"
               >
-                <ul className="flex items-center gap-1">
+                <ul className="flex min-w-0 items-center gap-1">
                   {navigationItems.map((item) => (
-                    <li key={item.label} className="list-none">
+                    <li key={item.label} className="min-w-0 list-none">
                       {renderTabletNavigationItem(item)}
                     </li>
                   ))}

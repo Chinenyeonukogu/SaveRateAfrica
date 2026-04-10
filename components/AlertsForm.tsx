@@ -249,18 +249,19 @@ export function AlertsForm({
         >
           <input
             checked={consent}
-            className={`mt-1 h-4 w-4 rounded ${
+            className={`mt-1 h-4 w-4 rounded accent-[#1a5c2a] ${
               isHero ? "border-[#c8e6c9] bg-white text-[#2e7d32]" : "border-brand-navy/20 text-brand-green"
             }`}
             type="checkbox"
             onChange={(event) => setConsent(event.target.checked)}
           />
           <div className="rounded-[10px] bg-[#f0f7f2] px-[14px] py-3">
-            <p className="text-[13px] font-medium leading-[1.5] text-[#1e3d28]">
-              I agree to receive rate alerts and product updates. You can
-              unsubscribe at any time. Messaging follows{" "}
-              <strong className="font-bold">GDPR</strong> and{" "}
-              <strong className="font-bold">CAN-SPAM</strong> expectations.
+            <p className="text-[13px] font-medium leading-[1.7] text-[#1e3d28]">
+              By checking this box, I consent to receiving rate alert
+              notifications and occasional product updates from SaveRateAfrica.
+              You may unsubscribe at any time. Communications are handled in
+              accordance with <strong className="font-bold">GDPR</strong> and{" "}
+              <strong className="font-bold">CAN-SPAM</strong> requirements.
             </p>
           </div>
         </label>
