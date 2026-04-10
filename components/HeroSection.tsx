@@ -107,7 +107,6 @@ export function HeroSection({
               <div
                 id="rate-alerts"
                 ref={alertsAnchorRef}
-                className="scroll-mt-24"
               >
                 {alertsContent}
               </div>

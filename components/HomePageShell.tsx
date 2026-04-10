@@ -53,6 +53,7 @@ interface SlimFeatureItemDefinition {
   subtitle: string;
   title: string;
   href?: string;
+  sectionId?: string;
 }
 
 const slimFeatureItems: SlimFeatureItemDefinition[] = [
@@ -68,6 +69,7 @@ const slimFeatureItems: SlimFeatureItemDefinition[] = [
   {
     kind: "link",
     href: "/#how-it-works",
+    sectionId: "how-it-works",
     icon: Clock3,
     iconBoxClassName: "bg-[#ede7f6]",
     iconColorClassName: "text-[#5e35b1]",
@@ -77,6 +79,7 @@ const slimFeatureItems: SlimFeatureItemDefinition[] = [
   {
     kind: "link",
     href: "/alerts",
+    sectionId: "rate-alerts",
     icon: BellRing,
     iconBoxClassName: "bg-[#e1f5fe]",
     iconColorClassName: "text-[#0288d1]",
@@ -86,6 +89,7 @@ const slimFeatureItems: SlimFeatureItemDefinition[] = [
   {
     kind: "link",
     href: "/#smart-sending",
+    sectionId: "smart-sending",
     icon: Activity,
     iconBoxClassName: "bg-[#fce4ec]",
     iconColorClassName: "text-[#c62828]",
@@ -106,6 +110,25 @@ const reviewCountries = ["USA", "UK", "Canada"] as const;
 const pageShellClassName = "mx-auto w-full max-w-[1200px] px-6";
 const topLevelSectionInnerClassName = `${pageShellClassName} py-9 min-[600px]:py-[52px] lg:py-[72px]`;
 const sectionDividerClassName = "border-t border-[#e8f5e9]";
+const featureHrefBySectionId = slimFeatureItems.reduce<Record<string, string>>(
+  (sectionHrefMap, item) => {
+    if (item.sectionId && item.href) {
+      sectionHrefMap[item.sectionId] = item.href;
+    }
+
+    return sectionHrefMap;
+  },
+  {}
+);
+const observedHomepageSectionIds = [
+  "compare-rates",
+  "rate-alerts",
+  "how-it-works",
+  "smart-sending",
+  "market-timing",
+  "rate-chart",
+  "contact"
+] as const;
 
 function buildLiveReviewComparisons(
   comparison: ComparisonResult
@@ -148,6 +171,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [nextRefreshAt, setNextRefreshAt] = useState(initialComparison.cachedUntil);
+  const [activeFeatureHref, setActiveFeatureHref] = useState<string | null>(null);
   const amountRef = useRef(amount);
   const senderCountryRef = useRef(senderCountry);
   const sortByRef = useRef(sortBy);
@@ -286,6 +310,62 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
     };
   }, []);
 
+  useEffect(() => {
+    const sections = observedHomepageSectionIds
+      .map((sectionId) => document.getElementById(sectionId))
+      .filter((section): section is HTMLElement => Boolean(section));
+
+    if (!sections.length) {
+      return;
+    }
+
+    const stickyOffset = 125;
+    const visibleSections = new Map<string, number>();
+
+    const updateActiveFeature = () => {
+      const nextSectionId =
+        [...visibleSections.entries()]
+          .filter(([sectionId]) => Boolean(featureHrefBySectionId[sectionId]))
+          .sort((entryA, entryB) => entryB[1] - entryA[1])[0]?.[0] ?? null;
+      const nextActiveHref = nextSectionId
+        ? featureHrefBySectionId[nextSectionId] ?? null
+        : null;
+
+      setActiveFeatureHref((currentHref) =>
+        currentHref === nextActiveHref ? currentHref : nextActiveHref
+      );
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            visibleSections.delete(entry.target.id);
+            return;
+          }
+
+          visibleSections.set(
+            entry.target.id,
+            entry.intersectionRatio +
+              (entry.boundingClientRect.top <= stickyOffset ? 0.1 : 0)
+          );
+        });
+
+        updateActiveFeature();
+      },
+      {
+        rootMargin: `-${stickyOffset}px 0px -45% 0px`,
+        threshold: [0, 0.15, 0.35, 0.55]
+      }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   function handleCompare() {
     document
       .querySelector("#compare-rates")
@@ -309,11 +389,14 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
 
       <main className="overflow-x-hidden pb-32 md:pb-20">
 
-        <section id="feature-hub" className="hidden scroll-mt-24 min-[600px]:block">
-          <div className="w-full border-b border-[#e0ede2] bg-white">
-            <div className="mx-auto grid max-w-[1100px] min-[600px]:grid-cols-3 min-[600px]:px-4 lg:grid-cols-5 lg:px-7">
+        <section
+          id="feature-hub"
+          className="sticky top-[60px] z-[999] hidden border-b border-[#e0ede2] bg-white shadow-[0_2px_8px_rgba(46,125,50,0.07)] min-[600px]:block"
+        >
+          <div className="mx-auto grid max-w-[1100px] min-[600px]:grid-cols-3 min-[600px]:px-4 lg:grid-cols-5 lg:px-7">
               {slimFeatureItems.map((item, index) => {
                 const Icon = item.icon;
+                const isActiveFeature = item.href === activeFeatureHref;
                 const tabletRightBorderClassName =
                   index === 0 || index === 1 || index === 3
                     ? "min-[600px]:max-[1023px]:border-r"
@@ -323,6 +406,12 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                 const desktopRightBorderClassName =
                   index < slimFeatureItems.length - 1 ? "lg:border-r" : "";
                 const itemClassName = `group flex cursor-pointer items-center gap-3 border-[#e8f0e8] px-5 py-[14px] no-underline transition-colors duration-200 hover:bg-[#f4faf5] ${tabletRightBorderClassName} ${tabletBottomBorderClassName} ${desktopRightBorderClassName}`;
+                const iconBoxClassName = `flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] transition-[transform,box-shadow] duration-[180ms] group-hover:scale-[1.06] ${item.iconBoxClassName} ${
+                  isActiveFeature ? "shadow-[0_0_0_2px_#2e7d32]" : ""
+                }`;
+                const titleClassName = isActiveFeature
+                  ? "whitespace-nowrap text-[12px] font-bold leading-[1.3] text-[#1b5e20] transition-colors duration-[180ms]"
+                  : "whitespace-nowrap text-[12px] font-semibold leading-[1.3] text-[#1a2e1a] transition-colors duration-[180ms] group-hover:text-[#1b5e20]";
 
                 if (item.kind === "ai") {
                   return (
@@ -336,13 +425,11 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                           type="button"
                           onClick={openPanel}
                         >
-                          <div
-                            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] transition-transform duration-[180ms] group-hover:scale-[1.06] ${item.iconBoxClassName}`}
-                          >
+                          <div className={iconBoxClassName}>
                             <Icon className={`h-5 w-5 ${item.iconColorClassName}`} />
                           </div>
                           <div className="flex min-w-0 flex-1 flex-col gap-[2px] text-left">
-                            <span className="whitespace-nowrap text-[12px] font-bold leading-[1.3] text-[#1a2e1a] transition-colors duration-[180ms] group-hover:text-[#1b5e20]">
+                            <span className={titleClassName}>
                               {item.title}
                             </span>
                             <span className="overflow-hidden text-ellipsis whitespace-nowrap text-[10px] leading-[1.4] text-[#7a9a7a]">
@@ -359,16 +446,15 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                 return (
                   <Link
                     key={item.title}
+                    aria-current={isActiveFeature ? "location" : undefined}
                     className={itemClassName}
                     href={item.href ?? "/"}
                   >
-                    <div
-                      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] transition-transform duration-[180ms] group-hover:scale-[1.06] ${item.iconBoxClassName}`}
-                    >
+                    <div className={iconBoxClassName}>
                       <Icon className={`h-5 w-5 ${item.iconColorClassName}`} />
                     </div>
                     <div className="flex min-w-0 flex-1 flex-col gap-[2px]">
-                      <span className="whitespace-nowrap text-[12px] font-bold leading-[1.3] text-[#1a2e1a] transition-colors duration-[180ms] group-hover:text-[#1b5e20]">
+                      <span className={titleClassName}>
                         {item.title}
                       </span>
                       <span className="overflow-hidden text-ellipsis whitespace-nowrap text-[10px] leading-[1.4] text-[#7a9a7a]">
@@ -378,7 +464,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                   </Link>
                 );
               })}
-            </div>
           </div>
         </section>
 
@@ -393,7 +478,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
           onSenderCountryChange={setSenderCountry}
         />
 
-        <section id="compare-rates" className={`${sectionDividerClassName} scroll-mt-24`}>
+        <section id="compare-rates" className={sectionDividerClassName}>
           <div className={topLevelSectionInnerClassName}>
             <div ref={compareRef}>
               <ComparisonTable
@@ -416,7 +501,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
             <section
               id="how-it-works"
               ref={howItWorksRef}
-              className="scroll-mt-24 rounded-[16px] border border-[#c8e6c9] bg-white px-4 py-5 min-[600px]:px-6 min-[600px]:py-8 lg:px-8 lg:py-10"
+              className="rounded-[16px] border border-[#c8e6c9] bg-white px-4 py-5 min-[600px]:px-6 min-[600px]:py-8 lg:px-8 lg:py-10"
             >
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-green">
                 How it works
@@ -459,7 +544,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
             <section
               id="smart-sending"
               ref={smartSendingRef}
-              className="scroll-mt-24 rounded-[16px] border border-[#c8e6c9] bg-white px-4 py-5 min-[600px]:px-6 min-[600px]:py-8 lg:px-8 lg:py-10"
+              className="rounded-[16px] border border-[#c8e6c9] bg-white px-4 py-5 min-[600px]:px-6 min-[600px]:py-8 lg:px-8 lg:py-10"
             >
               <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start lg:gap-12">
                 <div className="lg:max-w-md">
@@ -538,7 +623,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
 
         <section className={sectionDividerClassName}>
           <div className={topLevelSectionInnerClassName}>
-            <div id="market-timing" ref={bestTimeRef} className="scroll-mt-24">
+            <div id="market-timing" ref={bestTimeRef}>
               <BestTimeToSend comparison={comparison} />
             </div>
           </div>
@@ -546,7 +631,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
 
         <section className={sectionDividerClassName}>
           <div className={topLevelSectionInnerClassName}>
-            <div id="rate-chart" ref={rateChartRef} className="scroll-mt-24">
+            <div id="rate-chart" ref={rateChartRef}>
               <RateChart />
             </div>
           </div>

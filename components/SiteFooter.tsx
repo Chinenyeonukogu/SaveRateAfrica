@@ -6,7 +6,7 @@ export function SiteFooter() {
   ] as const;
 
   return (
-    <section id="contact" className="scroll-mt-24">
+    <section id="contact">
       <footer className="border-t-[3px] border-[#2e7d32] bg-[#f4faf5] px-5 pb-5 pt-8 min-[600px]:px-7 min-[600px]:pb-5 min-[600px]:pt-10 lg:px-10 lg:pb-6 lg:pt-12">
         <div className="mx-auto max-w-[1200px]">
           <div className="mb-8 border-b border-[#c8e6c9] pb-6 text-[13px] leading-[1.7] text-[#4a6a4a]">
