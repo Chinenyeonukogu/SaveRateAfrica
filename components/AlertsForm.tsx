@@ -234,8 +234,8 @@ export function AlertsForm({
           <button
             className={`inline-flex min-h-12 items-center justify-center rounded-[7px] px-5 text-base font-bold transition disabled:cursor-not-allowed disabled:opacity-60 ${
               isHero
-                ? "w-full bg-[#1a5c2a] text-white min-[600px]:col-span-2 lg:col-span-1 lg:w-auto hover:bg-[#154a22]"
-                : "bg-[#1a5c2a] text-white hover:shadow-float"
+                ? "w-full bg-brand-yellow text-brand-navy min-[600px]:col-span-2 lg:col-span-1 lg:w-auto hover:shadow-float"
+                : "bg-brand-yellow text-brand-navy hover:shadow-float"
             }`}
             disabled={submitting}
             type="submit"
