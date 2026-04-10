@@ -1,3 +1,7 @@
+"use client";
+
+import { useRef, useState } from "react";
+
 import type { ComparisonResult } from "@/lib/fetchRates";
 import type { ComparisonSort } from "@/lib/providers";
 
@@ -66,8 +70,23 @@ export function ComparisonTable({
   nextRefreshAt: _nextRefreshAt,
   onSortChange
 }: ComparisonTableProps) {
+  const [showAll, setShowAll] = useState(false);
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const sortedProviders = [...comparison.providers].sort(
+    (providerA, providerB) => providerB.exchangeRate - providerA.exchangeRate
+  );
+  const visibleProviders = showAll ? sortedProviders : sortedProviders.slice(0, 5);
+
+  function handleShowLess() {
+    setShowAll(false);
+
+    window.requestAnimationFrame(() => {
+      sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }
+
   return (
-    <section>
+    <section ref={sectionRef}>
       <div className="mb-8">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-green">
@@ -103,7 +122,7 @@ export function ComparisonTable({
         {isLoading ? <LoadingSkeletonCards /> : null}
 
         <div className="flex flex-col gap-3">
-          {comparison.providers.map((provider, index) => (
+          {visibleProviders.map((provider, index) => (
             <ProviderCard
               key={`${comparison.senderCountry}-${provider.slug}-${comparison.amount}`}
               index={index}
@@ -111,6 +130,18 @@ export function ComparisonTable({
               sourceCurrency={comparison.sourceCurrency}
             />
           ))}
+
+          {comparison.providers.length > 5 ? (
+            <button
+              className="w-full rounded-[10px] border-[1.5px] border-[#1a5c2a] bg-transparent px-4 py-[14px] text-[14px] font-bold text-[#1a5c2a] transition hover:bg-[#f0f7f2]"
+              type="button"
+              onClick={showAll ? handleShowLess : () => setShowAll(true)}
+            >
+              {showAll
+                ? "Show less ↑"
+                : `See all ${comparison.providers.length} providers ↓`}
+            </button>
+          ) : null}
         </div>
       </div>
     </section>
