@@ -257,11 +257,10 @@ export function AlertsForm({
           />
           <div className="rounded-[10px] bg-[#f0f7f2] px-[14px] py-3">
             <p className="text-[13px] font-medium leading-[1.7] text-[#1e3d28]">
-              By checking this box, I consent to receiving rate alert
-              notifications and occasional product updates from SaveRateAfrica.
-              You may unsubscribe at any time. Communications are handled in
-              accordance with <strong className="font-bold">GDPR</strong> and{" "}
-              <strong className="font-bold">CAN-SPAM</strong> requirements.
+              I agree to receive rate alerts and product updates. You can
+              unsubscribe at any time. Messaging follows{" "}
+              <strong className="font-bold">GDPR</strong> and{" "}
+              <strong className="font-bold">CAN-SPAM</strong> expectations.
             </p>
           </div>
         </label>
