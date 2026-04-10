@@ -547,19 +547,14 @@ export function SiteHeader({
                         onClick={(event) => handleNavigationClick(event, item)}
                       >
                         {renderFeatureIcon(item)}
-                        <span className="min-w-0">
-                          <span
-                            className={`block truncate text-[12px] leading-[1.2] transition-colors ${
-                              isActive
-                                ? "font-bold text-[#1b5e20]"
-                                : "font-semibold text-[#1a2e1a] group-hover:text-[#1b5e20]"
-                            }`}
-                          >
-                            {item.label}
-                          </span>
-                          <span className="mt-[2px] block truncate text-[9px] leading-[1.3] text-[#7a9a7a]">
-                            {item.description}
-                          </span>
+                        <span
+                          className={`block min-w-0 truncate text-[12px] leading-[1.2] transition-colors ${
+                            isActive
+                              ? "font-bold text-[#1b5e20]"
+                              : "font-semibold text-[#1a2e1a] group-hover:text-[#1b5e20]"
+                          }`}
+                        >
+                          {item.label}
                         </span>
                       </Link>
                     </li>
@@ -795,14 +790,7 @@ export function SiteHeader({
                   onClick={(event) => handleNavigationClick(event, item)}
                 >
                   {renderFeatureIcon(item)}
-                  <span className="min-w-0">
-                    <span className="block text-[15px]">{item.label}</span>
-                    {item.description ? (
-                      <span className="mt-1 block text-[11px] font-medium text-[#7a9a7a]">
-                        {item.description}
-                      </span>
-                    ) : null}
-                  </span>
+                  <span className="block min-w-0 text-[15px]">{item.label}</span>
                 </Link>
               </div>
             );
