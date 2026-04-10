@@ -55,15 +55,16 @@ summary::-webkit-details-marker {
 }
 
 .alert-hero-card .toggle-btn {
-  background: #f4faf5;
-  border: 1px solid #e0ede2;
-  color: #4a6a4a;
+  background: transparent;
+  border: 2px solid #1a5c2a;
+  color: #1a5c2a;
   border-radius: 999px;
+  font-weight: 700;
 }
 
 .alert-hero-card .toggle-btn[data-state="active"] {
-  background: #1a2e1a;
-  border-color: #1a2e1a;
+  background: #1a5c2a;
+  border-color: #1a5c2a;
   color: #ffffff;
 }
 
@@ -84,12 +85,6 @@ summary::-webkit-details-marker {
 
 .alert-hero-card .alert-input::placeholder {
   color: #b0c4b0;
-}
-
-.alert-hero-card .gdpr-text {
-  font-size: 10px;
-  line-height: 1.5;
-  color: #8a9a8a;
 }
 
 @layer base {

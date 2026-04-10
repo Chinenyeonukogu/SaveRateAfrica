@@ -94,7 +94,7 @@ export function AlertsForm({
               </h3>
             </div>
           </div>
-          <p className="mt-[6px] text-[11px] leading-[1.6] text-[#5a7a5a]">
+          <p className="mt-[10px] border-l-[3px] border-[#1a5c2a] pl-3 text-[11px] font-medium leading-[1.6] text-[#2d4a35]">
             Set your ideal rate and we alert you instantly — free for 1 alert per
             month, unlimited on Premium.
           </p>
@@ -120,7 +120,7 @@ export function AlertsForm({
             <h3 className="mt-2 text-[28px] font-heading text-brand-navy min-[600px]:text-3xl">
               Get notified when NGN hits your target
             </h3>
-            <p className="mt-2 text-[12px] leading-6 text-brand-navy/70 min-[600px]:text-sm">
+            <p className="mt-2 text-[12px] font-medium leading-6 text-[#2d4a35] min-[600px]:text-sm">
               Free users get one alert per month. Premium users can track unlimited
               targets across USD, GBP, and CAD routes.
             </p>
@@ -140,11 +140,11 @@ export function AlertsForm({
                 key={value}
                 className={`toggle-btn min-h-11 capitalize transition ${
                   isHero
-                    ? "rounded-full px-4 py-[6px] text-[11px] font-semibold"
-                    : `text-[12px] font-semibold min-[600px]:min-h-12 min-[600px]:text-sm ${
+                    ? "rounded-full px-4 py-[6px] text-[11px] font-bold"
+                    : `rounded-[10px] border-2 border-[#1a5c2a] bg-transparent text-[12px] font-bold text-[#1a5c2a] min-[600px]:min-h-12 min-[600px]:text-sm ${
                         value === channel
-                          ? "bg-brand-navy text-white"
-                          : "text-brand-navy/70 hover:bg-white"
+                          ? "border-[#1a5c2a] bg-[#1a5c2a] text-white"
+                          : "hover:bg-[#f0f7f2]"
                       }`
                 }`}
                 data-state={value === channel ? "active" : "inactive"}
@@ -169,18 +169,12 @@ export function AlertsForm({
             className={`${
                 isHero
                   ? "space-y-1"
-                  : "space-y-2 text-[12px] font-medium text-brand-navy/70 min-[600px]:text-sm"
+                  : "space-y-2 min-[600px]:text-sm"
             }`}
           >
-            <span
-              className={
-                isHero
-                  ? "block text-[10px] font-semibold uppercase tracking-[0.8px] text-[#8a9a8a]"
-                  : undefined
-              }
-              >
-                Target rate
-              </span>
+            <span className="block text-[12px] font-bold uppercase tracking-[0.08em] text-[#0d1f12]">
+              Target rate
+            </span>
             <input
               className={`alert-input min-h-12 w-full rounded-[8px] px-[14px] py-[11px] outline-none ${
                 isHero ? "" : "border border-[#c8e6c9] bg-white font-mono"
@@ -198,16 +192,10 @@ export function AlertsForm({
               className={`${
                 isHero
                   ? "space-y-1"
-                  : "space-y-2 text-[12px] font-medium text-brand-navy/70 min-[600px]:text-sm"
+                  : "space-y-2 min-[600px]:text-sm"
               }`}
             >
-              <span
-                className={
-                  isHero
-                    ? "block text-[10px] font-semibold uppercase tracking-[0.8px] text-[#8a9a8a]"
-                    : undefined
-                }
-              >
+              <span className="block text-[12px] font-bold uppercase tracking-[0.08em] text-[#0d1f12]">
                 Email
               </span>
               <input
@@ -225,16 +213,10 @@ export function AlertsForm({
               className={`${
                 isHero
                   ? "space-y-1"
-                  : "space-y-2 text-[12px] font-medium text-brand-navy/70 min-[600px]:text-sm"
+                  : "space-y-2 min-[600px]:text-sm"
               }`}
             >
-              <span
-                className={
-                  isHero
-                    ? "block text-[10px] font-semibold uppercase tracking-[0.8px] text-[#8a9a8a]"
-                    : undefined
-                }
-              >
+              <span className="block text-[12px] font-bold uppercase tracking-[0.08em] text-[#0d1f12]">
                 SMS number
               </span>
               <input
@@ -250,10 +232,10 @@ export function AlertsForm({
           )}
 
           <button
-            className={`inline-flex min-h-12 items-center justify-center rounded-[7px] px-5 text-sm font-bold transition disabled:cursor-not-allowed disabled:opacity-60 ${
+            className={`inline-flex min-h-12 items-center justify-center rounded-[7px] px-5 text-base font-bold transition disabled:cursor-not-allowed disabled:opacity-60 ${
               isHero
-                ? "w-full bg-[#2e7d32] text-white min-[600px]:col-span-2 lg:col-span-1 lg:w-auto hover:bg-[#1b5e20]"
-                : "bg-[#2e7d32] text-white hover:shadow-float"
+                ? "w-full bg-[#1a5c2a] text-white min-[600px]:col-span-2 lg:col-span-1 lg:w-auto hover:bg-[#154a22]"
+                : "bg-[#1a5c2a] text-white hover:shadow-float"
             }`}
             disabled={submitting}
             type="submit"
@@ -263,9 +245,7 @@ export function AlertsForm({
         </div>
 
         <label
-          className={`mt-[10px] flex items-start gap-3 text-[10px] leading-4 ${
-            isHero ? "text-[#8a9a8a]" : "text-brand-navy/70"
-          }`}
+          className="mt-[10px] flex items-start gap-3"
         >
           <input
             checked={consent}
@@ -275,10 +255,14 @@ export function AlertsForm({
             type="checkbox"
             onChange={(event) => setConsent(event.target.checked)}
           />
-          <span className={isHero ? "gdpr-text" : undefined}>
-            I agree to receive rate alerts and product updates. You can unsubscribe
-            at any time. Messaging follows GDPR and CAN-SPAM expectations.
-          </span>
+          <div className="rounded-[10px] bg-[#f0f7f2] px-[14px] py-3">
+            <p className="text-[13px] font-medium leading-[1.5] text-[#1e3d28]">
+              I agree to receive rate alerts and product updates. You can
+              unsubscribe at any time. Messaging follows{" "}
+              <strong className="font-bold">GDPR</strong> and{" "}
+              <strong className="font-bold">CAN-SPAM</strong> expectations.
+            </p>
+          </div>
         </label>
 
         {isHero ? (
@@ -287,12 +271,18 @@ export function AlertsForm({
               {heroAlertBadges.map((badge) => (
                 <div
                   key={badge.title}
-                  className="flex items-center gap-[6px] rounded-[8px] border border-[#e0ede2] bg-[#f4faf5] px-[10px] py-[6px]"
+                  className={`flex items-center gap-[6px] rounded-[8px] bg-[#f4faf5] px-[10px] py-[6px] ${
+                    badge.title === "Premium"
+                      ? "border-2 border-[#1a5c2a]"
+                      : "border border-[#e0ede2]"
+                  }`}
                 >
                   <span className="text-sm">{badge.icon}</span>
                   <div>
                     <p className="text-[11px] font-bold text-[#1a2e1a]">{badge.title}</p>
-                    <p className="text-[9px] text-[#6a8a6a]">{badge.subtitle}</p>
+                    <p className="text-[9px] font-semibold text-[#2d4a35]">
+                      {badge.subtitle}
+                    </p>
                   </div>
                 </div>
               ))}
