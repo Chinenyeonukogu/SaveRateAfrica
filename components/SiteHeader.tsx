@@ -2,7 +2,15 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Menu, Search, X } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import {
+  Activity,
+  Clock3,
+  CreditCard,
+  Menu,
+  Search,
+  X
+} from "lucide-react";
 import {
   useEffect,
   useRef,
@@ -19,20 +27,55 @@ interface SiteHeaderProps {
 }
 
 interface NavigationItem {
+  description?: string;
   href: string;
+  icon?: LucideIcon;
+  iconBoxClassName?: string;
+  iconColorClassName?: string;
   label: string;
+  matchPathnames?: string[];
   routeHref?: string;
   sectionId?: string;
 }
 
 const navigationItems: NavigationItem[] = [
   {
-    href: "#contact",
-    label: "Contact Us",
-    routeHref: "/#contact",
-    sectionId: "contact"
+    description: "Cards for the Nigerian diaspora",
+    href: "/credit-cards",
+    icon: CreditCard,
+    iconBoxClassName: "bg-[#e8f5e9]",
+    iconColorClassName: "text-[#2e7d32]",
+    label: "Build Credit",
+    matchPathnames: ["/credit-cards"]
+  },
+  {
+    description: "Your 3-step send journey",
+    href: "#how-it-works",
+    icon: Clock3,
+    iconBoxClassName: "bg-[#ede7f6]",
+    iconColorClassName: "text-[#5e35b1]",
+    label: "How It Works",
+    routeHref: "/#how-it-works",
+    sectionId: "how-it-works"
+  },
+  {
+    description: "Best time and route guidance",
+    href: "#smart-sending",
+    icon: Activity,
+    iconBoxClassName: "bg-[#fce4ec]",
+    iconColorClassName: "text-[#c62828]",
+    label: "Smart Sending",
+    routeHref: "/#smart-sending",
+    sectionId: "smart-sending"
   }
 ] as const;
+
+const contactNavigationItem: NavigationItem = {
+  href: "#contact",
+  label: "Contact Us",
+  routeHref: "/#contact",
+  sectionId: "contact"
+};
 
 const appDownloadButtons = [
   {
@@ -55,6 +98,7 @@ const brandFontStyle = {
 const headerShellClassName = "mx-auto w-full max-w-[1200px] px-4 lg:px-6";
 const breadcrumbShellClassName =
   "mx-auto w-full max-w-[1200px] px-4 min-[600px]:px-6 lg:px-10";
+const allNavigationItems = [...navigationItems, contactNavigationItem];
 
 function SaveRateAfricaLogo({
   href,
@@ -174,7 +218,7 @@ export function SiteHeader({
 
     const sectionIds = [
       "home",
-      ...navigationItems.flatMap((item) => (item.sectionId ? [item.sectionId] : []))
+      ...allNavigationItems.flatMap((item) => (item.sectionId ? [item.sectionId] : []))
     ];
     const sections = sectionIds
       .map((sectionId) => document.getElementById(sectionId))
@@ -353,9 +397,10 @@ export function SiteHeader({
       return;
     }
 
-    const matchedNavTarget = navigationItems.find((item) => {
+    const matchedNavTarget = allNavigationItems.find((item) => {
       const haystack = [
         item.label,
+        item.description ?? "",
         item.sectionId ?? ""
       ]
         .join(" ")
@@ -373,11 +418,57 @@ export function SiteHeader({
   }
 
   function isActiveNavigationItem(item: NavigationItem) {
+    if (item.matchPathnames?.includes(pathname)) {
+      return true;
+    }
+
     if (pathname === "/") {
       return activeSectionId === item.sectionId;
     }
 
-    return false;
+    if (item.sectionId) {
+      return false;
+    }
+
+    return [item.href, item.routeHref]
+      .filter((href): href is string => Boolean(href))
+      .map((href) => href.split("#")[0])
+      .includes(pathname);
+  }
+
+  function handleNavigationClick(
+    event: MouseEvent<HTMLAnchorElement>,
+    item: NavigationItem
+  ) {
+    if (!item.sectionId) {
+      closePanels();
+      return;
+    }
+
+    event.preventDefault();
+    navigateTo(getNavigationHref(item), item.sectionId);
+
+    if (pathname === "/") {
+      setActiveSectionId(item.sectionId);
+    }
+  }
+
+  function renderFeatureIcon(item: NavigationItem) {
+    if (!item.icon) {
+      return null;
+    }
+
+    const Icon = item.icon;
+
+    return (
+      <div
+        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] ${
+          item.iconBoxClassName ?? "bg-[#f4faf5]"
+        }`}
+      >
+        <Icon className={`h-5 w-5 ${item.iconColorClassName ?? "text-[#2e7d32]"}`} />
+      </div>
+    );
   }
 
   return (
@@ -410,33 +501,37 @@ export function SiteHeader({
           <div className="relative flex h-[60px] items-center justify-between gap-4">
             <div className="flex min-w-0 flex-1 items-center">
               <SaveRateAfricaLogo href={getHomeHref()} onClick={handleLogoClick} />
-              <nav aria-label="Primary" className="ml-3 hidden min-w-0 lg:flex">
-                <ul className="flex min-w-0 items-center gap-1 whitespace-nowrap">
+              <nav aria-label="Primary" className="ml-4 hidden min-w-0 flex-1 lg:flex">
+                <ul className="flex min-w-0 items-center gap-2">
                 {navigationItems.map((item) => {
                   const isActive = isActiveNavigationItem(item);
 
                   return (
-                    <li key={item.label} className="list-none">
+                    <li key={item.label} className="min-w-0 max-w-[170px] flex-1 list-none">
                       <Link
-                        className={`inline-flex h-[60px] cursor-pointer items-center border-b-2 px-[10px] py-[6px] text-[13px] font-medium transition ${
+                        className={`group flex min-w-0 items-center gap-2 rounded-[14px] border px-3 py-[7px] transition-colors ${
                           isActive
-                            ? "active border-[#1b5e20] font-semibold text-[#1b5e20]"
-                            : "border-transparent text-[#2e4a2e] hover:text-[#2e7d32]"
+                            ? "border-[#c8e6c9] bg-[#f4faf5] text-[#1b5e20] shadow-[0_0_0_1px_rgba(46,125,50,0.08)]"
+                            : "border-transparent bg-white text-[#2e4a2e] hover:border-[#dcedc8] hover:bg-[#f8fcf8]"
                         }`}
                         href={getNavigationHref(item)}
-                        onClick={(event) => {
-                          if (!item.sectionId) {
-                            return;
-                          }
-
-                          event.preventDefault();
-                          navigateTo(getNavigationHref(item), item.sectionId);
-                          if (pathname === "/") {
-                            setActiveSectionId(item.sectionId);
-                          }
-                        }}
+                        onClick={(event) => handleNavigationClick(event, item)}
                       >
-                        <span>{item.label}</span>
+                        {renderFeatureIcon(item)}
+                        <span className="min-w-0">
+                          <span
+                            className={`block truncate text-[12px] leading-[1.2] transition-colors ${
+                              isActive
+                                ? "font-bold text-[#1b5e20]"
+                                : "font-semibold text-[#1a2e1a] group-hover:text-[#1b5e20]"
+                            }`}
+                          >
+                            {item.label}
+                          </span>
+                          <span className="mt-[2px] block truncate text-[9px] leading-[1.3] text-[#7a9a7a]">
+                            {item.description}
+                          </span>
+                        </span>
                       </Link>
                     </li>
                   );
@@ -446,6 +541,17 @@ export function SiteHeader({
             </div>
 
             <div className="hidden shrink-0 items-center gap-2 lg:flex">
+              <Link
+                className={`inline-flex h-9 items-center rounded-full px-3 text-[13px] font-semibold transition ${
+                  isActiveNavigationItem(contactNavigationItem)
+                    ? "bg-[#f4faf5] text-[#1b5e20]"
+                    : "text-[#2e4a2e] hover:bg-[#f4faf5] hover:text-[#2e7d32]"
+                }`}
+                href={getNavigationHref(contactNavigationItem)}
+                onClick={(event) => handleNavigationClick(event, contactNavigationItem)}
+              >
+                {contactNavigationItem.label}
+              </Link>
               <div className="relative flex items-center">
                 <button
                   aria-expanded={isSearchOpen}
@@ -497,7 +603,7 @@ export function SiteHeader({
                 ) : null}
               </div>
 
-              <div className="ml-4 flex shrink-0 items-center gap-2">
+              <div className="ml-2 flex shrink-0 items-center gap-2">
                 {appDownloadButtons.map((button) => (
                   <AppStoreBadge key={button.platform} {...button} />
                 ))}
@@ -590,19 +696,27 @@ export function SiteHeader({
         </div>
 
         <div className="space-y-1">
-          {navigationItems.map((item) => {
+          {[...navigationItems, contactNavigationItem].map((item) => {
             const isActive = isActiveNavigationItem(item);
 
             return (
               <div key={item.label} className="border-b border-[#e8f5e9]">
                 <Link
-                  className={`block cursor-pointer py-3 text-[15px] ${
+                  className={`flex cursor-pointer items-center gap-3 py-3 ${
                     isActive ? "font-semibold text-[#1b5e20]" : "text-[#1a2e1a]"
                   }`}
-                  href={item.routeHref ?? "/#contact"}
-                  onClick={closeDrawer}
+                  href={getNavigationHref(item)}
+                  onClick={(event) => handleNavigationClick(event, item)}
                 >
-                  {item.label}
+                  {renderFeatureIcon(item)}
+                  <span className="min-w-0">
+                    <span className="block text-[15px]">{item.label}</span>
+                    {item.description ? (
+                      <span className="mt-1 block text-[11px] font-medium text-[#7a9a7a]">
+                        {item.description}
+                      </span>
+                    ) : null}
+                  </span>
                 </Link>
               </div>
             );

@@ -1,16 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import type { LucideIcon } from "lucide-react";
 import {
-  Activity,
-  BellRing,
-  Bot,
   CheckCircle2,
-  Clock3,
   CircleDollarSign,
-  CreditCard,
   LineChart,
   ShieldCheck,
   Star
@@ -45,90 +38,10 @@ interface HomePageShellProps {
   initialComparison: ComparisonResult;
 }
 
-interface SlimFeatureItemDefinition {
-  icon: LucideIcon;
-  iconBoxClassName: string;
-  iconColorClassName: string;
-  kind: "ai" | "link";
-  subtitle: string;
-  title: string;
-  href?: string;
-  sectionId?: string;
-}
-
-const slimFeatureItems: SlimFeatureItemDefinition[] = [
-  {
-    kind: "link",
-    href: "/credit-cards",
-    icon: CreditCard,
-    iconBoxClassName: "bg-[#e8f5e9]",
-    iconColorClassName: "text-[#2e7d32]",
-    subtitle: "Cards for the Nigerian diaspora",
-    title: "Build Credit"
-  },
-  {
-    kind: "link",
-    href: "/#how-it-works",
-    sectionId: "how-it-works",
-    icon: Clock3,
-    iconBoxClassName: "bg-[#ede7f6]",
-    iconColorClassName: "text-[#5e35b1]",
-    subtitle: "Your 3-step send journey",
-    title: "How It Works"
-  },
-  {
-    kind: "link",
-    href: "/alerts",
-    sectionId: "rate-alerts",
-    icon: BellRing,
-    iconBoxClassName: "bg-[#e1f5fe]",
-    iconColorClassName: "text-[#0288d1]",
-    subtitle: "Get notified at your target",
-    title: "Rate Alerts"
-  },
-  {
-    kind: "link",
-    href: "/#smart-sending",
-    sectionId: "smart-sending",
-    icon: Activity,
-    iconBoxClassName: "bg-[#fce4ec]",
-    iconColorClassName: "text-[#c62828]",
-    subtitle: "Best time and route guidance",
-    title: "Smart Sending"
-  },
-  {
-    kind: "ai",
-    icon: Bot,
-    iconBoxClassName: "bg-[#f4faf5]",
-    iconColorClassName: "text-[#2e7d32]",
-    subtitle: "Open the live assistant",
-    title: "Ask AI"
-  }
-];
-
 const reviewCountries = ["USA", "UK", "Canada"] as const;
 const pageShellClassName = "mx-auto w-full max-w-[1200px] px-6";
 const topLevelSectionInnerClassName = `${pageShellClassName} py-9 min-[600px]:py-[52px] lg:py-[72px]`;
 const sectionDividerClassName = "border-t border-[#e8f5e9]";
-const featureHrefBySectionId = slimFeatureItems.reduce<Record<string, string>>(
-  (sectionHrefMap, item) => {
-    if (item.sectionId && item.href) {
-      sectionHrefMap[item.sectionId] = item.href;
-    }
-
-    return sectionHrefMap;
-  },
-  {}
-);
-const observedHomepageSectionIds = [
-  "compare-rates",
-  "rate-alerts",
-  "how-it-works",
-  "smart-sending",
-  "market-timing",
-  "rate-chart",
-  "contact"
-] as const;
 
 function buildLiveReviewComparisons(
   comparison: ComparisonResult
@@ -171,7 +84,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [nextRefreshAt, setNextRefreshAt] = useState(initialComparison.cachedUntil);
-  const [activeFeatureHref, setActiveFeatureHref] = useState<string | null>(null);
   const amountRef = useRef(amount);
   const senderCountryRef = useRef(senderCountry);
   const sortByRef = useRef(sortBy);
@@ -310,62 +222,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
     };
   }, []);
 
-  useEffect(() => {
-    const sections = observedHomepageSectionIds
-      .map((sectionId) => document.getElementById(sectionId))
-      .filter((section): section is HTMLElement => Boolean(section));
-
-    if (!sections.length) {
-      return;
-    }
-
-    const stickyOffset = 125;
-    const visibleSections = new Map<string, number>();
-
-    const updateActiveFeature = () => {
-      const nextSectionId =
-        [...visibleSections.entries()]
-          .filter(([sectionId]) => Boolean(featureHrefBySectionId[sectionId]))
-          .sort((entryA, entryB) => entryB[1] - entryA[1])[0]?.[0] ?? null;
-      const nextActiveHref = nextSectionId
-        ? featureHrefBySectionId[nextSectionId] ?? null
-        : null;
-
-      setActiveFeatureHref((currentHref) =>
-        currentHref === nextActiveHref ? currentHref : nextActiveHref
-      );
-    };
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) {
-            visibleSections.delete(entry.target.id);
-            return;
-          }
-
-          visibleSections.set(
-            entry.target.id,
-            entry.intersectionRatio +
-              (entry.boundingClientRect.top <= stickyOffset ? 0.1 : 0)
-          );
-        });
-
-        updateActiveFeature();
-      },
-      {
-        rootMargin: `-${stickyOffset}px 0px -45% 0px`,
-        threshold: [0, 0.15, 0.35, 0.55]
-      }
-    );
-
-    sections.forEach((section) => observer.observe(section));
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
   function handleCompare() {
     document
       .querySelector("#compare-rates")
@@ -388,85 +244,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
       <SiteHeader showAnnouncementBar />
 
       <main className="overflow-x-hidden pb-32 md:pb-20">
-
-        <section
-          id="feature-hub"
-          className="sticky top-[60px] z-[999] hidden border-b border-[#e0ede2] bg-white shadow-[0_2px_8px_rgba(46,125,50,0.07)] min-[600px]:block"
-        >
-          <div className="mx-auto grid max-w-[1100px] min-[600px]:grid-cols-3 min-[600px]:px-4 lg:grid-cols-5 lg:px-7">
-              {slimFeatureItems.map((item, index) => {
-                const Icon = item.icon;
-                const isActiveFeature = item.href === activeFeatureHref;
-                const tabletRightBorderClassName =
-                  index === 0 || index === 1 || index === 3
-                    ? "min-[600px]:max-[1023px]:border-r"
-                    : "";
-                const tabletBottomBorderClassName =
-                  index < 3 ? "min-[600px]:max-[1023px]:border-b" : "";
-                const desktopRightBorderClassName =
-                  index < slimFeatureItems.length - 1 ? "lg:border-r" : "";
-                const itemClassName = `group flex cursor-pointer items-center gap-3 border-[#e8f0e8] px-5 py-[14px] no-underline transition-colors duration-200 hover:bg-[#f4faf5] ${tabletRightBorderClassName} ${tabletBottomBorderClassName} ${desktopRightBorderClassName}`;
-                const iconBoxClassName = `flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] transition-[transform,box-shadow] duration-[180ms] group-hover:scale-[1.06] ${item.iconBoxClassName} ${
-                  isActiveFeature ? "shadow-[0_0_0_2px_#2e7d32]" : ""
-                }`;
-                const titleClassName = isActiveFeature
-                  ? "whitespace-nowrap text-[12px] font-bold leading-[1.3] text-[#1b5e20] transition-colors duration-[180ms]"
-                  : "whitespace-nowrap text-[12px] font-semibold leading-[1.3] text-[#1a2e1a] transition-colors duration-[180ms] group-hover:text-[#1b5e20]";
-
-                if (item.kind === "ai") {
-                  return (
-                    <AIAssistant
-                      key={item.title}
-                      comparison={comparison}
-                      floatingButtonClassName="min-[600px]:hidden"
-                      renderTrigger={(openPanel) => (
-                        <button
-                          className={itemClassName}
-                          type="button"
-                          onClick={openPanel}
-                        >
-                          <div className={iconBoxClassName}>
-                            <Icon className={`h-5 w-5 ${item.iconColorClassName}`} />
-                          </div>
-                          <div className="flex min-w-0 flex-1 flex-col gap-[2px] text-left">
-                            <span className={titleClassName}>
-                              {item.title}
-                            </span>
-                            <span className="overflow-hidden text-ellipsis whitespace-nowrap text-[10px] leading-[1.4] text-[#7a9a7a]">
-                              {item.subtitle}
-                            </span>
-                          </div>
-                        </button>
-                      )}
-                      showFloatingButton
-                    />
-                  );
-                }
-
-                return (
-                  <Link
-                    key={item.title}
-                    aria-current={isActiveFeature ? "location" : undefined}
-                    className={itemClassName}
-                    href={item.href ?? "/"}
-                  >
-                    <div className={iconBoxClassName}>
-                      <Icon className={`h-5 w-5 ${item.iconColorClassName}`} />
-                    </div>
-                    <div className="flex min-w-0 flex-1 flex-col gap-[2px]">
-                      <span className={titleClassName}>
-                        {item.title}
-                      </span>
-                      <span className="overflow-hidden text-ellipsis whitespace-nowrap text-[10px] leading-[1.4] text-[#7a9a7a]">
-                        {item.subtitle}
-                      </span>
-                    </div>
-                  </Link>
-                );
-              })}
-          </div>
-        </section>
-
         <HeroSection
           alertsAnchorRef={alertsRef}
           alertsContent={<AlertsForm variant="hero" />}
@@ -477,6 +254,8 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
           onCompare={handleCompare}
           onSenderCountryChange={setSenderCountry}
         />
+
+        <AIAssistant comparison={comparison} />
 
         <section id="compare-rates" className={sectionDividerClassName}>
           <div className={topLevelSectionInnerClassName}>
