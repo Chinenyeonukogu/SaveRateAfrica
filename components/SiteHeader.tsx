@@ -77,21 +77,6 @@ const contactNavigationItem: NavigationItem = {
   sectionId: "contact"
 };
 
-const appDownloadButtons = [
-  {
-    href: "/manifest.webmanifest",
-    label: "App Store",
-    platform: "iOS" as const,
-    prefix: "Download on the"
-  },
-  {
-    href: "/manifest.webmanifest",
-    label: "Google Play",
-    platform: "Android" as const,
-    prefix: "Get it on"
-  }
-] as const;
-
 const brandFontStyle = {
   fontFamily: '"Sora", var(--font-heading), sans-serif'
 } as const;
@@ -141,53 +126,6 @@ function SaveRateAfricaLogo({
       </svg>
       <span className="ml-0 text-[20px] font-bold leading-none tracking-[-0.03em]">
         Save<span className="text-[#2e7d32]">Rate</span>Africa
-      </span>
-    </a>
-  );
-}
-
-function AppleBadgeIcon() {
-  return (
-    <svg aria-hidden="true" className="h-4 w-4 shrink-0 fill-current" viewBox="0 0 24 24">
-      <path d="M16.52 12.55c.03 2.3 2.01 3.07 2.03 3.08-.02.06-.31 1.09-1.03 2.15-.62.91-1.27 1.82-2.3 1.84-1 .02-1.33-.6-2.49-.6-1.16 0-1.53.58-2.46.62-1 .04-1.76-1-2.39-1.91-1.29-1.88-2.28-5.29-.95-7.65.66-1.17 1.87-1.91 3.16-1.93.99-.02 1.93.67 2.56.67.62 0 1.78-.83 3-.71.51.02 1.97.21 2.9 1.59-.08.05-1.73 1.01-1.76 2.85Zm-2.06-6.15c.54-.65.89-1.57.79-2.48-.77.03-1.69.52-2.24 1.16-.5.58-.92 1.5-.81 2.38.85.07 1.71-.44 2.26-1.06Z" />
-    </svg>
-  );
-}
-
-function GooglePlayBadgeIcon() {
-  return (
-    <svg aria-hidden="true" className="h-4 w-4 shrink-0" viewBox="0 0 24 24">
-      <path d="M3.5 3.2 13.7 12 3.5 20.8Z" fill="#00d2ff" />
-      <path d="M13.7 12 17.2 8.9 21 11.1c1 .56 1 1.24 0 1.8l-3.8 2.2Z" fill="#ffd54f" />
-      <path d="M3.5 3.2 17.2 8.9 13.7 12Z" fill="#66bb6a" />
-      <path d="M3.5 20.8 13.7 12 17.2 15.1Z" fill="#ef5350" />
-    </svg>
-  );
-}
-
-function AppStoreBadge({
-  href,
-  label,
-  platform,
-  prefix
-}: (typeof appDownloadButtons)[number]) {
-  const Icon = platform === "iOS" ? AppleBadgeIcon : GooglePlayBadgeIcon;
-  const isIOS = platform === "iOS";
-
-  return (
-    <a
-      className={`inline-flex h-9 items-center gap-2 rounded-[7px] border px-3 py-[5px] text-white ${
-        isIOS ? "border-black bg-black" : "border-[#016b4b] bg-[#01875f]"
-      }`}
-      download
-      href={href}
-    >
-      <Icon />
-      <span className="flex flex-col leading-none" style={brandFontStyle}>
-        <span className="text-[8px] font-medium tracking-[0.02em] text-white/85">
-          {prefix}
-        </span>
-        <span className="mt-[2px] text-[11px] font-bold">{label}</span>
       </span>
     </a>
   );
@@ -639,12 +577,6 @@ export function SiteHeader({
                   </div>
                 ) : null}
               </div>
-
-              <div className="ml-2 flex shrink-0 items-center gap-2">
-                {appDownloadButtons.map((button) => (
-                  <AppStoreBadge key={button.platform} {...button} />
-                ))}
-              </div>
             </div>
 
             <div className="hidden shrink-0 items-center gap-2 md:flex lg:hidden">
@@ -797,11 +729,6 @@ export function SiteHeader({
           })}
         </div>
 
-        <div className="mt-5 flex flex-col gap-2">
-          {appDownloadButtons.map((button) => (
-            <AppStoreBadge key={button.platform} {...button} />
-          ))}
-        </div>
       </aside>
 
       {showBreadcrumb ? (
