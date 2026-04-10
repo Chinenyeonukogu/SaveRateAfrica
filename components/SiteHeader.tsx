@@ -471,6 +471,26 @@ export function SiteHeader({
     );
   }
 
+  function renderTabletNavigationItem(item: NavigationItem) {
+    const isActive = isActiveNavigationItem(item);
+
+    return (
+      <Link
+        aria-label={item.label}
+        className={`group inline-flex h-11 w-11 items-center justify-center rounded-[14px] border p-[3px] transition-colors ${
+          isActive
+            ? "border-[#c8e6c9] bg-[#f4faf5] shadow-[0_0_0_1px_rgba(46,125,50,0.08)]"
+            : "border-transparent bg-white hover:border-[#dcedc8] hover:bg-[#f8fcf8]"
+        }`}
+        href={getNavigationHref(item)}
+        title={item.label}
+        onClick={(event) => handleNavigationClick(event, item)}
+      >
+        {renderFeatureIcon(item)}
+      </Link>
+    );
+  }
+
   return (
     <>
       {showAnnouncementBar ? (
@@ -496,7 +516,7 @@ export function SiteHeader({
         </div>
       ) : null}
 
-      <header className="sticky top-0 z-[1000] border-b border-[#e0ede2] bg-white shadow-[0_2px_8px_rgba(46,125,50,0.08)]">
+      <header className="sticky top-0 z-[999] border-b border-[#e0ede2] bg-white shadow-[0_2px_8px_rgba(46,125,50,0.08)]">
         <div className={headerShellClassName}>
           <div className="relative flex h-[60px] items-center justify-between gap-4">
             <div className="flex min-w-0 flex-1 items-center">
@@ -536,6 +556,19 @@ export function SiteHeader({
                     </li>
                   );
                 })}
+                </ul>
+              </nav>
+
+              <nav
+                aria-label="Tablet primary"
+                className="ml-3 hidden shrink-0 items-center md:flex lg:hidden"
+              >
+                <ul className="flex items-center gap-1">
+                  {navigationItems.map((item) => (
+                    <li key={item.label} className="list-none">
+                      {renderTabletNavigationItem(item)}
+                    </li>
+                  ))}
                 </ul>
               </nav>
             </div>
@@ -610,7 +643,19 @@ export function SiteHeader({
               </div>
             </div>
 
-            <div className="flex shrink-0 items-center gap-2 lg:hidden">
+            <div className="hidden shrink-0 items-center gap-2 md:flex lg:hidden">
+              <Link
+                className={`inline-flex h-9 items-center rounded-full px-3 text-[13px] font-semibold transition ${
+                  isActiveNavigationItem(contactNavigationItem)
+                    ? "bg-[#f4faf5] text-[#1b5e20]"
+                    : "text-[#2e4a2e] hover:bg-[#f4faf5] hover:text-[#2e7d32]"
+                }`}
+                href={getNavigationHref(contactNavigationItem)}
+                onClick={(event) => handleNavigationClick(event, contactNavigationItem)}
+              >
+                {contactNavigationItem.label}
+              </Link>
+
               <button
                 aria-expanded={isSearchOpen}
                 aria-label={isSearchOpen ? "Close search" : "Open search"}
@@ -625,6 +670,21 @@ export function SiteHeader({
                 <Search className="h-4 w-4" />
               </button>
 
+              <button
+                aria-expanded={isDrawerOpen}
+                aria-label={isDrawerOpen ? "Close menu" : "Open menu"}
+                className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-[#dcedc8] text-[#1a2e1a]"
+                type="button"
+                onClick={() => {
+                  closeSearch();
+                  setIsDrawerOpen((current) => !current);
+                }}
+              >
+                {isDrawerOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </button>
+            </div>
+
+            <div className="flex shrink-0 items-center md:hidden">
               <button
                 aria-expanded={isDrawerOpen}
                 aria-label={isDrawerOpen ? "Close menu" : "Open menu"}
@@ -696,6 +756,23 @@ export function SiteHeader({
         </div>
 
         <div className="space-y-1">
+          <div className="border-b border-[#e8f5e9]">
+            <button
+              className="flex w-full items-center gap-3 py-3 text-left text-[#1a2e1a]"
+              type="button"
+              onClick={() => {
+                closeDrawer();
+                setIsSearchOpen(true);
+                setNoResultsQuery(null);
+              }}
+            >
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-[#f4faf5]">
+                <Search className="h-5 w-5 text-[#2e7d32]" />
+              </div>
+              <span className="block text-[15px]">Search</span>
+            </button>
+          </div>
+
           {[...navigationItems, contactNavigationItem].map((item) => {
             const isActive = isActiveNavigationItem(item);
 
