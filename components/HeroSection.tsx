@@ -134,14 +134,14 @@ export function HeroSection({
       className="mx-3 my-3 overflow-hidden rounded-[10px] bg-[linear-gradient(140deg,#1b5e20_0%,#2e7d32_35%,#1a3a22_70%,#0d2010_100%)] min-[600px]:mx-4 min-[600px]:my-4 min-[600px]:rounded-[12px] lg:mx-auto lg:my-6 lg:max-w-[1200px] lg:rounded-[16px]"
     >
       <div className="px-5 py-7 text-white min-[600px]:px-7 min-[600px]:py-9 lg:px-10 lg:pb-11 lg:pt-12">
-        <div className="flex flex-col gap-8">
-          <div className="pt-0">
+        <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[minmax(0,1fr)_420px] lg:gap-x-10 lg:gap-y-6">
+          <div className="pt-0 lg:col-start-1 lg:row-start-1">
             <div className="mb-[18px] inline-flex w-fit items-center rounded-full border border-white/20 bg-white/10 px-[14px] py-[5px] text-[10px] font-medium uppercase tracking-[0.8px] text-[#a5d6a7]">
               <span className="mr-[6px] inline-flex h-[6px] w-[6px] rounded-full bg-[#69f0ae] animate-hero-live-pulse" />
               Real-Time Rates · Compare &amp; Save Instantly
             </div>
 
-            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between lg:grid lg:grid-cols-1">
               <h1
                 className="max-w-[620px] font-heading text-[24px] font-bold leading-[1.18] tracking-[-0.5px] text-white min-[600px]:text-[32px]"
                 style={brandFontStyle}
@@ -149,7 +149,7 @@ export function HeroSection({
                 Send Money to <span className="text-[#69f0ae]">Nigeria.</span> Compare and save instantly.
               </h1>
 
-              <div className="flex shrink-0 flex-col gap-[10px] md:items-end">
+              <div className="flex shrink-0 flex-col gap-[10px] md:items-end lg:hidden">
                 {appDownloadButtons.map((button) => (
                   <HeroStoreBadge key={button.platform} {...button} />
                 ))}
@@ -173,27 +173,32 @@ export function HeroSection({
             </div>
           </div>
 
-          <div className="grid gap-5 lg:grid-cols-2 lg:gap-5 lg:items-start">
-            {alertsContent ? (
-              <div
-                id="rate-alerts"
-                ref={alertsAnchorRef}
-                className="h-full [&_.alert-hero-card]:mt-0"
-              >
-                {alertsContent}
-              </div>
-            ) : null}
+          {alertsContent ? (
+            <div
+              id="rate-alerts"
+              ref={alertsAnchorRef}
+              className="h-full lg:col-start-1 lg:row-start-2 lg:max-w-[420px] [&_.alert-hero-card]:mt-0"
+            >
+              {alertsContent}
+            </div>
+          ) : null}
 
-            <div className="w-full">
-              <div className="w-full rounded-[14px] bg-white p-[22px] text-[#1a2e1a] shadow-[0_8px_32px_rgba(0,0,0,0.18)]">
+          <div className="w-full lg:col-start-2 lg:row-start-1 lg:self-start">
+            <div className="mb-3 hidden flex-col items-end gap-[10px] lg:flex">
+              {appDownloadButtons.map((button) => (
+                <HeroStoreBadge key={button.platform} {...button} />
+              ))}
+            </div>
+
+            <div className="w-full rounded-[14px] bg-white p-5 text-[#1a2e1a] shadow-[0_8px_32px_rgba(0,0,0,0.18)]">
                 <p className="mb-1 text-[9px] font-semibold uppercase tracking-[1.8px] text-[#2e7d32]">
                   COMPARE NOW
                 </p>
-                <h2 className="mb-[18px] text-[17px] font-semibold text-[#1a2e1a]">
+                <h2 className="mb-[14px] text-[17px] font-semibold text-[#1a2e1a]">
                   Check your best NGN payout
                 </h2>
 
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <label className="block">
                     <span className="mb-[6px] block text-[10px] font-medium uppercase tracking-[0.5px] text-[#8a9a8a]">
                       Send amount
@@ -229,7 +234,7 @@ export function HeroSection({
                       </div>
                     </div>
 
-                    <div className="mt-[6px] flex flex-wrap gap-[6px]">
+                    <div className="mt-[5px] flex flex-wrap gap-[6px]">
                       {quickAmounts.map((quickAmount) => {
                         const isActive = amount === String(quickAmount);
 
@@ -300,7 +305,7 @@ export function HeroSection({
                     {isLoading ? "Refreshing rates..." : "Compare Rates Now →"}
                   </button>
 
-                  <div className="rounded-[10px] border border-[#c8e6c9] bg-[#f4faf5] p-[14px]">
+                  <div className="rounded-[10px] border border-[#c8e6c9] bg-[#f4faf5] p-3">
                     <p className="text-[10px] font-semibold uppercase tracking-[1px] text-[#2e7d32]">
                       💰 SAVINGS CALCULATOR
                     </p>
@@ -347,7 +352,6 @@ export function HeroSection({
                   </div>
                 </div>
               </div>
-            </div>
           </div>
         </div>
       </div>
