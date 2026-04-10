@@ -391,7 +391,7 @@ export function SiteHeader({
     }
   }
 
-  function renderFeatureIcon(item: NavigationItem) {
+  function renderFeatureIcon(item: NavigationItem, compact = false) {
     if (!item.icon) {
       return null;
     }
@@ -400,11 +400,17 @@ export function SiteHeader({
 
     return (
       <div
-        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] ${
+        className={`flex shrink-0 items-center justify-center ${
+          compact ? "h-8 w-8 rounded-[9px]" : "h-9 w-9 rounded-[10px]"
+        } ${
           item.iconBoxClassName ?? "bg-[#f4faf5]"
         }`}
       >
-        <Icon className={`h-5 w-5 ${item.iconColorClassName ?? "text-[#2e7d32]"}`} />
+        <Icon
+          className={`${compact ? "h-4 w-4" : "h-5 w-5"} ${
+            item.iconColorClassName ?? "text-[#2e7d32]"
+          }`}
+        />
       </div>
     );
   }
@@ -415,7 +421,7 @@ export function SiteHeader({
     return (
       <Link
         aria-label={item.label}
-        className={`group flex min-w-0 items-center gap-2 rounded-[14px] border px-2.5 py-[3px] transition-colors ${
+        className={`group flex min-w-0 items-center gap-1.5 rounded-[14px] border px-3 py-1.5 transition-colors min-[860px]:gap-2 ${
           isActive
             ? "border-[#c8e6c9] bg-[#f4faf5] shadow-[0_0_0_1px_rgba(46,125,50,0.08)]"
             : "border-transparent bg-white hover:border-[#dcedc8] hover:bg-[#f8fcf8]"
@@ -424,9 +430,9 @@ export function SiteHeader({
         title={item.label}
         onClick={(event) => handleNavigationClick(event, item)}
       >
-        {renderFeatureIcon(item)}
+        {renderFeatureIcon(item, true)}
         <span
-          className={`block min-w-0 truncate text-[11px] leading-[1.2] ${
+          className={`block whitespace-nowrap text-[10px] leading-[1.2] min-[860px]:text-[11px] ${
             isActive
               ? "font-bold text-[#1b5e20]"
               : "font-semibold text-[#1a2e1a] group-hover:text-[#1b5e20]"
@@ -469,12 +475,12 @@ export function SiteHeader({
             <div className="flex min-w-0 flex-1 items-center">
               <SaveRateAfricaLogo href={getHomeHref()} onClick={handleLogoClick} />
               <nav aria-label="Primary" className="ml-4 hidden min-w-0 flex-1 lg:flex">
-                <ul className="flex min-w-0 items-center gap-2">
+                <ul className="flex min-w-0 items-center gap-2.5 xl:gap-3">
                 {navigationItems.map((item) => {
                   const isActive = isActiveNavigationItem(item);
 
                   return (
-                    <li key={item.label} className="min-w-0 max-w-[190px] flex-1 list-none">
+                    <li key={item.label} className="min-w-fit flex-none list-none">
                       <Link
                         className={`group flex min-w-0 items-center gap-2 rounded-[14px] border px-5 py-2 transition-colors ${
                           isActive
@@ -486,7 +492,7 @@ export function SiteHeader({
                       >
                         {renderFeatureIcon(item)}
                         <span
-                          className={`block min-w-0 truncate text-[12px] leading-[1.2] transition-colors ${
+                          className={`block whitespace-nowrap text-[12px] leading-[1.2] transition-colors ${
                             isActive
                               ? "font-bold text-[#1b5e20]"
                               : "font-semibold text-[#1a2e1a] group-hover:text-[#1b5e20]"
