@@ -11,7 +11,6 @@ import {
 
 import { AIAssistant } from "@/components/AIAssistant";
 import { AlertsForm } from "@/components/AlertsForm";
-import { BestTimeToSend } from "@/components/BestTimeToSend";
 import { ComparisonTable } from "@/components/ComparisonTable";
 import { HeroSection } from "@/components/HeroSection";
 import { RateChart } from "@/components/RateChart";
@@ -69,7 +68,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
   const compareRef = useRef<HTMLDivElement | null>(null);
   const smartSendingRef = useRef<HTMLElement | null>(null);
   const alertsRef = useRef<HTMLDivElement | null>(null);
-  const bestTimeRef = useRef<HTMLDivElement | null>(null);
   const howItWorksRef = useRef<HTMLElement | null>(null);
   const rateChartRef = useRef<HTMLDivElement | null>(null);
   const [amount, setAmount] = useState(String(initialComparison.amount));
@@ -397,14 +395,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                 </div>
               </div>
             </section>
-          </div>
-        </section>
-
-        <section className={sectionDividerClassName}>
-          <div className={topLevelSectionInnerClassName}>
-            <div id="market-timing" ref={bestTimeRef}>
-              <BestTimeToSend comparison={comparison} />
-            </div>
           </div>
         </section>
 
