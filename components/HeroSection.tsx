@@ -134,8 +134,8 @@ export function HeroSection({
       className="mx-3 my-3 overflow-hidden rounded-[10px] bg-[linear-gradient(140deg,#1b5e20_0%,#2e7d32_35%,#1a3a22_70%,#0d2010_100%)] min-[600px]:mx-4 min-[600px]:my-4 min-[600px]:rounded-[12px] lg:mx-auto lg:my-6 lg:max-w-[1200px] lg:rounded-[16px]"
     >
       <div className="px-5 py-7 text-white min-[600px]:px-7 min-[600px]:py-9 lg:px-10 lg:pb-11 lg:pt-12">
-        <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[minmax(0,1fr)_420px] lg:gap-x-10 lg:gap-y-6">
-          <div className="pt-0 lg:col-start-1 lg:row-start-1">
+        <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[minmax(0,1fr)_420px] lg:items-stretch lg:gap-x-10">
+          <div className="flex flex-col gap-8 pt-0 lg:h-full lg:justify-between">
             <div className="mb-[18px] inline-flex w-fit items-center rounded-full border border-white/20 bg-white/10 px-[14px] py-[5px] text-[10px] font-medium uppercase tracking-[0.8px] text-[#a5d6a7]">
               <span className="mr-[6px] inline-flex h-[6px] w-[6px] rounded-full bg-[#69f0ae] animate-hero-live-pulse" />
               Real-Time Rates · Compare &amp; Save Instantly
@@ -171,19 +171,19 @@ export function HeroSection({
                 </div>
               ))}
             </div>
+
+            {alertsContent ? (
+              <div
+                id="rate-alerts"
+                ref={alertsAnchorRef}
+                className="lg:max-w-[420px] [&_.alert-hero-card]:mt-0"
+              >
+                {alertsContent}
+              </div>
+            ) : null}
           </div>
 
-          {alertsContent ? (
-            <div
-              id="rate-alerts"
-              ref={alertsAnchorRef}
-              className="h-full lg:col-start-1 lg:row-start-2 lg:max-w-[420px] [&_.alert-hero-card]:mt-0"
-            >
-              {alertsContent}
-            </div>
-          ) : null}
-
-          <div className="w-full lg:col-start-2 lg:row-start-1 lg:self-start">
+          <div className="w-full lg:self-start">
             <div className="mb-3 hidden flex-col items-end gap-[10px] lg:flex">
               {appDownloadButtons.map((button) => (
                 <HeroStoreBadge key={button.platform} {...button} />
