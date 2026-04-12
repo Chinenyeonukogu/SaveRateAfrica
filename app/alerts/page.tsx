@@ -42,7 +42,7 @@ export default function AlertsPage() {
                 <Zap className="h-6 w-6 text-brand-yellow" />
                 <p className="mt-3 font-semibold">Fast notifications</p>
                 <p className="mt-2 text-sm text-white/70">
-                  Email or SMS-based updates for target hits
+                  Email-based updates for target hits
                 </p>
               </div>
             </div>
