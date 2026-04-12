@@ -235,7 +235,7 @@ export function HeroSection({
                   Check your best NGN payout
                 </h2>
 
-                <div className="space-y-3">
+                <div className="flex h-full flex-col gap-3">
                   <label className="block">
                     <span className="mb-[6px] block text-[10px] font-medium uppercase tracking-[0.5px] text-[#8a9a8a]">
                       Send amount
@@ -342,7 +342,7 @@ export function HeroSection({
                     {isLoading ? "Refreshing rates..." : "Compare Rates Now →"}
                   </button>
 
-                  <div className="rounded-[10px] border border-[#c8e6c9] bg-[#f4faf5] p-3">
+                  <div className="flex flex-1 flex-col rounded-[10px] border border-[#c8e6c9] bg-[#f4faf5] p-3">
                     <p className="text-[10px] font-semibold uppercase tracking-[1px] text-[#2e7d32]">
                       💰 SAVINGS CALCULATOR
                     </p>
