@@ -24,6 +24,9 @@ export function SiteFooter() {
             <p className="mt-2 text-[13px] text-[#6a8a6a]">
               Helping the Nigerian diaspora send more money home.
             </p>
+            <p className="mt-2 text-[12px] text-[#7a9a7a]">
+              🇺🇸 United States · Serving the Nigerian diaspora worldwide
+            </p>
           </div>
 
           <div className="mb-9 grid grid-cols-1 gap-7 min-[600px]:grid-cols-2 min-[600px]:gap-7 lg:grid-cols-3 lg:gap-12">
