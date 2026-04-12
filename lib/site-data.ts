@@ -151,7 +151,7 @@ export const faqItems = [
       "It changes by day, funding method, and corridor. SaveRateAfrica ranks providers by actual NGN delivered after fees so you see the best-value option for your exact send amount."
   },
   {
-    question: "Is Wise or Remitly better for Nigeria?",
+    question: "Which provider is better for Nigeria?",
     answer:
       "Wise often wins on transparent pricing and repeat bank transfers, while Remitly is strong when speed, promotions, or cash pickup matter more. The better option depends on your amount and urgency."
   },
