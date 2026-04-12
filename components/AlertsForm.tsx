@@ -22,7 +22,7 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
     <div
       className={
         isHero
-          ? "alert-hero-card mt-6 flex h-full w-full max-w-full flex-col rounded-[14px] bg-white px-[22px] py-[20px] shadow-[0_8px_32px_rgba(0,0,0,0.18)]"
+          ? "alert-hero-card mt-6 flex h-full w-full max-w-full flex-col rounded-[14px] bg-white px-[22px] pb-[16px] pt-[20px] shadow-[0_8px_32px_rgba(0,0,0,0.18)]"
           : undefined
       }
     >
