@@ -36,12 +36,12 @@ interface HomePageShellProps {
 
 const reviewCountries = ["USA", "UK", "Canada"] as const;
 const pageShellClassName = "mx-auto w-full max-w-[1200px] px-6";
-const topLevelSectionInnerClassName = `${pageShellClassName} py-9 min-[600px]:py-[52px] lg:py-[72px]`;
+const comparisonSectionInnerClassName = `${pageShellClassName} py-9 min-[600px]:py-[52px] lg:py-[72px]`;
+const postComparisonSectionInnerClassName = `${pageShellClassName} py-6 min-[600px]:py-8 lg:py-10`;
 const sectionDividerClassName = "border-t border-[#e8f5e9]";
 const smartSendingChecklistItems = [
   "Compare multiple trusted providers in one place to find the best overall value",
   "See exactly how much your recipient will receive after all fees",
-  "Understand trade-offs between speed, cost, and payout methods",
   "Avoid hidden charges and poor exchange rates before they cost you",
   "Use our AI assistant to instantly find the best rates and get personalized recommendations"
 ] as const;
@@ -50,7 +50,7 @@ function SmartSendingIllustration() {
   return (
     <svg
       aria-hidden="true"
-      className="h-auto w-full max-w-[320px]"
+      className="h-auto w-full max-w-[140px] lg:max-w-[180px]"
       viewBox="0 0 360 280"
     >
       <defs>
@@ -354,10 +354,8 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
           onSenderCountryChange={setSenderCountry}
         />
 
-        <AIAssistant comparison={comparison} />
-
         <section id="compare-rates" className={sectionDividerClassName}>
-          <div className={topLevelSectionInnerClassName}>
+          <div className={comparisonSectionInnerClassName}>
             <div ref={compareRef}>
               <ComparisonTable
                 comparison={comparison}
@@ -374,32 +372,42 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
           </div>
         </section>
 
+        <section className={sectionDividerClassName}>
+          <div className={postComparisonSectionInnerClassName}>
+            <div id="rate-chart" ref={rateChartRef}>
+              <RateChart />
+            </div>
+          </div>
+        </section>
+
+        <AIAssistant comparison={comparison} />
+
         <section id="faq" className={sectionDividerClassName}>
-          <div className={topLevelSectionInnerClassName}>
+          <div className={postComparisonSectionInnerClassName}>
             <section
               id="how-it-works"
               ref={howItWorksRef}
-              className="rounded-[16px] border border-[#c8e6c9] bg-white px-4 py-5 min-[600px]:px-6 min-[600px]:py-8 lg:px-8 lg:py-10"
+              className="rounded-[16px] border border-[#c8e6c9] bg-white px-4 py-5 min-[600px]:px-6 min-[600px]:py-6 lg:px-8 lg:py-8"
             >
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-green">
                 How it works
               </p>
-              <h2 className="mt-2 text-[28px] font-heading text-brand-navy min-[600px]:text-3xl">
+              <h2 className="mb-4 mt-2 text-[28px] font-heading text-brand-navy min-[600px]:text-3xl">
                 A clearer route from diaspora wallet to Nigerian bank account
               </h2>
 
-              <div className="mt-8 grid min-[600px]:grid-cols-3">
+              <div className="grid gap-4 lg:grid-cols-3 lg:gap-0">
                 {howItWorksSteps.map((step, index) => (
                   <article
                     key={step.step}
-                    className={`relative min-[600px]:px-6 ${
+                    className={`relative lg:px-6 ${
                       index < howItWorksSteps.length - 1
-                        ? "border-b border-[#e8f5e9] pb-6 min-[600px]:border-b-0"
+                        ? "border-b border-[#e8f5e9] pb-4 lg:border-b-0"
                         : ""
-                    } ${index > 0 ? "pt-6 min-[600px]:pt-0" : ""}`}
+                    } ${index > 0 ? "pt-4 lg:pt-0" : ""}`}
                   >
                     {index < howItWorksSteps.length - 1 ? (
-                      <span className="absolute right-0 top-4 hidden h-[60px] border-r border-[#c8e6c9] min-[600px]:block" />
+                      <span className="absolute right-0 top-3 hidden h-[52px] border-r border-[#c8e6c9] lg:block" />
                     ) : null}
                     <p className="mb-[10px] text-[11px] font-semibold uppercase tracking-[0.18em] text-[#2e7d32]">
                       Step {step.step}
@@ -418,14 +426,14 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
         </section>
 
         <section className={sectionDividerClassName}>
-          <div className={topLevelSectionInnerClassName}>
+          <div className={postComparisonSectionInnerClassName}>
             <section
               id="smart-sending"
               ref={smartSendingRef}
-              className="rounded-[16px] border border-[#c8e6c9] bg-white px-4 py-5 min-[600px]:px-6 min-[600px]:py-8 lg:px-8 lg:py-10"
+              className="mx-auto mb-6 max-w-[1100px] rounded-[12px] border border-[#c8e6c9] bg-white px-4 py-4 min-[600px]:px-6 min-[600px]:py-6 lg:px-8 lg:py-7"
             >
-              <div className="flex flex-col gap-8 rounded-[14px] bg-[#f4faf5] p-6 min-[600px]:p-8 lg:flex-row lg:items-center lg:gap-12 lg:p-12">
-                <div className="flex shrink-0 flex-col items-center">
+              <div className="flex flex-col gap-7 rounded-[12px] bg-[#f4faf5] p-5 min-[600px]:px-8 min-[600px]:py-7 lg:flex-row lg:items-center">
+                <div className="hidden shrink-0 flex-col items-center min-[600px]:flex">
                   <SmartSendingIllustration />
                   <p className="mt-4 text-center text-[11px] font-bold uppercase tracking-[0.1em] text-[#1a7a4a]">
                     Smart Sending
@@ -434,7 +442,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
 
                 <div className="flex flex-1 flex-col gap-4">
                   <div>
-                    <h2 className="mb-[10px] text-[26px] font-extrabold leading-[1.25] text-[#0d1f12]">
+                    <h2 className="mb-4 text-[26px] font-extrabold leading-[1.25] text-[#0d1f12]">
                       Send smarter. Keep more of your money.
                     </h2>
                     <p className="text-[14px] font-medium leading-[1.75] text-[#2d4a35]">
@@ -450,7 +458,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
 
                   <div>
                     {smartSendingChecklistItems.map((item) => (
-                      <div key={item} className="mb-[10px] flex items-start gap-[11px]">
+                      <div key={item} className="mb-2 flex items-start gap-[11px]">
                         <span className="mt-px flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full bg-[#1a5c2a]">
                           <Check className="h-3.5 w-3.5 text-white" strokeWidth={3} />
                         </span>
@@ -461,7 +469,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                     ))}
                   </div>
 
-                  <p className="border-l-[3px] border-[#1a5c2a] pl-3 text-[14px] font-semibold leading-[1.7] text-[#2d4a35]">
+                  <p className="mt-3 border-l-[3px] border-[#1a5c2a] px-4 py-[10px] text-[13px] font-semibold leading-[1.7] text-[#2d4a35]">
                     Make confident decisions and send money knowing you&apos;re
                     getting the best deal available.
                   </p>
@@ -472,25 +480,17 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
         </section>
 
         <section className={sectionDividerClassName}>
-          <div className={topLevelSectionInnerClassName}>
-            <div id="rate-chart" ref={rateChartRef}>
-              <RateChart />
-            </div>
-          </div>
-        </section>
-
-        <section className={sectionDividerClassName}>
-          <div className={topLevelSectionInnerClassName}>
-            <section className="rounded-[16px] border border-[#c8e6c9] bg-white px-4 py-5 min-[600px]:px-6 min-[600px]:py-8 lg:px-8 lg:py-10">
-              <div className="flex flex-col gap-5">
+          <div className={postComparisonSectionInnerClassName}>
+            <section className="rounded-[16px] border border-[#c8e6c9] bg-white px-4 py-5 min-[600px]:px-6 min-[600px]:py-6 lg:px-8 lg:py-8">
+              <div className="flex flex-col gap-4">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-green">
                     Live provider reviews
                   </p>
-                  <h2 className="mt-2 text-[28px] font-heading text-brand-navy min-[600px]:text-3xl">
+                  <h2 className="mb-4 mt-2 text-[28px] font-heading text-brand-navy min-[600px]:text-3xl">
                     Real-time provider pulse for Nigerians sending abroad
                   </h2>
-                  <p className="mt-2 text-[12px] text-brand-navy/60 min-[600px]:text-sm">
+                  <p className="text-[12px] text-brand-navy/60 min-[600px]:text-sm">
                     Updated {formatDateTime(selectedReviewComparison.updatedAt)} for the{" "}
                     {reviewCountry} corridor.
                   </p>
@@ -514,11 +514,11 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                 </div>
               </div>
 
-              <div className="mt-6 grid gap-[14px] lg:grid-cols-3">
+              <div className="mt-4 grid gap-4 lg:grid-cols-3">
                 {liveReviewProviders.map((provider) => (
                   <article
                     key={`${reviewCountry}-${provider.slug}`}
-                    className="rounded-[12px] border border-[#c8e6c9] bg-white p-6"
+                    className="rounded-[12px] border border-[#c8e6c9] bg-white p-5"
                   >
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex items-center gap-1">
@@ -541,7 +541,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                       ) : null}
                     </div>
 
-                    <div className="mt-4 flex flex-wrap items-center gap-3 text-[12px] text-brand-navy/60 min-[600px]:text-sm">
+                    <div className="mt-3 flex flex-wrap items-center gap-3 text-[12px] text-brand-navy/60 min-[600px]:text-sm">
                       <span className="font-semibold text-brand-green">
                         {provider.name}
                       </span>
@@ -549,7 +549,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                       <span>{formatCompact(provider.reviewCount)} reviews</span>
                     </div>
 
-                    <p className="mt-4 text-[14px] leading-7 text-brand-navy/75 min-[600px]:text-base">
+                    <p className="mt-3 text-[14px] leading-7 text-brand-navy/75 min-[600px]:text-base">
                       {provider.name} is currently delivering{" "}
                       <span className="font-semibold text-brand-green">
                         {formatNaira(provider.amountReceived, {
@@ -571,7 +571,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                       send from {reviewCountry}. {provider.trustNote}
                     </p>
 
-                    <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                    <div className="mt-4 grid gap-3 sm:grid-cols-2">
                       <div className="rounded-[12px] bg-brand-light px-4 py-3">
                         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-navy/45">
                           Best for
@@ -591,7 +591,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                       </div>
                     </div>
 
-                    <div className="mt-5 border-t border-brand-navy/10 pt-4">
+                    <div className="mt-4 border-t border-brand-navy/10 pt-4">
                       <p className="text-[12px] text-brand-navy/60 min-[600px]:text-sm">
                         Supported by live provider ratings and current payout data
                         for the {reviewCountry} to Nigeria route.
@@ -605,16 +605,16 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
         </section>
 
         <section className={sectionDividerClassName}>
-          <div className={topLevelSectionInnerClassName}>
-            <section className="rounded-[16px] border border-brand-navy/10 bg-white px-4 py-5 shadow-float min-[600px]:px-6 min-[600px]:py-8 lg:px-8 lg:py-10">
+          <div className={postComparisonSectionInnerClassName}>
+            <section className="rounded-[16px] border border-brand-navy/10 bg-white px-4 py-5 shadow-float min-[600px]:px-6 min-[600px]:py-6 lg:px-8 lg:py-8">
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-green">
                 FAQ
               </p>
-              <h2 className="mt-2 text-[28px] font-heading text-brand-navy min-[600px]:text-3xl">
+              <h2 className="mb-4 mt-2 text-[28px] font-heading text-brand-navy min-[600px]:text-3xl">
                 Questions Nigerian diaspora senders ask most
               </h2>
 
-              <div className="mt-6 space-y-4">
+              <div className="space-y-4">
                 {faqItems.map((item) => (
                   <details
                     key={item.question}

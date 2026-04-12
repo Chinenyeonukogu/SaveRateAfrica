@@ -21,16 +21,16 @@ export function RateChart() {
   const [period, setPeriod] = useState<(typeof periods)[number]>("7D");
 
   return (
-    <div className="rounded-[12px] border border-[#c8e6c9] bg-white p-5 shadow-float min-[600px]:p-6">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+    <div className="rounded-[12px] border border-[#c8e6c9] bg-white p-4 shadow-float min-[600px]:p-5 lg:p-6">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-green">
             Currency trends
           </p>
-          <h3 className="mt-2 text-[28px] font-heading text-brand-navy min-[600px]:text-3xl">
+          <h3 className="mb-4 mt-2 text-[28px] font-heading text-brand-navy min-[600px]:text-3xl">
             USD, GBP, and CAD to NGN pulse
           </h3>
-          <p className="mt-2 max-w-2xl text-[12px] leading-6 text-brand-navy/70 min-[600px]:text-sm">
+          <p className="max-w-2xl text-[12px] leading-6 text-brand-navy/70 min-[600px]:text-sm">
             Track short-term movement before you send. Toggle between 7, 30,
             and 90-day views to spot better entry points.
           </p>
@@ -60,7 +60,7 @@ export function RateChart() {
         </div>
       </div>
 
-      <div className="mt-5 h-[320px] w-full sm:h-[360px]">
+      <div className="mt-6 h-[320px] w-full sm:h-[360px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={trendSeries[period]} margin={{ left: 0, right: 12, top: 6, bottom: 0 }}>
             <CartesianGrid stroke="rgba(10,22,40,0.08)" strokeDasharray="4 4" />
