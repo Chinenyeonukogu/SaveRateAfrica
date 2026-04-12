@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { BellRing, Crown, Zap } from "lucide-react";
+import { BellRing, Zap } from "lucide-react";
 
 import { AlertsForm } from "@/components/AlertsForm";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -32,7 +32,7 @@ export default function AlertsPage() {
               SaveRateAfrica notify you when the market moves in your favor.
             </p>
 
-            <div className="mt-8 grid gap-4 md:grid-cols-3">
+            <div className="mt-8 grid gap-4 md:grid-cols-2">
               <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
                 <BellRing className="h-6 w-6 text-brand-green" />
                 <p className="mt-3 font-semibold">Free tier</p>
@@ -43,13 +43,6 @@ export default function AlertsPage() {
                 <p className="mt-3 font-semibold">Fast notifications</p>
                 <p className="mt-2 text-sm text-white/70">
                   Email or SMS-based updates for target hits
-                </p>
-              </div>
-              <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
-                <Crown className="h-6 w-6 text-brand-coral" />
-                <p className="mt-3 font-semibold">Premium</p>
-                <p className="mt-2 text-sm text-white/70">
-                  Unlimited alerts for $2.99/month
                 </p>
               </div>
             </div>
