@@ -1,75 +1,22 @@
 "use client";
 
-import type { FormEvent } from "react";
 import { useState } from "react";
-import { BellRing, CheckCircle2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { BellRing } from "lucide-react";
 
 interface AlertsFormProps {
-  compact?: boolean;
   variant?: "default" | "hero";
 }
 
-const heroAlertBadges = [
-  { icon: "🔔", title: "Free", subtitle: "1 alert per month" },
-  { icon: "⚡", title: "Fast", subtitle: "Email or SMS" },
-  { icon: "👑", title: "Premium", subtitle: "Unlimited · $2.99/mo" }
-] as const;
+const subtitleText =
+  "Set your ideal rate and we'll send you a free email alert instantly the moment your target rate is available.";
 
-export function AlertsForm({
-  compact = false,
-  variant = "default"
-}: AlertsFormProps) {
+export function AlertsForm({ variant = "default" }: AlertsFormProps) {
+  const router = useRouter();
   const isHero = variant === "hero";
-  const [channel, setChannel] = useState<"email" | "sms">("email");
   const [targetRate, setTargetRate] = useState("1600");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
   const [consent, setConsent] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setMessage(null);
-
-    if (!consent) {
-      setMessage("Please confirm marketing consent to continue.");
-      return;
-    }
-
-    setSubmitting(true);
-
-    try {
-      const response = await fetch("/api/alerts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          channel,
-          email,
-          phone,
-          targetRate: Number.parseFloat(targetRate)
-        })
-      });
-
-      const payload = (await response.json()) as { message?: string; error?: string };
-
-      if (!response.ok) {
-        throw new Error(payload.error ?? "Something went wrong");
-      }
-
-      setMessage(payload.message ?? "Alert created successfully.");
-      setEmail("");
-      setPhone("");
-    } catch (error) {
-      setMessage(
-        error instanceof Error ? error.message : "We could not create your alert."
-      );
-    } finally {
-      setSubmitting(false);
-    }
-  }
 
   return (
     <div
@@ -95,19 +42,17 @@ export function AlertsForm({
             </div>
           </div>
           <p className="mt-[10px] border-l-[3px] border-[#1a5c2a] pl-3 text-[11px] font-medium leading-[1.6] text-[#2d4a35]">
-            Set your ideal rate and we alert you instantly — free for 1 alert per
-            month, unlimited on Premium.
+            {subtitleText}
           </p>
         </div>
       ) : null}
 
-      <form
+      <div
         className={`${
           isHero
             ? ""
             : "mx-auto max-w-[560px] rounded-[16px] border border-[#c8e6c9] bg-white px-4 py-5 shadow-float min-[600px]:px-6 min-[600px]:py-8"
         }`}
-        onSubmit={handleSubmit}
       >
         {!isHero ? (
           <div className="mx-auto max-w-[440px] text-center">
@@ -121,48 +66,16 @@ export function AlertsForm({
               Get notified when NGN hits your target
             </h3>
             <p className="mt-2 text-[12px] font-medium leading-6 text-[#2d4a35] min-[600px]:text-sm">
-              Free users get one alert per month. Premium users can track unlimited
-              targets across USD, GBP, and CAD routes.
+              {subtitleText}
             </p>
           </div>
         ) : null}
 
-        {!compact && (
-          <div
-            className={
-              isHero
-                ? "mb-4 flex flex-wrap gap-2"
-                : "mx-auto mt-6 grid max-w-[320px] grid-cols-2 gap-2 rounded-[12px] bg-brand-light p-2"
-            }
-          >
-            {(["email", "sms"] as const).map((value) => (
-              <button
-                key={value}
-                className={`toggle-btn min-h-11 capitalize transition ${
-                  isHero
-                    ? "rounded-full px-4 py-[6px] text-[11px] font-bold"
-                    : `rounded-[10px] border-2 border-[#1a5c2a] bg-transparent text-[12px] font-bold text-[#1a5c2a] min-[600px]:min-h-12 min-[600px]:text-sm ${
-                        value === channel
-                          ? "border-[#1a5c2a] bg-[#1a5c2a] text-white"
-                          : "hover:bg-[#f0f7f2]"
-                      }`
-                }`}
-                data-state={value === channel ? "active" : "inactive"}
-                data-type={value}
-                type="button"
-                onClick={() => setChannel(value)}
-              >
-                {value}
-              </button>
-            ))}
-          </div>
-        )}
-
         <div
           className={`grid gap-3 ${
             isHero
-              ? "min-[600px]:grid-cols-2 lg:grid-cols-[130px_minmax(0,1fr)_auto] lg:items-end"
-              : "mt-6 lg:grid-cols-[140px_minmax(0,1fr)_auto] lg:items-end"
+              ? "min-[600px]:grid-cols-2"
+              : "mt-6 min-[600px]:grid-cols-2"
           }`}
         >
           <label
@@ -187,61 +100,26 @@ export function AlertsForm({
             />
           </label>
 
-          {compact || channel === "email" ? (
-            <label
-              className={`${
-                isHero
-                  ? "space-y-1"
-                  : "space-y-2 min-[600px]:text-sm"
-              }`}
-            >
-              <span className="block text-[12px] font-bold uppercase tracking-[0.08em] text-[#0d1f12]">
-                Email
-              </span>
-              <input
-                className={`alert-input min-h-12 w-full rounded-[8px] px-[14px] py-[11px] outline-none ${
-                  isHero ? "" : "border border-[#c8e6c9] bg-white"
-                }`}
-                placeholder="you@example.com"
-                type="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-              />
-            </label>
-          ) : (
-            <label
-              className={`${
-                isHero
-                  ? "space-y-1"
-                  : "space-y-2 min-[600px]:text-sm"
-              }`}
-            >
-              <span className="block text-[12px] font-bold uppercase tracking-[0.08em] text-[#0d1f12]">
-                SMS number
-              </span>
-              <input
-                className={`alert-input min-h-12 w-full rounded-[8px] px-[14px] py-[11px] outline-none ${
-                  isHero ? "" : "border border-[#c8e6c9] bg-white"
-                }`}
-                placeholder="+1 555 555 5555"
-                type="tel"
-                value={phone}
-                onChange={(event) => setPhone(event.target.value)}
-              />
-            </label>
-          )}
-
-          <button
-            className={`inline-flex min-h-12 items-center justify-center rounded-[7px] px-5 text-base font-bold transition disabled:cursor-not-allowed disabled:opacity-60 ${
+          <label
+            className={`${
               isHero
-                ? "w-full bg-brand-yellow text-brand-navy min-[600px]:col-span-2 lg:col-span-1 lg:w-auto hover:shadow-float"
-                : "bg-brand-yellow text-brand-navy hover:shadow-float"
+                ? "space-y-1"
+                : "space-y-2 min-[600px]:text-sm"
             }`}
-            disabled={submitting}
-            type="submit"
           >
-            {submitting ? "Saving alert..." : "Notify Me"}
-          </button>
+            <span className="block text-[12px] font-bold uppercase tracking-[0.08em] text-[#0d1f12]">
+              Email
+            </span>
+            <input
+              className={`alert-input min-h-12 w-full rounded-[8px] px-[14px] py-[11px] outline-none ${
+                isHero ? "" : "border border-[#c8e6c9] bg-white"
+              }`}
+              placeholder="you@example.com"
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+            />
+          </label>
         </div>
 
         <label
@@ -265,44 +143,37 @@ export function AlertsForm({
           </div>
         </label>
 
-        {isHero ? (
-          <div className="mt-[14px] border-t border-[#e0ede2] pt-[14px]">
-            <div className="grid gap-2 min-[600px]:grid-cols-3">
-              {heroAlertBadges.map((badge) => (
-                <div
-                  key={badge.title}
-                  className={`flex items-center gap-[6px] rounded-[8px] bg-[#f4faf5] px-[10px] py-[6px] ${
-                    badge.title === "Premium"
-                      ? "border-2 border-[#1a5c2a]"
-                      : "border border-[#e0ede2]"
-                  }`}
-                >
-                  <span className="text-sm">{badge.icon}</span>
-                  <div>
-                    <p className="text-[11px] font-bold text-[#1a2e1a]">{badge.title}</p>
-                    <p className="text-[9px] font-semibold text-[#2d4a35]">
-                      {badge.subtitle}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        ) : null}
-
-        {message ? (
-          <div
-            className={`mt-4 inline-flex items-center gap-2 rounded-[12px] px-4 py-3 text-[12px] font-medium min-[600px]:text-sm ${
-              isHero
-                ? "bg-[rgba(105,240,174,0.12)] text-[#a8e6b8]"
-                : "bg-brand-green/10 text-brand-green"
-            }`}
+        <div className="mt-4">
+          <button
+            onClick={() => router.push("/")}
+            style={{
+              width: "100%",
+              background: "#f5c800",
+              color: "#0d1f12",
+              border: "none",
+              padding: "15px",
+              borderRadius: "50px",
+              fontSize: "15px",
+              fontWeight: 800,
+              cursor: "pointer",
+              letterSpacing: "0.01em"
+            }}
           >
-            <CheckCircle2 className="h-4 w-4" />
-            {message}
-          </div>
-        ) : null}
-      </form>
+            Set Rate Alert →
+          </button>
+          <p
+            style={{
+              textAlign: "center",
+              fontSize: "11px",
+              color: "#888",
+              marginTop: "10px",
+              fontWeight: 500
+            }}
+          >
+            Free · No account needed · Email only
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
