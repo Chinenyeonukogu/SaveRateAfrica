@@ -21,10 +21,10 @@ export function SiteFooter() {
               </span>
             </div>
 
-            <p className="mt-2 text-[13px] text-[#6a8a6a]">
+            <p className="mt-2 text-[13px] font-semibold text-[#6a8a6a]">
               Helping the Nigerian diaspora send more money home.
             </p>
-            <p className="mt-2 text-[12px] text-[#7a9a7a]">
+            <p className="mt-2 text-[12px] font-semibold text-[#7a9a7a]">
               🇺🇸 United States · Serving the Nigerian diaspora worldwide
             </p>
           </div>
@@ -32,7 +32,7 @@ export function SiteFooter() {
           <div className="mb-9 grid grid-cols-1 gap-7 min-[600px]:grid-cols-2 min-[600px]:gap-7 lg:grid-cols-3 lg:gap-12">
             <div>
               <h2 className="mb-[14px] text-[14px] font-bold text-[#1a2e1a]">About Us</h2>
-              <p className="mt-[10px] text-[12px] leading-[1.7] text-[#6a8a6a]">
+              <p className="mt-[10px] text-[12px] font-semibold leading-[1.7] text-[#6a8a6a]">
                 {aboutText}
               </p>
             </div>
@@ -47,7 +47,7 @@ export function SiteFooter() {
               >
                 partners@saverateafrica.com
               </a>
-              <p className="text-[11px] text-[#7a9a7a]">We respond within 24 hours</p>
+              <p className="text-[11px] font-semibold text-[#7a9a7a]">We respond within 24 hours</p>
 
               <div className="mt-6">
                 <p className="mb-[10px] text-[10px] font-semibold uppercase tracking-[1.5px] text-[#5a7a5a]">
