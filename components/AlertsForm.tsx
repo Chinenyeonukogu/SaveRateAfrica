@@ -155,7 +155,7 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
 
         <div className={isHero ? "" : "mt-4"}>
           <button
-            onClick={() => router.push("/")}
+            onClick={() => router.push(isHero ? "/alerts" : "/")}
             style={{
               width: "100%",
               background: "#f5c800",
