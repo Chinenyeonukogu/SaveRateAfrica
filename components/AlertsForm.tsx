@@ -22,7 +22,7 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
     <div
       className={
         isHero
-          ? "alert-hero-card mt-6 flex h-full w-full max-w-full flex-col rounded-[14px] bg-white px-[22px] pb-[16px] pt-[20px] shadow-[0_8px_32px_rgba(0,0,0,0.18)]"
+          ? "alert-hero-card mt-6 flex h-full w-full max-w-full min-w-0 flex-col rounded-[14px] bg-white px-[22px] pb-[16px] pt-[20px] box-border shadow-[0_8px_32px_rgba(0,0,0,0.18)]"
           : undefined
       }
     >
@@ -50,7 +50,7 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
       <div
         className={`${
           isHero
-            ? "flex h-full flex-col"
+            ? "flex h-full min-w-0 flex-col"
             : "mx-auto max-w-[560px] rounded-[16px] border border-[#c8e6c9] bg-white px-4 py-5 shadow-float min-[600px]:px-6 min-[600px]:py-8"
         }`}
       >
@@ -72,14 +72,14 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
         ) : null}
 
         <div
-          className={`grid ${
+          className={`grid w-full min-w-0 ${
             isHero
-              ? "gap-[10px] min-[600px]:grid-cols-2"
+              ? "grid-cols-1 gap-[10px] min-[600px]:grid-cols-2"
               : "mt-6 gap-3 min-[600px]:grid-cols-2"
           }`}
         >
           <label
-            className={`${
+            className={`min-w-0 ${
                 isHero
                   ? "space-y-1"
                   : "space-y-2 min-[600px]:text-sm"
@@ -89,7 +89,7 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
               Target rate
             </span>
             <input
-              className={`alert-input min-h-12 w-full rounded-[8px] outline-none ${
+              className={`alert-input min-h-12 w-full min-w-0 rounded-[8px] outline-none ${
                 isHero
                   ? "px-3 py-[9px]"
                   : "border border-[#c8e6c9] bg-white px-[14px] py-[11px] font-mono"
@@ -103,7 +103,7 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
           </label>
 
           <label
-            className={`${
+            className={`min-w-0 ${
               isHero
                 ? "space-y-1"
                 : "space-y-2 min-[600px]:text-sm"
@@ -113,7 +113,7 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
               Email
             </span>
             <input
-              className={`alert-input min-h-12 w-full rounded-[8px] outline-none ${
+              className={`alert-input min-h-12 w-full min-w-0 rounded-[8px] outline-none ${
                 isHero
                   ? "px-3 py-[9px]"
                   : "border border-[#c8e6c9] bg-white px-[14px] py-[11px]"

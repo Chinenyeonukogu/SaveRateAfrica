@@ -140,7 +140,7 @@ export function HeroSection({
     >
       <div className="px-5 py-7 text-white min-[600px]:px-7 min-[600px]:py-9 lg:px-10 lg:pb-11 lg:pt-12">
         <div className="flex flex-col items-stretch gap-8 lg:grid lg:grid-cols-[minmax(0,1fr)_420px] lg:items-stretch lg:gap-x-10">
-          <div className="flex flex-col gap-8 pt-0 lg:h-full lg:justify-between">
+          <div className="flex min-w-0 flex-col gap-8 overflow-hidden pt-0 lg:h-full lg:justify-between">
             <div className="mb-[18px] inline-flex w-fit items-center rounded-full border border-white/20 bg-white/10 px-[14px] py-[5px] text-[10px] font-medium uppercase tracking-[0.8px] text-[#a5d6a7]">
               <span className="mr-[6px] inline-flex h-[6px] w-[6px] rounded-full bg-[#69f0ae] animate-hero-live-pulse" />
               Real-Time Rates · Compare &amp; Save Instantly
@@ -166,8 +166,8 @@ export function HeroSection({
               the exact NGN your recipient receives after all charges.
             </p>
 
-            <div className="flex w-full max-w-[560px] flex-col gap-3 min-[600px]:w-fit">
-              <div className="flex w-full flex-wrap gap-2 min-[600px]:w-fit">
+            <div className="flex w-full max-w-full min-w-0 flex-col gap-3 box-border">
+              <div className="flex w-full min-w-0 flex-wrap gap-2 box-border">
                 {trustPills.map((pill) => (
                   <div
                     key={pill}
@@ -182,11 +182,11 @@ export function HeroSection({
                 <div
                   id="rate-alerts"
                   ref={alertsAnchorRef}
-                  className="flex h-full w-full flex-col [&_.alert-hero-card]:mt-0"
+                  className="flex h-full w-full max-w-full min-w-0 flex-col box-border [&_.alert-hero-card]:mt-0"
                 >
                   {alertsContent}
                   <Link
-                    className="group mt-3 flex w-full items-center gap-4 rounded-[14px] bg-[#1a2e1a] px-5 py-[18px] text-left hover:bg-[#243d24] hover:translate-y-[-2px]"
+                    className="build-credit-card group mt-3 flex w-full max-w-full min-w-0 items-center gap-4 rounded-[14px] bg-[#1a2e1a] px-5 py-[18px] text-left box-border hover:bg-[#243d24] hover:translate-y-[-2px]"
                     href="/credit-cards"
                   >
                     <div className="relative h-[46px] w-[72px] shrink-0 rounded-[8px] bg-[linear-gradient(135deg,#2e7d32,#43a047)]">
