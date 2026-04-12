@@ -58,7 +58,7 @@ export function SiteFooter() {
                   <a
                     aria-label="Follow SaveRateAfrica on Facebook"
                     className="flex h-10 w-10 items-center justify-center rounded-full bg-[#1877F2] text-white transition-[transform,box-shadow] duration-200 hover:scale-110 hover:shadow-[0_4px_12px_rgba(24,119,242,0.4)]"
-                    href="https://www.facebook.com/saverateafrica"
+                    href="https://www.facebook.com/profile.php?id=61572031944138&sk=directory_links"
                     rel="noopener noreferrer"
                     target="_blank"
                   >
@@ -73,7 +73,7 @@ export function SiteFooter() {
                   <a
                     aria-label="Follow SaveRateAfrica on Instagram"
                     className="flex h-10 w-10 items-center justify-center rounded-full bg-[radial-gradient(circle_at_30%_107%,#fdf497_0%,#fdf497_5%,#fd5949_45%,#d6249f_60%,#285AEB_90%)] text-white transition-[transform,box-shadow] duration-200 hover:scale-110 hover:shadow-[0_4px_12px_rgba(214,36,159,0.35)]"
-                    href="https://www.instagram.com/saverateafrica"
+                    href="https://www.instagram.com/s.saverateafrica/"
                     rel="noopener noreferrer"
                     target="_blank"
                   >
@@ -88,7 +88,7 @@ export function SiteFooter() {
                   <a
                     aria-label="Follow SaveRateAfrica on TikTok"
                     className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-black text-white transition-[transform,box-shadow] duration-200 hover:scale-110 hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)]"
-                    href="https://www.tiktok.com/@saverateafrica"
+                    href="https://www.tiktok.com/@_saverateafrica"
                     rel="noopener noreferrer"
                     target="_blank"
                   >
