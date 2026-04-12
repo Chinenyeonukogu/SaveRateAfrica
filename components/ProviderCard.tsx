@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { ArrowUpRight, Clock3, Info, Star } from "lucide-react";
 
 import { formatCompact, formatNaira, formatRate } from "@/lib/format";
-import type { ComparisonProviderRow } from "@/lib/fetchRates";
+import { getDeliverySortValue, type ComparisonProviderRow } from "@/lib/fetchRates";
 import type { SourceCurrency } from "@/lib/providers";
 
 interface ProviderCardProps {
@@ -34,7 +34,10 @@ export function ProviderCard({
   return (
     <motion.article
       animate={{ opacity: 1, x: 0 }}
-      className="relative rounded-[12px] border border-[#e0ede2] bg-white px-5 py-4 shadow-[0_1px_4px_rgba(0,0,0,0.05)] transition duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)]"
+      className="provider-card relative rounded-[12px] border border-[#e0ede2] bg-white px-5 py-4 shadow-[0_1px_4px_rgba(0,0,0,0.05)] transition-[opacity,box-shadow] duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)]"
+      data-delivery={getDeliverySortValue(provider.deliveryLabel)}
+      data-fee={provider.fee.toFixed(2)}
+      data-rate={provider.exchangeRate.toFixed(2)}
       initial={{ opacity: 0, x: 24 }}
       transition={{ delay: index * 0.06, duration: 0.4 }}
     >
@@ -56,25 +59,25 @@ export function ProviderCard({
           </div>
 
           <div className="min-w-0 flex flex-wrap items-center gap-2">
-            <h3 className="text-[14px] font-bold text-[#1a2e1a] min-[600px]:text-[15px]">
+            <h3 className="text-[17px] font-bold leading-[1.3] text-[#1a2e1a]">
               {provider.name}
             </h3>
 
-            <span className="inline-flex items-center gap-1 text-[12px] text-[#e6a817]">
+            <span className="inline-flex items-center gap-1 text-[13px] text-[#e6a817]">
               <Star className="h-3.5 w-3.5 fill-[#e6a817] text-[#e6a817]" />
               {provider.rating.toFixed(1)}
             </span>
 
-            <span className="text-[11px] text-[#6a8a6a]">
+            <span className="text-[13px] text-[#6a8a6a]">
               {formatCompact(provider.reviewCount)} reviews
             </span>
 
-            <span className="inline-flex items-center rounded-full border border-[#e0ede2] bg-[#f4faf5] px-[10px] py-[3px] text-[11px] font-semibold text-[#2e7d32]">
+            <span className="inline-flex items-center rounded-full border border-[#e0ede2] bg-[#f4faf5] px-[10px] py-[3px] text-[12px] font-semibold text-[#2e7d32]">
               Trusted route
             </span>
 
             {!hasFee ? (
-              <span className="inline-flex items-center rounded-full border border-[#c8e6c9] bg-[#e8f5e9] px-[10px] py-[3px] text-[11px] font-semibold text-[#2e7d32]">
+              <span className="inline-flex items-center rounded-full border border-[#c8e6c9] bg-[#e8f5e9] px-[10px] py-[3px] text-[12px] font-semibold text-[#2e7d32]">
                 No Fee ✅
               </span>
             ) : null}
@@ -83,7 +86,7 @@ export function ProviderCard({
 
         <div className="hidden shrink-0 flex-col items-end md:flex">
           <a
-            className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-[8px] bg-[#2e7d32] px-4 py-2 text-[12px] font-bold text-white transition hover:bg-[#1b5e20]"
+            className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-[8px] bg-[#2e7d32] px-[18px] py-[10px] text-[13px] font-bold text-white transition hover:bg-[#1b5e20]"
             href={provider.sendUrl}
             rel="noreferrer"
             target="_blank"
@@ -91,15 +94,15 @@ export function ProviderCard({
             {providerCtaLabel}
             <ArrowUpRight className="h-3.5 w-3.5" />
           </a>
-          <span className="mt-1 max-w-[180px] text-right text-[10px] leading-[1.4] text-[#8a9a8a]">
+          <span className="mt-1 max-w-[180px] text-right text-[11px] leading-[1.4] text-[#8a9a8a]">
             {providerRedirectNote}
           </span>
         </div>
       </div>
 
       <div className="mb-[10px] flex flex-wrap gap-2 lg:flex-nowrap">
-        <div className="min-w-[135px] flex-1 rounded-[6px] border border-[#e0ede2] bg-[#f4faf5] px-3 py-[5px] text-[11px] min-[600px]:text-[12px]">
-          <p className="text-[9px] font-semibold uppercase tracking-[0.12em] text-[#6a8a6a]">
+        <div className="min-w-[135px] flex-1 rounded-[6px] border border-[#e0ede2] bg-[#f4faf5] px-3 py-[5px] text-[14px]">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#6a8a6a]">
             Rate
           </p>
           <div
@@ -108,7 +111,7 @@ export function ProviderCard({
           >
             <button
               aria-expanded={isTooltipOpen}
-              className="inline-flex items-center gap-1.5 text-left font-bold text-[#1a2e1a]"
+              className="inline-flex items-center gap-1.5 text-left text-[14px] font-bold text-[#1a2e1a]"
               type="button"
               onBlur={() => setIsTooltipOpen(false)}
               onClick={() => setIsTooltipOpen((current) => !current)}
@@ -128,11 +131,11 @@ export function ProviderCard({
           </div>
         </div>
 
-        <div className="min-w-[135px] flex-1 rounded-[6px] border border-[#c8e6c9] bg-[#e8f5e9] px-3 py-[5px] text-[11px] min-[600px]:text-[12px]">
-          <p className="text-[9px] font-semibold uppercase tracking-[0.12em] text-[#2e7d32]">
+        <div className="min-w-[135px] flex-1 rounded-[6px] border border-[#c8e6c9] bg-[#e8f5e9] px-3 py-[5px] text-[14px]">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#2e7d32]">
             Receives
           </p>
-          <p className="mt-[2px] font-bold text-[#1b5e20]">
+          <p className="mt-[2px] text-[14px] font-bold text-[#1b5e20]">
             {formatNaira(provider.amountReceived, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2
@@ -140,32 +143,32 @@ export function ProviderCard({
           </p>
         </div>
 
-        <div className="min-w-[120px] flex-1 rounded-[6px] border border-[#e0ede2] bg-[#f4faf5] px-3 py-[5px] text-[11px] min-[600px]:text-[12px]">
-          <p className="text-[9px] font-semibold uppercase tracking-[0.12em] text-[#6a8a6a]">
+        <div className="min-w-[120px] flex-1 rounded-[6px] border border-[#e0ede2] bg-[#f4faf5] px-3 py-[5px] text-[14px]">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#6a8a6a]">
             Delivery
           </p>
-          <div className="mt-[2px] flex items-center gap-1.5 font-bold text-[#1a2e1a]">
+          <div className="mt-[2px] flex items-center gap-1.5 text-[14px] font-bold text-[#1a2e1a]">
             <Clock3 className="h-3.5 w-3.5 text-[#6a8a6a]" />
             {provider.deliveryLabel}
           </div>
         </div>
 
         <div
-          className={`min-w-[120px] flex-1 rounded-[6px] border px-3 py-[5px] text-[11px] min-[600px]:text-[12px] ${
+          className={`min-w-[120px] flex-1 rounded-[6px] border px-3 py-[5px] text-[14px] ${
             hasFee
               ? "border-[#e0ede2] bg-[#f4faf5]"
               : "border-[#c8e6c9] bg-[#e8f5e9]"
           }`}
         >
           <p
-            className={`text-[9px] font-semibold uppercase tracking-[0.12em] ${
+            className={`text-[11px] font-semibold uppercase tracking-[0.12em] ${
               hasFee ? "text-[#6a8a6a]" : "text-[#2e7d32]"
             }`}
           >
             Fee
           </p>
           <p
-            className={`mt-[2px] font-bold ${
+            className={`mt-[2px] text-[14px] font-bold ${
               hasFee ? "text-[#1a2e1a]" : "text-[#2e7d32]"
             }`}
           >
@@ -176,7 +179,7 @@ export function ProviderCard({
 
       <div className="mb-[10px] md:hidden">
         <a
-          className="inline-flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-[8px] bg-[#2e7d32] px-4 py-[10px] text-[13px] font-bold text-white transition hover:bg-[#1b5e20]"
+          className="inline-flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-[8px] bg-[#2e7d32] px-[18px] py-[10px] text-[13px] font-bold text-white transition hover:bg-[#1b5e20]"
           href={provider.sendUrl}
           rel="noreferrer"
           target="_blank"
@@ -184,14 +187,14 @@ export function ProviderCard({
           {providerCtaLabel}
           <ArrowUpRight className="h-4 w-4" />
         </a>
-        <span className="mt-1 block text-right text-[10px] leading-[1.4] text-[#8a9a8a]">
+        <span className="mt-1 block text-right text-[11px] leading-[1.4] text-[#8a9a8a]">
           {providerRedirectNote}
         </span>
       </div>
 
       <div className="flex flex-col gap-[6px] lg:flex-row lg:items-center lg:justify-between">
         <p
-          className="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-[12px] text-[#6a8a6a]"
+          className="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-[13px] text-[#6a8a6a]"
           title={providerDescription}
         >
           {providerDescription}
@@ -201,7 +204,7 @@ export function ProviderCard({
           {provider.payoutChannels.map((channel) => (
             <span
               key={channel}
-              className="rounded-full border border-[#e0ede2] bg-[#f4faf5] px-[10px] py-[3px] text-[11px] font-medium text-[#4f6a4f]"
+              className="rounded-full border border-[#e0ede2] bg-[#f4faf5] px-[10px] py-[3px] text-[12px] font-medium text-[#4f6a4f]"
             >
               {channel}
             </span>

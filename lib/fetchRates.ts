@@ -68,6 +68,36 @@ interface FetchRatesOptions {
   signal?: AbortSignal;
 }
 
+export function getDeliverySortValue(deliveryLabel: string) {
+  const normalizedLabel = deliveryLabel.trim().toLowerCase();
+
+  if (normalizedLabel.includes("instant")) {
+    return 0;
+  }
+
+  if (
+    normalizedLabel.includes("3-5 min") ||
+    normalizedLabel.includes("minutes") ||
+    normalizedLabel.includes("minute")
+  ) {
+    return 1;
+  }
+
+  if (normalizedLabel.includes("within 1 hour") || normalizedLabel.includes("1 hour")) {
+    return 2;
+  }
+
+  if (normalizedLabel.includes("same day")) {
+    return 3;
+  }
+
+  if (normalizedLabel.includes("1-2 business day")) {
+    return 4;
+  }
+
+  return 5;
+}
+
 function clampAmount(value: number) {
   if (!Number.isFinite(value) || value <= 0) {
     return 500;
@@ -163,6 +193,8 @@ function sortRows(rows: ComparisonProviderRow[], sortBy: ComparisonSort) {
   if (sortBy === "fastest") {
     return [...rows].sort(
       (first, second) =>
+        getDeliverySortValue(first.deliveryLabel) -
+          getDeliverySortValue(second.deliveryLabel) ||
         first.speedHours - second.speedHours ||
         second.amountReceived - first.amountReceived
     );
@@ -170,7 +202,9 @@ function sortRows(rows: ComparisonProviderRow[], sortBy: ComparisonSort) {
 
   return [...rows].sort(
     (first, second) =>
-      second.amountReceived - first.amountReceived || first.fee - second.fee
+      second.exchangeRate - first.exchangeRate ||
+      second.amountReceived - first.amountReceived ||
+      first.fee - second.fee
   );
 }
 

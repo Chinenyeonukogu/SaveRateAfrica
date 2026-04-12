@@ -71,10 +71,9 @@ export function ComparisonTable({
 }: ComparisonTableProps) {
   const [showAll, setShowAll] = useState(false);
   const sectionRef = useRef<HTMLElement | null>(null);
-  const sortedProviders = [...comparison.providers].sort(
-    (providerA, providerB) => providerB.exchangeRate - providerA.exchangeRate
-  );
-  const visibleProviders = showAll ? sortedProviders : sortedProviders.slice(0, 5);
+  const visibleProviders = showAll
+    ? comparison.providers
+    : comparison.providers.slice(0, 5);
 
   function handleShowLess() {
     setShowAll(false);
@@ -120,10 +119,10 @@ export function ComparisonTable({
       <div className="relative">
         {isLoading ? <LoadingSkeletonCards /> : null}
 
-        <div className="flex flex-col gap-[10px]">
+        <div className="providers-list flex flex-col gap-[10px] transition-opacity duration-200">
           {visibleProviders.map((provider, index) => (
             <ProviderCard
-              key={`${comparison.senderCountry}-${provider.slug}-${comparison.amount}`}
+              key={`${comparison.senderCountry}-${provider.slug}-${comparison.amount}-${comparison.sortBy}`}
               index={index}
               provider={provider}
               sourceCurrency={comparison.sourceCurrency}

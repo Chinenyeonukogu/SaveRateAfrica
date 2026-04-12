@@ -8,6 +8,18 @@ const sortOptions: { label: string; value: ComparisonSort }[] = [
   { label: "Fastest", value: "fastest" }
 ];
 
+function getFilterDataValue(value: ComparisonSort) {
+  if (value === "best-rate") {
+    return "rate";
+  }
+
+  if (value === "lowest-fee") {
+    return "fee";
+  }
+
+  return "fastest";
+}
+
 interface FilterBarProps {
   amount: number;
   senderCountry: SenderCountry;
@@ -41,12 +53,14 @@ export function FilterBar({
 
             return (
               <button
-              key={option.value}
-                className={`min-h-11 rounded-[12px] px-3 text-[12px] font-semibold transition min-[600px]:min-h-12 min-[600px]:text-sm ${
+                key={option.value}
+                aria-pressed={active}
+                className={`filter-btn min-h-11 rounded-[12px] border px-3 text-[12px] font-semibold transition min-[600px]:min-h-12 min-[600px]:text-sm ${
                   active
-                    ? "bg-brand-navy text-white"
-                    : "bg-brand-light text-brand-navy hover:bg-brand-green/10"
+                    ? "border-[#1a2e1a] bg-[#1a2e1a] text-white"
+                    : "border-[#e0ede2] bg-white text-[#1a2e1a] hover:bg-brand-green/10"
                 }`}
+                data-filter={getFilterDataValue(option.value)}
                 type="button"
                 onClick={() => onSortChange(option.value)}
               >
