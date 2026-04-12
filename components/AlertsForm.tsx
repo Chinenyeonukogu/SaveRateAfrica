@@ -22,12 +22,12 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
     <div
       className={
         isHero
-          ? "alert-hero-card mt-6 w-full max-w-full rounded-[14px] bg-white p-[22px] shadow-[0_8px_32px_rgba(0,0,0,0.18)]"
+          ? "alert-hero-card mt-6 flex h-full w-full max-w-full flex-col rounded-[14px] bg-white px-[22px] py-[20px] shadow-[0_8px_32px_rgba(0,0,0,0.18)]"
           : undefined
       }
     >
       {isHero ? (
-        <div className="mb-4">
+        <div className="mb-[12px] flex flex-col gap-[10px]">
           <div className="flex items-start">
             <div className="mr-[10px] flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-[#c8e6c9] bg-[#e8f5e9] text-[15px] text-[#2e7d32]">
               <BellRing className="h-4 w-4" />
@@ -41,7 +41,7 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
               </h3>
             </div>
           </div>
-          <p className="mt-[10px] border-l-[3px] border-[#1a5c2a] pl-3 text-[11px] font-medium leading-[1.6] text-[#2d4a35]">
+          <p className="border-l-[3px] border-[#1a5c2a] pl-3 text-[11px] font-medium leading-[1.6] text-[#2d4a35]">
             {subtitleText}
           </p>
         </div>
@@ -50,7 +50,7 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
       <div
         className={`${
           isHero
-            ? ""
+            ? "flex h-full flex-col"
             : "mx-auto max-w-[560px] rounded-[16px] border border-[#c8e6c9] bg-white px-4 py-5 shadow-float min-[600px]:px-6 min-[600px]:py-8"
         }`}
       >
@@ -72,10 +72,10 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
         ) : null}
 
         <div
-          className={`grid gap-3 ${
+          className={`grid ${
             isHero
-              ? "min-[600px]:grid-cols-2"
-              : "mt-6 min-[600px]:grid-cols-2"
+              ? "gap-[10px] min-[600px]:grid-cols-2"
+              : "mt-6 gap-3 min-[600px]:grid-cols-2"
           }`}
         >
           <label
@@ -89,8 +89,10 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
               Target rate
             </span>
             <input
-              className={`alert-input min-h-12 w-full rounded-[8px] px-[14px] py-[11px] outline-none ${
-                isHero ? "" : "border border-[#c8e6c9] bg-white font-mono"
+              className={`alert-input min-h-12 w-full rounded-[8px] outline-none ${
+                isHero
+                  ? "px-3 py-[9px]"
+                  : "border border-[#c8e6c9] bg-white px-[14px] py-[11px] font-mono"
               }`}
               inputMode="decimal"
               placeholder="1600"
@@ -111,8 +113,10 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
               Email
             </span>
             <input
-              className={`alert-input min-h-12 w-full rounded-[8px] px-[14px] py-[11px] outline-none ${
-                isHero ? "" : "border border-[#c8e6c9] bg-white"
+              className={`alert-input min-h-12 w-full rounded-[8px] outline-none ${
+                isHero
+                  ? "px-3 py-[9px]"
+                  : "border border-[#c8e6c9] bg-white px-[14px] py-[11px]"
               }`}
               placeholder="you@example.com"
               type="email"
@@ -123,7 +127,9 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
         </div>
 
         <label
-          className="mt-[10px] flex items-start gap-3"
+          className={`flex items-start ${
+            isHero ? "mb-[12px] mt-[10px] gap-[10px]" : "mt-[10px] gap-3"
+          }`}
         >
           <input
             checked={consent}
@@ -133,7 +139,11 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
             type="checkbox"
             onChange={(event) => setConsent(event.target.checked)}
           />
-          <div className="rounded-[10px] bg-[#f0f7f2] px-[14px] py-3">
+          <div
+            className={`rounded-[10px] bg-[#f0f7f2] ${
+              isHero ? "px-[11px] py-[9px]" : "px-[14px] py-3"
+            }`}
+          >
             <p className="text-[13px] font-medium leading-[1.7] text-[#1e3d28]">
               I agree to receive rate alerts and product updates. You can
               unsubscribe at any time. Messaging follows{" "}
@@ -143,7 +153,7 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
           </div>
         </label>
 
-        <div className="mt-4">
+        <div className={isHero ? "" : "mt-4"}>
           <button
             onClick={() => router.push("/")}
             style={{
@@ -151,7 +161,7 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
               background: "#f5c800",
               color: "#0d1f12",
               border: "none",
-              padding: "15px",
+              padding: isHero ? "12px" : "15px",
               borderRadius: "50px",
               fontSize: "15px",
               fontWeight: 800,
@@ -166,7 +176,7 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
               textAlign: "center",
               fontSize: "11px",
               color: "#888",
-              marginTop: "10px",
+              marginTop: isHero ? "6px" : "10px",
               fontWeight: 500
             }}
           >
