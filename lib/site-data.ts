@@ -153,7 +153,7 @@ export const faqItems = [
   {
     question: "Which provider is better for Nigeria?",
     answer:
-      "Wise often wins on transparent pricing and repeat bank transfers, while Remitly is strong when speed, promotions, or cash pickup matter more. The better option depends on your amount and urgency."
+      "Check the comparison dashboard to see which provider gives you the best value for your amount, speed needs, and payout preference."
   },
   {
     question: "What's the best time to send money to Nigeria?",
