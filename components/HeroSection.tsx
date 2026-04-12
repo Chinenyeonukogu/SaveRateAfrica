@@ -30,6 +30,11 @@ const currencySymbolByCountry: Record<
   UK: { code: "GBP", symbol: "\u00a3" },
   Canada: { code: "CAD", symbol: "CA$" }
 };
+const flagByCountry: Record<SenderCountry, string> = {
+  USA: "🇺🇸",
+  UK: "🇬🇧",
+  Canada: "🇨🇦"
+};
 
 const brandFontStyle = {
   fontFamily: '"Sora", var(--font-heading), sans-serif'
@@ -308,7 +313,7 @@ export function HeroSection({
                             type="button"
                             onClick={() => onSenderCountryChange(country.code)}
                           >
-                            {country.label}
+                            {flagByCountry[country.code]} {country.label}
                           </button>
                         );
                       })}
@@ -351,8 +356,10 @@ export function HeroSection({
 
                     <div className="mt-3 grid grid-cols-[minmax(0,1fr)_28px_minmax(0,1fr)] items-center gap-2">
                       <div className="rounded-[8px] border border-[#c8e6c9] bg-[#e8f5e9] px-3 py-[10px]">
-                        <p className="text-[10px] text-[#5f7a61]">Best value</p>
-                        <p className="mt-1 text-[13px] font-bold text-[#1a2e1a]">
+                        <p className="mb-1 text-[9px] font-semibold uppercase tracking-[0.8px] text-[#5a8a5a]">
+                          Best value
+                        </p>
+                        <p className="sname text-[13px] font-bold leading-[1.3] text-[#1a2e1a] whitespace-normal break-words">
                           Grey Finance
                         </p>
                         <p className="mt-1 text-[13px] font-semibold text-[#2e7d32]">
@@ -365,8 +372,10 @@ export function HeroSection({
                       </div>
 
                       <div className="rounded-[8px] border border-[#e8e8e8] bg-[#fafafa] px-3 py-[10px]">
-                        <p className="text-[10px] text-[#8b8b8b]">Less efficient</p>
-                        <p className="mt-1 text-[13px] font-bold text-[#1a2e1a]">
+                        <p className="mb-1 text-[9px] font-semibold uppercase tracking-[0.8px] text-[#9a8a7a]">
+                          Less efficient
+                        </p>
+                        <p className="sname text-[13px] font-bold leading-[1.3] text-[#1a2e1a] whitespace-normal break-words">
                           Western Union
                         </p>
                         <p className="mt-1 text-[13px] font-semibold text-[#888888]">
