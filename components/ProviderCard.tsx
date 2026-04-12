@@ -68,7 +68,7 @@ export function ProviderCard({
               {provider.rating.toFixed(1)}
             </span>
 
-            <span className="text-[13px] text-[#6a8a6a]">
+            <span className="text-[12px] font-semibold text-[#4a6a4a]">
               {formatCompact(provider.reviewCount)} reviews
             </span>
 
@@ -77,7 +77,7 @@ export function ProviderCard({
             </span>
 
             {!hasFee ? (
-              <span className="inline-flex items-center rounded-full border border-[#c8e6c9] bg-[#e8f5e9] px-[10px] py-[3px] text-[12px] font-semibold text-[#2e7d32]">
+              <span className="inline-flex items-center rounded-full border border-[#c8e6c9] bg-[#e8f5e9] px-[10px] py-[3px] text-[13px] font-bold text-[#1b5e20]">
                 No Fee ✅
               </span>
             ) : null}
@@ -94,15 +94,15 @@ export function ProviderCard({
             {providerCtaLabel}
             <ArrowUpRight className="h-3.5 w-3.5" />
           </a>
-          <span className="mt-1 max-w-[180px] text-right text-[11px] leading-[1.4] text-[#8a9a8a]">
+          <span className="mt-1 max-w-[180px] text-right text-[12px] font-semibold leading-[1.4] text-[#2e4a2e]">
             {providerRedirectNote}
           </span>
         </div>
       </div>
 
       <div className="mb-[10px] flex flex-wrap gap-2 lg:flex-nowrap">
-        <div className="min-w-[135px] flex-1 rounded-[6px] border border-[#e0ede2] bg-[#f4faf5] px-3 py-[5px] text-[14px]">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#6a8a6a]">
+        <div className="min-w-[135px] flex-1 rounded-[6px] border border-[#c8e6c9] bg-[linear-gradient(135deg,#fffdf2_0%,#eef8ef_100%)] px-3 py-[5px] text-[14px] shadow-[0_1px_2px_rgba(46,125,50,0.08)]">
+          <p className="text-[11px] font-bold uppercase tracking-[0.8px] text-[#5a8a5a]">
             Rate
           </p>
           <div
@@ -119,7 +119,7 @@ export function ProviderCard({
               onMouseEnter={() => setIsTooltipOpen(true)}
             >
               <span>{formatRate(provider.exchangeRate, sourceCurrency)}</span>
-              <Info className="h-3.5 w-3.5 text-[#8a9a8a]" />
+              <Info className="h-3.5 w-3.5 text-[#5a8a5a]" />
             </button>
 
             {isTooltipOpen ? (
@@ -144,11 +144,11 @@ export function ProviderCard({
         </div>
 
         <div className="min-w-[120px] flex-1 rounded-[6px] border border-[#e0ede2] bg-[#f4faf5] px-3 py-[5px] text-[14px]">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#6a8a6a]">
+          <p className="text-[11px] font-bold uppercase tracking-[0.8px] text-[#5a8a5a]">
             Delivery
           </p>
           <div className="mt-[2px] flex items-center gap-1.5 text-[14px] font-bold text-[#1a2e1a]">
-            <Clock3 className="h-3.5 w-3.5 text-[#6a8a6a]" />
+            <Clock3 className="h-3.5 w-3.5 text-[#5a8a5a]" />
             {provider.deliveryLabel}
           </div>
         </div>
@@ -161,15 +161,15 @@ export function ProviderCard({
           }`}
         >
           <p
-            className={`text-[11px] font-semibold uppercase tracking-[0.12em] ${
-              hasFee ? "text-[#6a8a6a]" : "text-[#2e7d32]"
+            className={`text-[11px] font-bold uppercase tracking-[0.8px] ${
+              hasFee ? "text-[#5a8a5a]" : "text-[#5a8a5a]"
             }`}
           >
             Fee
           </p>
           <p
             className={`mt-[2px] text-[14px] font-bold ${
-              hasFee ? "text-[#1a2e1a]" : "text-[#2e7d32]"
+              hasFee ? "text-[#1a2e1a]" : "text-[#1b5e20]"
             }`}
           >
             {hasFee ? provider.feeDisplayText : "No Fee ✅"}
@@ -187,14 +187,14 @@ export function ProviderCard({
           {providerCtaLabel}
           <ArrowUpRight className="h-4 w-4" />
         </a>
-        <span className="mt-1 block text-right text-[11px] leading-[1.4] text-[#8a9a8a]">
+        <span className="mt-1 block text-right text-[12px] font-semibold leading-[1.4] text-[#2e4a2e]">
           {providerRedirectNote}
         </span>
       </div>
 
       <div className="flex flex-col gap-[6px] lg:flex-row lg:items-center lg:justify-between">
         <p
-          className="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-[13px] text-[#6a8a6a]"
+          className="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-[13px] text-[#3a5a3a]"
           title={providerDescription}
         >
           {providerDescription}
@@ -204,7 +204,7 @@ export function ProviderCard({
           {provider.payoutChannels.map((channel) => (
             <span
               key={channel}
-              className="rounded-full border border-[#e0ede2] bg-[#f4faf5] px-[10px] py-[3px] text-[12px] font-medium text-[#4f6a4f]"
+              className="rounded-full border border-[#c8e6c9] bg-[#f4faf5] px-[10px] py-[3px] text-[12px] font-semibold text-[#2e4a2e]"
             >
               {channel}
             </span>
