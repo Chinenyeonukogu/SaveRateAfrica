@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowUpRight, BadgeCheck, Clock3, Info, Star } from "lucide-react";
+import { ArrowUpRight, Clock3, Info, Star } from "lucide-react";
 
 import { formatCompact, formatNaira, formatRate } from "@/lib/format";
 import type { ComparisonProviderRow } from "@/lib/fetchRates";
@@ -23,24 +23,31 @@ export function ProviderCard({
   const hasFee = provider.fee > 0;
   const providerCtaLabel = `Go to ${provider.name}`;
   const providerRedirectNote = `You will be redirected to ${provider.name}'s website`;
+  const providerDescription = [
+    provider.bestFor,
+    provider.trustNote,
+    provider.transferFeeNote
+  ]
+    .filter(Boolean)
+    .join(" · ");
 
   return (
     <motion.article
       animate={{ opacity: 1, x: 0 }}
-      className="relative rounded-[12px] border border-[#c8e6c9] bg-white px-6 py-5 shadow-float transition duration-200 hover:shadow-[0_4px_16px_rgba(46,125,50,0.1)]"
+      className="relative rounded-[12px] border border-[#e0ede2] bg-white px-5 py-4 shadow-[0_1px_4px_rgba(0,0,0,0.05)] transition duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)]"
       initial={{ opacity: 0, x: 24 }}
       transition={{ delay: index * 0.06, duration: 0.4 }}
     >
-      {provider.isBestValue && (
-        <div className="absolute left-6 top-0 -translate-y-1/2 rounded-full bg-[#e8f5e9] px-2 py-[3px] text-[9px] font-semibold uppercase tracking-[0.16em] text-[#2e7d32]">
+      {provider.isBestValue ? (
+        <div className="absolute left-5 top-0 -translate-y-1/2 rounded-[4px] bg-[#e8f5e9] px-2 py-[2px] text-[10px] font-bold uppercase tracking-[1px] text-[#2e7d32]">
           Best value
         </div>
-      )}
+      ) : null}
 
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex items-start gap-4">
+      <div className="mb-[10px] flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+        <div className="min-w-0 flex items-start gap-2">
           <div
-            className="flex h-14 w-14 items-center justify-center rounded-2xl text-lg font-heading text-white"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white"
             style={{
               background: `linear-gradient(145deg, ${provider.logoFrom}, ${provider.logoTo})`
             }}
@@ -48,61 +55,60 @@ export function ProviderCard({
             {provider.name.slice(0, 2).toUpperCase()}
           </div>
 
-          <div>
-            <h3 className="font-heading text-[22px] text-brand-navy min-[600px]:text-2xl">
+          <div className="min-w-0 flex flex-wrap items-center gap-2">
+            <h3 className="text-[14px] font-bold text-[#1a2e1a] min-[600px]:text-[15px]">
               {provider.name}
             </h3>
-            <div className="mt-2 flex flex-wrap items-center gap-3 text-[12px] text-brand-navy/70 min-[600px]:text-sm">
-              <div className="inline-flex items-center gap-1">
-                <Star className="h-4 w-4 fill-brand-yellow text-brand-yellow" />
-                {provider.rating.toFixed(1)}
-              </div>
-              <div>{formatCompact(provider.reviewCount)} reviews</div>
-              <div className="inline-flex items-center gap-1 rounded-full bg-brand-green/10 px-3 py-1 text-brand-green">
-                <BadgeCheck className="h-4 w-4" />
-                Trusted route
-              </div>
-              {!hasFee ? (
-                <div className="inline-flex items-center gap-1 rounded-full bg-brand-green px-3 py-1 font-semibold text-white">
-                  No Fee ✅
-                </div>
-              ) : null}
-            </div>
+
+            <span className="inline-flex items-center gap-1 text-[12px] text-[#e6a817]">
+              <Star className="h-3.5 w-3.5 fill-[#e6a817] text-[#e6a817]" />
+              {provider.rating.toFixed(1)}
+            </span>
+
+            <span className="text-[11px] text-[#6a8a6a]">
+              {formatCompact(provider.reviewCount)} reviews
+            </span>
+
+            <span className="inline-flex items-center rounded-full border border-[#e0ede2] bg-[#f4faf5] px-[10px] py-[3px] text-[11px] font-semibold text-[#2e7d32]">
+              Trusted route
+            </span>
+
+            {!hasFee ? (
+              <span className="inline-flex items-center rounded-full border border-[#c8e6c9] bg-[#e8f5e9] px-[10px] py-[3px] text-[11px] font-semibold text-[#2e7d32]">
+                No Fee ✅
+              </span>
+            ) : null}
           </div>
         </div>
 
-        <div className="hidden flex-col items-center self-center md:flex">
+        <div className="hidden shrink-0 flex-col items-end md:flex">
           <a
-            className="inline-flex min-h-12 min-w-[180px] items-center justify-center gap-2 whitespace-nowrap rounded-[8px] bg-[#2e7d32] px-[18px] py-[10px] text-[13px] font-bold text-white transition hover:bg-[#1b5e20]"
+            className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-[8px] bg-[#2e7d32] px-4 py-2 text-[12px] font-bold text-white transition hover:bg-[#1b5e20]"
             href={provider.sendUrl}
             rel="noreferrer"
             target="_blank"
           >
             {providerCtaLabel}
-            <ArrowUpRight className="h-4 w-4" />
+            <ArrowUpRight className="h-3.5 w-3.5" />
           </a>
-          <span className="mt-1 block text-center text-[10px] text-[#8a9a8a]">
+          <span className="mt-1 max-w-[180px] text-right text-[10px] leading-[1.4] text-[#8a9a8a]">
             {providerRedirectNote}
           </span>
         </div>
       </div>
 
-      <div
-        className={`mt-6 grid gap-3 sm:grid-cols-2 ${
-          hasFee ? "lg:grid-cols-4" : "lg:grid-cols-3"
-        }`}
-      >
-        <div className="rounded-[12px] bg-brand-light p-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-navy/50">
-            Exchange rate
+      <div className="mb-[10px] flex flex-wrap gap-2 lg:flex-nowrap">
+        <div className="min-w-[135px] flex-1 rounded-[6px] border border-[#e0ede2] bg-[#f4faf5] px-3 py-[5px] text-[11px] min-[600px]:text-[12px]">
+          <p className="text-[9px] font-semibold uppercase tracking-[0.12em] text-[#6a8a6a]">
+            Rate
           </p>
           <div
-            className="relative mt-2"
+            className="relative mt-[2px]"
             onMouseLeave={() => setIsTooltipOpen(false)}
           >
             <button
               aria-expanded={isTooltipOpen}
-              className="inline-flex items-center gap-2 text-left font-mono text-lg text-brand-navy"
+              className="inline-flex items-center gap-1.5 text-left font-bold text-[#1a2e1a]"
               type="button"
               onBlur={() => setIsTooltipOpen(false)}
               onClick={() => setIsTooltipOpen((current) => !current)}
@@ -110,11 +116,11 @@ export function ProviderCard({
               onMouseEnter={() => setIsTooltipOpen(true)}
             >
               <span>{formatRate(provider.exchangeRate, sourceCurrency)}</span>
-              <Info className="h-4 w-4 text-brand-navy/45" />
+              <Info className="h-3.5 w-3.5 text-[#8a9a8a]" />
             </button>
 
             {isTooltipOpen ? (
-              <div className="absolute left-0 top-full z-20 mt-2 w-64 rounded-2xl bg-brand-navy px-4 py-3 text-xs font-medium leading-5 text-white shadow-float">
+              <div className="absolute left-0 top-full z-20 mt-2 w-64 rounded-[12px] bg-brand-navy px-3 py-2 text-[11px] font-medium leading-5 text-white shadow-float">
                 This rate is estimated based on {provider.name}&apos;s published
                 spread. Click {providerCtaLabel} to see exact rate.
               </div>
@@ -122,22 +128,11 @@ export function ProviderCard({
           </div>
         </div>
 
-        {hasFee ? (
-          <div className="rounded-[12px] bg-brand-light p-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-navy/50">
-              Transfer fee
-            </p>
-            <p className="mt-2 text-lg font-semibold text-brand-coral">
-              {provider.feeDisplayText}
-            </p>
-          </div>
-        ) : null}
-
-        <div className="rounded-[12px] border border-brand-green/20 bg-brand-green/10 p-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-green">
-            Amount received
+        <div className="min-w-[135px] flex-1 rounded-[6px] border border-[#c8e6c9] bg-[#e8f5e9] px-3 py-[5px] text-[11px] min-[600px]:text-[12px]">
+          <p className="text-[9px] font-semibold uppercase tracking-[0.12em] text-[#2e7d32]">
+            Receives
           </p>
-          <p className="mt-2 text-2xl font-heading text-brand-navy">
+          <p className="mt-[2px] font-bold text-[#1b5e20]">
             {formatNaira(provider.amountReceived, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2
@@ -145,55 +140,72 @@ export function ProviderCard({
           </p>
         </div>
 
-        <div className="rounded-[12px] bg-brand-light p-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-navy/50">
+        <div className="min-w-[120px] flex-1 rounded-[6px] border border-[#e0ede2] bg-[#f4faf5] px-3 py-[5px] text-[11px] min-[600px]:text-[12px]">
+          <p className="text-[9px] font-semibold uppercase tracking-[0.12em] text-[#6a8a6a]">
             Delivery
           </p>
-          <div className="mt-2 flex items-center gap-2 text-lg font-semibold text-brand-navy">
-            <Clock3 className="h-4 w-4 text-brand-coral" />
+          <div className="mt-[2px] flex items-center gap-1.5 font-bold text-[#1a2e1a]">
+            <Clock3 className="h-3.5 w-3.5 text-[#6a8a6a]" />
             {provider.deliveryLabel}
           </div>
         </div>
+
+        <div
+          className={`min-w-[120px] flex-1 rounded-[6px] border px-3 py-[5px] text-[11px] min-[600px]:text-[12px] ${
+            hasFee
+              ? "border-[#e0ede2] bg-[#f4faf5]"
+              : "border-[#c8e6c9] bg-[#e8f5e9]"
+          }`}
+        >
+          <p
+            className={`text-[9px] font-semibold uppercase tracking-[0.12em] ${
+              hasFee ? "text-[#6a8a6a]" : "text-[#2e7d32]"
+            }`}
+          >
+            Fee
+          </p>
+          <p
+            className={`mt-[2px] font-bold ${
+              hasFee ? "text-[#1a2e1a]" : "text-[#2e7d32]"
+            }`}
+          >
+            {hasFee ? provider.feeDisplayText : "No Fee ✅"}
+          </p>
+        </div>
       </div>
 
-      <div className="mt-5 flex flex-col gap-4 border-t border-brand-navy/10 pt-5 md:flex-row md:items-center md:justify-between">
-        <div>
-          <p className="text-[12px] font-semibold text-brand-navy min-[600px]:text-sm">
-            {provider.bestFor}
-          </p>
-          <p className="mt-1 text-[12px] leading-6 text-brand-navy/70 min-[600px]:text-sm">
-            {provider.trustNote}
-          </p>
-          {provider.transferFeeNote ? (
-            <p className="mt-3 rounded-[12px] bg-brand-coral/10 px-3 py-3 text-xs font-medium leading-5 text-brand-navy/75">
-              {provider.transferFeeNote}
-            </p>
-          ) : null}
-          <div className="mt-3 flex flex-wrap gap-2">
-            {provider.payoutChannels.map((channel) => (
-              <span
-                key={channel}
-                className="rounded-full bg-brand-navy/5 px-3 py-1 text-xs font-medium text-brand-navy/70"
-              >
-                {channel}
-              </span>
-            ))}
-          </div>
-        </div>
+      <div className="mb-[10px] md:hidden">
+        <a
+          className="inline-flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-[8px] bg-[#2e7d32] px-4 py-[10px] text-[13px] font-bold text-white transition hover:bg-[#1b5e20]"
+          href={provider.sendUrl}
+          rel="noreferrer"
+          target="_blank"
+        >
+          {providerCtaLabel}
+          <ArrowUpRight className="h-4 w-4" />
+        </a>
+        <span className="mt-1 block text-right text-[10px] leading-[1.4] text-[#8a9a8a]">
+          {providerRedirectNote}
+        </span>
+      </div>
 
-        <div className="flex flex-col items-center md:hidden">
-          <a
-            className="inline-flex min-h-12 min-w-[180px] items-center justify-center gap-2 whitespace-nowrap rounded-[8px] bg-[#2e7d32] px-[18px] py-[10px] text-[13px] font-bold text-white transition hover:bg-[#1b5e20]"
-            href={provider.sendUrl}
-            rel="noreferrer"
-            target="_blank"
-          >
-            {providerCtaLabel}
-            <ArrowUpRight className="h-4 w-4" />
-          </a>
-          <span className="mt-1 block text-center text-[10px] text-[#8a9a8a]">
-            {providerRedirectNote}
-          </span>
+      <div className="flex flex-col gap-[6px] lg:flex-row lg:items-center lg:justify-between">
+        <p
+          className="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-[12px] text-[#6a8a6a]"
+          title={providerDescription}
+        >
+          {providerDescription}
+        </p>
+
+        <div className="flex flex-wrap gap-2">
+          {provider.payoutChannels.map((channel) => (
+            <span
+              key={channel}
+              className="rounded-full border border-[#e0ede2] bg-[#f4faf5] px-[10px] py-[3px] text-[11px] font-medium text-[#4f6a4f]"
+            >
+              {channel}
+            </span>
+          ))}
         </div>
       </div>
     </motion.article>

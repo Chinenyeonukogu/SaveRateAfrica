@@ -19,41 +19,40 @@ interface ComparisonTableProps {
 function LoadingSkeletonCards() {
   return (
     <div className="absolute inset-0 z-10 overflow-hidden rounded-[16px] bg-white/88 backdrop-blur-sm">
-      <div className="flex h-full flex-col gap-3 overflow-hidden">
+      <div className="flex h-full flex-col gap-[10px] overflow-hidden">
         {Array.from({ length: 3 }).map((_, index) => (
           <div
             key={index}
-            className="animate-pulse rounded-[12px] border border-[#c8e6c9] bg-white px-6 py-5 shadow-float"
+            className="animate-pulse rounded-[12px] border border-[#e0ede2] bg-white px-5 py-4 shadow-[0_1px_4px_rgba(0,0,0,0.05)]"
           >
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex items-start gap-4">
-                <div className="h-14 w-14 rounded-2xl bg-brand-light" />
-                <div className="space-y-3">
-                  <div className="h-6 w-32 rounded-full bg-brand-light" />
-                  <div className="h-4 w-40 rounded-full bg-brand-light" />
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-start gap-2">
+                <div className="h-8 w-8 rounded-full bg-brand-light" />
+                <div className="space-y-2">
+                  <div className="h-4 w-36 rounded-full bg-brand-light" />
+                  <div className="h-3 w-44 rounded-full bg-brand-light" />
                 </div>
               </div>
-              <div className="hidden h-12 w-28 rounded-2xl bg-brand-light md:block" />
+              <div className="hidden h-9 w-32 rounded-[8px] bg-brand-light md:block" />
             </div>
 
-            <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-[10px] flex flex-wrap gap-2">
               {Array.from({ length: 4 }).map((__, cardIndex) => (
                 <div
                   key={cardIndex}
-                  className="rounded-2xl bg-brand-light p-4"
+                  className="h-11 min-w-[120px] flex-1 rounded-[6px] bg-brand-light px-3 py-[5px]"
                 >
-                  <div className="h-3 w-20 rounded-full bg-white/70" />
-                  <div className="mt-3 h-6 w-full rounded-full bg-white/80" />
+                  <div className="h-2 w-12 rounded-full bg-white/70" />
+                  <div className="mt-2 h-4 w-full rounded-full bg-white/80" />
                 </div>
               ))}
             </div>
 
-            <div className="mt-5 space-y-3 border-t border-brand-navy/10 pt-5">
-              <div className="h-4 w-44 rounded-full bg-brand-light" />
-              <div className="h-4 w-full rounded-full bg-brand-light" />
+            <div className="mt-[10px] space-y-2">
+              <div className="h-3 w-full rounded-full bg-brand-light" />
               <div className="flex gap-2">
-                <div className="h-7 w-20 rounded-full bg-brand-light" />
-                <div className="h-7 w-24 rounded-full bg-brand-light" />
+                <div className="h-6 w-20 rounded-full bg-brand-light" />
+                <div className="h-6 w-24 rounded-full bg-brand-light" />
               </div>
             </div>
           </div>
@@ -102,7 +101,7 @@ export function ComparisonTable({
         </div>
       </div>
 
-      <div className="mb-6">
+      <div className="mb-3">
         <FilterBar
           amount={comparison.amount}
           senderCountry={comparison.senderCountry}
@@ -121,7 +120,7 @@ export function ComparisonTable({
       <div className="relative">
         {isLoading ? <LoadingSkeletonCards /> : null}
 
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-[10px]">
           {visibleProviders.map((provider, index) => (
             <ProviderCard
               key={`${comparison.senderCountry}-${provider.slug}-${comparison.amount}`}

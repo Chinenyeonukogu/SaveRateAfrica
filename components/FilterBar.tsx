@@ -24,7 +24,7 @@ export function FilterBar({
   onSortChange
 }: FilterBarProps) {
   return (
-    <div className="sticky top-4 z-20 rounded-[12px] border border-[#c8e6c9] bg-white/95 p-3 shadow-float backdrop-blur">
+    <div className="sticky top-4 z-20 rounded-[12px] border border-[#c8e6c9] bg-white/95 px-4 py-3 shadow-float backdrop-blur">
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-green">
