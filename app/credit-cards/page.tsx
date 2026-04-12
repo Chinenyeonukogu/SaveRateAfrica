@@ -167,7 +167,7 @@ export default function CreditCardsPage() {
     <>
       <SiteHeader showBreadcrumb />
 
-      <main className="overflow-x-hidden pb-28 min-[600px]:pb-16">
+      <main className="overflow-x-hidden">
         <section className="bg-[linear-gradient(135deg,#1a3a1a_0%,#2e7d32_50%,#0d2416_100%)]">
           <div className="mx-auto max-w-[1200px] px-5 pb-10 pt-8 min-[600px]:px-6 min-[600px]:py-14 lg:px-10 lg:py-16">
             <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/5 px-5 py-6 text-white shadow-[0_20px_60px_rgba(15,36,20,0.35)] backdrop-blur-sm min-[600px]:px-8 min-[600px]:py-10 lg:px-12 lg:py-12">
@@ -443,21 +443,6 @@ export default function CreditCardsPage() {
         </section>
       </main>
 
-      <div className="fixed inset-x-0 bottom-0 z-[999] min-[600px]:hidden">
-        <div className="flex h-14 items-center justify-between gap-3 bg-[#2e7d32] px-4 text-white shadow-[0_-10px_30px_rgba(15,36,20,0.2)]">
-          <p className="text-[11px] font-semibold leading-tight">
-            Ready to build your U.S. credit?
-          </p>
-          <a
-            className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-full bg-white px-4 text-[11px] font-bold text-[#2e7d32]"
-            href={topPick.url}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Check if you qualify →
-          </a>
-        </div>
-      </div>
     </>
   );
 }
