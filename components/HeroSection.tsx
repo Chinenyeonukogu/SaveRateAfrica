@@ -161,56 +161,58 @@ export function HeroSection({
               the exact NGN your recipient receives after all charges.
             </p>
 
-            <div className="flex flex-wrap gap-2">
-              {trustPills.map((pill) => (
-                <div
-                  key={pill}
-                  className="inline-flex min-h-10 w-[calc(50%-4px)] items-center justify-center gap-[6px] rounded-full border border-white/15 bg-white/10 px-[13px] py-[5px] text-[11px] text-white/80 min-[600px]:w-auto"
-                >
-                  {pill}
-                </div>
-              ))}
-            </div>
-
-            {alertsContent ? (
-              <div
-                id="rate-alerts"
-                ref={alertsAnchorRef}
-                className="flex h-full w-full flex-col [&_.alert-hero-card]:mt-0"
-              >
-                {alertsContent}
-                <Link
-                  className="group mt-3 flex w-full items-center gap-4 rounded-[14px] bg-[#1a2e1a] px-5 py-[18px] text-left hover:bg-[#243d24] hover:translate-y-[-2px]"
-                  href="/credit-cards"
-                >
-                  <div className="relative h-[46px] w-[72px] shrink-0 rounded-[8px] bg-[linear-gradient(135deg,#2e7d32,#43a047)]">
-                    <div className="absolute left-[8px] top-[8px] h-[12px] w-[16px] rounded-[3px] bg-[#f5c800]" />
-                    <div className="absolute bottom-[8px] left-[8px] flex gap-[4px]">
-                      <span className="h-[4px] w-[4px] rounded-full bg-white/75" />
-                      <span className="h-[4px] w-[4px] rounded-full bg-white/75" />
-                      <span className="h-[4px] w-[4px] rounded-full bg-white/75" />
-                      <span className="h-[4px] w-[4px] rounded-full bg-white/75" />
-                    </div>
+            <div className="flex w-full max-w-[560px] flex-col gap-3 min-[600px]:w-fit">
+              <div className="flex w-full flex-wrap gap-2 min-[600px]:w-fit">
+                {trustPills.map((pill) => (
+                  <div
+                    key={pill}
+                    className="inline-flex min-h-10 w-[calc(50%-4px)] items-center justify-center gap-[6px] rounded-full border border-white/15 bg-white/10 px-[13px] py-[5px] text-[11px] text-white/80 min-[600px]:w-auto"
+                  >
+                    {pill}
                   </div>
-
-                  <div className="min-w-0 flex-1">
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#a8e6b8]">
-                      BUILD CREDIT
-                    </p>
-                    <p className="mt-1 text-[15px] font-bold leading-[1.35] text-white">
-                      Build credit while you send from the USA
-                    </p>
-                    <p className="mt-1 text-[12px] font-medium leading-[1.5] text-white/70">
-                      Explore immigrant-friendly card picks →
-                    </p>
-                  </div>
-
-                  <span className="ml-auto text-[28px] leading-none text-white/65 transition-colors group-hover:text-[#a8e6b8]">
-                    ›
-                  </span>
-                </Link>
+                ))}
               </div>
-            ) : null}
+
+              {alertsContent ? (
+                <div
+                  id="rate-alerts"
+                  ref={alertsAnchorRef}
+                  className="flex h-full w-full flex-col [&_.alert-hero-card]:mt-0"
+                >
+                  {alertsContent}
+                  <Link
+                    className="group mt-3 flex w-full items-center gap-4 rounded-[14px] bg-[#1a2e1a] px-5 py-[18px] text-left hover:bg-[#243d24] hover:translate-y-[-2px]"
+                    href="/credit-cards"
+                  >
+                    <div className="relative h-[46px] w-[72px] shrink-0 rounded-[8px] bg-[linear-gradient(135deg,#2e7d32,#43a047)]">
+                      <div className="absolute left-[8px] top-[8px] h-[12px] w-[16px] rounded-[3px] bg-[#f5c800]" />
+                      <div className="absolute bottom-[8px] left-[8px] flex gap-[4px]">
+                        <span className="h-[4px] w-[4px] rounded-full bg-white/75" />
+                        <span className="h-[4px] w-[4px] rounded-full bg-white/75" />
+                        <span className="h-[4px] w-[4px] rounded-full bg-white/75" />
+                        <span className="h-[4px] w-[4px] rounded-full bg-white/75" />
+                      </div>
+                    </div>
+
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#a8e6b8]">
+                        BUILD CREDIT
+                      </p>
+                      <p className="mt-1 text-[15px] font-bold leading-[1.35] text-white">
+                        Build credit while you send from the USA
+                      </p>
+                      <p className="mt-1 text-[12px] font-medium leading-[1.5] text-white/70">
+                        Explore immigrant-friendly card picks →
+                      </p>
+                    </div>
+
+                    <span className="ml-auto text-[28px] leading-none text-white/65 transition-colors group-hover:text-[#a8e6b8]">
+                      ›
+                    </span>
+                  </Link>
+                </div>
+              ) : null}
+            </div>
           </div>
 
           <div className="w-full lg:flex lg:h-full lg:flex-col">
