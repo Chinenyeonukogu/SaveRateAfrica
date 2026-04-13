@@ -27,7 +27,7 @@ export function SiteFooter() {
               Helping the Nigerian diaspora send more money home.
             </p>
             <p className="mt-2 text-[12px] font-semibold text-[#7a9a7a]">
-              🇺🇸 United States · Serving the Nigerian diaspora worldwide
+              Proudly built in USA 🇳🇬🇺🇸
             </p>
           </div>
 

@@ -21,16 +21,17 @@ export const metadata: Metadata = {
 };
 
 const storyParagraphs = [
-  "SaveRateAfrica was created out of personal frustration. As a Nigerian living in the Floida, United States. I saw firsthand how much money was being lost every time I sent remittances home. High fees, poor exchange rates, and confusing options from banks and big transfer services meant my family received far less than they should.",
-  "After one too many disappointing transfers, I decided to build a simple, transparent solution: an independent comparison platform that shows the real amount your loved ones will receive in Naira — updated live, with no hidden tricks. SaveRateAfrica does not process transfers or hold any funds. We simply compare providers like Grey Finance, LemFi, Sendwave, Nala, and others side-by-side so you can choose the one that puts the most money in your recipient's pocket.",
+  "SaveRateAfrica was created to solve a real problem faced by the Nigerian diaspora. Nigerians living in the United States, United Kingdom, and Canada send billions of dollars home each year. In 2024 alone, Nigeria received over $21 billion in remittances, with the United States (home to more than 2 million Nigerians) and the UK and Canada as the top sending countries (World Bank data).",
+  "Yet many still juggle multiple apps and websites to compare rates, often losing money to hidden fees and outdated exchange rates.",
+  "To change that, we built SaveRateAfrica as the one all-in-one platform that shows real-time comparisons across 14+ trusted providers, including Grey Finance, LemFi, Remistly, Sendwave, Wise, and others. We display exactly how much your loved ones will receive in Naira (updated live every 5 minutes) so you no longer need to switch between apps to find the best deal.",
+  "SaveRateAfrica does not process transfers or hold any funds. We simply provide independent, transparent side-by-side rankings that help you choose the option that puts the most money in your recipient’s pocket.",
   "What started as a tool to solve my own problem has grown into a platform helping Nigerians in the USA, UK, and Canada send money home more efficiently."
 ] as const;
 
 const trustItems = [
-  "Rankings are based purely on how much the recipient actually receives after all fees — not headline rates.",
-  "We may earn affiliate commissions when you use our links, but this never influences our comparisons or rankings.",
+  "Rankings are based purely on how much the recipient actually receives after all fees not headline rates.",
   "Rates are updated every 5 minutes across 14+ trusted providers.",
-  "Saverateafrica focused on transparency and real value for the diaspora community."
+  "SaveRateAfrica is focused on transparency and real value for the diaspora community."
 ] as const;
 
 const commitmentItems = [
@@ -100,11 +101,11 @@ export default function AboutPage() {
                   />
                 </div>
                 <p className="mt-3 text-[16px] font-bold text-[#1a2e1a]">
-                  Chinenye, onukogu.
+                  Chinenye Onukogu
                 </p>
                 <p className="text-[13px] text-[#5a7a5a]">Founder, SaveRateAfrica</p>
                 <p className="mt-1 text-[12px] text-[#7a9a7a]">
-                  United state.
+                  United States
                 </p>
               </div>
 
@@ -115,9 +116,9 @@ export default function AboutPage() {
                 <p className={`${bodyTextClassName} max-w-[720px]`}>
                   I built SaveRateAfrica to empower fellow Nigerians in the diaspora
                   with clear, real-time information on the best remittance options.
-                  With a background in Information Technology to Masters in IT
-                  Product Management management. my goal is to make sending money
-                  home cost-effective as possible.
+                  With a background in Information Technology and a Master’s in IT
+                  Product Management, my goal is to make sending money home as
+                  cost-effective as possible.
                 </p>
               </div>
             </div>
@@ -129,8 +130,9 @@ export default function AboutPage() {
             </h2>
             <p className={`${bodyTextClassName} max-w-[720px]`}>
               To help the Nigerian diaspora maximize every dollar, pound, and
-              Canadian dollar sent home — by providing honest, independent
-              comparisons and useful tools like rate alerts and savings calculators.
+              Canadian dollar sent home by providing honest, independent
+              comparisons and useful tools like rate alerts and savings
+              calculators.
             </p>
           </section>
 
