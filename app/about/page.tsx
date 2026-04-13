@@ -21,11 +21,21 @@ export const metadata: Metadata = {
 };
 
 const storyParagraphs = [
-  "SaveRateAfrica was created to solve a real problem faced by the Nigerian diaspora. Nigerians living in the United States, United Kingdom, and Canada send billions of dollars home each year. In 2024 alone, Nigeria received over $21 billion in remittances, with the United States (home to more than 2 million Nigerians) and the UK and Canada as the top sending countries (World Bank data).",
-  "Yet many still juggle multiple apps and websites to compare rates, often losing money to hidden fees and outdated exchange rates.",
-  "To change that, we built SaveRateAfrica as the one all-in-one platform that shows real-time comparisons across 14+ trusted providers, including Grey Finance, LemFi, Remistly, Sendwave, Wise, and others. We display exactly how much your loved ones will receive in Naira (updated live every 5 minutes) so you no longer need to switch between apps to find the best deal.",
-  "SaveRateAfrica does not process transfers or hold any funds. We simply provide independent, transparent side-by-side rankings that help you choose the option that puts the most money in your recipient’s pocket.",
-  "What started as a tool to solve my own problem has grown into a platform helping Nigerians in the USA, UK, and Canada send money home more efficiently."
+  <>
+    SaveRateAfrica was born from a simple belief: your hard work deserves the
+    best exchange rate possible. With over{" "}
+    <strong className="font-bold text-[#102717]">$21 billion</strong> sent home
+    annually by Nigerians in the US, UK, and Canada, too much is still lost to
+    hidden fees and outdated rates.
+  </>,
+  <>
+    We built a real-time comparison engine that tracks{" "}
+    <strong className="font-bold text-[#102717]">14+ providers</strong> every 5
+    minutes, giving you the transparency to ensure every extra Naira reaches
+    your loved ones. We don&apos;t move your money; we just make sure your money
+    moves further.
+  </>,
+  "What started as a tool to solve my own frustration with inconsistent rates has grown into a platform built for all Nigerians in the diaspora."
 ] as const;
 
 const trustItems = [
@@ -51,7 +61,7 @@ const largeSectionClassName =
   "rounded-[16px] px-5 py-6 min-[600px]:p-8 lg:px-10 lg:py-12";
 const standardSectionClassName =
   "rounded-[16px] px-5 py-6 min-[600px]:p-8 lg:p-10";
-const bodyTextClassName = "text-[15px] leading-[1.85] text-[#3a5a3a]";
+const bodyTextClassName = "text-[16px] leading-[1.95] text-[#1f3523]";
 
 export default function AboutPage() {
   return (
@@ -69,8 +79,9 @@ export default function AboutPage() {
             <h1 className="mt-4 max-w-[640px] font-heading text-[28px] font-extrabold leading-[1.15] text-white min-[600px]:text-[32px] lg:text-[36px]">
               Helping Nigerians Abroad Send More Money Home
             </h1>
-            <p className="mt-4 max-w-[520px] text-[16px] leading-[1.7] text-[rgba(255,255,255,0.75)]">
-              Built by a Nigerian in the diaspora who got tired of bad rates.
+            <p className="mt-4 max-w-[520px] text-[16px] leading-[1.7] text-[rgba(255,255,255,0.88)]">
+              Built by a Nigerian in the diaspora who believes your hard work
+              deserves a better rate.
             </p>
           </section>
 
@@ -79,8 +90,8 @@ export default function AboutPage() {
               Our Story
             </h2>
             <div className="max-w-[720px] space-y-5">
-              {storyParagraphs.map((paragraph) => (
-                <p key={paragraph} className={bodyTextClassName}>
+              {storyParagraphs.map((paragraph, index) => (
+                <p key={index} className={bodyTextClassName}>
                   {paragraph}
                 </p>
               ))}
