@@ -408,16 +408,18 @@ export function SiteHeader({
 
     const Icon = item.icon;
 
-    return (
+  return (
       <div
-        className={`flex shrink-0 items-center justify-center ${
-          compact ? "h-8 w-8 rounded-[9px]" : "h-9 w-9 rounded-[10px]"
+        className={`si flex shrink-0 items-center justify-center ${
+          compact
+            ? "h-8 w-8 rounded-[9px]"
+            : "h-9 w-9 rounded-[10px] max-[1150px]:h-7 max-[1150px]:w-7"
         } ${
           item.iconBoxClassName ?? "bg-[#f4faf5]"
         }`}
       >
         <Icon
-          className={`${compact ? "h-4 w-4" : "h-5 w-5"} ${
+          className={`${compact ? "h-4 w-4" : "h-5 w-5 max-[1150px]:h-4 max-[1150px]:w-4"} ${
             item.iconColorClassName ?? "text-[#2e7d32]"
           }`}
         />
@@ -431,7 +433,7 @@ export function SiteHeader({
     return (
       <Link
         aria-label={item.label}
-        className={`group flex shrink-0 items-center gap-1.5 rounded-[14px] border px-3 py-1.5 transition-colors min-[860px]:gap-2 ${
+        className={`strip-item group flex shrink-0 items-center gap-1.5 rounded-[14px] border px-3 py-1.5 transition-colors min-[860px]:gap-2 ${
           isActive
             ? "border-[#c8e6c9] bg-[#f4faf5] shadow-[0_0_0_1px_rgba(46,125,50,0.08)]"
             : "border-transparent bg-white hover:border-[#dcedc8] hover:bg-[#f8fcf8]"
@@ -442,7 +444,7 @@ export function SiteHeader({
       >
         {renderFeatureIcon(item, true)}
         <span
-          className={`block shrink-0 whitespace-nowrap text-[10px] leading-[1.2] min-[860px]:text-[11px] ${
+          className={`st-t block shrink-0 whitespace-nowrap text-[10px] leading-[1.2] min-[860px]:text-[11px] ${
             isActive
               ? "font-bold text-[#1b5e20]"
               : "font-semibold text-[#1a2e1a] group-hover:text-[#1b5e20]"
@@ -485,14 +487,14 @@ export function SiteHeader({
             <div className="flex min-w-0 flex-1 items-center">
               <SaveRateAfricaLogo href={getHomeHref()} onClick={handleLogoClick} />
               <nav aria-label="Primary" className="ml-3 hidden min-w-0 flex-1 lg:flex xl:ml-4">
-                <ul className="flex min-w-0 flex-1 items-center gap-2 xl:gap-3">
+                <ul className="strip grid min-w-0 flex-1 grid-cols-4 items-center gap-2 xl:gap-3">
                 {navigationItems.map((item) => {
                   const isActive = isActiveNavigationItem(item);
 
                   return (
-                    <li key={item.label} className="min-w-0 flex-1 list-none">
+                    <li key={item.label} className="min-w-0 list-none">
                       <Link
-                        className={`group flex w-full min-w-0 items-center gap-1.5 rounded-[14px] border px-3.5 py-2 transition-colors xl:gap-2 xl:px-5 ${
+                        className={`strip-item group flex w-full min-w-0 items-center gap-1.5 rounded-[14px] border px-3.5 py-2 transition-colors xl:gap-2 xl:px-5 ${
                           isActive
                             ? "border-[#c8e6c9] bg-[#f4faf5] text-[#1b5e20] shadow-[0_0_0_1px_rgba(46,125,50,0.08)]"
                             : "border-transparent bg-white text-[#2e4a2e] hover:border-[#dcedc8] hover:bg-[#f8fcf8]"
@@ -502,7 +504,7 @@ export function SiteHeader({
                       >
                         {renderFeatureIcon(item)}
                         <span
-                          className={`block min-w-0 whitespace-nowrap text-[11px] leading-[1.2] transition-colors xl:text-[12px] ${
+                          className={`st-t block min-w-0 whitespace-nowrap text-[11px] leading-[1.2] transition-colors xl:text-[12px] ${
                             isActive
                               ? "font-bold text-[#1b5e20]"
                               : "font-semibold text-[#1a2e1a] group-hover:text-[#1b5e20]"
@@ -519,11 +521,11 @@ export function SiteHeader({
 
               <nav
                 aria-label="Tablet primary"
-                className="ml-3 hidden min-w-0 flex-1 items-center overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden md:flex lg:hidden"
+                className="ml-3 hidden min-w-0 flex-1 items-center md:flex lg:hidden"
               >
-                <ul className="flex min-w-max items-center gap-1 pr-2">
+                <ul className="strip grid w-full min-w-0 grid-cols-3 items-center gap-1 pr-2 min-[860px]:grid-cols-4">
                   {navigationItems.map((item) => (
-                    <li key={item.label} className="flex-none list-none">
+                    <li key={item.label} className="min-w-0 list-none">
                       {renderTabletNavigationItem(item)}
                     </li>
                   ))}

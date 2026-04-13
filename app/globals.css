@@ -98,6 +98,38 @@ summary::-webkit-details-marker {
   color: #b0c4b0;
 }
 
+@media (max-width: 1150px) {
+  .strip {
+    max-width: 100%;
+    padding: 0 8px;
+  }
+
+  .st-s {
+    display: none;
+  }
+
+  .strip-item {
+    padding: 12px 8px;
+    gap: 7px;
+  }
+
+  .si,
+  .ai-circle {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .st-t {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 750px) {
+  .strip {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 @layer base {
   body {
     @apply font-body antialiased;

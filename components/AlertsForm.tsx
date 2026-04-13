@@ -75,7 +75,7 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
           <>
             <div className="mt-[2px] h-px w-full bg-[#e0ede2]" />
 
-            <div className="my-[14px] flex items-center gap-[14px] rounded-[16px] bg-[linear-gradient(135deg,#102417_0%,#183422_100%)] px-[14px] py-[15px]">
+            <div className="my-[14px] flex items-center gap-[14px] rounded-[16px] bg-[#1e4028] px-[14px] py-[15px]">
               <div className="relative flex h-[80px] w-[80px] shrink-0 items-center justify-center">
                 <span
                   className="absolute inset-0 rounded-full border border-[#69f0ae]/45"
