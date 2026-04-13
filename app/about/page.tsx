@@ -125,11 +125,12 @@ export default function AboutPage() {
                   Meet the Founder
                 </h2>
                 <p className={`${bodyTextClassName} max-w-[720px]`}>
-                  I built SaveRateAfrica to empower fellow Nigerians in the diaspora
-                  with clear, real-time information on the best remittance options.
-                  With a background in Information Technology and a Master’s in IT
-                  Product Management, my goal is to make sending money home as
-                  cost-effective as possible.
+                  I built <strong className="font-bold">SaveRateAfrica</strong>{" "}
+                  to empower fellow Nigerians in the diaspora with clear,
+                  real-time information on the best remittance options. With a
+                  background in Information Technology and current
+                  specialization in IT Product Management, my goal is to make
+                  sending money home as cost-effective as possible.
                 </p>
               </div>
             </div>
