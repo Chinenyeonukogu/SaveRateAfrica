@@ -30,7 +30,7 @@ const trustItems = [
   "Rankings are based purely on how much the recipient actually receives after all fees — not headline rates.",
   "We may earn affiliate commissions when you use our links, but this never influences our comparisons or rankings.",
   "Rates are updated every 5 minutes across 14+ trusted providers.",
-  "We're a small, bootstrapped team focused on transparency and real value for the diaspora community."
+  "Saverateafrica focused on transparency and real value for the diaspora community."
 ] as const;
 
 const commitmentItems = [
@@ -100,11 +100,11 @@ export default function AboutPage() {
                   />
                 </div>
                 <p className="mt-3 text-[16px] font-bold text-[#1a2e1a]">
-                  Chinenye onukogu
+                  Chinenye, onukogu.
                 </p>
                 <p className="text-[13px] text-[#5a7a5a]">Founder, SaveRateAfrica</p>
                 <p className="mt-1 text-[12px] text-[#7a9a7a]">
-                  🇺🇸 Pembroke Pines, Florida
+                  United state.
                 </p>
               </div>
 
@@ -115,9 +115,9 @@ export default function AboutPage() {
                 <p className={`${bodyTextClassName} max-w-[720px]`}>
                   I built SaveRateAfrica to empower fellow Nigerians in the diaspora
                   with clear, real-time information on the best remittance options.
-                  With a background in IT management and financial technology, my goal
-                  is to make sending money home as straightforward and cost-effective
-                  as possible.
+                  With a background in Information Technology to Masters in IT
+                  Product Management management. my goal is to make sending money
+                  home cost-effective as possible.
                 </p>
               </div>
             </div>

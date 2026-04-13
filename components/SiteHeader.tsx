@@ -67,6 +67,11 @@ const navigationItems: NavigationItem[] = [
     label: "Smart Sending",
     routeHref: "/#smart-sending",
     sectionId: "smart-sending"
+  },
+  {
+    href: "/about",
+    label: "About",
+    matchPathnames: ["/about"]
   }
 ] as const;
 
