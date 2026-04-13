@@ -65,7 +65,7 @@ const navigationItems: NavigationItem[] = [
     icon: Activity,
     iconBoxClassName: "bg-[#fce4ec]",
     iconColorClassName: "text-[#c62828]",
-    label: "Smart Sending",
+    label: "Send Smart",
     routeHref: "/#smart-sending",
     sectionId: "smart-sending"
   },
