@@ -30,7 +30,7 @@ const storyParagraphs = [
   </>,
   <>
     We built a real-time comparison engine that tracks{" "}
-    <strong className="font-bold text-[#102717]">14+ providers</strong> every 5
+    <strong className="font-bold text-[#102717]">14+ providers</strong>{" "}every 5
     minutes, giving you the transparency to ensure every extra Naira reaches
     your loved ones. We don&apos;t move your money; we just make sure your money
     moves further.
