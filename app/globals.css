@@ -14,6 +14,12 @@ html {
   scroll-padding-top: 60px;
 }
 
+@media (min-width: 900px) {
+  html {
+    scroll-padding-top: 120px;
+  }
+}
+
 body {
   min-height: 100vh;
   overflow-x: hidden;
@@ -98,10 +104,9 @@ summary::-webkit-details-marker {
   color: #b0c4b0;
 }
 
-@media (max-width: 1150px) {
+@media (min-width: 900px) and (max-width: 1200px) {
   .strip {
     max-width: 100%;
-    padding: 0 8px;
   }
 
   .st-s {
@@ -109,14 +114,13 @@ summary::-webkit-details-marker {
   }
 
   .strip-item {
-    padding: 12px 8px;
-    gap: 7px;
+    padding: 12px 10px;
   }
 
   .si,
   .ai-circle {
-    width: 28px !important;
-    height: 28px !important;
+    width: 30px !important;
+    height: 30px !important;
   }
 
   .st-t {
@@ -124,9 +128,9 @@ summary::-webkit-details-marker {
   }
 }
 
-@media (max-width: 750px) {
-  .strip {
-    grid-template-columns: repeat(3, 1fr);
+@media (max-width: 899px) {
+  .feature-strip {
+    display: none;
   }
 }
 
