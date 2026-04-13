@@ -484,15 +484,15 @@ export function SiteHeader({
           <div className="relative flex h-[60px] items-center justify-between gap-4">
             <div className="flex min-w-0 flex-1 items-center">
               <SaveRateAfricaLogo href={getHomeHref()} onClick={handleLogoClick} />
-              <nav aria-label="Primary" className="ml-4 hidden min-w-0 flex-1 lg:flex">
-                <ul className="flex min-w-0 items-center gap-2.5 xl:gap-3">
+              <nav aria-label="Primary" className="ml-3 hidden min-w-0 flex-1 lg:flex xl:ml-4">
+                <ul className="flex min-w-0 flex-1 items-center gap-2 xl:gap-3">
                 {navigationItems.map((item) => {
                   const isActive = isActiveNavigationItem(item);
 
                   return (
-                    <li key={item.label} className="min-w-fit flex-none list-none">
+                    <li key={item.label} className="min-w-0 flex-1 list-none">
                       <Link
-                        className={`group flex min-w-0 items-center gap-2 rounded-[14px] border px-5 py-2 transition-colors ${
+                        className={`group flex w-full min-w-0 items-center gap-1.5 rounded-[14px] border px-3.5 py-2 transition-colors xl:gap-2 xl:px-5 ${
                           isActive
                             ? "border-[#c8e6c9] bg-[#f4faf5] text-[#1b5e20] shadow-[0_0_0_1px_rgba(46,125,50,0.08)]"
                             : "border-transparent bg-white text-[#2e4a2e] hover:border-[#dcedc8] hover:bg-[#f8fcf8]"
@@ -502,7 +502,7 @@ export function SiteHeader({
                       >
                         {renderFeatureIcon(item)}
                         <span
-                          className={`block whitespace-nowrap text-[12px] leading-[1.2] transition-colors ${
+                          className={`block min-w-0 whitespace-nowrap text-[11px] leading-[1.2] transition-colors xl:text-[12px] ${
                             isActive
                               ? "font-bold text-[#1b5e20]"
                               : "font-semibold text-[#1a2e1a] group-hover:text-[#1b5e20]"
