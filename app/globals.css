@@ -54,6 +54,17 @@ summary::-webkit-details-marker {
   animation: hero-live-pulse 1.8s infinite;
 }
 
+@keyframes ringpulse {
+  0% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
 .alert-hero-card .toggle-btn {
   background: transparent;
   border: 2px solid #1a5c2a;

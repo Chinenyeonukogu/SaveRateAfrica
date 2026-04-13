@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { BellRing } from "lucide-react";
+import { Bell, BellRing } from "lucide-react";
 
 interface AlertsFormProps {
   variant?: "default" | "hero";
@@ -71,87 +71,88 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
           </div>
         ) : null}
 
-        <div
-          className={`grid w-full min-w-0 ${
-            isHero
-              ? "grid-cols-1 gap-[10px] min-[600px]:grid-cols-2"
-              : "mt-6 gap-3 min-[600px]:grid-cols-2"
-          }`}
-        >
-          <label
-            className={`min-w-0 ${
-                isHero
-                  ? "space-y-1"
-                  : "space-y-2 min-[600px]:text-sm"
-            }`}
-          >
-            <span className="block text-[12px] font-bold uppercase tracking-[0.08em] text-[#0d1f12]">
-              Target rate
-            </span>
-            <input
-              className={`alert-input min-h-12 w-full min-w-0 rounded-[8px] outline-none ${
-                isHero
-                  ? "px-3 py-[9px]"
-                  : "border border-[#c8e6c9] bg-white px-[14px] py-[11px] font-mono"
-              }`}
-              inputMode="decimal"
-              placeholder="1600"
-              type="number"
-              value={targetRate}
-              onChange={(event) => setTargetRate(event.target.value)}
-            />
-          </label>
+        {isHero ? (
+          <>
+            <div className="mt-[2px] h-px w-full bg-[#e0ede2]" />
 
-          <label
-            className={`min-w-0 ${
-              isHero
-                ? "space-y-1"
-                : "space-y-2 min-[600px]:text-sm"
-            }`}
-          >
-            <span className="block text-[12px] font-bold uppercase tracking-[0.08em] text-[#0d1f12]">
-              Email
-            </span>
-            <input
-              className={`alert-input min-h-12 w-full min-w-0 rounded-[8px] outline-none ${
-                isHero
-                  ? "px-3 py-[9px]"
-                  : "border border-[#c8e6c9] bg-white px-[14px] py-[11px]"
-              }`}
-              placeholder="you@example.com"
-              type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-            />
-          </label>
-        </div>
+            <div className="my-[14px] flex items-center gap-[14px] rounded-[16px] bg-[linear-gradient(135deg,#102417_0%,#183422_100%)] px-[14px] py-[15px]">
+              <div className="relative flex h-[80px] w-[80px] shrink-0 items-center justify-center">
+                <span
+                  className="absolute inset-0 rounded-full border border-[#69f0ae]/45"
+                  style={{ animation: "ringpulse 1.8s ease-out infinite" }}
+                />
+                <span
+                  className="absolute inset-0 rounded-full border border-[#69f0ae]/35"
+                  style={{
+                    animation: "ringpulse 1.8s ease-out infinite",
+                    animationDelay: "0.6s"
+                  }}
+                />
+                <span className="relative flex h-[80px] w-[80px] items-center justify-center rounded-full bg-[rgba(46,125,50,0.25)]">
+                  <Bell className="h-[26px] w-[26px] text-[#69f0ae]" strokeWidth={2.1} />
+                </span>
+              </div>
 
-        <label
-          className={`flex items-start ${
-            isHero ? "mb-[12px] mt-[10px] gap-[10px]" : "mt-[10px] gap-3"
-          }`}
-        >
-          <input
-            checked={consent}
-            className={`mt-1 h-4 w-4 rounded accent-[#1a5c2a] ${
-              isHero ? "border-[#c8e6c9] bg-white text-[#2e7d32]" : "border-brand-navy/20 text-brand-green"
-            }`}
-            type="checkbox"
-            onChange={(event) => setConsent(event.target.checked)}
-          />
-          <div
-            className={`rounded-[10px] bg-[#f0f7f2] ${
-              isHero ? "px-[11px] py-[9px]" : "px-[14px] py-3"
-            }`}
-          >
-            <p className="text-[13px] font-medium leading-[1.7] text-[#1e3d28]">
-              I agree to receive rate alerts and product updates. You can
-              unsubscribe at any time. Messaging follows{" "}
-              <strong className="font-bold">GDPR</strong> and{" "}
-              <strong className="font-bold">CAN-SPAM</strong> expectations.
-            </p>
-          </div>
-        </label>
+              <div className="min-w-0">
+                <p className="text-[13px] font-bold text-white">
+                  Never miss the right rate
+                </p>
+                <p className="mt-[4px] text-[11px] leading-[1.6] text-[rgba(255,255,255,0.45)]">
+                  We&apos;ll notify you instantly the moment NGN reaches your
+                  target — straight to your inbox.
+                </p>
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="mt-6 grid w-full min-w-0 gap-3 min-[600px]:grid-cols-2">
+              <label className="min-w-0 space-y-2 min-[600px]:text-sm">
+                <span className="block text-[12px] font-bold uppercase tracking-[0.08em] text-[#0d1f12]">
+                  Target rate
+                </span>
+                <input
+                  className="alert-input min-h-12 w-full min-w-0 rounded-[8px] border border-[#c8e6c9] bg-white px-[14px] py-[11px] font-mono outline-none"
+                  inputMode="decimal"
+                  placeholder="1600"
+                  type="number"
+                  value={targetRate}
+                  onChange={(event) => setTargetRate(event.target.value)}
+                />
+              </label>
+
+              <label className="min-w-0 space-y-2 min-[600px]:text-sm">
+                <span className="block text-[12px] font-bold uppercase tracking-[0.08em] text-[#0d1f12]">
+                  Email
+                </span>
+                <input
+                  className="alert-input min-h-12 w-full min-w-0 rounded-[8px] border border-[#c8e6c9] bg-white px-[14px] py-[11px] outline-none"
+                  placeholder="you@example.com"
+                  type="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                />
+              </label>
+            </div>
+
+            <label className="mt-[10px] flex items-start gap-3">
+              <input
+                checked={consent}
+                className="mt-1 h-4 w-4 rounded border-brand-navy/20 text-brand-green accent-[#1a5c2a]"
+                type="checkbox"
+                onChange={(event) => setConsent(event.target.checked)}
+              />
+              <div className="rounded-[10px] bg-[#f0f7f2] px-[14px] py-3">
+                <p className="text-[13px] font-medium leading-[1.7] text-[#1e3d28]">
+                  I agree to receive rate alerts and product updates. You can
+                  unsubscribe at any time. Messaging follows{" "}
+                  <strong className="font-bold">GDPR</strong> and{" "}
+                  <strong className="font-bold">CAN-SPAM</strong> expectations.
+                </p>
+              </div>
+            </label>
+          </>
+        )}
 
         <div className={isHero ? "" : "mt-4"}>
           <button
