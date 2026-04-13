@@ -14,12 +14,6 @@ html {
   scroll-padding-top: 60px;
 }
 
-@media (min-width: 900px) {
-  html {
-    scroll-padding-top: 120px;
-  }
-}
-
 body {
   min-height: 100vh;
   overflow-x: hidden;
@@ -102,36 +96,6 @@ summary::-webkit-details-marker {
 
 .alert-hero-card .alert-input::placeholder {
   color: #b0c4b0;
-}
-
-@media (min-width: 900px) and (max-width: 1200px) {
-  .strip {
-    max-width: 100%;
-  }
-
-  .st-s {
-    display: none;
-  }
-
-  .strip-item {
-    padding: 12px 10px;
-  }
-
-  .si,
-  .ai-circle {
-    width: 30px !important;
-    height: 30px !important;
-  }
-
-  .st-t {
-    font-size: 11px;
-  }
-}
-
-@media (max-width: 899px) {
-  .feature-strip {
-    display: none;
-  }
 }
 
 @layer base {

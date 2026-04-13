@@ -5,12 +5,11 @@ import { usePathname, useRouter } from "next/navigation";
 import type { LucideIcon } from "lucide-react";
 import {
   Activity,
-  BellRing,
-  Bot,
   Clock3,
   CreditCard,
   Menu,
   Search,
+  UserRound,
   X
 } from "lucide-react";
 import {
@@ -40,7 +39,7 @@ interface NavigationItem {
   sectionId?: string;
 }
 
-const featureNavigationItems: NavigationItem[] = [
+const navigationItems: NavigationItem[] = [
   {
     description: "Cards for the Nigerian diaspora",
     href: "/credit-cards",
@@ -61,15 +60,6 @@ const featureNavigationItems: NavigationItem[] = [
     sectionId: "how-it-works"
   },
   {
-    description: "Instant alerts when NGN hits your rate",
-    href: "/alerts",
-    icon: BellRing,
-    iconBoxClassName: "bg-[#e8f5e9]",
-    iconColorClassName: "text-[#2e7d32]",
-    label: "Rate Alerts",
-    matchPathnames: ["/alerts"]
-  },
-  {
     description: "Best time and route guidance",
     href: "#smart-sending",
     icon: Activity,
@@ -80,25 +70,17 @@ const featureNavigationItems: NavigationItem[] = [
     sectionId: "smart-sending"
   },
   {
-    description: "Get instant help with rates and routes",
-    href: "/",
-    icon: Bot,
-    iconBoxClassName: "bg-[#eef4ff]",
-    iconColorClassName: "text-[#2563eb]",
-    label: "Ask AI",
-    routeHref: "/"
+    description: "Our story",
+    href: "/about",
+    icon: UserRound,
+    iconBoxClassName: "bg-[#fff4d8]",
+    iconColorClassName: "text-[#d88a00]",
+    label: "About Us",
+    matchPathnames: ["/about"]
   }
 ] as const;
 
-const aboutNavigationItem: NavigationItem = {
-  description: "Our story",
-  href: "/about",
-  label: "About Us",
-  matchPathnames: ["/about"]
-};
-
 const contactNavigationItem: NavigationItem = {
-  description: "Get in touch with the team",
   href: "#contact",
   label: "Contact Us",
   routeHref: "/#contact",
@@ -111,11 +93,7 @@ const brandFontStyle = {
 const headerShellClassName = "mx-auto w-full max-w-[1200px] px-4 lg:px-6";
 const breadcrumbShellClassName =
   "mx-auto w-full max-w-[1200px] px-4 min-[600px]:px-6 lg:px-10";
-const allNavigationItems = [
-  ...featureNavigationItems,
-  aboutNavigationItem,
-  contactNavigationItem
-];
+const allNavigationItems = [...navigationItems, contactNavigationItem];
 
 function SaveRateAfricaLogo({
   href,
@@ -449,13 +427,13 @@ export function SiteHeader({
     );
   }
 
-  function renderFeatureStripItem(item: NavigationItem) {
+  function renderTabletNavigationItem(item: NavigationItem) {
     const isActive = isActiveNavigationItem(item);
 
     return (
       <Link
         aria-label={item.label}
-        className={`strip-item group flex w-full min-w-0 items-center gap-2 rounded-[14px] border px-4 py-3 transition-colors ${
+        className={`strip-item group flex shrink-0 items-center gap-1.5 rounded-[14px] border px-3 py-1.5 transition-colors min-[860px]:gap-2 ${
           isActive
             ? "border-[#c8e6c9] bg-[#f4faf5] shadow-[0_0_0_1px_rgba(46,125,50,0.08)]"
             : "border-transparent bg-white hover:border-[#dcedc8] hover:bg-[#f8fcf8]"
@@ -464,45 +442,16 @@ export function SiteHeader({
         title={item.label}
         onClick={(event) => handleNavigationClick(event, item)}
       >
-        {renderFeatureIcon(item)}
-        <div className="min-w-0">
-          <span
-            className={`st-t block whitespace-nowrap text-[12px] leading-[1.2] ${
-              isActive
-                ? "font-bold text-[#1b5e20]"
-                : "font-semibold text-[#1a2e1a] group-hover:text-[#1b5e20]"
-            }`}
-          >
-            {item.label}
-          </span>
-          {item.description ? (
-            <span
-              className={`st-s mt-1 block truncate text-[10px] leading-[1.2] ${
-                isActive ? "text-[#3b5e43]" : "text-[#5f7d63] group-hover:text-[#3b5e43]"
-              }`}
-            >
-              {item.description}
-            </span>
-          ) : null}
-        </div>
-      </Link>
-    );
-  }
-
-  function renderTopNavLink(item: NavigationItem) {
-    const isActive = isActiveNavigationItem(item);
-
-    return (
-      <Link
-        className={`inline-flex items-center rounded-[6px] px-3 py-1.5 text-[13px] font-medium no-underline ${
-          isActive
-            ? "bg-[#f1faf2] text-[#1b5e20]"
-            : "text-[#2e4a2e] hover:bg-[#f1faf2] hover:text-[#1b5e20]"
-        }`}
-        href={getNavigationHref(item)}
-        onClick={(event) => handleNavigationClick(event, item)}
-      >
-        {item.label}
+        {renderFeatureIcon(item, true)}
+        <span
+          className={`st-t block shrink-0 whitespace-nowrap text-[10px] leading-[1.2] min-[860px]:text-[11px] ${
+            isActive
+              ? "font-bold text-[#1b5e20]"
+              : "font-semibold text-[#1a2e1a] group-hover:text-[#1b5e20]"
+          }`}
+        >
+          {item.label}
+        </span>
       </Link>
     );
   }
@@ -532,16 +481,70 @@ export function SiteHeader({
         </div>
       ) : null}
 
-      <header className="sticky top-0 z-[1000] border-b border-[#e0ede2] bg-white shadow-[0_2px_8px_rgba(46,125,50,0.08)]">
+      <header className="sticky top-0 z-[999] border-b border-[#e0ede2] bg-white shadow-[0_2px_8px_rgba(46,125,50,0.08)]">
         <div className={headerShellClassName}>
           <div className="relative flex h-[60px] items-center justify-between gap-4">
             <div className="flex min-w-0 flex-1 items-center">
               <SaveRateAfricaLogo href={getHomeHref()} onClick={handleLogoClick} />
+              <nav aria-label="Primary" className="ml-3 hidden min-w-0 flex-1 lg:flex xl:ml-4">
+                <ul className="strip grid min-w-0 flex-1 grid-cols-4 items-center gap-2 xl:gap-3">
+                  {navigationItems.map((item) => {
+                    const isActive = isActiveNavigationItem(item);
+
+                    return (
+                      <li key={item.label} className="min-w-0 list-none">
+                        <Link
+                          className={`strip-item group flex w-full min-w-0 items-center gap-1.5 rounded-[14px] border px-3.5 py-2 transition-colors xl:gap-2 xl:px-5 ${
+                            isActive
+                              ? "border-[#c8e6c9] bg-[#f4faf5] text-[#1b5e20] shadow-[0_0_0_1px_rgba(46,125,50,0.08)]"
+                              : "border-transparent bg-white text-[#2e4a2e] hover:border-[#dcedc8] hover:bg-[#f8fcf8]"
+                          }`}
+                          href={getNavigationHref(item)}
+                          onClick={(event) => handleNavigationClick(event, item)}
+                        >
+                          {renderFeatureIcon(item)}
+                          <span
+                            className={`st-t block min-w-0 whitespace-nowrap text-[11px] leading-[1.2] transition-colors xl:text-[12px] ${
+                              isActive
+                                ? "font-bold text-[#1b5e20]"
+                                : "font-semibold text-[#1a2e1a] group-hover:text-[#1b5e20]"
+                            }`}
+                          >
+                            {item.label}
+                          </span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </nav>
+
+              <nav
+                aria-label="Tablet primary"
+                className="ml-3 hidden min-w-0 flex-1 items-center md:flex lg:hidden"
+              >
+                <ul className="strip grid w-full min-w-0 grid-cols-3 items-center gap-1 pr-2 min-[860px]:grid-cols-4">
+                  {navigationItems.map((item) => (
+                    <li key={item.label} className="min-w-0 list-none">
+                      {renderTabletNavigationItem(item)}
+                    </li>
+                  ))}
+                </ul>
+              </nav>
             </div>
 
-            <div className="hidden shrink-0 items-center gap-1.5 min-[900px]:flex">
-              {renderTopNavLink(aboutNavigationItem)}
-              {renderTopNavLink(contactNavigationItem)}
+            <div className="hidden shrink-0 items-center gap-2 lg:flex">
+              <Link
+                className={`inline-flex h-9 items-center rounded-full px-3 text-[13px] font-semibold transition ${
+                  isActiveNavigationItem(contactNavigationItem)
+                    ? "bg-[#f4faf5] text-[#1b5e20]"
+                    : "text-[#2e4a2e] hover:bg-[#f4faf5] hover:text-[#2e7d32]"
+                }`}
+                href={getNavigationHref(contactNavigationItem)}
+                onClick={(event) => handleNavigationClick(event, contactNavigationItem)}
+              >
+                {contactNavigationItem.label}
+              </Link>
               <div
                 className={`relative flex items-center rounded-full transition-colors ${
                   isSearchOpen ? "border-[0.5px] border-[#1a5c2a] bg-white pl-1.5 pr-3" : ""
@@ -599,9 +602,18 @@ export function SiteHeader({
               </div>
             </div>
 
-            <div className="hidden shrink-0 items-center gap-1.5 md:flex min-[900px]:hidden">
-              {renderTopNavLink(aboutNavigationItem)}
-              {renderTopNavLink(contactNavigationItem)}
+            <div className="hidden shrink-0 items-center gap-2 md:flex lg:hidden">
+              <Link
+                className={`inline-flex h-9 items-center rounded-full px-3 text-[13px] font-semibold transition ${
+                  isActiveNavigationItem(contactNavigationItem)
+                    ? "bg-[#f4faf5] text-[#1b5e20]"
+                    : "text-[#2e4a2e] hover:bg-[#f4faf5] hover:text-[#2e7d32]"
+                }`}
+                href={getNavigationHref(contactNavigationItem)}
+                onClick={(event) => handleNavigationClick(event, contactNavigationItem)}
+              >
+                {contactNavigationItem.label}
+              </Link>
 
               <button
                 aria-expanded={isSearchOpen}
@@ -647,7 +659,7 @@ export function SiteHeader({
             </div>
 
             {isSearchOpen ? (
-              <div className="absolute left-4 right-4 top-[calc(100%+8px)] z-[1001] rounded-[6px] border border-[#c8e6c9] bg-white px-3 py-2 shadow-[0_8px_24px_rgba(0,0,0,0.08)] min-[900px]:hidden">
+              <div className="absolute left-4 right-4 top-[calc(100%+8px)] z-[1001] rounded-[6px] border border-[#c8e6c9] bg-white px-3 py-2 shadow-[0_8px_24px_rgba(0,0,0,0.08)] lg:hidden">
                 <form className="flex items-center gap-2" role="search" onSubmit={handleSearchSubmit}>
                   <input
                     ref={mobileSearchInputRef}
@@ -677,20 +689,6 @@ export function SiteHeader({
           </div>
         </div>
       </header>
-
-      <div className="feature-strip sticky top-[60px] z-[999] hidden border-b border-[#e0ede2] bg-white min-[900px]:block">
-        <div className={headerShellClassName}>
-          <nav aria-label="Feature strip" className="py-2">
-            <ul className="strip grid grid-cols-5 gap-2">
-              {featureNavigationItems.map((item) => (
-                <li key={item.label} className="min-w-0 list-none">
-                  {renderFeatureStripItem(item)}
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </div>
-      </div>
 
       <div
         className={`fixed inset-0 z-[998] bg-brand-navy/20 transition lg:hidden ${
@@ -734,7 +732,7 @@ export function SiteHeader({
             </button>
           </div>
 
-          {[...featureNavigationItems, aboutNavigationItem, contactNavigationItem].map((item) => {
+          {[...navigationItems, contactNavigationItem].map((item) => {
             const isActive = isActiveNavigationItem(item);
 
             return (
