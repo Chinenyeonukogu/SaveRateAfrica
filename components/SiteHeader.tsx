@@ -9,6 +9,7 @@ import {
   CreditCard,
   Menu,
   Search,
+  UserRound,
   X
 } from "lucide-react";
 import {
@@ -69,8 +70,12 @@ const navigationItems: NavigationItem[] = [
     sectionId: "smart-sending"
   },
   {
+    description: "Our story",
     href: "/about",
-    label: "About",
+    icon: UserRound,
+    iconBoxClassName: "bg-[#fff4d8]",
+    iconColorClassName: "text-[#d88a00]",
+    label: "About Us",
     matchPathnames: ["/about"]
   }
 ] as const;
