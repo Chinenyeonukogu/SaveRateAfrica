@@ -431,7 +431,7 @@ export function SiteHeader({
     return (
       <Link
         aria-label={item.label}
-        className={`group flex min-w-0 items-center gap-1.5 rounded-[14px] border px-3 py-1.5 transition-colors min-[860px]:gap-2 ${
+        className={`group flex shrink-0 items-center gap-1.5 rounded-[14px] border px-3 py-1.5 transition-colors min-[860px]:gap-2 ${
           isActive
             ? "border-[#c8e6c9] bg-[#f4faf5] shadow-[0_0_0_1px_rgba(46,125,50,0.08)]"
             : "border-transparent bg-white hover:border-[#dcedc8] hover:bg-[#f8fcf8]"
@@ -442,7 +442,7 @@ export function SiteHeader({
       >
         {renderFeatureIcon(item, true)}
         <span
-          className={`block whitespace-nowrap text-[10px] leading-[1.2] min-[860px]:text-[11px] ${
+          className={`block shrink-0 whitespace-nowrap text-[10px] leading-[1.2] min-[860px]:text-[11px] ${
             isActive
               ? "font-bold text-[#1b5e20]"
               : "font-semibold text-[#1a2e1a] group-hover:text-[#1b5e20]"
@@ -519,11 +519,11 @@ export function SiteHeader({
 
               <nav
                 aria-label="Tablet primary"
-                className="ml-3 hidden min-w-0 flex-1 items-center md:flex lg:hidden"
+                className="ml-3 hidden min-w-0 flex-1 items-center overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden md:flex lg:hidden"
               >
-                <ul className="flex min-w-0 items-center gap-1">
+                <ul className="flex min-w-max items-center gap-1 pr-2">
                   {navigationItems.map((item) => (
-                    <li key={item.label} className="min-w-0 list-none">
+                    <li key={item.label} className="flex-none list-none">
                       {renderTabletNavigationItem(item)}
                     </li>
                   ))}
