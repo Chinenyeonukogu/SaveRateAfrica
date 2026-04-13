@@ -18,6 +18,26 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
 
+  async function handleCtaClick() {
+    if (isHero) {
+      router.push("/alerts");
+      return;
+    }
+
+    try {
+      await fetch("/api/alerts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email,
+          targetRate: Number.parseFloat(targetRate)
+        })
+      });
+    } catch {}
+  }
+
   return (
     <div
       className={
@@ -156,7 +176,7 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
 
         <div className={isHero ? "" : "mt-4"}>
           <button
-            onClick={() => router.push(isHero ? "/alerts" : "/")}
+            onClick={handleCtaClick}
             style={{
               width: "100%",
               background: "#f5c800",
@@ -170,7 +190,7 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
               letterSpacing: "0.01em"
             }}
           >
-            Set Rate Alert →
+            {isHero ? "Set Rate Alert →" : "Send now"}
           </button>
           <p
             style={{
