@@ -68,17 +68,18 @@ const navigationItems: NavigationItem[] = [
     label: "Send Smart",
     routeHref: "/#smart-sending",
     sectionId: "smart-sending"
-  },
-  {
-    description: "Our story",
-    href: "/about",
-    icon: UserRound,
-    iconBoxClassName: "bg-[#fff4d8]",
-    iconColorClassName: "text-[#d88a00]",
-    label: "About Us",
-    matchPathnames: ["/about"]
   }
 ] as const;
+
+const aboutNavigationItem: NavigationItem = {
+  description: "Our story",
+  href: "/about",
+  icon: UserRound,
+  iconBoxClassName: "bg-[#fff4d8]",
+  iconColorClassName: "text-[#d88a00]",
+  label: "About Us",
+  matchPathnames: ["/about"]
+};
 
 const contactNavigationItem: NavigationItem = {
   href: "#contact",
@@ -93,7 +94,7 @@ const brandFontStyle = {
 const headerShellClassName = "mx-auto w-full max-w-[1200px] px-4 lg:px-6";
 const breadcrumbShellClassName =
   "mx-auto w-full max-w-[1200px] px-4 min-[600px]:px-6 lg:px-10";
-const allNavigationItems = [...navigationItems, contactNavigationItem];
+const allNavigationItems = [...navigationItems, aboutNavigationItem, contactNavigationItem];
 
 function SaveRateAfricaLogo({
   href,
@@ -462,7 +463,7 @@ export function SiteHeader({
         <div className="bg-[#2e7d32]">
           <div className="mx-auto max-w-[1200px] px-5 py-[10px] text-center text-[13px] text-white">
             <span>
-              ✦ Real-time NGN rates · No hidden fees · Compare 10+ providers and
+              ✦ Real-time NGN rates · No hidden fees · Compare 14+ providers and
               save on every transfer.{" "}
             </span>
             <Link
@@ -487,7 +488,7 @@ export function SiteHeader({
             <div className="flex min-w-0 flex-1 items-center">
               <SaveRateAfricaLogo href={getHomeHref()} onClick={handleLogoClick} />
               <nav aria-label="Primary" className="ml-3 hidden min-w-0 flex-1 lg:flex xl:ml-4">
-                <ul className="strip grid min-w-0 flex-1 grid-cols-4 items-center gap-2 xl:gap-3">
+                <ul className="strip grid min-w-0 flex-1 grid-cols-3 items-center gap-2 xl:gap-3">
                   {navigationItems.map((item) => {
                     const isActive = isActiveNavigationItem(item);
 
@@ -523,7 +524,7 @@ export function SiteHeader({
                 aria-label="Tablet primary"
                 className="ml-3 hidden min-w-0 flex-1 items-center md:flex lg:hidden"
               >
-                <ul className="strip grid w-full min-w-0 grid-cols-3 items-center gap-1 pr-2 min-[860px]:grid-cols-4">
+                <ul className="strip grid w-full min-w-0 grid-cols-3 items-center gap-1 pr-2">
                   {navigationItems.map((item) => (
                     <li key={item.label} className="min-w-0 list-none">
                       {renderTabletNavigationItem(item)}
@@ -534,6 +535,17 @@ export function SiteHeader({
             </div>
 
             <div className="hidden shrink-0 items-center gap-2 lg:flex">
+              <Link
+                className={`inline-flex h-9 items-center rounded-full px-3 text-[13px] font-semibold transition ${
+                  isActiveNavigationItem(aboutNavigationItem)
+                    ? "bg-[#f4faf5] text-[#1b5e20]"
+                    : "text-[#2e4a2e] hover:bg-[#f4faf5] hover:text-[#2e7d32]"
+                }`}
+                href={getNavigationHref(aboutNavigationItem)}
+                onClick={(event) => handleNavigationClick(event, aboutNavigationItem)}
+              >
+                {aboutNavigationItem.label}
+              </Link>
               <Link
                 className={`inline-flex h-9 items-center rounded-full px-3 text-[13px] font-semibold transition ${
                   isActiveNavigationItem(contactNavigationItem)
@@ -603,6 +615,17 @@ export function SiteHeader({
             </div>
 
             <div className="hidden shrink-0 items-center gap-2 md:flex lg:hidden">
+              <Link
+                className={`inline-flex h-9 items-center rounded-full px-3 text-[13px] font-semibold transition ${
+                  isActiveNavigationItem(aboutNavigationItem)
+                    ? "bg-[#f4faf5] text-[#1b5e20]"
+                    : "text-[#2e4a2e] hover:bg-[#f4faf5] hover:text-[#2e7d32]"
+                }`}
+                href={getNavigationHref(aboutNavigationItem)}
+                onClick={(event) => handleNavigationClick(event, aboutNavigationItem)}
+              >
+                {aboutNavigationItem.label}
+              </Link>
               <Link
                 className={`inline-flex h-9 items-center rounded-full px-3 text-[13px] font-semibold transition ${
                   isActiveNavigationItem(contactNavigationItem)
@@ -732,7 +755,7 @@ export function SiteHeader({
             </button>
           </div>
 
-          {[...navigationItems, contactNavigationItem].map((item) => {
+          {[...navigationItems, aboutNavigationItem, contactNavigationItem].map((item) => {
             const isActive = isActiveNavigationItem(item);
 
             return (
