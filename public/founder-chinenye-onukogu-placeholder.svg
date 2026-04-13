@@ -1,0 +1,29 @@
+<svg width="560" height="720" viewBox="0 0 560 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="80" y1="60" x2="500" y2="680" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1B5E20"/>
+      <stop offset="0.45" stop-color="#2E7D32"/>
+      <stop offset="1" stop-color="#0D2010"/>
+    </linearGradient>
+    <linearGradient id="halo" x1="160" y1="120" x2="400" y2="420" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A8E6B8" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#A8E6B8" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="560" height="720" rx="28" fill="url(#bg)"/>
+  <circle cx="188" cy="164" r="138" fill="url(#halo)" opacity="0.36"/>
+  <circle cx="438" cy="110" r="84" fill="#FFFFFF" opacity="0.06"/>
+  <circle cx="470" cy="624" r="124" fill="#FFFFFF" opacity="0.05"/>
+
+  <path d="M124 572C124 466.477 209.477 381 315 381C420.523 381 506 466.477 506 572V720H124V572Z" fill="#F4FAF5" opacity="0.18"/>
+  <circle cx="315" cy="274" r="112" fill="#F4FAF5" opacity="0.9"/>
+  <path d="M174 622C174 536.396 243.396 467 329 467H339C424.604 467 494 536.396 494 622V720H174V622Z" fill="#F4FAF5" opacity="0.9"/>
+
+  <rect x="40" y="42" width="140" height="32" rx="16" fill="#FFFFFF" fill-opacity="0.12"/>
+  <text x="60" y="63" fill="#A8E6B8" font-family="Arial, sans-serif" font-size="14" font-weight="700" letter-spacing="2">OUR STORY</text>
+
+  <text x="58" y="648" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="46" font-weight="700">CO</text>
+  <text x="58" y="680" fill="#A8E6B8" font-family="Arial, sans-serif" font-size="20" font-weight="600">Founder portrait placeholder</text>
+  <text x="58" y="706" fill="#E6F6E9" font-family="Arial, sans-serif" font-size="16">Drop in the provided photo to replace this card.</text>
+</svg>

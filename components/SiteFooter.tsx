@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export function SiteFooter() {
   const aboutText =
     "SaveRateAfrica is an independent comparison platform. We are not a money transfer operator and do not process transfers. Our mission is to help Nigerians in the diaspora send more money home by comparing the best real rates and lowest fees.";
@@ -35,6 +37,18 @@ export function SiteFooter() {
               <p className="mt-[10px] text-[12px] font-semibold leading-[1.7] text-[#6a8a6a]">
                 {aboutText}
               </p>
+
+              <div className="mt-5">
+                <p className="mb-[10px] text-[10px] font-semibold uppercase tracking-[1.5px] text-[#5a7a5a]">
+                  Quick Links
+                </p>
+                <Link
+                  className="inline-flex text-[13px] font-semibold text-[#2e7d32] transition hover:text-[#1b5e20] hover:underline"
+                  href="/about"
+                >
+                  About Us
+                </Link>
+              </div>
             </div>
 
             <div>

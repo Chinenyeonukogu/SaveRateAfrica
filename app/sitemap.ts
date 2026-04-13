@@ -5,7 +5,7 @@ import { providers } from "@/lib/providers";
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://www.saverateafrica.com";
 
-  const staticPages = ["", "/credit-cards", "/providers", "/blog", "/alerts"].map(
+  const staticPages = ["", "/about", "/credit-cards", "/providers", "/blog", "/alerts"].map(
     (path) => ({
       url: `${baseUrl}${path}`,
       lastModified: new Date(),
