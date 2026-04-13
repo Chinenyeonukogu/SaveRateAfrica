@@ -484,8 +484,8 @@ export function SiteHeader({
 
       <header className="sticky top-0 z-[999] border-b border-[#e0ede2] bg-white shadow-[0_2px_8px_rgba(46,125,50,0.08)]">
         <div className={headerShellClassName}>
-          <div className="relative flex h-[60px] items-center justify-between gap-4">
-            <div className="flex min-w-0 flex-1 items-center">
+          <div className="relative flex h-[60px] items-center justify-between gap-4 md:h-auto md:min-h-[60px] md:flex-wrap md:py-2 lg:h-[60px] lg:min-h-0 lg:flex-nowrap lg:py-0">
+            <div className="flex min-w-0 flex-1 items-center md:w-full lg:w-auto">
               <SaveRateAfricaLogo href={getHomeHref()} onClick={handleLogoClick} />
               <nav aria-label="Primary" className="ml-3 hidden min-w-0 flex-1 lg:flex xl:ml-4">
                 <ul className="strip grid min-w-0 flex-1 grid-cols-3 items-center gap-2 xl:gap-3">
@@ -536,7 +536,7 @@ export function SiteHeader({
 
             <div className="hidden shrink-0 items-center gap-2 lg:flex">
               <Link
-                className={`inline-flex h-9 items-center rounded-full px-3 text-[13px] font-semibold transition ${
+                className={`inline-flex h-9 items-center gap-2 rounded-full px-3 text-[13px] font-semibold transition ${
                   isActiveNavigationItem(aboutNavigationItem)
                     ? "bg-[#f4faf5] text-[#1b5e20]"
                     : "text-[#2e4a2e] hover:bg-[#f4faf5] hover:text-[#2e7d32]"
@@ -544,6 +544,7 @@ export function SiteHeader({
                 href={getNavigationHref(aboutNavigationItem)}
                 onClick={(event) => handleNavigationClick(event, aboutNavigationItem)}
               >
+                {renderFeatureIcon(aboutNavigationItem, true)}
                 {aboutNavigationItem.label}
               </Link>
               <Link
@@ -614,9 +615,9 @@ export function SiteHeader({
               </div>
             </div>
 
-            <div className="hidden shrink-0 items-center gap-2 md:flex lg:hidden">
+            <div className="hidden w-full shrink-0 items-center justify-end gap-2 md:flex lg:hidden">
               <Link
-                className={`inline-flex h-9 items-center rounded-full px-3 text-[13px] font-semibold transition ${
+                className={`inline-flex h-9 items-center gap-2 rounded-full px-3 text-[13px] font-semibold transition ${
                   isActiveNavigationItem(aboutNavigationItem)
                     ? "bg-[#f4faf5] text-[#1b5e20]"
                     : "text-[#2e4a2e] hover:bg-[#f4faf5] hover:text-[#2e7d32]"
@@ -624,6 +625,7 @@ export function SiteHeader({
                 href={getNavigationHref(aboutNavigationItem)}
                 onClick={(event) => handleNavigationClick(event, aboutNavigationItem)}
               >
+                {renderFeatureIcon(aboutNavigationItem, true)}
                 {aboutNavigationItem.label}
               </Link>
               <Link
