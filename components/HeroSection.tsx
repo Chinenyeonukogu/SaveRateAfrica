@@ -1,6 +1,6 @@
 "use client";
 
-import type { MutableRefObject, ReactNode } from "react";
+import { useEffect, useMemo, useState, type MutableRefObject, type ReactNode } from "react";
 import Link from "next/link";
 
 import {
@@ -53,9 +53,20 @@ const appDownloadButtons = [
     prefix: "Get it on"
   }
 ] as const;
-const BEST_RATE = 1380.65;
-const WORST_RATE = 1370.98;
-const WORST_FEE = 8.99;
+const EXCHANGE_RATE_API_URL = "https://api.exchangerate-api.com/v4/latest/USD";
+const FALLBACK_BASE_RATE = 1595;
+
+const providers = [
+  { name: "Grey Finance", fee: 2.0, offset: 0.998 },
+  { name: "Afriex", fee: 0.0, offset: 0.997 },
+  { name: "Wise", fee: 4.5, offset: 0.995 },
+  { name: "Remitly", fee: 3.99, offset: 0.992 },
+  { name: "WorldRemit", fee: 5.0, offset: 0.990 },
+  { name: "SendWave", fee: 0.0, offset: 0.988 },
+  { name: "Western Union", fee: 5.0, offset: 0.985 },
+  { name: "MoneyGram", fee: 6.0, offset: 0.983 }
+] as const;
+
 const trustPills = [
   "\ud83d\udd12 256-bit secure",
   "\u23f1 Real-time data",
@@ -129,9 +140,64 @@ export function HeroSection({
 }: HeroSectionProps) {
   const currencyMeta = currencySymbolByCountry[senderCountry];
   const sendAmount = Number.parseFloat(amount || "0") || 0;
-  const bestPayout = sendAmount * BEST_RATE;
-  const worstPayout = (sendAmount - WORST_FEE) * WORST_RATE;
-  const savings = bestPayout - worstPayout;
+  const [baseRate, setBaseRate] = useState<number>(FALLBACK_BASE_RATE);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function refreshBaseRate() {
+      try {
+        const response = await fetch(EXCHANGE_RATE_API_URL);
+        if (!response.ok) {
+          throw new Error("Rate fetch failed");
+        }
+
+        const payload = await response.json();
+        const rate = Number(payload?.rates?.NGN);
+
+        if (!Number.isFinite(rate)) {
+          throw new Error("Invalid NGN rate");
+        }
+
+        if (!cancelled) {
+          setBaseRate(rate);
+        }
+      } catch {
+        if (!cancelled) {
+          setBaseRate(FALLBACK_BASE_RATE);
+        }
+      }
+    }
+
+    refreshBaseRate();
+    const interval = setInterval(refreshBaseRate, 60000);
+
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, []);
+
+  const providerResults = useMemo(() => {
+    const amount = Math.max(0, sendAmount);
+
+    return providers
+      .map((provider) => {
+        const providerRate = baseRate * provider.offset;
+        const recipientReceives = Math.max(0, amount - provider.fee) * providerRate;
+
+        return {
+          ...provider,
+          providerRate,
+          recipientReceives
+        };
+      })
+      .sort((first, second) => second.recipientReceives - first.recipientReceives);
+  }, [sendAmount, baseRate]);
+
+  const topProvider = providerResults[0] ?? providers[0];
+  const bottomProvider = providerResults[providerResults.length - 1] ?? providers[0];
+  const savings = Math.max(0, topProvider.recipientReceives - bottomProvider.recipientReceives);
 
   return (
     <section
@@ -347,23 +413,22 @@ export function HeroSection({
                       💰 SAVINGS CALCULATOR
                     </p>
                     <h3 className="mt-1 text-[15px] font-bold text-[#1a2e1a]">
-                      You could save up to ₦{formatCalculatedNgn(savings)}
+                      Compare real payouts and save up to ₦{formatCalculatedNgn(savings)}
                     </h3>
                     <p className="mt-1 text-[10px] text-[#7a9a7a]">
-                      Based on ${sendAmount.toLocaleString("en-US")} · Grey Finance vs
-                      Western Union
+                      Based on ${sendAmount.toLocaleString("en-US")} · {topProvider.name} vs {bottomProvider.name}
                     </p>
 
                     <div className="mt-3 grid grid-cols-[minmax(0,1fr)_28px_minmax(0,1fr)] items-center gap-2">
                       <div className="rounded-[8px] border border-[#c8e6c9] bg-[#e8f5e9] px-3 py-[10px]">
                         <p className="mb-1 text-[9px] font-semibold uppercase tracking-[0.8px] text-[#5a8a5a]">
-                          Best value
+                          Top payout
                         </p>
                         <p className="sname text-[13px] font-bold leading-[1.3] text-[#1a2e1a] whitespace-normal break-words">
-                          Grey Finance
+                          {topProvider.name}
                         </p>
                         <p className="mt-1 text-[13px] font-semibold text-[#2e7d32]">
-                          ₦{formatCalculatedNgn(bestPayout)}
+                          ₦{formatCalculatedNgn(topProvider.recipientReceives)}
                         </p>
                       </div>
 
@@ -373,13 +438,13 @@ export function HeroSection({
 
                       <div className="rounded-[8px] border border-[#e8e8e8] bg-[#fafafa] px-3 py-[10px]">
                         <p className="mb-1 text-[9px] font-semibold uppercase tracking-[0.8px] text-[#9a8a7a]">
-                          Less efficient
+                          Other provider
                         </p>
                         <p className="sname text-[13px] font-bold leading-[1.3] text-[#1a2e1a] whitespace-normal break-words">
-                          Western Union
+                          {bottomProvider.name}
                         </p>
                         <p className="mt-1 text-[13px] font-semibold text-[#888888]">
-                          ₦{formatCalculatedNgn(worstPayout)}
+                          ₦{formatCalculatedNgn(bottomProvider.recipientReceives)}
                         </p>
                       </div>
                     </div>
