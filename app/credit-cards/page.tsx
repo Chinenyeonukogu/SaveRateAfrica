@@ -437,8 +437,7 @@ export default function CreditCardsPage() {
 
           <div className="mt-6 rounded-[16px] border border-[#e8f5e9] bg-white px-5 py-4 text-center text-sm leading-7 text-[#5d6b5f] min-[600px]:px-6">
             We may earn a commission if you apply through our links, at no cost
-            to you. Our recommendations prioritize fit, accessibility, and
-            long-term value for diaspora senders.
+            to you. Our recommendations offer long-term value for diaspora senders.
           </div>
         </section>
       </main>
