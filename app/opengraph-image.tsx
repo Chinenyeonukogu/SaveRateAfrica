@@ -67,7 +67,7 @@ export default function OpenGraphImage() {
                 background: "rgba(255,255,255,0.12)"
               }}
             >
-              10+ providers
+              14+ providers
             </div>
             <div
               style={{

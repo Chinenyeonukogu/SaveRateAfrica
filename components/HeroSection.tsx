@@ -162,7 +162,7 @@ export function HeroSection({
             </div>
 
             <p className="mb-6 mt-[14px] max-w-[440px] text-[14px] leading-[1.7] text-white/70">
-              Real-time rates from 10+ trusted providers. No hidden fees. Ranked by
+              Real-time rates from 14+ trusted providers. No hidden fees. Ranked by
               the exact NGN your recipient receives after all charges.
             </p>
 

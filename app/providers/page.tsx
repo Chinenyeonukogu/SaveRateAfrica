@@ -7,7 +7,7 @@ import { providers } from "@/lib/providers";
 export const metadata: Metadata = {
   title: "All Money Transfer Providers to Nigeria | SaveRateAfrica",
   description:
-    "Browse 10+ money transfer providers sending to Nigeria and filter by country, speed, fee range, and rating.",
+    "Browse 14+ money transfer providers sending to Nigeria and filter by country, speed, fee range, and rating.",
   alternates: {
     canonical: "/providers"
   }
