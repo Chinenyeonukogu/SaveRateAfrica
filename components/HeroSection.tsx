@@ -54,7 +54,7 @@ const appDownloadButtons = [
   }
 ] as const;
 const EXCHANGE_RATE_API_URL = "https://api.exchangerate-api.com/v4/latest/USD";
-const FALLBACK_BASE_RATE = 1595;
+const FALLBACK_BASE_RATE = 159;
 
 const providers = [
   { name: "Grey Finance", fee: 2.0, offset: 0.998 },
@@ -141,6 +141,8 @@ export function HeroSection({
   const currencyMeta = currencySymbolByCountry[senderCountry];
   const sendAmount = Number.parseFloat(amount || "0") || 0;
   const [baseRate, setBaseRate] = useState<number>(FALLBACK_BASE_RATE);
+  const [currentLowerIndex, setCurrentLowerIndex] = useState<number>(providers.length - 1);
+  const [fade, setFade] = useState<boolean>(true);
 
   useEffect(() => {
     let cancelled = false;
@@ -160,22 +162,37 @@ export function HeroSection({
         }
 
         if (!cancelled) {
+          setFade(false);
           setBaseRate(rate);
+          setTimeout(() => setFade(true), 100);
         }
       } catch {
         if (!cancelled) {
+          setFade(false);
           setBaseRate(FALLBACK_BASE_RATE);
+          setTimeout(() => setFade(true), 100);
         }
       }
     }
 
     refreshBaseRate();
-    const interval = setInterval(refreshBaseRate, 60000);
+    const interval = setInterval(refreshBaseRate, 30000);
 
     return () => {
       cancelled = true;
       clearInterval(interval);
     };
+  }, []);
+
+  useEffect(() => {
+    const rotationInterval = setInterval(() => {
+      setCurrentLowerIndex(prev => {
+        const next = prev - 1;
+        return next < 1 ? providers.length - 1 : next;
+      });
+    }, 30000);
+
+    return () => clearInterval(rotationInterval);
   }, []);
 
   const providerResults = useMemo(() => {
@@ -196,8 +213,8 @@ export function HeroSection({
   }, [sendAmount, baseRate]);
 
   const topProvider = providerResults[0] ?? providers[0];
-  const bottomProvider = providerResults[providerResults.length - 1] ?? providers[0];
-  const savings = Math.max(0, topProvider.recipientReceives - bottomProvider.recipientReceives);
+  const lowerProvider = providerResults[currentLowerIndex] ?? providers[providers.length - 1];
+  const savings = Math.max(0, topProvider.recipientReceives - lowerProvider.recipientReceives);
 
   return (
     <section
@@ -416,7 +433,7 @@ export function HeroSection({
                       Compare real payouts and save up to ₦{formatCalculatedNgn(savings)}
                     </h3>
                     <p className="mt-1 text-[10px] text-[#7a9a7a]">
-                      Based on ${sendAmount.toLocaleString("en-US")} · {topProvider.name} vs {bottomProvider.name}
+                      Based on ${sendAmount.toLocaleString("en-US")} · {topProvider.name} vs {lowerProvider.name}
                     </p>
 
                     <div className="mt-3 grid grid-cols-[minmax(0,1fr)_28px_minmax(0,1fr)] items-center gap-2">
@@ -427,7 +444,7 @@ export function HeroSection({
                         <p className="sname text-[13px] font-bold leading-[1.3] text-[#1a2e1a] whitespace-normal break-words">
                           {topProvider.name}
                         </p>
-                        <p className="mt-1 text-[13px] font-semibold text-[#2e7d32]">
+                        <p className={`mt-1 text-[13px] font-semibold text-[#2e7d32] transition-opacity duration-500 ${fade ? 'opacity-100' : 'opacity-0'}`}>
                           ₦{formatCalculatedNgn(topProvider.recipientReceives)}
                         </p>
                       </div>
@@ -438,20 +455,20 @@ export function HeroSection({
 
                       <div className="rounded-[8px] border border-[#e8e8e8] bg-[#fafafa] px-3 py-[10px]">
                         <p className="mb-1 text-[9px] font-semibold uppercase tracking-[0.8px] text-[#9a8a7a]">
-                          Other provider
+                          Lower payout
                         </p>
                         <p className="sname text-[13px] font-bold leading-[1.3] text-[#1a2e1a] whitespace-normal break-words">
-                          {bottomProvider.name}
+                          {lowerProvider.name}
                         </p>
-                        <p className="mt-1 text-[13px] font-semibold text-[#888888]">
-                          ₦{formatCalculatedNgn(bottomProvider.recipientReceives)}
+                        <p className={`mt-1 text-[13px] font-semibold text-[#888888] transition-opacity duration-500 ${fade ? 'opacity-100' : 'opacity-0'}`}>
+                          ₦{formatCalculatedNgn(lowerProvider.recipientReceives)}
                         </p>
                       </div>
                     </div>
 
                     <div className="mt-3 flex items-center justify-between gap-3 rounded-[6px] bg-[#e0f2e1] px-3 py-2">
                       <span className="text-[11px] text-[#2e4a2e]">Your savings</span>
-                      <span className="text-[13px] font-bold text-[#1b5e20]">
+                      <span className={`text-[13px] font-bold text-[#1b5e20] transition-opacity duration-500 ${fade ? 'opacity-100' : 'opacity-0'}`}>
                         + ₦{formatCalculatedNgn(savings)}
                       </span>
                     </div>
