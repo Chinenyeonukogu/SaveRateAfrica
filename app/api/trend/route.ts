@@ -24,10 +24,13 @@ export async function GET() {
     const date = new Date();
     date.setDate(date.getDate() - i);
 
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
     dates.push({
       year: date.getFullYear(),
-      month: date.getMonth() + 1,
-      day: date.getDate(),
+      month,
+      day,
       label: date.toLocaleDateString("en-US", {
         month: "short",
         day: "numeric"
