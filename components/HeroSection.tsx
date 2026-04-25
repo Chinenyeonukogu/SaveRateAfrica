@@ -143,9 +143,14 @@ export function HeroSection({
   const [baseRate, setBaseRate] = useState<number>(FALLBACK_BASE_RATE);
   const [currentLowerIndex, setCurrentLowerIndex] = useState<number>(providers.length - 1);
   const [fade, setFade] = useState<boolean>(true);
+  const [flashActive, setFlashActive] = useState<boolean>(false);
+  const [swapSpin, setSwapSpin] = useState<boolean>(false);
+  const [secondsRemaining, setSecondsRemaining] = useState<number>(30);
 
   useEffect(() => {
     let cancelled = false;
+    let flashTimeout: ReturnType<typeof setTimeout> | null = null;
+    let fadeTimeout: ReturnType<typeof setTimeout> | null = null;
 
     async function refreshBaseRate() {
       try {
@@ -163,36 +168,49 @@ export function HeroSection({
 
         if (!cancelled) {
           setFade(false);
+          setSwapSpin((prev) => !prev);
+          setFlashActive(true);
+          setSecondsRemaining(30);
           setBaseRate(rate);
-          setTimeout(() => setFade(true), 100);
+          fadeTimeout = setTimeout(() => setFade(true), 100);
+          flashTimeout = setTimeout(() => setFlashActive(false), 800);
         }
       } catch {
         if (!cancelled) {
           setFade(false);
+          setSwapSpin((prev) => !prev);
+          setFlashActive(true);
+          setSecondsRemaining(30);
           setBaseRate(FALLBACK_BASE_RATE);
-          setTimeout(() => setFade(true), 100);
+          fadeTimeout = setTimeout(() => setFade(true), 100);
+          flashTimeout = setTimeout(() => setFlashActive(false), 800);
         }
       }
     }
 
     refreshBaseRate();
-    const interval = setInterval(refreshBaseRate, 30000);
-
-    return () => {
-      cancelled = true;
-      clearInterval(interval);
-    };
-  }, []);
-
-  useEffect(() => {
-    const rotationInterval = setInterval(() => {
-      setCurrentLowerIndex(prev => {
+    const interval = setInterval(() => {
+      refreshBaseRate();
+      setCurrentLowerIndex((prev) => {
         const next = prev - 1;
         return next < 1 ? providers.length - 1 : next;
       });
     }, 30000);
 
-    return () => clearInterval(rotationInterval);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+      if (flashTimeout) clearTimeout(flashTimeout);
+      if (fadeTimeout) clearTimeout(fadeTimeout);
+    };
+  }, []);
+
+  useEffect(() => {
+    const countdownInterval = setInterval(() => {
+      setSecondsRemaining((prev) => (prev <= 1 ? 30 : prev - 1));
+    }, 1000);
+
+    return () => clearInterval(countdownInterval);
   }, []);
 
   const providerResults = useMemo(() => {
@@ -437,7 +455,7 @@ export function HeroSection({
                     </p>
 
                     <div className="mt-3 grid grid-cols-[minmax(0,1fr)_28px_minmax(0,1fr)] items-center gap-2">
-                      <div className="rounded-[8px] border border-[#c8e6c9] bg-[#e8f5e9] px-3 py-[10px]">
+                      <div className={`rounded-[8px] border border-[#c8e6c9] bg-[#e8f5e9] px-3 py-[10px] transition-all duration-300 ${flashActive ? "border-[#2e7d32] shadow-[0_0_10px_rgba(46,125,50,0.25)]" : ""}`}>
                         <p className="mb-1 text-[9px] font-semibold uppercase tracking-[0.8px] text-[#5a8a5a]">
                           Top payout
                         </p>
@@ -449,11 +467,16 @@ export function HeroSection({
                         </p>
                       </div>
 
-                      <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2e7d32] text-white">
+                      <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2e7d32] text-white"
+                        style={{
+                          transform: swapSpin ? "rotate(360deg)" : "rotate(0deg)",
+                          transition: "transform 0.6s ease"
+                        }}
+                      >
                         <ArrowUpDown className="h-3 w-3" />
                       </div>
 
-                      <div className="rounded-[8px] border border-[#e8e8e8] bg-[#fafafa] px-3 py-[10px]">
+                      <div className={`rounded-[8px] border border-[#e8e8e8] bg-[#fafafa] px-3 py-[10px] transition-all duration-300 ${flashActive ? "border-[#2e7d32] shadow-[0_0_10px_rgba(46,125,50,0.25)]" : ""}`}>
                         <p className="mb-1 text-[9px] font-semibold uppercase tracking-[0.8px] text-[#9a8a7a]">
                           Lower payout
                         </p>
@@ -471,6 +494,13 @@ export function HeroSection({
                       <span className={`text-[13px] font-bold text-[#1b5e20] transition-opacity duration-500 ${fade ? 'opacity-100' : 'opacity-0'}`}>
                         + ₦{formatCalculatedNgn(savings)}
                       </span>
+                    </div>
+
+                    <div className="mt-3 h-2 overflow-hidden rounded-full bg-[#f4faf5]">
+                      <div
+                        className="h-full rounded-full bg-[#2e7d32] transition-[width] duration-1000 ease-linear"
+                        style={{ width: `${(secondsRemaining / 30) * 100}%` }}
+                      />
                     </div>
                   </div>
                 </div>
