@@ -54,6 +54,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=DM+Sans:wght@400;500&display=swap"
+        />
+      </head>
       <body className="bg-brand-light text-brand-navy">
         {children}
         <SiteFooter />
