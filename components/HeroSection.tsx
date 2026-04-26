@@ -333,7 +333,7 @@ export function HeroSection({
                   COMPARE NOW
                 </p>
                 <h2 className="mb-[14px] text-[17px] font-semibold text-[#1a2e1a]">
-                  Check your best NGN payout
+                  Check your best payout
                 </h2>
 
                 <div className="flex h-full flex-col gap-3">
@@ -478,7 +478,7 @@ export function HeroSection({
 
                       <div className={`rounded-[8px] border border-[#e8e8e8] bg-[#fafafa] px-3 py-[10px] transition-all duration-300 ${flashActive ? "border-[#2e7d32] shadow-[0_0_10px_rgba(46,125,50,0.25)]" : ""}`}>
                         <p className="mb-1 text-[9px] font-semibold uppercase tracking-[0.8px] text-[#9a8a7a]">
-                          Lower payout
+                          Other provider
                         </p>
                         <p className="sname text-[13px] font-bold leading-[1.3] text-[#1a2e1a] whitespace-normal break-words">
                           {lowerProvider.name}

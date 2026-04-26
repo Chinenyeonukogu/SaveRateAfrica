@@ -44,7 +44,7 @@ export const howItWorksSteps: HowItWorksStep[] = [
     step: "01",
     title: "Enter amount and origin",
     description:
-      "Pick your sending country, enter how much you want to send, and lock Nigeria as the payout market."
+      "Pick your sending country, enter how much you want to send, and Select Compare Rates Now."
   },
   {
     step: "02",
