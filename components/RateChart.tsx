@@ -21,8 +21,6 @@ interface TrendPoint {
   CAD: number;
 }
 
-const periods = ["7D"] as const;
-
 function formatNgRate(value: number) {
   return value.toLocaleString("en-NG", {
     minimumFractionDigits: 2,
@@ -184,26 +182,18 @@ export function RateChart() {
             USD, GBP, and CAD to NGN pulse
           </h3>
           <p className="max-w-2xl text-[12px] leading-6 text-brand-navy/70 min-[600px]:text-sm">
-            Track short-term movement before you send. Toggle between 7, 30,
-            and 90-day views to spot better entry points.
+            Track the last 7 days of NGN rate movement before you send. Spot
+            the best time to transfer.
           </p>
         </div>
 
         <div className="flex flex-wrap gap-2">
-          {periods.map((value) => (
-            <button
-              key={value}
-              className={`min-h-11 rounded-full px-4 text-[12px] font-semibold transition min-[600px]:min-h-12 min-[600px]:text-sm ${
-                value === "7D"
-                  ? "bg-[#2e7d32] text-white"
-                  : "border border-[#c8e6c9] bg-white text-brand-navy opacity-50 cursor-not-allowed"
-              }`}
-              type="button"
-              disabled={value !== "7D"}
-            >
-              {value}
-            </button>
-          ))}
+          <button
+            className="rounded-[999px] bg-[#2e7d32] px-[14px] py-[5px] text-[12px] font-semibold text-white"
+            type="button"
+          >
+            7D
+          </button>
           <Link
             className="inline-flex min-h-11 items-center rounded-full bg-brand-yellow px-4 text-[12px] font-bold text-brand-navy transition hover:shadow-float min-[600px]:min-h-12 min-[600px]:text-sm"
             href="/alerts"
