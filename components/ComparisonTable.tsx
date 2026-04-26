@@ -94,7 +94,7 @@ export function ComparisonTable({
             Compare fees, speed, and real payout value
           </h2>
           <p className="mt-4 max-w-2xl text-[12px] leading-6 text-brand-navy/70 min-[600px]:text-base">
-            Providers are ranked for the selected sender country and current
+            Providers are shown for the selected sender country and current
             corridor details.
           </p>
         </div>
@@ -119,17 +119,12 @@ export function ComparisonTable({
       <div className="relative">
         {isLoading ? <LoadingSkeletonCards /> : null}
 
-        <div className="mb-3 inline-flex items-center rounded-full border border-[#c8e6c9] bg-[#f4faf5] px-3 py-1.5 text-[12px] font-bold text-[#1b5e20]">
-          📍 Ranked for {comparison.senderCountry ?? "USA"} senders
-        </div>
-
         <div className="providers-list flex flex-col gap-[10px] transition-opacity duration-200">
           {visibleProviders.map((provider, index) => (
             <ProviderCard
               key={`${comparison.senderCountry}-${provider.slug}-${comparison.amount}-${comparison.sortBy}`}
               index={index}
               provider={provider}
-              senderCountry={comparison.senderCountry ?? "USA"}
               sourceCurrency={comparison.sourceCurrency}
             />
           ))}

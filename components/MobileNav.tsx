@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BellRing, CreditCard, Home, Menu, Search } from "lucide-react";
+import { BellRing, CreditCard, Home, Menu } from "lucide-react";
 
 const items = [
   { href: "/", label: "Home", icon: Home },
-  { href: "/#compare", label: "Compare", icon: Search },
   { href: "/credit-cards", label: "Cards", icon: CreditCard },
   { href: "/alerts", label: "Alerts", icon: BellRing },
   { href: "/providers", label: "Menu", icon: Menu }
@@ -17,7 +16,7 @@ export function MobileNav() {
 
   return (
     <nav className="mobile-nav fixed inset-x-3 bottom-3 z-40 rounded-[28px] border border-brand-navy/10 bg-white/95 p-2 shadow-float backdrop-blur md:hidden">
-      <div className="grid grid-cols-5 gap-1">
+      <div className="grid grid-cols-4 gap-1">
         {items.map((item) => {
           const active =
             pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
