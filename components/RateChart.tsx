@@ -10,8 +10,7 @@ import {
   LineChart,
   ResponsiveContainer,
   Tooltip,
-  XAxis,
-  YAxis
+  XAxis
 } from "recharts";
 
 interface TrendPoint {
@@ -28,20 +27,39 @@ function formatNgRate(value: number) {
   });
 }
 
+function formatNgRateCompact(value: number) {
+  return `\u20a6${Math.round(value).toLocaleString("en-NG")}`;
+}
+
+function formatTrendDate(value: string) {
+  const parsedDate = new Date(value);
+
+  if (Number.isNaN(parsedDate.getTime())) {
+    return value;
+  }
+
+  return parsedDate.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric"
+  });
+}
+
 function ChartTooltip({ active, payload, label }: any) {
   if (!active || !payload?.length) {
     return null;
   }
 
+  const activePoint = payload[0];
+  const value = Number(activePoint.value);
+
+  if (!Number.isFinite(value)) {
+    return null;
+  }
+
   return (
-    <div className="rounded-[16px] border border-[rgba(10,22,40,0.08)] bg-white p-3 text-[12px] text-[#1a2e3a] shadow-[0_20px_60px_rgba(10,22,40,0.08)]">
-      <p className="mb-2 font-semibold">{label}</p>
-      {payload.map((entry: any) => (
-        <div key={entry.dataKey} className="flex items-center justify-between gap-4">
-          <span className="text-[#526173]">{entry.name}</span>
-          <span className="font-semibold">₦{formatNgRate(Number(entry.value))}</span>
-        </div>
-      ))}
+    <div className="rounded-[8px] bg-[#2e7d32] px-3 py-1.5 text-[12px] text-white">
+      <p>{formatTrendDate(String(label))}</p>
+      <p className="font-bold">{"\u20a6"}{formatNgRate(value)}</p>
     </div>
   );
 }
@@ -102,20 +120,6 @@ export function RateChart() {
     return chartData.flatMap((point) => [point.USD, point.GBP, point.CAD]);
   }, [chartData]);
 
-  const minRate = useMemo(() => {
-    if (!numericRates.length) {
-      return 0;
-    }
-    return Math.min(...numericRates);
-  }, [numericRates]);
-
-  const maxRate = useMemo(() => {
-    if (!numericRates.length) {
-      return 0;
-    }
-    return Math.max(...numericRates);
-  }, [numericRates]);
-
   const bestRate = useMemo(() => {
     if (!numericRates.length) {
       return 0;
@@ -130,6 +134,8 @@ export function RateChart() {
     return Math.min(...numericRates);
   }, [numericRates]);
 
+  const latestPoint = chartData[chartData.length - 1];
+
   const renderDot = (props: any) => {
     const { cx, cy, payload, dataKey } = props;
     if (typeof cx !== "number" || typeof cy !== "number" || !payload) {
@@ -143,33 +149,57 @@ export function RateChart() {
 
     const isBest = value === bestRate;
     const isLow = value === lowRate;
-    const fill = isBest ? "#2e7d32" : isLow ? "#888888" : "#2e7d32";
+    const isRecent = payload === latestPoint && dataKey === "USD";
+    const shouldShowRateLabel = isBest || isLow || isRecent;
+    const fill = isLow ? "#888888" : "#2e7d32";
     const radius = isBest || isLow ? 5 : 3;
+    const labelColor = isLow ? "#888888" : "#2e7d32";
+    const labelWeight = isLow ? 400 : 700;
 
     return (
       <g>
         <circle cx={cx} cy={cy} r={radius} fill={fill} />
         {isBest ? (
-          <text x={cx} y={cy - 12} fill="#2e7d32" fontSize={10} textAnchor="middle">
-            ▲ Top
+          <text
+            fill="#2e7d32"
+            fontFamily="DM Sans, sans-serif"
+            fontSize={10}
+            fontWeight={700}
+            textAnchor="middle"
+            x={cx}
+            y={cy - 24}
+          >
+            ▲ Best
+          </text>
+        ) : null}
+        {shouldShowRateLabel ? (
+          <text
+            fill={labelColor}
+            fontFamily="DM Sans, sans-serif"
+            fontSize={10}
+            fontWeight={labelWeight}
+            textAnchor="middle"
+            x={cx}
+            y={cy - 12}
+          >
+            {formatNgRateCompact(value)}
           </text>
         ) : null}
         {isLow ? (
-          <text x={cx} y={cy + 16} fill="#5a7a5a" fontSize={10} textAnchor="middle">
+          <text
+            fill="#5a7a5a"
+            fontFamily="DM Sans, sans-serif"
+            fontSize={10}
+            textAnchor="middle"
+            x={cx}
+            y={cy + 16}
+          >
             ▼ Low
           </text>
         ) : null}
       </g>
     );
   };
-
-  const yDomain = useMemo<[number, number]>(() => {
-    if (!numericRates.length) {
-      return [0, 100];
-    }
-
-    return [Math.max(0, minRate - 50), maxRate + 50];
-  }, [minRate, maxRate, numericRates.length]);
 
   return (
     <div className="rounded-[12px] border border-[#c8e6c9] bg-white p-4 shadow-float min-[600px]:p-5 lg:p-6">
@@ -220,22 +250,16 @@ export function RateChart() {
           </div>
         ) : (
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={chartData} margin={{ left: 0, right: 12, top: 6, bottom: 0 }}>
-              <CartesianGrid stroke="rgba(10,22,40,0.08)" strokeDasharray="4 4" />
+            <LineChart data={chartData} margin={{ left: 8, right: 12, top: 30, bottom: 0 }}>
+              <CartesianGrid stroke="rgba(0,0,0,0.05)" strokeDasharray="4 4" vertical={false} />
               <XAxis
                 axisLine={false}
                 dataKey="date"
-                tick={{ fill: "#526173", fontSize: 12 }}
+                tick={{ fill: "#5a7a5a", fontSize: 10 }}
+                tickFormatter={formatTrendDate}
                 tickLine={false}
               />
-              <YAxis
-                axisLine={false}
-                domain={yDomain}
-                tick={{ fill: "#526173", fontSize: 12 }}
-                tickLine={false}
-                width={52}
-              />
-              <Tooltip content={<ChartTooltip />} />
+              <Tooltip content={<ChartTooltip />} cursor={{ stroke: "rgba(46,125,50,0.18)" }} />
               <Legend />
               <Area
                 dataKey="USD"
@@ -270,7 +294,8 @@ export function RateChart() {
                 stroke="#FF5722"
                 strokeWidth={3}
                 type="monotone"
-                dot={false}
+                dot={renderDot}
+                activeDot={{ r: 6 }}
               />
             </LineChart>
           </ResponsiveContainer>
