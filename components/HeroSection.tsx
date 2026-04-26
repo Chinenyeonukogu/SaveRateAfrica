@@ -36,6 +36,12 @@ const flagByCountry: Record<SenderCountry, string> = {
   Canada: "🇨🇦"
 };
 
+function getCountryFlag(country: SenderCountry) {
+  if (country === "USA") return "\uD83C\uDDFA\uD83C\uDDF8";
+  if (country === "UK") return "\uD83C\uDDEC\uD83C\uDDE7";
+  return "\uD83C\uDDE8\uD83C\uDDE6";
+}
+
 const brandFontStyle = {
   fontFamily: '"Sora", var(--font-heading), sans-serif'
 } as const;
@@ -406,9 +412,7 @@ export function HeroSection({
                         return (
                           <button
                             key={country.code}
-                            aria-label={country.label}
-                            title={country.label}
-                            className={`flex min-h-10 items-center justify-center rounded-[8px] border-[1.5px] px-3 py-2 text-[18px] font-semibold transition ${
+                            className={`rounded-[8px] border-[1.5px] px-3 py-2 text-[11px] font-semibold transition ${
                               active
                                 ? "border-[#2e7d32] bg-[#2e7d32] text-white"
                                 : "border-[#e0ede2] text-[#2e4a2e] hover:border-[#2e7d32]/50"
@@ -416,7 +420,7 @@ export function HeroSection({
                             type="button"
                             onClick={() => onSenderCountryChange(country.code)}
                           >
-                            <span aria-hidden="true">{flagByCountry[country.code]}</span>
+                            {getCountryFlag(country.code)} {country.label}
                           </button>
                         );
                       })}
@@ -429,7 +433,7 @@ export function HeroSection({
                     </p>
                     <div className="flex items-center justify-between rounded-[8px] border-[1.5px] border-[#e0ede2] px-[14px] py-[9px]">
                       <span className="text-[12px] font-semibold text-[#1a2e1a]">
-                        🇳🇬 Nigeria
+                        {"\uD83C\uDDF3\uD83C\uDDEC"} Nigeria
                       </span>
                       <span className="text-[12px] font-medium text-[#2e7d32]">
                         Locked corridor
