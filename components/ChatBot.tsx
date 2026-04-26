@@ -16,14 +16,14 @@ const botResponses: Record<string, string> = {
   "top rate now": "Use our comparison tool to find a top rate available right now for your transfer. Rates update every 30 seconds.\n\n👉 Compare Rates Now →",
   "compare providers": "SaveRateAfrica compares 14+ providers including Wise, Remitly, WorldRemit, Grey Finance, LemFi, SendWave and more.\n\nUse the comparison tool on the homepage to see live payouts side by side.",
   "rate alerts": "You can set a target NGN rate and we will notify you the moment a provider hits it.\n\n🔔 Go to Rate Alerts in the nav to get started.",
-  "i need help": "📧 We are here to help!\n\nFor support or any questions about SaveRateAfrica please email us at:\n\npatterns@saverateafrica.com\n\nOur team will get back to you as soon as possible.",
-  help: "📧 We are here to help!\n\nFor support or any questions about SaveRateAfrica please email us at:\n\npatterns@saverateafrica.com\n\nOur team will get back to you as soon as possible.",
-  support: "📧 We are here to help!\n\nFor support or any questions about SaveRateAfrica please email us at:\n\npatterns@saverateafrica.com\n\nOur team will get back to you as soon as possible.",
-  contact: "📧 We are here to help!\n\nFor support or any questions about SaveRateAfrica please email us at:\n\npatterns@saverateafrica.com\n\nOur team will get back to you as soon as possible.",
-  "talk to someone": "📧 We are here to help!\n\nFor support or any questions about SaveRateAfrica please email us at:\n\npatterns@saverateafrica.com\n\nOur team will get back to you as soon as possible.",
-  human: "📧 We are here to help!\n\nFor support or any questions about SaveRateAfrica please email us at:\n\npatterns@saverateafrica.com\n\nOur team will get back to you as soon as possible.",
-  agent: "📧 We are here to help!\n\nFor support or any questions about SaveRateAfrica please email us at:\n\npatterns@saverateafrica.com\n\nOur team will get back to you as soon as possible.",
-  "i have a problem": "📧 We are here to help!\n\nFor support or any questions about SaveRateAfrica please email us at:\n\npatterns@saverateafrica.com\n\nOur team will get back to you as soon as possible."
+  "i need help": "📧 We are here to help!\nFor support or any questions about SaveRateAfrica please email us at:\npatterns@saverateafrica.com\nOur team will get back to you within 24 hours.",
+  help: "📧 We are here to help!\nFor support or any questions about SaveRateAfrica please email us at:\npatterns@saverateafrica.com\nOur team will get back to you within 24 hours.",
+  support: "📧 We are here to help!\nFor support or any questions about SaveRateAfrica please email us at:\npatterns@saverateafrica.com\nOur team will get back to you within 24 hours.",
+  contact: "📧 We are here to help!\nFor support or any questions about SaveRateAfrica please email us at:\npatterns@saverateafrica.com\nOur team will get back to you within 24 hours.",
+  "talk to someone": "📧 We are here to help!\nFor support or any questions about SaveRateAfrica please email us at:\npatterns@saverateafrica.com\nOur team will get back to you within 24 hours.",
+  human: "📧 We are here to help!\nFor support or any questions about SaveRateAfrica please email us at:\npatterns@saverateafrica.com\nOur team will get back to you within 24 hours.",
+  agent: "📧 We are here to help!\nFor support or any questions about SaveRateAfrica please email us at:\npatterns@saverateafrica.com\nOur team will get back to you within 24 hours.",
+  "i have a problem": "📧 We are here to help!\nFor support or any questions about SaveRateAfrica please email us at:\npatterns@saverateafrica.com\nOur team will get back to you within 24 hours."
 };
 
 const defaultResponse = "I am only able to help with questions about sending money to Nigeria and exchange rates.\n\nFor other support please email:\n📧 patterns@saverateafrica.com";
