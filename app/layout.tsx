@@ -12,14 +12,14 @@ export const metadata: Metadata = {
   manifest: "/manifest.webmanifest",
   title: "Compare Ways to Save Money Sending to Nigeria | SaveRateAfrica",
   description:
-    "Compare 14+ money transfer providers and find the best NGN exchange rate. Save hundreds of naira on every transfer from USA, UK and Canada to Nigeria.",
+    "Compare 14+ money transfer providers and find top NGN exchange rates. Save hundreds of naira on every transfer from USA, UK and Canada to Nigeria.",
   applicationName: "SaveRateAfrica",
   keywords:
-    "send money Nigeria, best NGN exchange rate, compare remittance Nigeria, Nigerian diaspora money transfer, USD to NGN best rate, GBP to NGN best rate, CAD to NGN best rate",
+    "send money Nigeria, top NGN exchange rate, compare remittance Nigeria, Nigerian diaspora money transfer, USD to NGN top rate, GBP to NGN top rate, CAD to NGN top rate",
   openGraph: {
     title: "Compare Ways to Save Money Sending to Nigeria | SaveRateAfrica",
     description:
-      "Find the best NGN exchange rate from USA, UK and Canada. Compare 14+ providers instantly.",
+      "Find top NGN exchange rates from USA, UK and Canada. Compare 14+ providers instantly.",
     siteName: "SaveRateAfrica",
     type: "website",
     url: "https://saverateafrica.com"
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Compare Ways to Save Money Sending to Nigeria",
     description:
-      "Find the best NGN rate from USA, UK and Canada instantly."
+      "Find top NGN rates from USA, UK and Canada instantly."
   },
   icons: {
     icon: [

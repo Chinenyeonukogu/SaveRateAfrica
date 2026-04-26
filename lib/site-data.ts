@@ -148,15 +148,15 @@ export const faqItems = [
   {
     question: "Which service sends the most NGN per dollar?",
     answer:
-      "It changes by day, funding method, and corridor. SaveRateAfrica ranks providers by actual NGN delivered after fees so you see the best-value option for your exact send amount."
+      "It changes by day, funding method, and corridor. SaveRateAfrica ranks providers by actual NGN delivered after fees so you see the top-pick option for your exact send amount."
   },
   {
     question: "Which provider is better for Nigeria?",
     answer:
-      "Check the comparison dashboard to see which provider gives you the best value for your amount, speed needs, and payout preference."
+      "Check the comparison dashboard to see which provider gives you strong value for your amount, speed needs, and payout preference."
   },
   {
-    question: "What's the best time to send money to Nigeria?",
+    question: "What's a strong time to send money to Nigeria?",
     answer:
       "Most diaspora senders benefit from watching rate momentum rather than reacting to headlines. Use the trend chart and rate alerts to catch favorable moves instead of sending blind."
   },
@@ -236,8 +236,8 @@ export const creditCardOffers: CreditCardOffer[] = [
 
 export const blogPosts: BlogPost[] = [
   {
-    slug: "best-way-to-send-money-to-nigeria-from-usa-2025",
-    title: "Best Way to Send Money to Nigeria from USA in 2025",
+    slug: "top-way-to-send-money-to-nigeria-from-usa-2025",
+    title: "Top Way to Send Money to Nigeria from USA in 2025",
     category: "Guides",
     readTime: "8 min read",
     excerpt:

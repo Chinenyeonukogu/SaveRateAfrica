@@ -60,7 +60,7 @@ const navigationItems: NavigationItem[] = [
     sectionId: "how-it-works"
   },
   {
-    description: "Best time and route guidance",
+    description: "Top time and route guidance",
     href: "#smart-sending",
     icon: Activity,
     iconBoxClassName: "bg-[#fce4ec]",

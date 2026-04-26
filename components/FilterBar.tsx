@@ -3,7 +3,7 @@
 import type { ComparisonSort, SenderCountry, SourceCurrency } from "@/lib/providers";
 
 const sortOptions: { label: string; value: ComparisonSort }[] = [
-  { label: "Best Rate", value: "best-rate" },
+  { label: "Top Rate", value: "best-rate" },
   { label: "Lowest Fee", value: "lowest-fee" },
   { label: "Fastest", value: "fastest" }
 ];

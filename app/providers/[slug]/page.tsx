@@ -244,7 +244,7 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
               </div>
 
               <p className="mt-6 text-sm leading-7 text-brand-navy/70">
-                Best for: {provider.bestFor}. Payout channels available include{" "}
+                Popular for: {provider.bestFor}. Payout channels available include{" "}
                 {provider.payoutChannels.join(", ")}.
               </p>
             </div>
@@ -256,7 +256,7 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
               <p className="mt-3 text-sm leading-7 text-brand-navy/70">
                 SaveRateAfrica recommends checking this provider against the full
                 live ranking before every transfer, especially if speed or cash
-                pickup matters more than the best pure payout value.
+                pickup matters more than pure payout value.
               </p>
               <Link
                 className="mt-6 inline-flex min-h-12 items-center gap-2 rounded-2xl bg-brand-navy px-5 text-sm font-semibold text-white"

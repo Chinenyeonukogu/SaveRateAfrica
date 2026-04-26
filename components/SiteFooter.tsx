@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export function SiteFooter() {
   const aboutText =
-    "SaveRateAfrica is an independent comparison platform. We are not a money transfer operator and do not process transfers. Our mission is to help Nigerians in the diaspora send more money home by comparing the best real rates and lowest fees.";
+    "SaveRateAfrica is an independent comparison platform. We are not a money transfer operator and do not process transfers. Our mission is to help Nigerians in the diaspora send more money home by comparing top real rates and lowest fees.";
   const importantItems = [
     "Rates shown are for comparison purposes only.",
     "Final rates and fees are determined by each provider at the time of transfer.",

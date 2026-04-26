@@ -153,7 +153,7 @@ export function RateChart() {
         <circle cx={cx} cy={cy} r={radius} fill={fill} />
         {isBest ? (
           <text x={cx} y={cy - 12} fill="#2e7d32" fontSize={10} textAnchor="middle">
-            ▲ Best
+            ▲ Top
           </text>
         ) : null}
         {isLow ? (

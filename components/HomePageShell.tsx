@@ -40,10 +40,10 @@ const comparisonSectionInnerClassName = `${pageShellClassName} py-9 min-[600px]:
 const postComparisonSectionInnerClassName = `${pageShellClassName} py-6 min-[600px]:py-8 lg:py-10`;
 const sectionDividerClassName = "border-t border-[#e8f5e9]";
 const smartSendingChecklistItems = [
-  "Compare multiple trusted providers in one place to find the best overall value",
+  "Compare multiple trusted providers in one place to find strong overall value",
   "See exactly how much your recipient will receive after all fees",
-  "Avoid hidden charges and poor exchange rates before they cost you",
-  "Use our AI assistant to instantly find the best rates and get personalized recommendations"
+  "Review hidden charges and unfavorable exchange rates before they cost you",
+  "Use our AI assistant to instantly find top rates and get personalized recommendations"
 ] as const;
 
 function SmartSendingIllustration() {
@@ -448,7 +448,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                     <p className="text-[14px] font-medium leading-[1.75] text-[#2d4a35]">
                       Get clear, real-time insights before you send so you can choose
                       the option that gives you the most value — whether that&apos;s
-                      better rates, lower fees, or faster delivery.
+                      stronger rates, lower fees, or faster delivery.
                     </p>
                   </div>
 
@@ -471,7 +471,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
 
                   <p className="mt-3 border-l-[3px] border-[#1a5c2a] px-4 py-[10px] text-[13px] font-semibold leading-[1.7] text-[#2d4a35]">
                     Make confident decisions and send money knowing you&apos;re
-                    getting the best deal available.
+                    getting a strong deal available.
                   </p>
                 </div>
               </div>
@@ -536,7 +536,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
 
                       {provider.isBestValue ? (
                         <span className="rounded-full bg-brand-green/10 px-3 py-1 text-[9px] font-semibold uppercase tracking-[0.16em] text-brand-green">
-                          Best value now
+                          Top pick now
                         </span>
                       ) : null}
                     </div>
@@ -574,7 +574,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                     <div className="mt-4 grid gap-3 sm:grid-cols-2">
                       <div className="rounded-[12px] bg-brand-light px-4 py-3">
                         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-navy/45">
-                          Best for
+                          Popular for
                         </p>
                         <p className="mt-2 text-[12px] font-semibold text-brand-navy min-[600px]:text-sm">
                           {provider.bestFor}

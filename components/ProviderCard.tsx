@@ -6,17 +6,26 @@ import { ArrowUpRight, Clock3, Info, Star } from "lucide-react";
 
 import { formatCompact, formatNaira, formatRate } from "@/lib/format";
 import { getDeliverySortValue, type ComparisonProviderRow } from "@/lib/fetchRates";
-import type { SourceCurrency } from "@/lib/providers";
+import type { SenderCountry, SourceCurrency } from "@/lib/providers";
 
 interface ProviderCardProps {
   index: number;
   provider: ComparisonProviderRow;
+  senderCountry: SenderCountry;
   sourceCurrency: SourceCurrency;
+}
+
+function neutralizeRankingLanguage(value: string) {
+  return value
+    .replace(/\bbest-value\b/gi, "top pick value")
+    .replace(/\bbest\b/gi, "top pick")
+    .replace(/\bworst\b/gi, "popular");
 }
 
 export function ProviderCard({
   index,
   provider,
+  senderCountry,
   sourceCurrency
 }: ProviderCardProps) {
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
@@ -28,7 +37,8 @@ export function ProviderCard({
     provider.trustNote,
     provider.transferFeeNote
   ]
-    .filter(Boolean)
+    .filter((value): value is string => Boolean(value))
+    .map((value) => neutralizeRankingLanguage(value))
     .join(" · ");
 
   return (
@@ -41,9 +51,9 @@ export function ProviderCard({
       initial={{ opacity: 0, x: 24 }}
       transition={{ delay: index * 0.06, duration: 0.4 }}
     >
-      {provider.isBestValue ? (
-        <div className="absolute left-5 top-0 -translate-y-1/2 rounded-[4px] bg-[#e8f5e9] px-2 py-[2px] text-[10px] font-bold uppercase tracking-[1px] text-[#2e7d32]">
-          Best value
+      {index === 0 ? (
+        <div className="absolute left-5 top-0 -translate-y-1/2 rounded-[4px] bg-[#2e7d32] px-2 py-[2px] text-[10px] font-bold uppercase tracking-[1px] text-white">
+          #1 for {senderCountry}
         </div>
       ) : null}
 
@@ -59,6 +69,10 @@ export function ProviderCard({
           </div>
 
           <div className="min-w-0 flex flex-wrap items-center gap-2">
+            <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#f4faf5] text-[12px] font-bold text-[#1b5e20] ring-1 ring-[#c8e6c9]">
+              #{index + 1}
+            </span>
+
             <h3 className="text-[17px] font-bold leading-[1.3] text-[#1a2e1a]">
               {provider.name}
             </h3>

@@ -89,14 +89,14 @@ export const providers: Provider[] = [
     variableFeePercents: { USD: 1.27, GBP: 1.22, CAD: 1.24 },
     feeDisplayPrefix: "From",
     rateMultiplier: { USD: 0.9965, GBP: 0.9965, CAD: 0.9965 },
-    summary: "Transparent pricing and strong bank transfer rates for recurring senders.",
-    headline: "Best for predictable, transparent pricing.",
-    bestFor: "Bank transfers with mid-market pricing",
-    trustNote: "Public fee breakdown and strong app experience.",
+    summary: "Massive trust + low fees",
+    headline: "Massive trust + low fees",
+    bestFor: "Massive trust + low fees",
+    trustNote: "Massive trust + low fees",
     supportedSenderCountries: ["USA", "UK", "Canada"],
     payoutChannels: ["Bank deposit"],
     pros: ["Clear fee split", "Strong app", "Great for repeat transfers"],
-    cons: ["Not always the fastest", "Card funding can cost more"]
+    cons: ["Delivery timing varies by route", "Funding method details vary"]
   },
   {
     slug: "remitly",
@@ -111,14 +111,14 @@ export const providers: Provider[] = [
     feeBand: "low",
     fees: { USD: 3.99, GBP: 3.99, CAD: 3.99 },
     rateMultiplier: { USD: 0.9955, GBP: 0.9955, CAD: 0.9955 },
-    summary: "Fast delivery options and frequent promotional pricing for new users.",
-    headline: "Best for fast cash pickup and first-transfer promos.",
-    bestFor: "Urgent transfers and mixed payout options",
-    trustNote: "Well known for speed and onboarding simplicity.",
+    summary: "Big brand + urgent send",
+    headline: "Big brand + urgent send",
+    bestFor: "Big brand + urgent send",
+    trustNote: "Big brand + urgent send",
     supportedSenderCountries: ["USA", "UK", "Canada"],
     payoutChannels: ["Bank deposit", "Cash pickup", "Mobile money"],
     pros: ["Fast", "Easy onboarding", "Broad payout network"],
-    cons: ["Promo rates can expire", "Rates vary by payout method"]
+    cons: ["Promo timing varies", "Payout method details vary"]
   },
   {
     slug: "worldremit",
@@ -133,14 +133,14 @@ export const providers: Provider[] = [
     feeBand: "low",
     fees: { USD: 0, GBP: 0, CAD: 0 },
     rateMultiplier: { USD: 0.996, GBP: 0.996, CAD: 0.996 },
-    summary: "Reliable payout choices with strong coverage across Nigerian banks.",
-    headline: "Best for flexible payout options.",
-    bestFor: "Cash pickup and airtime add-ons",
-    trustNote: "Known brand with broad payout coverage.",
+    summary: "Pickup + airtime use cases",
+    headline: "Pickup + airtime use cases",
+    bestFor: "Pickup + airtime use cases",
+    trustNote: "Pickup + airtime use cases",
     supportedSenderCountries: ["USA", "UK", "Canada"],
     payoutChannels: ["Bank deposit", "Cash pickup", "Airtime top-up"],
     pros: ["Wide reach", "Fast payout", "Trusted brand"],
-    cons: ["Rates can trail the leaders", "Fees vary by route"]
+    cons: ["Route pricing varies", "Fee details vary by route"]
   },
   {
     slug: "sendwave",
@@ -156,13 +156,13 @@ export const providers: Provider[] = [
     fees: { USD: 0, GBP: 0, CAD: 0 },
     rateMultiplier: { USD: 0.9982, GBP: 0.9982, CAD: 0.9982 },
     summary: "Zero-fee positioning with very quick delivery for mobile-first customers.",
-    headline: "Best for fee-free speed.",
+    headline: "Fee-free speed.",
     bestFor: "Quick sends with simple mobile UX",
     trustNote: "Strong reputation among diaspora mobile users.",
     supportedSenderCountries: ["USA", "UK", "Canada"],
     payoutChannels: ["Bank deposit"],
     pros: ["No transfer fee", "Very fast", "Simple interface"],
-    cons: ["Rate spread can be wider", "Limited advanced controls"]
+    cons: ["Rate spread varies", "App controls vary by route"]
   },
   {
     slug: "western-union",
@@ -179,14 +179,14 @@ export const providers: Provider[] = [
     transferFeeNote:
       "Rate includes exchange rate margin. Final rate confirmed at checkout.",
     rateMultiplier: { USD: 0.993, GBP: 0.993, CAD: 0.993 },
-    summary: "Excellent brand recognition and one of the strongest cash pickup footprints.",
-    headline: "Best for cash pickup reach.",
-    bestFor: "Recipients who prefer physical pickup points",
-    trustNote: "Massive global network and brand familiarity.",
+    summary: "Legacy trust",
+    headline: "Legacy trust",
+    bestFor: "Legacy trust",
+    trustNote: "Legacy trust",
     supportedSenderCountries: ["USA", "UK", "Canada"],
     payoutChannels: ["Cash pickup", "Bank deposit"],
     pros: ["Pickup network", "Fast", "Recognizable brand"],
-    cons: ["Higher fees", "Lower effective payout on some routes"]
+    cons: ["Fee level varies by route", "Payout details vary by route"]
   },
   {
     slug: "moneygram",
@@ -201,14 +201,14 @@ export const providers: Provider[] = [
     feeBand: "premium",
     fees: { USD: 7, GBP: 7, CAD: 7 },
     rateMultiplier: { USD: 0.994, GBP: 0.994, CAD: 0.994 },
-    summary: "Fast cash transfer option when reach matters more than headline value.",
-    headline: "Best for fast pickup convenience.",
-    bestFor: "Emergency pickup transfers",
-    trustNote: "Strong offline pickup distribution in key markets.",
+    summary: "Emergency cash needs",
+    headline: "Emergency cash needs",
+    bestFor: "Emergency cash needs",
+    trustNote: "Emergency cash needs",
     supportedSenderCountries: ["USA", "UK", "Canada"],
     payoutChannels: ["Cash pickup", "Bank deposit"],
     pros: ["Fast pickup", "Large brand", "Easy walk-in options"],
-    cons: ["Higher fees", "Rates usually below digital leaders"]
+    cons: ["Fee level varies by route", "Rate details vary by route"]
   },
   {
     slug: "pangea",
@@ -224,13 +224,13 @@ export const providers: Provider[] = [
     fees: { USD: 4.49, GBP: 4.49, CAD: 4.49 },
     rateMultiplier: { USD: 0.9968, GBP: 0.9968, CAD: 0.9968 },
     summary: "Good app-first option with simple onboarding for North American senders.",
-    headline: "Best for simple North America onboarding.",
+    headline: "Simple North America onboarding.",
     bestFor: "Diaspora users who want a quick setup",
     trustNote: "Solid mobile-led experience for repeat transfers.",
     supportedSenderCountries: ["Canada"],
     payoutChannels: ["Bank deposit", "Cash pickup"],
     pros: ["Smooth UX", "Fast setup", "Reliable delivery"],
-    cons: ["Smaller geographic footprint", "Not always best rate"]
+    cons: ["Geographic coverage varies", "Rate details vary by route"]
   },
   {
     slug: "chipper-cash",
@@ -245,14 +245,14 @@ export const providers: Provider[] = [
     feeBand: "low",
     fees: { USD: 0, GBP: 0, CAD: 0 },
     rateMultiplier: { USD: 0.9975, GBP: 0.9975, CAD: 0.9975 },
-    summary: "Strong fintech feel with quick wallet-style transfers and modern UX.",
-    headline: "Best for fintech-native senders.",
-    bestFor: "Users comfortable with app-based money movement",
-    trustNote: "Fast-moving African fintech with diaspora traction.",
+    summary: "Younger app users",
+    headline: "Younger app users",
+    bestFor: "Younger app users",
+    trustNote: "Younger app users",
     supportedSenderCountries: ["USA", "UK", "Canada"],
     payoutChannels: ["Bank deposit", "Wallet transfer"],
     pros: ["Low fee", "Fast", "Modern app feel"],
-    cons: ["Support expectations differ by market", "Not as established as legacy brands"]
+    cons: ["Support options vary by market", "Brand familiarity varies by sender"]
   },
   {
     slug: "lemfi",
@@ -267,14 +267,14 @@ export const providers: Provider[] = [
     feeBand: "low",
     fees: { USD: 0, GBP: 0, CAD: 0 },
     rateMultiplier: { USD: 0.9985, GBP: 0.9985, CAD: 0.9985 },
-    summary: "One of the strongest overall value plays for sending NGN home from key diaspora markets.",
-    headline: "Best overall value for Nigeria-focused senders.",
-    bestFor: "Best-value bank deposits to Nigeria",
-    trustNote: "Nigeria-focused product design with strong diaspora awareness.",
+    summary: "Strong Nigeria trust + deposits",
+    headline: "Strong Nigeria trust + deposits",
+    bestFor: "Strong Nigeria trust + deposits",
+    trustNote: "Strong Nigeria trust + deposits",
     supportedSenderCountries: ["USA", "UK", "Canada"],
     payoutChannels: ["Bank deposit", "Wallet transfer"],
     pros: ["Excellent payout value", "Zero fee", "Very fast"],
-    cons: ["Primarily digital", "Fewer cash pickup options"]
+    cons: ["Digital-first experience", "Cash pickup options vary"]
   },
   {
     slug: "grey-finance",
@@ -289,14 +289,14 @@ export const providers: Provider[] = [
     feeBand: "low",
     fees: { USD: 0, GBP: 0, CAD: 0 },
     rateMultiplier: { USD: 1.0, GBP: 0.999, CAD: 0.999 },
-    summary: "Good option for diaspora professionals already using multicurrency accounts.",
-    headline: "Best for freelancers and digital earners.",
-    bestFor: "Users already moving money across multiple balances",
-    trustNote: "Appeals to remote workers and multi-currency account holders.",
+    summary: "High modern appeal + diaspora relevance",
+    headline: "High modern appeal + diaspora relevance",
+    bestFor: "High modern appeal + diaspora relevance",
+    trustNote: "High modern appeal + diaspora relevance",
     supportedSenderCountries: ["USA", "UK", "Canada"],
     payoutChannels: ["Bank deposit"],
     pros: ["No Fee ✅", "Great for freelancers", "Strong multicurrency positioning"],
-    cons: ["Less mainstream brand recognition", "Not always instant"]
+    cons: ["Brand familiarity varies by sender", "Delivery timing varies"]
   },
   {
     slug: "afriex",
@@ -311,14 +311,14 @@ export const providers: Provider[] = [
     feeBand: "low",
     fees: { USD: 0, GBP: 0, CAD: 0 },
     rateMultiplier: { USD: 0.9972, GBP: 0.9972, CAD: 0.9972 },
-    summary: "Competitive African corridor pricing with a simple in-app transfer flow.",
-    headline: "Best for corridor-specific value.",
-    bestFor: "Users focused on African transfer routes",
-    trustNote: "Built with African cross-border corridors in mind.",
+    summary: "Corridor-specific appeal",
+    headline: "Corridor-specific appeal",
+    bestFor: "Corridor-specific appeal",
+    trustNote: "Corridor-specific appeal",
     supportedSenderCountries: ["USA", "UK", "Canada"],
     payoutChannels: ["Bank deposit", "Wallet transfer"],
     pros: ["Competitive rates", "Low fee", "Fast app flow"],
-    cons: ["Smaller brand", "Support depth varies"]
+    cons: ["Brand familiarity varies by sender", "Support options vary"]
   },
   {
     slug: "flutterwave-send",
@@ -333,14 +333,14 @@ export const providers: Provider[] = [
     feeBand: "low",
     fees: { USD: 1, GBP: 1, CAD: 1 },
     rateMultiplier: { USD: 0.989, GBP: 0.989, CAD: 0.988 },
-    summary: "Useful if your household already trusts Flutterwave's broader fintech ecosystem.",
-    headline: "Best for senders already using Flutterwave.",
-    bestFor: "Brand familiarity inside African fintech",
-    trustNote: "Backed by a recognizable African payments brand.",
+    summary: "African fintech familiarity",
+    headline: "African fintech familiarity",
+    bestFor: "African fintech familiarity",
+    trustNote: "African fintech familiarity",
     supportedSenderCountries: ["USA", "UK", "Canada"],
     payoutChannels: ["Bank deposit"],
     pros: ["Recognizable brand", "Good app flows", "Same-day delivery"],
-    cons: ["Not the top payout value", "Fewer payout options"]
+    cons: ["Payout details vary by route", "Payout options vary"]
   },
   {
     slug: "nala",
@@ -355,14 +355,14 @@ export const providers: Provider[] = [
     feeBand: "low",
     fees: { USD: 0.99, GBP: 0.99, CAD: 0.99 },
     rateMultiplier: { USD: 0.9978, GBP: 0.9978, CAD: 0.9978 },
-    summary: "Very strong payout value with a diaspora-first user experience and clean app design.",
-    headline: "Best for high-value mobile transfers.",
-    bestFor: "Value-conscious app-first senders",
-    trustNote: "Diaspora-focused product messaging and polished UX.",
-    supportedSenderCountries: ["USA", "UK"],
+    summary: "Mobile-first users",
+    headline: "Mobile-first users",
+    bestFor: "Mobile-first users",
+    trustNote: "Mobile-first users",
+    supportedSenderCountries: ["USA", "UK", "Canada"],
     payoutChannels: ["Bank deposit"],
     pros: ["Great rate", "Fast", "Polished mobile experience"],
-    cons: ["Bank-first payout model", "Less legacy brand familiarity"]
+    cons: ["Bank-first payout model", "Brand familiarity varies by sender"]
   },
   {
     slug: "taptap-send",
@@ -377,14 +377,14 @@ export const providers: Provider[] = [
     feeBand: "low",
     fees: { USD: 0, GBP: 0, CAD: 0 },
     rateMultiplier: { USD: 0.995, GBP: 0.995, CAD: 0.995 },
-    summary: "App-first remittance provider with fast bank delivery to Nigeria and no additional transfer fee on this corridor.",
-    headline: "Best for fast, no-transfer-fee sends to Nigeria.",
-    bestFor: "Diaspora users who want quick bank deposits without an added fee line",
-    trustNote: "Supports sending to Nigeria from the USA, UK, and Canada with bank-focused delivery.",
+    summary: "Fast simple sending",
+    headline: "Fast simple sending",
+    bestFor: "Fast simple sending",
+    trustNote: "Fast simple sending",
     supportedSenderCountries: ["USA", "UK", "Canada"],
     payoutChannels: ["Bank deposit"],
     pros: ["No transfer fee for Nigeria corridor", "Fast delivery", "Strong Nigeria corridor support"],
-    cons: ["Total value still depends on FX spread", "Nigeria route is bank-deposit focused"]
+    cons: ["FX spread details vary", "Nigeria route is bank-deposit focused"]
   },
   {
     slug: "paysend",
@@ -399,16 +399,64 @@ export const providers: Provider[] = [
     feeBand: "medium",
     fees: { USD: 1.99, GBP: 1.99, CAD: 1.99 },
     rateMultiplier: { USD: 0.987, GBP: 0.986, CAD: 0.986 },
-    summary: "Predictable flat-fee option that can work well for small and mid-sized transfers.",
-    headline: "Best for flat-fee simplicity.",
-    bestFor: "Users who prefer predictable pricing",
-    trustNote: "Simple fee structure and broad market recognition.",
+    summary: "Predictable pricing",
+    headline: "Predictable pricing",
+    bestFor: "Predictable pricing",
+    trustNote: "Predictable pricing",
     supportedSenderCountries: ["USA", "UK", "Canada"],
     payoutChannels: ["Bank deposit", "Card transfer"],
     pros: ["Simple flat fee", "Good app", "Widely available"],
-    cons: ["Rate spread can be wider", "Value trails top performers"]
+    cons: ["Rate spread varies", "Value details vary by route"]
   }
 ];
+
+export const providerRankingsBySenderCountry: Record<SenderCountry, string[]> = {
+  USA: [
+    "Grey Finance",
+    "LemFi",
+    "Wise",
+    "TapTap Send",
+    "Remitly",
+    "WorldRemit",
+    "Western Union",
+    "MoneyGram",
+    "Paysend",
+    "Flutterwave Send",
+    "Afriex",
+    "Chipper Cash",
+    "NALA"
+  ],
+  UK: [
+    "Wise",
+    "LemFi",
+    "TapTap Send",
+    "NALA",
+    "Remitly",
+    "WorldRemit",
+    "Western Union",
+    "MoneyGram",
+    "Paysend",
+    "Grey Finance",
+    "Afriex",
+    "Chipper Cash",
+    "Flutterwave Send"
+  ],
+  Canada: [
+    "Wise",
+    "Remitly",
+    "LemFi",
+    "TapTap Send",
+    "Grey Finance",
+    "WorldRemit",
+    "Western Union",
+    "MoneyGram",
+    "NALA",
+    "Paysend",
+    "Afriex",
+    "Chipper Cash",
+    "Flutterwave Send"
+  ]
+};
 
 export const speedBandLabel: Record<SpeedBand, string> = {
   instant: "Instant",

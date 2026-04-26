@@ -8,7 +8,7 @@ import {
 export const SAVE_RATE_AI_SYSTEM_PROMPT = `You are SaveRateAI, the intelligent assistant for 
 SaveRateAfrica.com — a real-time comparison platform 
 helping Nigerians in the USA, UK, and Canada send 
-money to Nigeria at the best rates.
+money to Nigeria at top rates.
 
 You have access to the following live data from the 
 page the user is currently viewing:
@@ -60,7 +60,7 @@ YOUR BEHAVIOUR RULES:
    Rank by: payout = (amount - fee) × rate
    Show top 3 with exact NGN amounts
 
-5. For best rate questions:
+5. For top rate questions:
    Recommend Grey Finance first, explain why
 
 6. Always be specific. Show numbers. 
@@ -79,7 +79,7 @@ YOUR BEHAVIOUR RULES:
    asking Google Gemini directly: 
    https://gemini.google.com
    
-   I'm best at helping you compare NGN rates, 
+   I'm ready to help you compare NGN rates,
    find the fastest provider, or calculate your 
    exact payout. Want me to help with that instead?"
 
@@ -92,7 +92,7 @@ SaveRateAfrica. For that question, I'd recommend
 asking Google Gemini directly: 
 https://gemini.google.com
 
-I'm best at helping you compare NGN rates, 
+I'm ready to help you compare NGN rates,
 find the fastest provider, or calculate your 
 exact payout. Want me to help with that instead?`;
 
@@ -536,10 +536,10 @@ function buildBestRateReply(comparison: ComparisonResult, amount: number) {
   const formattedAmount = getFormattedAmount(activeComparison, amount);
 
   if (!westernUnion) {
-    return `Best rate today is ${getNormalizedProviderName(bestRateProvider.name)} at ${formatRateValue(bestRateProvider.exchangeRate)} NGN/${activeComparison.sourceCurrency} with ${getTransferFeeLabel(bestRateProvider, activeComparison).toLowerCase()} and ${bestRateProvider.deliveryLabel.toLowerCase()} delivery. On a ${formattedAmount} send your recipient gets ${formatExactNaira(bestRateProvider.amountReceived)}.`;
+  return `Top rate today is ${getNormalizedProviderName(bestRateProvider.name)} at ${formatRateValue(bestRateProvider.exchangeRate)} NGN/${activeComparison.sourceCurrency} with ${getTransferFeeLabel(bestRateProvider, activeComparison).toLowerCase()} and ${bestRateProvider.deliveryLabel.toLowerCase()} delivery. On a ${formattedAmount} send your recipient gets ${formatExactNaira(bestRateProvider.amountReceived)}.`;
   }
 
-  return `Best rate today is ${getNormalizedProviderName(bestRateProvider.name)} at ${formatRateValue(bestRateProvider.exchangeRate)} NGN/${activeComparison.sourceCurrency} with ${getTransferFeeLabel(bestRateProvider, activeComparison).toLowerCase()} and ${bestRateProvider.deliveryLabel.toLowerCase()} delivery. On a ${formattedAmount} send your recipient gets ${formatExactNaira(bestRateProvider.amountReceived)}.\n\nThat's ${formatExactNaira(bestRateProvider.amountReceived - westernUnion.amountReceived)} more than Western Union on the same transfer.`;
+  return `Top rate today is ${getNormalizedProviderName(bestRateProvider.name)} at ${formatRateValue(bestRateProvider.exchangeRate)} NGN/${activeComparison.sourceCurrency} with ${getTransferFeeLabel(bestRateProvider, activeComparison).toLowerCase()} and ${bestRateProvider.deliveryLabel.toLowerCase()} delivery. On a ${formattedAmount} send your recipient gets ${formatExactNaira(bestRateProvider.amountReceived)}.\n\nThat's ${formatExactNaira(bestRateProvider.amountReceived - westernUnion.amountReceived)} more than Western Union on the same transfer.`;
 }
 
 function buildCheapestReply(comparison: ComparisonResult, amount: number) {

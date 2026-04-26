@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 const storyParagraphs = [
   <>
     SaveRateAfrica was born from a simple belief: your hard work deserves the
-    best exchange rate possible. With over{" "}
+    top exchange rate possible. With over{" "}
     <strong className="font-bold text-[#102717]">$21 billion</strong> sent home
     annually by Nigerians in the US, UK, and Canada, too much is still lost to
     hidden fees and outdated rates.
@@ -127,7 +127,7 @@ export default function AboutPage() {
                 <p className={`${bodyTextClassName} max-w-[720px]`}>
                   I built <strong className="font-bold">SaveRateAfrica</strong>{" "}
                   to empower fellow Nigerians in the diaspora with clear,
-                  real-time information on the best remittance options. With a
+                  real-time information on top remittance options. With a
                   background in Information Technology and current
                   specialization in IT Product Management, my goal is to make
                   sending money home as cost-effective as possible.

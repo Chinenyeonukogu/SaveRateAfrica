@@ -9,10 +9,11 @@ interface Message {
   timestamp: string;
 }
 
-const quickReplies = ["Best rate now", "Compare providers", "Rate alerts", "I need help"];
+const quickReplies = ["Top rate now", "Compare providers", "Rate alerts", "I need help"];
 
 const botResponses: Record<string, string> = {
-  "best rate now": "Use our comparison tool to find the best rate available right now for your transfer. Rates update every 30 seconds.\n\n👉 Compare Rates Now →",
+  "best rate now": "Use our comparison tool to find a top rate available right now for your transfer. Rates update every 30 seconds.\n\n👉 Compare Rates Now →",
+  "top rate now": "Use our comparison tool to find a top rate available right now for your transfer. Rates update every 30 seconds.\n\n👉 Compare Rates Now →",
   "compare providers": "SaveRateAfrica compares 14+ providers including Wise, Remitly, WorldRemit, Grey Finance, LemFi, SendWave and more.\n\nUse the comparison tool on the homepage to see live payouts side by side.",
   "rate alerts": "You can set a target NGN rate and we will notify you the moment a provider hits it.\n\n🔔 Go to Rate Alerts in the nav to get started.",
   "i need help": "📧 We are here to help!\n\nFor support or any questions about SaveRateAfrica please email us at:\n\npatterns@saverateafrica.com\n\nOur team will get back to you as soon as possible.",
@@ -30,7 +31,7 @@ const defaultResponse = "I am only able to help with questions about sending mon
 const welcomeMessage: Message = {
   id: "welcome",
   type: "bot",
-  text: "👋 Hi there! I am the SaveRateAfrica assistant. I can help you find the best NGN exchange rates, compare providers, and set rate alerts.\n\nWhat would you like to know?",
+  text: "👋 Hi there! I am the SaveRateAfrica assistant. I can help you find top NGN exchange rates, compare providers, and set rate alerts.\n\nWhat would you like to know?",
   timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
 };
 

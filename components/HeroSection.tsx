@@ -333,7 +333,7 @@ export function HeroSection({
                   COMPARE NOW
                 </p>
                 <h2 className="mb-[14px] text-[17px] font-semibold text-[#1a2e1a]">
-                  Check your best payout
+                  Check your top payout
                 </h2>
 
                 <div className="flex h-full flex-col gap-3">

@@ -219,11 +219,11 @@ export function formatMarketSnapshot(snapshot: MarketSnapshot) {
 
     return [
       `${country} corridor (${corridor.sourceCurrency})`,
-      `Best provider: ${corridor.bestProvider} at ${formatNaira(corridor.bestAmount, {
+      `Top provider: ${corridor.bestProvider} at ${formatNaira(corridor.bestAmount, {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
       })}`,
-      `Worst provider: ${corridor.worstProvider} at ${formatNaira(corridor.worstAmount, {
+      `Lowest payout provider: ${corridor.worstProvider} at ${formatNaira(corridor.worstAmount, {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
       })}`,
@@ -290,7 +290,7 @@ export function buildManualChatReply(
     normalizedMessage.includes("who should i use") ||
     normalizedMessage.includes("who is winning")
   ) {
-    return `Based on my verified live data, ${corridor.bestProvider} is your best bet for ${corridor.senderCountry} today, delivering about ${formatNaira(corridor.bestAmount, {
+    return `Based on my verified live data, ${corridor.bestProvider} is a top pick for ${corridor.senderCountry} today, delivering about ${formatNaira(corridor.bestAmount, {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     })} on a ${formattedAmount} transfer. SaveRate AI 🤖 🇳🇬`;
@@ -301,7 +301,7 @@ export function buildManualChatReply(
     normalizedMessage.includes("difference") ||
     normalizedMessage.includes("delta")
   ) {
-    return `${corridor.bestProvider} is beating ${corridor.worstProvider} by about ${formatNaira(corridor.maxSavings, {
+    return `${corridor.bestProvider} is ahead by about ${formatNaira(corridor.maxSavings, {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     })} on a ${formattedAmount} send right now, so provider choice still matters more than headlines alone. SaveRate AI 🤖 🇳🇬`;

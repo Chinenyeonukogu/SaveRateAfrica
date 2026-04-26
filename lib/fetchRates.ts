@@ -2,6 +2,7 @@ import { getProviderAffiliateLink } from "@/lib/affiliateLinks";
 import { formatCurrency } from "@/lib/format";
 import {
   getCurrencyBySender,
+  providerRankingsBySenderCountry,
   providers,
   type ComparisonSort,
   type SenderCountry,
@@ -32,6 +33,7 @@ export interface ComparisonProviderRow {
   payoutChannels: string[];
   sendUrl: string;
   isBestValue: boolean;
+  countryRank: number;
 }
 
 export interface ComparisonResult {
@@ -183,16 +185,22 @@ async function fetchLiveComparisonFromApi(
 }
 
 function sortRows(rows: ComparisonProviderRow[], sortBy: ComparisonSort) {
+  const byCountryRank = (first: ComparisonProviderRow, second: ComparisonProviderRow) =>
+    first.countryRank - second.countryRank;
+
   if (sortBy === "lowest-fee") {
     return [...rows].sort(
       (first, second) =>
-        first.fee - second.fee || second.amountReceived - first.amountReceived
+        byCountryRank(first, second) ||
+        first.fee - second.fee ||
+        second.amountReceived - first.amountReceived
     );
   }
 
   if (sortBy === "fastest") {
     return [...rows].sort(
       (first, second) =>
+        byCountryRank(first, second) ||
         getDeliverySortValue(first.deliveryLabel) -
           getDeliverySortValue(second.deliveryLabel) ||
         first.speedHours - second.speedHours ||
@@ -202,10 +210,25 @@ function sortRows(rows: ComparisonProviderRow[], sortBy: ComparisonSort) {
 
   return [...rows].sort(
     (first, second) =>
+      byCountryRank(first, second) ||
       second.exchangeRate - first.exchangeRate ||
       second.amountReceived - first.amountReceived ||
       first.fee - second.fee
   );
+}
+
+function normalizeProviderName(value: string) {
+  return value.trim().toLowerCase();
+}
+
+function getCountryRank(providerName: string, senderCountry: SenderCountry) {
+  const ranking = providerRankingsBySenderCountry[senderCountry] ?? providerRankingsBySenderCountry.USA;
+  const normalizedName = normalizeProviderName(providerName);
+  const rankIndex = ranking.findIndex(
+    (rankedProvider) => normalizeProviderName(rankedProvider) === normalizedName
+  );
+
+  return rankIndex === -1 ? ranking.length + 1 : rankIndex + 1;
 }
 
 export function buildComparisonFromLiveRates({
@@ -253,7 +276,8 @@ export function buildComparisonFromLiveRates({
           amount: adjustedAmount,
           currency: sourceCurrency
         }),
-        isBestValue: false
+        isBestValue: false,
+        countryRank: getCountryRank(provider.name, senderCountry)
       };
     });
 
