@@ -20,6 +20,8 @@ interface TrendPoint {
   CAD: number;
 }
 
+type TrendCurrency = "USD" | "GBP" | "CAD";
+
 function formatNgRate(value: number) {
   return value.toLocaleString("en-NG", {
     minimumFractionDigits: 2,
@@ -44,12 +46,18 @@ function formatTrendDate(value: string) {
   });
 }
 
-function ChartTooltip({ active, payload, label }: any) {
+function ChartTooltip({
+  active,
+  payload,
+  label,
+  activeCurrency
+}: any & { activeCurrency: TrendCurrency }) {
   if (!active || !payload?.length) {
     return null;
   }
 
-  const activePoint = payload[0];
+  const activePoint =
+    payload.find((point: any) => point.dataKey === activeCurrency) ?? payload[0];
   const value = Number(activePoint.value);
 
   if (!Number.isFinite(value)) {
@@ -68,6 +76,7 @@ export function RateChart() {
   const [trendData, setTrendData] = useState<TrendPoint[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [activeCurrency, setActiveCurrency] = useState<TrendCurrency>("USD");
 
   useEffect(() => {
     let mounted = true;
@@ -142,7 +151,8 @@ export function RateChart() {
       return <g />;
     }
 
-    const value = Number(payload[dataKey]);
+    const currency = dataKey as TrendCurrency;
+    const value = Number(payload[currency]);
     if (!Number.isFinite(value)) {
       return <g />;
     }
@@ -157,7 +167,10 @@ export function RateChart() {
     const labelWeight = isLow ? 400 : 700;
 
     return (
-      <g>
+      <g
+        onClick={() => setActiveCurrency(currency)}
+        onMouseEnter={() => setActiveCurrency(currency)}
+      >
         <circle cx={cx} cy={cy} r={radius} fill={fill} />
         {isBest ? (
           <text
@@ -259,7 +272,10 @@ export function RateChart() {
                 tickFormatter={formatTrendDate}
                 tickLine={false}
               />
-              <Tooltip content={<ChartTooltip />} cursor={{ stroke: "rgba(46,125,50,0.18)" }} />
+              <Tooltip
+                content={<ChartTooltip activeCurrency={activeCurrency} />}
+                cursor={{ stroke: "rgba(46,125,50,0.18)" }}
+              />
               <Legend />
               <Area
                 dataKey="USD"
@@ -278,6 +294,8 @@ export function RateChart() {
                 type="monotone"
                 dot={renderDot}
                 activeDot={{ r: 6 }}
+                onClick={() => setActiveCurrency("USD")}
+                onMouseEnter={() => setActiveCurrency("USD")}
               />
               <Line
                 dataKey="GBP"
@@ -287,6 +305,8 @@ export function RateChart() {
                 type="monotone"
                 dot={renderDot}
                 activeDot={{ r: 6 }}
+                onClick={() => setActiveCurrency("GBP")}
+                onMouseEnter={() => setActiveCurrency("GBP")}
               />
               <Line
                 dataKey="CAD"
@@ -296,6 +316,8 @@ export function RateChart() {
                 type="monotone"
                 dot={renderDot}
                 activeDot={{ r: 6 }}
+                onClick={() => setActiveCurrency("CAD")}
+                onMouseEnter={() => setActiveCurrency("CAD")}
               />
             </LineChart>
           </ResponsiveContainer>

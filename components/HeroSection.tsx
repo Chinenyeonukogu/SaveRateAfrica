@@ -406,7 +406,9 @@ export function HeroSection({
                         return (
                           <button
                             key={country.code}
-                            className={`rounded-[8px] border-[1.5px] px-3 py-2 text-[11px] font-semibold transition ${
+                            aria-label={country.label}
+                            title={country.label}
+                            className={`flex min-h-10 items-center justify-center rounded-[8px] border-[1.5px] px-3 py-2 text-[18px] font-semibold transition ${
                               active
                                 ? "border-[#2e7d32] bg-[#2e7d32] text-white"
                                 : "border-[#e0ede2] text-[#2e4a2e] hover:border-[#2e7d32]/50"
@@ -414,7 +416,7 @@ export function HeroSection({
                             type="button"
                             onClick={() => onSenderCountryChange(country.code)}
                           >
-                            {flagByCountry[country.code]} {country.label}
+                            <span aria-hidden="true">{flagByCountry[country.code]}</span>
                           </button>
                         );
                       })}
