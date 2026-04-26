@@ -6,7 +6,6 @@ import {
   Star
 } from "lucide-react";
 
-import { ChatBot } from "@/components/ChatBot";
 import { AlertsForm } from "@/components/AlertsForm";
 import { ComparisonTable } from "@/components/ComparisonTable";
 import { HeroSection } from "@/components/HeroSection";
@@ -379,8 +378,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
             </div>
           </div>
         </section>
-
-        <ChatBot />
 
         <section id="faq" className={sectionDividerClassName}>
           <div className={postComparisonSectionInnerClassName}>

@@ -16,7 +16,7 @@ export function MobileNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed inset-x-3 bottom-3 z-40 rounded-[28px] border border-brand-navy/10 bg-white/95 p-2 shadow-float backdrop-blur md:hidden">
+    <nav className="mobile-nav fixed inset-x-3 bottom-3 z-40 rounded-[28px] border border-brand-navy/10 bg-white/95 p-2 shadow-float backdrop-blur md:hidden">
       <div className="grid grid-cols-5 gap-1">
         {items.map((item) => {
           const active =

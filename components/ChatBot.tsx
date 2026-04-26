@@ -9,7 +9,7 @@ interface Message {
   timestamp: string;
 }
 
-const quickReplies = ["Top rate now", "Compare providers", "Rate alerts", "I need help"];
+const quickReplies = ["Best rate now", "Compare providers", "Rate alerts", "I need help"];
 
 const botResponses: Record<string, string> = {
   "best rate now": "Use our comparison tool to find a top rate available right now for your transfer. Rates update every 30 seconds.\n\n👉 Compare Rates Now →",
@@ -41,7 +41,6 @@ export function ChatBot() {
   const [isTyping, setIsTyping] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [showNotification, setShowNotification] = useState(true);
-  const [showChips, setShowChips] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -71,7 +70,6 @@ export function ChatBot() {
     };
     setMessages(prev => [...prev, userMessage]);
     setInputValue("");
-    setShowChips(false);
     setIsTyping(true);
 
     setTimeout(() => {
@@ -109,7 +107,7 @@ export function ChatBot() {
       {/* Trigger Button */}
       <button
         onClick={toggleChat}
-        className="fixed bottom-6 right-6 z-[9999] flex h-[52px] w-[52px] items-center justify-center rounded-full bg-[#2e7d32] shadow-[0_4px_16px_rgba(46,125,50,0.35)] transition-transform hover:scale-110"
+        className="chat-trigger fixed bottom-6 right-6 z-[9999] flex h-[52px] w-[52px] items-center justify-center rounded-full bg-[#2e7d32] shadow-[0_4px_16px_rgba(46,125,50,0.35)] transition-transform hover:scale-110"
         style={{ fontFamily: "'DM Sans', sans-serif" }}
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -159,7 +157,7 @@ export function ChatBot() {
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4" style={{ scrollbarWidth: "thin", scrollbarColor: "#c8e6c9 transparent" }}>
+          <div className="flex flex-1 flex-col overflow-y-auto p-4" style={{ scrollbarWidth: "thin", scrollbarColor: "#c8e6c9 transparent" }}>
             {messages.map((msg) => (
               <div
                 key={msg.id}
@@ -189,19 +187,17 @@ export function ChatBot() {
           </div>
 
           {/* Quick Replies */}
-          {showChips && (
-            <div className="flex flex-wrap gap-2 p-[8px_16px]">
-              {quickReplies.map((chip) => (
-                <button
-                  key={chip}
-                  onClick={() => handleChipClick(chip)}
-                  className="rounded-full border border-[#c8e6c9] bg-white px-3 py-[5px] text-[11px] font-medium text-[#2e7d32] transition-all hover:bg-[#2e7d32] hover:text-white hover:border-[#2e7d32]"
-                >
-                  {chip}
-                </button>
-              ))}
-            </div>
-          )}
+          <div className="flex flex-wrap gap-2 border-t border-[#e8f5e9] bg-white p-[8px_16px]">
+            {quickReplies.map((chip) => (
+              <button
+                key={chip}
+                onClick={() => handleChipClick(chip)}
+                className="rounded-full border border-[#c8e6c9] bg-white px-3 py-[5px] text-[11px] font-medium text-[#2e7d32] transition-all hover:border-[#2e7d32] hover:bg-[#2e7d32] hover:text-white"
+              >
+                {chip}
+              </button>
+            ))}
+          </div>
 
           {/* Input Bar */}
           <div className="flex items-center gap-2 border-t border-[#c8e6c9] bg-white p-[10px_12px]">
@@ -236,11 +232,17 @@ export function ChatBot() {
             transform: translateY(0);
           }
         }
-        @media (max-width: 480px) {
-          .fixed.bottom-6.right-6 {
-            bottom: 16px;
+        @media (max-width: 768px) {
+          .chat-trigger {
+            bottom: 80px;
             right: 16px;
+            z-index: 999;
           }
+          :global(.mobile-nav) {
+            z-index: 1000;
+          }
+        }
+        @media (max-width: 480px) {
           .fixed.bottom-[90px].right-6 {
             bottom: 80px;
             right: 16px;
@@ -251,3 +253,5 @@ export function ChatBot() {
     </>
   );
 }
+
+export default ChatBot;

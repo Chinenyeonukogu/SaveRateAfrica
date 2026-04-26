@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/react'
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 
+import ChatBot from "@/components/ChatBot";
 import { MobileNav } from "@/components/MobileNav";
 import { SiteFooter } from "@/components/SiteFooter";
 
@@ -63,6 +64,7 @@ export default function RootLayout({
       <body className="bg-brand-light text-brand-navy">
         {children}
         <SiteFooter />
+        <ChatBot />
         <MobileNav />
         <Analytics />
       </body>
