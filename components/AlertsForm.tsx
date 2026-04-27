@@ -8,12 +8,20 @@ interface AlertsFormProps {
   variant?: "default" | "hero";
 }
 
+type AlertCountry = "USA" | "Canada" | "UK";
+
 const subtitleText =
   "Set your ideal rate and we'll send you a free email alert instantly the moment your target rate is available.";
+const currencyByCountry: Record<AlertCountry, "USD" | "CAD" | "GBP"> = {
+  USA: "USD",
+  Canada: "CAD",
+  UK: "GBP"
+};
 
 export function AlertsForm({ variant = "default" }: AlertsFormProps) {
   const router = useRouter();
   const isHero = variant === "hero";
+  const [country, setCountry] = useState<AlertCountry>("USA");
   const [targetRate, setTargetRate] = useState("1600");
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
@@ -29,6 +37,7 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
 
     const parsedTargetRate = Number.parseFloat(targetRate);
     const trimmedEmail = email.trim();
+    const currency = currencyByCountry[country];
 
     if (!trimmedEmail || !Number.isFinite(parsedTargetRate) || parsedTargetRate <= 0) {
       setStatusType("error");
@@ -48,7 +57,9 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
         },
         body: JSON.stringify({
           email: trimmedEmail,
-          targetRate: parsedTargetRate
+          targetRate: parsedTargetRate,
+          currency,
+          country
         })
       });
 
@@ -163,7 +174,22 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
             <div className="mt-6 grid w-full min-w-0 gap-3 min-[600px]:grid-cols-2">
               <label className="min-w-0 space-y-2 min-[600px]:text-sm">
                 <span className="block text-[12px] font-bold uppercase tracking-[0.08em] text-[#0d1f12]">
-                  Target rate
+                  Country
+                </span>
+                <select
+                  className="alert-input min-h-12 w-full min-w-0 rounded-[8px] border border-[#c8e6c9] bg-white px-[14px] py-[11px] outline-none"
+                  value={country}
+                  onChange={(event) => setCountry(event.target.value as AlertCountry)}
+                >
+                  <option value="USA">USA</option>
+                  <option value="Canada">Canada</option>
+                  <option value="UK">UK</option>
+                </select>
+              </label>
+
+              <label className="min-w-0 space-y-2 min-[600px]:text-sm">
+                <span className="block text-[12px] font-bold uppercase tracking-[0.08em] text-[#0d1f12]">
+                  Target rate ({currencyByCountry[country]})
                 </span>
                 <input
                   className="alert-input min-h-12 w-full min-w-0 rounded-[8px] border border-[#c8e6c9] bg-white px-[14px] py-[11px] font-mono outline-none"
