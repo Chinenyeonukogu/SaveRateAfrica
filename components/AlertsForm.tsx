@@ -10,8 +10,6 @@ interface AlertsFormProps {
 
 const subtitleText =
   "Set your ideal rate and we'll send you a free email alert instantly the moment your target rate is available.";
-const alertsApiEndpoint =
-  "https://kcjhk91q5b.execute-api.us-east-1.amazonaws.com/production/alerts";
 
 export function AlertsForm({ variant = "default" }: AlertsFormProps) {
   const router = useRouter();
@@ -19,6 +17,9 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
   const [targetRate, setTargetRate] = useState("1600");
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [statusMessage, setStatusMessage] = useState("");
+  const [statusType, setStatusType] = useState<"success" | "error" | null>(null);
 
   async function handleCtaClick() {
     if (isHero) {
@@ -26,18 +27,49 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
       return;
     }
 
+    const parsedTargetRate = Number.parseFloat(targetRate);
+    const trimmedEmail = email.trim();
+
+    if (!trimmedEmail || !Number.isFinite(parsedTargetRate) || parsedTargetRate <= 0) {
+      setStatusType("error");
+      setStatusMessage("Please enter your email and a valid target rate.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setStatusMessage("");
+    setStatusType(null);
+
     try {
-      await fetch(alertsApiEndpoint, {
+      const response = await fetch("/api/alerts", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          email,
-          targetRate: Number.parseFloat(targetRate)
+          email: trimmedEmail,
+          targetRate: parsedTargetRate
         })
       });
-    } catch {}
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(data.error ?? "Unable to create alert right now.");
+      }
+
+      setStatusType("success");
+      setStatusMessage(data.message ?? "Your rate alert has been created.");
+    } catch (error) {
+      setStatusType("error");
+      setStatusMessage(
+        error instanceof Error
+          ? error.message
+          : "Unable to create alert right now. Please try again."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -137,6 +169,7 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
                   className="alert-input min-h-12 w-full min-w-0 rounded-[8px] border border-[#c8e6c9] bg-white px-[14px] py-[11px] font-mono outline-none"
                   inputMode="decimal"
                   placeholder="1600"
+                  required
                   type="number"
                   value={targetRate}
                   onChange={(event) => setTargetRate(event.target.value)}
@@ -150,6 +183,7 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
                 <input
                   className="alert-input min-h-12 w-full min-w-0 rounded-[8px] border border-[#c8e6c9] bg-white px-[14px] py-[11px] outline-none"
                   placeholder="you@example.com"
+                  required
                   type="email"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
@@ -178,6 +212,7 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
 
         <div className={isHero ? "" : "mt-4"}>
           <button
+            disabled={!isHero && isSubmitting}
             onClick={handleCtaClick}
             style={{
               width: "100%",
@@ -188,12 +223,24 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
               borderRadius: "50px",
               fontSize: "15px",
               fontWeight: 800,
-              cursor: "pointer",
+              cursor: !isHero && isSubmitting ? "not-allowed" : "pointer",
               letterSpacing: "0.01em"
             }}
+            type="button"
           >
-            {isHero ? "Set Rate Alert →" : "Send now"}
+            {isHero ? "Set Rate Alert →" : isSubmitting ? "Sending..." : "Send now"}
           </button>
+          {statusMessage ? (
+            <p
+              className={`mt-3 rounded-[10px] px-3 py-2 text-center text-[12px] font-semibold ${
+                statusType === "success"
+                  ? "bg-[#e8f5e9] text-[#1b5e20]"
+                  : "bg-[#fff4e5] text-[#7a4a00]"
+              }`}
+            >
+              {statusMessage}
+            </p>
+          ) : null}
           <p
             style={{
               textAlign: "center",
