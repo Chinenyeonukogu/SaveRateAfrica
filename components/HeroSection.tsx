@@ -30,16 +30,22 @@ const currencySymbolByCountry: Record<
   UK: { code: "GBP", symbol: "\u00a3" },
   Canada: { code: "CAD", symbol: "CA$" }
 };
-const flagByCountry: Record<SenderCountry, string> = {
-  USA: "🇺🇸",
-  UK: "🇬🇧",
-  Canada: "🇨🇦"
+const flagByCountry: Record<SenderCountry, { alt: string; src: string }> = {
+  USA: { alt: "USA flag", src: "/flags/us.svg" },
+  UK: { alt: "UK flag", src: "/flags/gb.svg" },
+  Canada: { alt: "Canada flag", src: "/flags/ca.svg" }
 };
 
-function getCountryFlag(country: SenderCountry) {
-  if (country === "USA") return "\uD83C\uDDFA\uD83C\uDDF8";
-  if (country === "UK") return "\uD83C\uDDEC\uD83C\uDDE7";
-  return "\uD83C\uDDE8\uD83C\uDDE6";
+function CountryFlag({ country }: { country: SenderCountry }) {
+  const flag = flagByCountry[country];
+
+  return (
+    <img
+      alt={flag.alt}
+      className="mr-1 inline-block h-[12px] w-[16px] rounded-[2px] object-cover align-[-2px]"
+      src={flag.src}
+    />
+  );
 }
 
 const brandFontStyle = {
@@ -420,7 +426,8 @@ export function HeroSection({
                             type="button"
                             onClick={() => onSenderCountryChange(country.code)}
                           >
-                            {getCountryFlag(country.code)} {country.label}
+                            <CountryFlag country={country.code} />
+                            {country.label}
                           </button>
                         );
                       })}
@@ -433,7 +440,12 @@ export function HeroSection({
                     </p>
                     <div className="flex items-center justify-between rounded-[8px] border-[1.5px] border-[#e0ede2] px-[14px] py-[9px]">
                       <span className="text-[12px] font-semibold text-[#1a2e1a]">
-                        {"\uD83C\uDDF3\uD83C\uDDEC"} Nigeria
+                        <img
+                          alt="Nigeria flag"
+                          className="mr-2 inline-block h-[12px] w-[16px] rounded-[2px] object-cover align-[-2px]"
+                          src="/flags/ng.svg"
+                        />
+                        Nigeria
                       </span>
                       <span className="text-[12px] font-medium text-[#2e7d32]">
                         Locked corridor
