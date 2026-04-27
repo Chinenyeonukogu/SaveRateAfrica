@@ -1,5 +1,4 @@
 {
-  "ignoreDeprecations": "6.0",
   "compilerOptions": {
     "target": "ES2017",
     "lib": [
@@ -23,7 +22,6 @@
         "name": "next"
       }
     ],
-    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./*"
@@ -38,6 +36,8 @@
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "SaveRateAfrica.com _ SaveRateAfrica.com.ng",
+    "saverateafric-mobile-app"
   ]
 }
