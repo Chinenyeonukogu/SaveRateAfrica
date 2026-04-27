@@ -50,21 +50,18 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
     setStatusType(null);
 
     try {
-      const response = await fetch(
-        "https://kcjhk91q5b.execute-api.us-east-1.amazonaws.com/production/alerts",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            email: trimmedEmail,
-            targetRate: parsedTargetRate,
-            currency,
-            country
-          })
-        }
-      );
+      const response = await fetch("/api/alerts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: trimmedEmail,
+          targetRate: parsedTargetRate,
+          currency,
+          country
+        })
+      });
 
       const data = await response.json().catch(() => ({}));
 
