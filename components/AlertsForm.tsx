@@ -10,6 +10,8 @@ interface AlertsFormProps {
 
 const subtitleText =
   "Set your ideal rate and we'll send you a free email alert instantly the moment your target rate is available.";
+const alertsApiEndpoint =
+  "https://kcjhk91q5b.execute-api.us-east-1.amazonaws.com/production/alerts";
 
 export function AlertsForm({ variant = "default" }: AlertsFormProps) {
   const router = useRouter();
@@ -25,7 +27,7 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
     }
 
     try {
-      await fetch("/api/alerts", {
+      await fetch(alertsApiEndpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
