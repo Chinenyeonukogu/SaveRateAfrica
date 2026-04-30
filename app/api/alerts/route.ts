@@ -33,23 +33,42 @@ export async function POST(request: Request) {
       );
     }
 
+    const awsRequestBody = { email, targetRate };
+
+    console.log("[api/alerts] Calling AWS API Gateway URL:", apiGatewayUrl);
+    console.log("[api/alerts] Sending AWS request body:", awsRequestBody);
+
     const response = await fetch(apiGatewayUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "x-api-key": apiKey
       },
-      body: JSON.stringify({ email, targetRate })
+      body: JSON.stringify(awsRequestBody)
     });
 
-    const responseBody = await response.json().catch(() => ({}));
+    const responseText = await response.text();
+    let responseBody: unknown = responseText;
+
+    try {
+      responseBody = responseText ? JSON.parse(responseText) : {};
+    } catch {}
 
     if (!response.ok) {
+      console.error("[api/alerts] AWS API Gateway error:", {
+        url: apiGatewayUrl,
+        status: response.status,
+        statusText: response.statusText,
+        body: responseBody
+      });
+
       return NextResponse.json(
         {
           error: "The alert service rejected the request.",
+          calledUrl: apiGatewayUrl,
           upstreamStatus: response.status,
-          upstreamMessage: responseBody.message ?? responseBody.error ?? null
+          upstreamStatusText: response.statusText,
+          upstreamBody: responseBody
         },
         { status: 502 }
       );
