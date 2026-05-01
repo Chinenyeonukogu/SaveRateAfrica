@@ -4,6 +4,12 @@ export async function POST(request: Request) {
   try {
     const apiGatewayUrl = process.env.AWS_API_GATEWAY_URL;
     const apiKey = process.env.AWS_API_KEY;
+
+    console.log("[api/alerts] Environment variables:", {
+      AWS_API_KEY: Boolean(apiKey),
+      AWS_API_GATEWAY_URL: Boolean(apiGatewayUrl)
+    });
+
     const body = (await request.json()) as {
       email?: string;
       targetRate?: number;
@@ -26,13 +32,6 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!apiKey) {
-      return NextResponse.json(
-        { error: "AWS_API_KEY is not configured." },
-        { status: 500 }
-      );
-    }
-
     const awsRequestBody = { email, targetRate };
 
     console.log("[api/alerts] Calling AWS API Gateway URL:", apiGatewayUrl);
@@ -42,7 +41,7 @@ export async function POST(request: Request) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": apiKey
+        "x-api-key": apiKey ?? ""
       },
       body: JSON.stringify(awsRequestBody)
     });
