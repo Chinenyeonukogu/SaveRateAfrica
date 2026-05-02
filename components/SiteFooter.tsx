@@ -57,9 +57,9 @@ export function SiteFooter() {
               </p>
               <a
                 className="mb-1 block text-[13px] font-semibold text-[#2e7d32] transition hover:text-[#1b5e20] hover:underline"
-                href="mailto:partners@saverateafrica.com"
+                href="mailto:patterns@saverateafrica.com"
               >
-                partners@saverateafrica.com
+                patterns@saverateafrica.com
               </a>
               <p className="text-[11px] font-semibold text-[#7a9a7a]">We respond within 24 hours</p>
 

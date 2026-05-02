@@ -49,9 +49,9 @@ const commitmentItems = [
     We respond to enquiries within 24 hours via{" "}
     <a
       className="font-semibold text-[#2e7d32] underline decoration-[#2e7d32]/30 underline-offset-2 hover:text-[#1b5e20]"
-      href="mailto:partners@saverateafrica.com"
+      href="mailto:patterns@saverateafrica.com"
     >
-      partners@saverateafrica.com
+      patterns@saverateafrica.com
     </a>
   </>,
   "We're constantly improving the platform based on feedback from the diaspora community."
