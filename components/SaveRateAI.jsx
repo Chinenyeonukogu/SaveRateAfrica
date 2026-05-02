@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { Home } from "lucide-react";
 
 const quickReplies = [
   "🇺🇸 Best USD rate now?",
@@ -73,6 +74,7 @@ export function SaveRateAI() {
   const [isTyping, setIsTyping] = useState(false);
   const [showQuickReplies, setShowQuickReplies] = useState(false);
   const messagesEndRef = useRef(null);
+  const requestTokenRef = useRef(0);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -80,15 +82,25 @@ export function SaveRateAI() {
 
   function openChat() {
     setIsOpen(true);
-    setShowQuickReplies(true);
-    setMessages([createMessage("bot", openingGreeting)]);
+    resetChat();
   }
 
   function closeChat(event) {
     event?.preventDefault();
     event?.stopPropagation();
+    requestTokenRef.current += 1;
     setIsOpen(false);
     setIsTyping(false);
+  }
+
+  function resetChat(event) {
+    event?.preventDefault();
+    event?.stopPropagation();
+    requestTokenRef.current += 1;
+    setInputValue("");
+    setIsTyping(false);
+    setShowQuickReplies(true);
+    setMessages([createMessage("bot", openingGreeting)]);
   }
 
   async function sendMessage(text) {
@@ -105,16 +117,25 @@ export function SaveRateAI() {
     setShowQuickReplies(false);
     setIsTyping(true);
 
+    const requestToken = requestTokenRef.current + 1;
+    requestTokenRef.current = requestToken;
+
     try {
       const reply = await askGemini(trimmedText, nextMessages);
-      setMessages((current) => [...current, createMessage("bot", reply)]);
+      if (requestTokenRef.current === requestToken) {
+        setMessages((current) => [...current, createMessage("bot", reply)]);
+      }
     } catch {
-      setMessages((current) => [
-        ...current,
-        createMessage("bot", fallbackReply(trimmedText))
-      ]);
+      if (requestTokenRef.current === requestToken) {
+        setMessages((current) => [
+          ...current,
+          createMessage("bot", fallbackReply(trimmedText))
+        ]);
+      }
     } finally {
-      setIsTyping(false);
+      if (requestTokenRef.current === requestToken) {
+        setIsTyping(false);
+      }
     }
   }
 
@@ -135,18 +156,29 @@ export function SaveRateAI() {
               <h2>SaveRate AI</h2>
               <p>Eva is Online — Here to help!</p>
             </div>
-            <button
-              aria-label="Close SaveRate AI"
-              className="save-rate-ai-close"
-              type="button"
-              onClick={closeChat}
-            >
-              ×
-            </button>
+            <div className="save-rate-ai-actions">
+              <button
+                aria-label="Restart SaveRate AI conversation"
+                className="save-rate-ai-icon-button"
+                title="Back to menu"
+                type="button"
+                onClick={resetChat}
+              >
+                <Home aria-hidden="true" size={16} strokeWidth={2.5} />
+              </button>
+              <button
+                aria-label="Close SaveRate AI"
+                className="save-rate-ai-icon-button"
+                type="button"
+                onClick={closeChat}
+              >
+                ×
+              </button>
+            </div>
           </header>
 
           <div className="save-rate-ai-messages">
-            {messages.map((message) => (
+            {messages.map((message, messageIndex) => (
               <article
                 key={message.id}
                 className={`save-rate-ai-message save-rate-ai-message-${message.role}`}
@@ -155,6 +187,15 @@ export function SaveRateAI() {
                   <p key={`${message.id}-${index}`}>{line}</p>
                 ))}
                 <span>{message.timestamp}</span>
+                {message.role === "bot" && messageIndex > 0 ? (
+                  <button
+                    className="save-rate-ai-back-button"
+                    type="button"
+                    onClick={resetChat}
+                  >
+                    Back to menu
+                  </button>
+                ) : null}
               </article>
             ))}
 
@@ -296,7 +337,13 @@ export function SaveRateAI() {
           margin: 3px 0 0;
         }
 
-        .save-rate-ai-close {
+        .save-rate-ai-actions {
+          display: flex;
+          gap: 8px;
+          margin-left: auto;
+        }
+
+        .save-rate-ai-icon-button {
           align-items: center;
           background: rgba(255, 255, 255, 0.16);
           border: 0;
@@ -307,8 +354,11 @@ export function SaveRateAI() {
           font-size: 22px;
           height: 32px;
           justify-content: center;
-          margin-left: auto;
           width: 32px;
+        }
+
+        .save-rate-ai-icon-button:hover {
+          background: rgba(255, 255, 255, 0.24);
         }
 
         .save-rate-ai-messages {
@@ -346,6 +396,26 @@ export function SaveRateAI() {
           background: #ffffff;
           box-shadow: 0 6px 18px rgba(26, 107, 60, 0.1);
           color: #14351f;
+        }
+
+        .save-rate-ai-back-button {
+          background: #ffffff;
+          border: 1.5px solid #1a6b3c;
+          border-radius: 999px;
+          color: #1a6b3c;
+          cursor: pointer;
+          display: inline-flex;
+          font-size: 11px;
+          font-weight: 800;
+          margin-top: 8px;
+          padding: 7px 12px;
+          transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+        }
+
+        .save-rate-ai-back-button:hover {
+          background: #1a6b3c;
+          color: #ffffff;
+          transform: translateY(-1px);
         }
 
         .save-rate-ai-message-user {
