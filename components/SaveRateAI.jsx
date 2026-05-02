@@ -71,6 +71,7 @@ export function SaveRateAI() {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [showQuickReplies, setShowQuickReplies] = useState(false);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -79,13 +80,15 @@ export function SaveRateAI() {
 
   function openChat() {
     setIsOpen(true);
-    setMessages((current) =>
-      current.length ? current : [createMessage("bot", openingGreeting)]
-    );
+    setShowQuickReplies(true);
+    setMessages([createMessage("bot", openingGreeting)]);
   }
 
-  function closeChat() {
+  function closeChat(event) {
+    event?.preventDefault();
+    event?.stopPropagation();
     setIsOpen(false);
+    setIsTyping(false);
   }
 
   async function sendMessage(text) {
@@ -99,6 +102,7 @@ export function SaveRateAI() {
 
     setMessages(nextMessages);
     setInputValue("");
+    setShowQuickReplies(false);
     setIsTyping(true);
 
     try {
@@ -164,7 +168,7 @@ export function SaveRateAI() {
             <div ref={messagesEndRef} />
           </div>
 
-          {messages.length <= 1 ? (
+          {showQuickReplies ? (
             <div className="save-rate-ai-quick-replies">
               {quickReplies.map((reply) => (
                 <button
