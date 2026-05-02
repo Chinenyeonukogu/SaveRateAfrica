@@ -2,10 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
 const quickReplies = [
   "🇺🇸 Best USD rate now?",
   "🇬🇧 Best GBP rate now?",
@@ -18,38 +14,6 @@ const quickReplies = [
 const openingGreeting = `Hi, I'm Eva! 👋
 Your SaveRate AI assistant — here to help you find the best rates, save money on transfers, and support you every step of the way.
 What can I help you with today?`;
-
-const baseSystemPrompt = `You are Eva, SaveRateAfrica's warm and friendly AI assistant. Your personality is encouraging, helpful, and supportive. You help Nigerian diaspora users find the best remittance rates for sending USD, GBP, and CAD to NGN.
-
-About SaveRateAfrica:
-- Free remittance comparison platform for Nigerian diaspora
-- Compares 14 providers including LemFi, Wise, WorldRemit, Remitly, Western Union, MoneyGram
-- Users compare USD, GBP, and CAD to NGN rates
-- We show live rates, fees, speed, and payout value
-- We NEVER hold funds or process transfers ourselves
-- Rate alerts can be set from the Currency Trends chart on the homepage
-
-How to use the site:
-1. Go to Compare Rates section
-2. Select sending country (USA, UK, or Canada)
-3. Enter the amount to send
-4. Click Compare Rates Now
-5. View providers ranked by best payout
-6. Click preferred provider to send
-
-How to set a rate alert:
-1. Scroll to Currency Trends chart on homepage
-2. Click the gold Set Rate Alert button
-3. Enter target NGN rate and email address
-4. We notify you when any provider hits that rate
-
-Getting help:
-- Use Eva chat for instant answers
-- Visit Contact Us page for email support
-- Check How It Works section on homepage
-
-Always end responses with an encouraging line like:
-You are making a smart move sending with SaveRateAfrica!`;
 
 function getTimeLabel() {
   return new Date().toLocaleTimeString([], {
@@ -67,146 +31,22 @@ function createMessage(role, text) {
   };
 }
 
-function normalizeRateRow(row) {
-  const currency =
-    row?.currency ||
-    row?.source_currency ||
-    row?.from_currency ||
-    row?.base_currency ||
-    row?.corridor;
-  const provider = row?.provider || row?.provider_name || row?.name || "Unknown provider";
-  const rate = Number(row?.rate ?? row?.exchange_rate ?? row?.ngn_rate ?? row?.value);
-
-  if (!currency || !Number.isFinite(rate)) {
-    return null;
-  }
-
-  const normalizedCurrency = String(currency).toUpperCase().includes("GBP")
-    ? "GBP"
-    : String(currency).toUpperCase().includes("CAD")
-      ? "CAD"
-      : String(currency).toUpperCase().includes("USD")
-        ? "USD"
-        : null;
-
-  if (!normalizedCurrency) {
-    return null;
-  }
-
-  return {
-    currency: normalizedCurrency,
-    provider,
-    rate
-  };
-}
-
-function buildRatesSummary(rows) {
-  if (!Array.isArray(rows) || rows.length === 0) {
-    return "Live Supabase rates are unavailable right now.";
-  }
-
-  const bestByCurrency = rows
-    .map(normalizeRateRow)
-    .filter(Boolean)
-    .reduce((bestRates, row) => {
-      const current = bestRates[row.currency];
-      if (!current || row.rate > current.rate) {
-        bestRates[row.currency] = row;
-      }
-      return bestRates;
-    }, {});
-
-  const summaryLines = ["Current best rates from Supabase exchange_rates:"];
-  ["USD", "GBP", "CAD"].forEach((currency) => {
-    const best = bestByCurrency[currency];
-    if (best) {
-      summaryLines.push(`- ${currency}: ${best.provider} at ${best.rate} NGN/${currency}`);
-    }
+async function askGemini(message, history) {
+  const response = await fetch("/api/eva", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message, history })
   });
 
-  return summaryLines.length > 1
-    ? summaryLines.join("\n")
-    : "Live Supabase rates are unavailable right now.";
-}
-
-async function fetchSupabaseRates() {
-  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-    return "Live Supabase rates are unavailable right now.";
-  }
-
-  try {
-    const response = await fetch(
-      `${SUPABASE_URL.replace(/\/$/, "")}/rest/v1/exchange_rates?select=*&limit=100`,
-      {
-        headers: {
-          apikey: SUPABASE_ANON_KEY,
-          Authorization: `Bearer ${SUPABASE_ANON_KEY}`
-        }
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Supabase rates fetch failed.");
-    }
-
-    return buildRatesSummary(await response.json());
-  } catch {
-    return "Live Supabase rates are unavailable right now.";
-  }
-}
-
-async function askGemini(message, history) {
-  const liveRates = await fetchSupabaseRates();
-  const systemPrompt = `${baseSystemPrompt}
-
-${liveRates}
-
-If live Supabase rates are unavailable, answer with general SaveRateAfrica guidance and avoid pretending to know live winners.`;
-
-  if (!GEMINI_API_KEY) {
-    return "I can help with rate comparisons, alerts, and how to use SaveRateAfrica. The Gemini API key is not available in the browser right now, so I cannot generate a live AI response. You are making a smart move sending with SaveRateAfrica!";
-  }
-
-  const response = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        contents: [
-          {
-            role: "user",
-            parts: [
-              {
-                text: `${systemPrompt}
-
-Conversation so far:
-${history.map((item) => `${item.role === "user" ? "User" : "Eva"}: ${item.text}`).join("\n")}
-
-User: ${message}`
-              }
-            ]
-          }
-        ],
-        generationConfig: {
-          temperature: 0.45,
-          maxOutputTokens: 360
-        }
-      })
-    }
-  );
-
   if (!response.ok) {
-    throw new Error("Gemini request failed.");
+    throw new Error("Eva request failed.");
   }
 
   const data = await response.json();
-  const text = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+  const text = data?.message?.trim();
 
   if (!text) {
-    throw new Error("Gemini returned an empty response.");
+    throw new Error("Eva returned an empty response.");
   }
 
   return text;

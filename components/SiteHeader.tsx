@@ -146,7 +146,7 @@ export function SiteHeader({
   showAnnouncementBar = false,
   showBreadcrumb = false
 }: SiteHeaderProps) {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "/";
   const router = useRouter();
   const [activeSectionId, setActiveSectionId] = useState<string | null>(
     pathname === "/" ? "home" : null
