@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200" role="img" aria-labelledby="title">
+  <title>SaveRateAfrica Logo</title>
+  <circle cx="100" cy="100" r="100" fill="#4a7c59" />
+  <text
+    x="100"
+    y="116"
+    fill="#ffffff"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="96"
+    font-weight="700"
+    text-anchor="middle"
+  >
+    S
+  </text>
+</svg>
