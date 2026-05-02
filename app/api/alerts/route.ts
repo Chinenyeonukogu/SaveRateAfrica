@@ -48,7 +48,7 @@ export async function POST(req: Request) {
 
     await sesClient.send(
       new SendEmailCommand({
-        Source: "partners@saverateafrica.com",
+        Source: "Patterns@saverateafrica.com",
         Destination: {
           ToAddresses: email ? [email] : []
         },
