@@ -463,7 +463,7 @@ export function SiteHeader({
         <div className="bg-[#2e7d32]">
           <div className="mx-auto max-w-[1200px] px-5 py-[10px] text-center text-[13px] text-white">
             <span>
-              ✦ Real-time NGN rates · No hidden fees · Compare 14+ providers and
+              ✦ Real-time NGN rates · No hidden fees · Compare 14 providers and
               save on every transfer.{" "}
             </span>
             <Link

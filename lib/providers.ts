@@ -277,28 +277,6 @@ export const providers: Provider[] = [
     cons: ["Digital-first experience", "Cash pickup options vary"]
   },
   {
-    slug: "grey-finance",
-    name: "Grey Finance",
-    logoFrom: "#3949AB",
-    logoTo: "#0A1628",
-    rating: 4.6,
-    reviewCount: 7721,
-    speedHours: 8,
-    speedBand: "same-day",
-    deliveryLabel: "Same day",
-    feeBand: "low",
-    fees: { USD: 0, GBP: 0, CAD: 0 },
-    rateMultiplier: { USD: 1.0, GBP: 0.999, CAD: 0.999 },
-    summary: "High modern appeal + diaspora relevance",
-    headline: "High modern appeal + diaspora relevance",
-    bestFor: "High modern appeal + diaspora relevance",
-    trustNote: "High modern appeal + diaspora relevance",
-    supportedSenderCountries: ["USA", "UK", "Canada"],
-    payoutChannels: ["Bank deposit"],
-    pros: ["No Fee ✅", "Great for freelancers", "Strong multicurrency positioning"],
-    cons: ["Brand familiarity varies by sender", "Delivery timing varies"]
-  },
-  {
     slug: "afriex",
     name: "Afriex",
     logoFrom: "#FF5722",
@@ -412,7 +390,6 @@ export const providers: Provider[] = [
 
 export const providerRankingsBySenderCountry: Record<SenderCountry, string[]> = {
   USA: [
-    "Grey Finance",
     "LemFi",
     "Wise",
     "TapTap Send",
@@ -436,7 +413,6 @@ export const providerRankingsBySenderCountry: Record<SenderCountry, string[]> = 
     "Western Union",
     "MoneyGram",
     "Paysend",
-    "Grey Finance",
     "Afriex",
     "Chipper Cash",
     "Flutterwave Send"
@@ -446,7 +422,6 @@ export const providerRankingsBySenderCountry: Record<SenderCountry, string[]> = 
     "Remitly",
     "LemFi",
     "TapTap Send",
-    "Grey Finance",
     "WorldRemit",
     "Western Union",
     "MoneyGram",

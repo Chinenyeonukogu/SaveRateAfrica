@@ -98,15 +98,6 @@ export const providerReviews: Review[] = [
       "I care about payout value more than marketing claims. Seeing the amount received ranked properly changed how I send home."
   },
   {
-    name: "Favour I.",
-    country: "Canada",
-    provider: "Grey Finance",
-    rating: 5,
-    role: "Remote designer in Toronto",
-    quote:
-      "The calculator helped me prove I was overpaying. Switching providers saved me enough to cover airtime and groceries back home."
-  },
-  {
     name: "Kelechi N.",
     country: "Canada",
     provider: "Sendwave",

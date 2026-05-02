@@ -14,7 +14,6 @@ You have access to the following live data from the
 page the user is currently viewing:
 
 LIVE PROVIDER DATA (USD to NGN, updated every 5 min):
-- Grey Finance:   rate 1,380.65 NGN/USD · No fee · Same day · 4.6★
 - LemFi:          rate 1,378.58 NGN/USD · No fee · 3–5 min · 4.9★
 - Sendwave:       rate 1,378.16 NGN/USD · No fee · Instant · 4.8★
 - Chipper Cash:   rate 1,377.20 NGN/USD · No fee · Minutes · 4.4★
@@ -50,7 +49,7 @@ YOUR BEHAVIOUR RULES:
              TapTap Send, Remitly, MoneyGram, 
              Western Union
    Within 1 hour = WorldRemit
-   Same day = Grey Finance, Wise, Flutterwave
+   Same day = Wise, Flutterwave
 
 3. For emergency/urgent questions:
    Recommend Sendwave or Afriex (instant, no fee)
@@ -61,7 +60,7 @@ YOUR BEHAVIOUR RULES:
    Show top 3 with exact NGN amounts
 
 5. For top rate questions:
-   Recommend Grey Finance first, explain why
+   Recommend the strongest live payout provider first, explain why
 
 6. Always be specific. Show numbers. 
    Never give vague answers.
@@ -113,7 +112,6 @@ interface AssistantIntent {
 }
 
 const PROVIDER_ORDER = [
-  "Grey Finance",
   "LemFi",
   "Sendwave",
   "Chipper Cash",
@@ -133,7 +131,6 @@ const PROVIDER_ALIASES: Record<string, string[]> = {
   Afriex: ["afriex"],
   "Chipper Cash": ["chipper cash", "chipper"],
   Flutterwave: ["flutterwave send", "flutterwave"],
-  "Grey Finance": ["grey finance"],
   LemFi: ["lemfi"],
   MoneyGram: ["moneygram"],
   Nala: ["nala"],
@@ -530,8 +527,7 @@ ${getNormalizedProviderName(rankedProviders[0].name)} wins by ${formatExactNaira
 
 function buildBestRateReply(comparison: ComparisonResult, amount: number) {
   const activeComparison = buildComparisonForAmount(comparison, amount);
-  const bestRateProvider =
-    findProvider(activeComparison, "Grey Finance") ?? activeComparison.providers[0];
+  const bestRateProvider = activeComparison.providers[0];
   const westernUnion = findProvider(activeComparison, "Western Union");
   const formattedAmount = getFormattedAmount(activeComparison, amount);
 

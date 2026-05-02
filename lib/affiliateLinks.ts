@@ -10,7 +10,6 @@ const remittanceProviderLinks: Record<string, string> = {
   pangea: "https://www.pangeamoneytransfer.com/",
   "chipper-cash": "https://chippercash.com/",
   lemfi: "https://lemfi.com/en-us",
-  "grey-finance": "https://grey.co/",
   afriex: "https://www.afriex.com/",
   "flutterwave-send": "https://send.flutterwave.com",
   nala: "https://www.nala.com/",

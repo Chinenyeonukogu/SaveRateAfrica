@@ -4,7 +4,7 @@ The #1 remittance comparison platform for
 Nigerian diaspora in USA, UK and Canada.
 
 ## What It Does
-- Compare real-time rates from 14+ providers
+- Compare real-time rates from 14 providers
 - Find the best NGN payout instantly
 - Savings calculator shows how much you save
 - Currency trend charts (7Days/30Days)
@@ -36,7 +36,7 @@ MoneyGram, Western Union and more
 
 ## Vision
 You work hard abroad. Your family deserves every naira of it. SaveRateAfrica helps 
-Nigerian diaspora in USA, UK and Canada compare 14+ providers in seconds — so every 
+Nigerian diaspora in USA, UK and Canada compare 14 providers in seconds — so every 
 dollar, pound and loonie lands as more naira in your loved ones hands. No hidden fees. 
 No guesswork. Just smarter sending money!
 

@@ -69,7 +69,6 @@ const EXCHANGE_RATE_API_URL = "https://api.exchangerate-api.com/v4/latest/USD";
 const FALLBACK_BASE_RATE = 159;
 
 const providers = [
-  { name: "Grey Finance", fee: 2.0, offset: 0.998 },
   { name: "Afriex", fee: 0.0, offset: 0.997 },
   { name: "Wise", fee: 4.5, offset: 0.995 },
   { name: "Remitly", fee: 3.99, offset: 0.992 },
@@ -275,7 +274,7 @@ export function HeroSection({
             </div>
 
             <p className="mb-6 mt-[14px] max-w-[440px] text-[14px] leading-[1.7] text-white/70">
-              Real-time rates from 14+ trusted providers. No hidden fees. Ranked by
+              Real-time rates from 14 trusted providers. No hidden fees. Ranked by
               the exact NGN your recipient receives after all charges.
             </p>
 

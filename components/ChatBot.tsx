@@ -14,7 +14,7 @@ const quickReplies = ["Best rate now", "Compare providers", "Rate alerts", "I ne
 const botResponses: Record<string, string> = {
   "best rate now": "Use our comparison tool to find a top rate available right now for your transfer. Rates update every 30 seconds.\n\n👉 Compare Rates Now →",
   "top rate now": "Use our comparison tool to find a top rate available right now for your transfer. Rates update every 30 seconds.\n\n👉 Compare Rates Now →",
-  "compare providers": "SaveRateAfrica compares 14+ providers including Wise, Remitly, WorldRemit, Grey Finance, LemFi, SendWave and more.\n\nUse the comparison tool on the homepage to see live payouts side by side.",
+  "compare providers": "SaveRateAfrica compares providers including Wise, Remitly, WorldRemit, LemFi, SendWave and more.\n\nUse the comparison tool on the homepage to see live payouts side by side.",
   "rate alerts": "You can set a target NGN rate and we will notify you the moment a provider hits it.\n\n🔔 Go to Rate Alerts in the nav to get started.",
   "i need help": "📧 We are here to help!\nFor support or any questions about SaveRateAfrica please email us at:\npatterns@saverateafrica.com\nOur team will get back to you within 24 hours.",
   help: "📧 We are here to help!\nFor support or any questions about SaveRateAfrica please email us at:\npatterns@saverateafrica.com\nOur team will get back to you within 24 hours.",
@@ -153,7 +153,7 @@ export function ChatBot() {
           {/* Live Bar */}
           <div className="flex items-center gap-2 bg-[#1b5e20] p-[5px_16px] text-[10px] text-[rgba(255,255,255,0.75)]">
             <div className="h-[5px] w-[5px] animate-pulse rounded-full bg-[#69f0ae]"></div>
-            Live rates active · 14+ providers
+            Live rates active · 14 providers
           </div>
 
           {/* Messages */}
