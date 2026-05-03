@@ -29,8 +29,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "SaveRateAfrica | Best Way to Send Money to Nigeria",
     description:
-      "Compare USD, GBP and CAD to NGN rates today. Find the cheapest way to send money to Nigeria from USA, UK and Canada. Compare LemFi, Wise, Grey, Remitly and 10+ providers instantly.",
-    url: "https://saverateafrica.com"
+      "Compare USD, GBP and CAD to NGN rates today. Find the cheapest way to send money to Nigeria.",
+    url: "https://saverateafrica.com",
+    siteName: "SaveRateAfrica",
+    images: [{ url: "https://saverateafrica.com/logo.svg", width: 200, height: 200 }],
+    type: "website"
   }
 };
 
