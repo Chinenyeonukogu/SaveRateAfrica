@@ -1,4 +1,4 @@
-import type { MetadataRoute } from "next";
+import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -12,7 +12,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/"
       }
     ],
-    sitemap: "https://saverateafrica.com/sitemap.xml",
-    host: "https://saverateafrica.com"
+    sitemap: "https://saverateafrica.com/sitemap.xml"
   };
 }

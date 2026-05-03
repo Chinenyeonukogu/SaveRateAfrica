@@ -11,9 +11,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://saverateafrica.com"),
   manifest: "/manifest.webmanifest",
-  title: "Compare Ways to Save Money Sending to Nigeria | SaveRateAfrica",
+  title: "SaveRateAfrica | Best Way to Send Money to Nigeria",
   description:
-    "Compare 14 money transfer providers and find top NGN exchange rates. Save hundreds of naira on every transfer from USA, UK and Canada to Nigeria.",
+    "Compare USD, GBP and CAD to NGN rates today. Find the cheapest way to send money to Nigeria from USA, UK and Canada.",
   applicationName: "SaveRateAfrica",
   keywords: [
     "best app to send money to Nigeria from US",
@@ -33,10 +33,11 @@ export const metadata: Metadata = {
     google: "ZkilmT1V7LJp4qCpQs4y2758O5_TPxT-iVVDieULCq4"
   },
   openGraph: {
-    title: "Compare Ways to Save Money Sending to Nigeria | SaveRateAfrica",
+    title: "SaveRateAfrica | Best Way to Send Money to Nigeria",
     description:
-      "Find top NGN exchange rates from USA, UK and Canada. Compare 14 providers instantly.",
+      "Compare USD, GBP and CAD to NGN rates today. Find the cheapest way to send money to Nigeria.",
     siteName: "SaveRateAfrica",
+    images: [{ url: "https://saverateafrica.com/logo.svg", width: 200, height: 200 }],
     type: "website",
     url: "https://saverateafrica.com"
   },
