@@ -12,17 +12,31 @@ import { CreditEligibilityCounterBadge } from "@/components/CreditEligibilityCou
 import { SiteHeader } from "@/components/SiteHeader";
 import { creditCardOffers } from "@/lib/site-data";
 
+const seoKeywords = [
+  "best app to send money to Nigeria from US",
+  "which platform gives best naira rate",
+  "how to avoid transfer fees Nigeria",
+  "cheapest way to send money to Nigeria",
+  "Nigeria exchange rate today",
+  "USD to NGN rate today",
+  "compare remittance Nigeria",
+  "GBP to NGN rate",
+  "CAD to NGN rate"
+];
+
 export const metadata: Metadata = {
-  title: "Best Credit Cards for Nigerians in USA | SaveRateAfrica",
+  title: "Best Cards to Send Money to Nigeria | Avoid Transfer Fees",
   description:
-    "Mobile-friendly credit card recommendations for Nigerians in the USA with low or limited credit history.",
+    "Find the best cards for sending money to Nigeria. Learn how to avoid transfer fees and get the best NGN exchange rate today.",
+  keywords: seoKeywords,
   alternates: {
     canonical: "/credit-cards"
   },
   openGraph: {
-    title: "Best Credit Cards for Nigerians in the USA",
+    title: "Best Cards to Send Money to Nigeria | Avoid Transfer Fees",
     description:
-      "Earn rewards while you send and build a stronger U.S. credit profile."
+      "Find the best cards for sending money to Nigeria. Learn how to avoid transfer fees and get the best NGN exchange rate today.",
+    url: "https://saverateafrica.com/credit-cards"
   }
 };
 

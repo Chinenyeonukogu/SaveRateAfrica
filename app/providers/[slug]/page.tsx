@@ -11,6 +11,18 @@ import { getProviderBySlug, providers } from "@/lib/providers";
 
 export const revalidate = 300;
 
+const seoKeywords = [
+  "best app to send money to Nigeria from US",
+  "which platform gives best naira rate",
+  "how to avoid transfer fees Nigeria",
+  "cheapest way to send money to Nigeria",
+  "Nigeria exchange rate today",
+  "USD to NGN rate today",
+  "compare remittance Nigeria",
+  "GBP to NGN rate",
+  "CAD to NGN rate"
+];
+
 interface ProviderPageProps {
   params: Promise<{
     slug: string;
@@ -36,12 +48,14 @@ export async function generateMetadata({
   return {
     title: `${provider.name} money transfer to Nigeria`,
     description: `${provider.name} review for sending money to Nigeria from USA, UK, and Canada. Compare speed, fees, and payout context.`,
+    keywords: seoKeywords,
     alternates: {
       canonical: `/providers/${provider.slug}`
     },
     openGraph: {
       title: `${provider.name} for Nigeria transfers`,
-      description: provider.summary
+      description: provider.summary,
+      url: `https://saverateafrica.com/providers/${provider.slug}`
     }
   };
 }

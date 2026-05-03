@@ -5,12 +5,31 @@ import { ArrowRight } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { blogPosts } from "@/lib/site-data";
 
+const seoKeywords = [
+  "best app to send money to Nigeria from US",
+  "which platform gives best naira rate",
+  "how to avoid transfer fees Nigeria",
+  "cheapest way to send money to Nigeria",
+  "Nigeria exchange rate today",
+  "USD to NGN rate today",
+  "compare remittance Nigeria",
+  "GBP to NGN rate",
+  "CAD to NGN rate"
+];
+
 export const metadata: Metadata = {
   title: "Blog and Guides",
   description:
     "Guides and comparisons for Nigerians abroad sending money home and building financial stability overseas.",
+  keywords: seoKeywords,
   alternates: {
     canonical: "/blog"
+  },
+  openGraph: {
+    title: "Blog and Guides",
+    description:
+      "Guides and comparisons for Nigerians abroad sending money home and building financial stability overseas.",
+    url: "https://saverateafrica.com/blog"
   }
 };
 

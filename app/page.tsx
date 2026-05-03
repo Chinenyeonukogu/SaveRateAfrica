@@ -5,17 +5,32 @@ import { fetchRates } from "@/lib/fetchRates";
 
 export const revalidate = 300;
 
+const seoKeywords = [
+  "best way to send money to Nigeria",
+  "best app to send money to Nigeria from US",
+  "which platform gives best naira rate",
+  "how to avoid transfer fees Nigeria",
+  "cheapest way to send money to Nigeria",
+  "Nigeria exchange rate today",
+  "USD to NGN rate today",
+  "compare remittance Nigeria",
+  "GBP to NGN rate",
+  "CAD to NGN rate"
+];
+
 export const metadata: Metadata = {
-  title: "Compare Ways to Save Money Sending to Nigeria | SaveRateAfrica",
+  title: "SaveRateAfrica | Best Way to Send Money to Nigeria",
   description:
-    "Compare real-time NGN remittance rates from 14 providers, track currency trends, and save on every transfer to Nigeria.",
+    "Compare USD, GBP and CAD to NGN rates today. Find the cheapest way to send money to Nigeria from USA, UK and Canada. Compare LemFi, Wise, Grey, Remitly and 10+ providers instantly.",
+  keywords: seoKeywords,
   alternates: {
     canonical: "/"
   },
   openGraph: {
-    title: "Send Money to Nigeria - Compare and Save Instantly",
+    title: "SaveRateAfrica | Best Way to Send Money to Nigeria",
     description:
-      "Real-time rates from 14 providers. No hidden fees. Built for Nigerians in USA, UK and Canada."
+      "Compare USD, GBP and CAD to NGN rates today. Find the cheapest way to send money to Nigeria from USA, UK and Canada. Compare LemFi, Wise, Grey, Remitly and 10+ providers instantly.",
+    url: "https://saverateafrica.com"
   }
 };
 

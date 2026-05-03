@@ -5,18 +5,31 @@ import { Check } from "lucide-react";
 
 import { SiteHeader } from "@/components/SiteHeader";
 
+const seoKeywords = [
+  "best app to send money to Nigeria from US",
+  "which platform gives best naira rate",
+  "how to avoid transfer fees Nigeria",
+  "cheapest way to send money to Nigeria",
+  "Nigeria exchange rate today",
+  "USD to NGN rate today",
+  "compare remittance Nigeria",
+  "GBP to NGN rate",
+  "CAD to NGN rate"
+];
+
 export const metadata: Metadata = {
-  title: "Our Story – SaveRateAfrica",
+  title: "About SaveRateAfrica | Nigeria Remittance Comparison Platform",
   description:
-    "Learn why SaveRateAfrica was built and how we help Nigerians abroad compare remittance providers and keep more money in every transfer.",
+    "SaveRateAfrica helps you find the best naira rate when sending money to Nigeria. Compare which platform gives the best naira rate from USA, UK and Canada.",
+  keywords: seoKeywords,
   alternates: {
     canonical: "/about"
   },
   openGraph: {
-    title: "Our Story – SaveRateAfrica",
+    title: "About SaveRateAfrica | Nigeria Remittance Comparison Platform",
     description:
-      "Built to help Nigerians in the diaspora compare remittance rates with more clarity, transparency, and confidence.",
-    url: "https://www.saverateafrica.com/about"
+      "SaveRateAfrica helps you find the best naira rate when sending money to Nigeria. Compare which platform gives the best naira rate from USA, UK and Canada.",
+    url: "https://saverateafrica.com/about"
   }
 };
 

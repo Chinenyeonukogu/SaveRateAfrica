@@ -15,8 +15,20 @@ export const metadata: Metadata = {
   description:
     "Compare 14 money transfer providers and find top NGN exchange rates. Save hundreds of naira on every transfer from USA, UK and Canada to Nigeria.",
   applicationName: "SaveRateAfrica",
-  keywords:
-    "send money Nigeria, top NGN exchange rate, compare remittance Nigeria, Nigerian diaspora money transfer, USD to NGN top rate, GBP to NGN top rate, CAD to NGN top rate",
+  keywords: [
+    "best app to send money to Nigeria from US",
+    "which platform gives best naira rate",
+    "how to avoid transfer fees Nigeria",
+    "cheapest way to send money to Nigeria",
+    "Nigeria exchange rate today",
+    "USD to NGN rate today",
+    "compare remittance Nigeria",
+    "GBP to NGN rate",
+    "CAD to NGN rate"
+  ],
+  alternates: {
+    canonical: "/"
+  },
   openGraph: {
     title: "Compare Ways to Save Money Sending to Nigeria | SaveRateAfrica",
     description:

@@ -4,12 +4,31 @@ import { ProvidersDirectoryClient } from "@/components/ProvidersDirectoryClient"
 import { SiteHeader } from "@/components/SiteHeader";
 import { providers } from "@/lib/providers";
 
+const seoKeywords = [
+  "best app to send money to Nigeria from US",
+  "which platform gives best naira rate",
+  "how to avoid transfer fees Nigeria",
+  "cheapest way to send money to Nigeria",
+  "Nigeria exchange rate today",
+  "USD to NGN rate today",
+  "compare remittance Nigeria",
+  "GBP to NGN rate",
+  "CAD to NGN rate"
+];
+
 export const metadata: Metadata = {
   title: "All Money Transfer Providers to Nigeria | SaveRateAfrica",
   description:
     "Browse 14 money transfer providers sending to Nigeria and filter by country, speed, fee range, and rating.",
+  keywords: seoKeywords,
   alternates: {
     canonical: "/providers"
+  },
+  openGraph: {
+    title: "All Money Transfer Providers to Nigeria | SaveRateAfrica",
+    description:
+      "Browse 14 money transfer providers sending to Nigeria and filter by country, speed, fee range, and rating.",
+    url: "https://saverateafrica.com/providers"
   }
 };
 
