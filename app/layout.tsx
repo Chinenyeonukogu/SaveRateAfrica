@@ -29,6 +29,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/"
   },
+  verification: {
+    google: "ZkilmT1V7LJp4qCpQs4y2758O5_TPxT-iVVDieULCq4"
+  },
   openGraph: {
     title: "Compare Ways to Save Money Sending to Nigeria | SaveRateAfrica",
     description:
