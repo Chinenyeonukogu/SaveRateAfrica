@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/"
     },
-    sitemap: "https://www.saverateafrica.com/sitemap.xml",
-    host: "https://www.saverateafrica.com"
+    sitemap: "https://saverateafrica.com/sitemap.xml",
+    host: "https://saverateafrica.com"
   };
 }
