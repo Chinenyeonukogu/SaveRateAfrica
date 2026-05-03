@@ -31,9 +31,7 @@ export function ProviderCard({
   const providerCtaLabel = `Go to ${provider.name}`;
   const providerRedirectNote = `You will be redirected to ${provider.name}'s website`;
   const providerDescription = [
-    provider.bestFor,
-    provider.trustNote,
-    provider.transferFeeNote
+    provider.summary
   ]
     .filter((value): value is string => Boolean(value))
     .map((value) => neutralizeRankingLanguage(value))

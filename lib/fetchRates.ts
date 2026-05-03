@@ -27,6 +27,7 @@ export interface ComparisonProviderRow {
   amountReceived: number;
   speedHours: number;
   deliveryLabel: string;
+  summary: string;
   bestFor: string;
   trustNote: string;
   transferFeeNote?: string;
@@ -267,6 +268,7 @@ export function buildComparisonFromLiveRates({
         amountReceived,
         speedHours: provider.speedHours,
         deliveryLabel: provider.deliveryLabel,
+        summary: provider.summary,
         bestFor: provider.bestFor,
         trustNote: provider.trustNote,
         transferFeeNote: provider.transferFeeNote,
