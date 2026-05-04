@@ -165,12 +165,6 @@ function LearnAndSaveMoreSection() {
           <h2 className="text-[18px] font-extrabold leading-tight text-[#1a3a2a] min-[600px]:text-[22px]">
             Learn &amp; save more
           </h2>
-          <Link
-            className="shrink-0 text-[13px] font-bold text-[#2e7d32] transition hover:text-[#1a3a2a]"
-            href="/blog"
-          >
-            View all →
-          </Link>
         </div>
 
         <div className="grid gap-4 md:grid-cols-3">

@@ -274,7 +274,8 @@ export function HomeHero({
         <div className="grid min-w-0 grid-cols-1 items-stretch gap-5 lg:grid-cols-[1fr_minmax(0,340px)] lg:items-start lg:gap-x-7">
           <div className="flex min-w-0 flex-col gap-4 overflow-hidden pt-0">
             <div className="inline-flex w-fit items-center rounded-full border border-green-800/60 bg-green-950/40 px-3 py-[5px] text-[9px] font-bold uppercase tracking-[0.6px] text-green-400">
-              • REAL-TIME RATES · COMPARE &amp; SAVE INSTANTLY
+              <span className="mr-2 inline-flex h-2 w-2 rounded-full bg-[#4ade80] animate-hero-live-pulse shadow-[0_0_10px_rgba(74,222,128,0.8)]" />
+              REAL-TIME RATES · COMPARE &amp; SAVE INSTANTLY
             </div>
 
             <div className="flex flex-col gap-4">
