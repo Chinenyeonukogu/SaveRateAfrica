@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, type MutableRefObject } from "react";
+import Image from "next/image";
 import Link from "next/link";
 
 import {
@@ -303,7 +304,7 @@ export function HeroSection({
       id="home"
       className="mx-3 my-3 overflow-hidden rounded-[10px] bg-[linear-gradient(140deg,#1b5e20_0%,#2e7d32_35%,#1a3a22_70%,#0d2010_100%)] min-[600px]:mx-4 min-[600px]:my-4 min-[600px]:rounded-[12px] lg:mx-auto lg:my-6 lg:max-w-[1200px] lg:rounded-[16px]"
     >
-      <div className="px-5 py-10 text-white min-[600px]:px-7 min-[600px]:py-10 lg:px-10 lg:py-10">
+      <div className="px-5 pb-10 pt-10 text-white min-[600px]:px-7 min-[600px]:pb-10 min-[600px]:pt-10 lg:px-[60px] lg:pb-10 lg:pt-12">
         <div className="flex flex-col items-stretch gap-8 lg:grid lg:grid-cols-[minmax(0,1fr)_420px] lg:items-start lg:gap-x-10">
           <div className="flex min-w-0 flex-col gap-8 overflow-hidden pt-0">
             <div className="mb-[18px] inline-flex w-fit items-center rounded-full border border-white/20 bg-white/10 px-[14px] py-[5px] text-[10px] font-medium uppercase tracking-[0.8px] text-[#a5d6a7]">
@@ -346,14 +347,20 @@ export function HeroSection({
               <div
                 id="rate-alerts"
                 ref={alertsAnchorRef}
-                className="grid w-full max-w-[380px] grid-cols-2 gap-3"
+                className="grid w-full grid-cols-2 gap-3"
               >
                   <Link
                     className="group relative h-[140px] overflow-hidden rounded-[14px] bg-[#e8f5e9] p-4 text-left transition hover:translate-y-[-2px]"
                     href="/alerts"
                   >
-                    <div className="absolute bottom-[-8px] right-[-2px]">
-                      <RateAlertsBellIllustration />
+                    <div className="absolute bottom-[-4px] right-[-4px] h-16 w-16 overflow-hidden">
+                      <Image
+                        alt=""
+                        className="object-cover object-center"
+                        fill
+                        sizes="64px"
+                        src="/hero/rate-alerts.png"
+                      />
                     </div>
 
                     <div className="relative z-10 max-w-[100px]">
@@ -390,8 +397,14 @@ export function HeroSection({
                         Explore Cards &rarr;
                       </span>
                     </div>
-                    <div className="absolute bottom-[-6px] right-[-14px] rotate-[-8deg]">
-                      <SaveRateCreditCardIllustration />
+                    <div className="absolute bottom-[-4px] right-[-10px] h-[58px] w-20 rotate-[-8deg] overflow-hidden">
+                      <Image
+                        alt=""
+                        className="object-cover object-center"
+                        fill
+                        sizes="80px"
+                        src="/hero/build-credit.png"
+                      />
                     </div>
                   </Link>
               </div>
