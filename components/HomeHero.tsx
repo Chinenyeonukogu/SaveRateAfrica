@@ -287,7 +287,7 @@ export function HomeHero({
                 className="max-w-[580px] font-heading text-[25px] font-bold leading-[1.08] tracking-[-0.5px] text-white min-[600px]:text-[34px] lg:text-[40px]"
                 style={brandFontStyle}
               >
-                Send Money to <span className="text-[#4ade80]">Nigeria.</span> Compare and save instantly.
+                Real-time rates to <span className="text-[#4ade80]">Nigeria</span> compare remittance providers, save on fees and send more money from USA, UK, and Canada.
               </h1>
 
             </div>
