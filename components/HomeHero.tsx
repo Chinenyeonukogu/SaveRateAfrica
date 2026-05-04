@@ -246,9 +246,13 @@ export function HomeHero({
   return (
     <section
       id="home"
-      className="relative w-full max-w-[100vw] overflow-hidden overflow-x-hidden bg-gradient-to-br from-[#0a1f14] via-[#0f2d1a] to-[#061209]"
+      className="relative w-full max-w-[100vw] overflow-hidden overflow-x-hidden bg-[linear-gradient(160deg,#2d6a4f_0%,#1b5e3b_40%,#145a32_100%)]"
     >
-      <div className="mx-auto w-full max-w-[1200px] overflow-x-hidden px-5 pb-8 pt-4 text-white min-[600px]:px-7 min-[600px]:pb-9 lg:px-6 lg:pb-10">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_20%_20%,rgba(200,255,220,0.25)_0%,transparent_55%),radial-gradient(ellipse_at_85%_80%,rgba(134,239,172,0.18)_0%,transparent_50%)]"
+      />
+      <div className="relative z-10 mx-auto w-full max-w-[1200px] overflow-x-hidden px-5 pb-8 pt-4 text-white min-[600px]:px-7 min-[600px]:pb-9 lg:px-6 lg:pb-10">
         <div className="mb-4 flex flex-col gap-2 border-b border-white/10 pb-2 min-[760px]:flex-row min-[760px]:items-center min-[760px]:justify-between">
           <div className="text-[11px] font-medium leading-5 text-white/78 min-[600px]:text-[12px]">
             <span>
@@ -311,29 +315,63 @@ export function HomeHero({
                 className="grid w-full max-w-full grid-cols-1 gap-2 overflow-hidden min-[520px]:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]"
               >
                   <Link
-                    className="group relative min-h-[160px] min-w-0 max-w-full overflow-hidden rounded-[12px] bg-[#e8f5e9] p-3 text-left transition hover:translate-y-[-2px]"
+                    className="group relative min-h-[190px] min-w-0 max-w-full overflow-hidden rounded-[20px] border-2 border-[rgba(74,222,128,0.4)] bg-[linear-gradient(145deg,#ffffff_0%,#f0fff4_100%)] p-5 text-left shadow-[0_8px_32px_rgba(0,0,0,0.12)] transition hover:translate-y-[-4px] hover:shadow-[0_16px_48px_rgba(0,0,0,0.18)]"
                     href="/alerts"
                   >
+                    <div
+                      style={{
+                        position: "absolute",
+                        right: "-20px",
+                        bottom: "-20px",
+                        width: "180px",
+                        height: "180px",
+                        background:
+                          "radial-gradient(circle, rgba(74,222,128,0.2) 0%, transparent 70%)",
+                        borderRadius: "50%",
+                        pointerEvents: "none"
+                      }}
+                    />
                     <img
                       alt="rate alert bell"
                       src="/images/alarm.png"
                       style={{
                         position: "absolute",
-                        right: "-10px",
-                        bottom: "-10px",
-                        width: "120px",
-                        height: "120px",
+                        right: "-14px",
+                        bottom: "-14px",
+                        width: "155px",
+                        height: "155px",
                         objectFit: "contain",
-                        filter: "drop-shadow(0 8px 20px rgba(74,222,128,0.3))",
-                        animation: "float 4s ease-in-out infinite"
+                        filter:
+                          "drop-shadow(0 8px 20px rgba(180,83,9,0.35)) drop-shadow(0 0 30px rgba(245,158,11,0.25))",
+                        animation: "float 3.5s ease-in-out infinite",
+                        zIndex: 2
                       }}
                     />
-                    <div className="absolute right-2 top-2 flex h-[22px] w-[22px] items-center justify-center rounded-full bg-[#ef4444] text-[11px] font-extrabold text-white">
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "14px",
+                        right: "14px",
+                        width: "30px",
+                        height: "30px",
+                        borderRadius: "50%",
+                        background: "#ef4444",
+                        color: "#fff",
+                        fontSize: "14px",
+                        fontWeight: "900",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        boxShadow: "0 4px 14px rgba(239,68,68,0.6)",
+                        zIndex: 5,
+                        animation: "pulse 1.8s ease-in-out infinite"
+                      }}
+                    >
                       1
                     </div>
 
                     <div className="relative z-10 max-w-[132px]">
-                      <p className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#2e7d32]">
+                      <p className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#16a34a]">
                         RATE ALERTS
                       </p>
                       <p className="mt-2 text-[14px] font-extrabold leading-[1.25] text-[#1a2e1a]">
