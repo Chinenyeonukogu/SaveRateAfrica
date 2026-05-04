@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState, type MutableRefObject } from "react";
-import Image from "next/image";
 import Link from "next/link";
 
 import {
@@ -311,17 +310,25 @@ export function HomeHero({
                 className="grid w-full max-w-full grid-cols-1 gap-2 overflow-hidden min-[520px]:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]"
               >
                   <Link
-                    className="group relative min-h-[96px] min-w-0 overflow-hidden rounded-[12px] bg-[#e8f5e9] p-3 text-left transition hover:translate-y-[-2px] min-[520px]:min-h-[108px]"
+                    className="group relative min-h-[160px] min-w-0 overflow-hidden rounded-[12px] bg-[#e8f5e9] p-3 text-left transition hover:translate-y-[-2px]"
                     href="/alerts"
                   >
-                    <div className="absolute bottom-[-4px] right-[-4px] h-12 w-12 overflow-hidden">
-                      <Image
-                        alt=""
-                        className="object-cover object-center"
-                        fill
-                        sizes="64px"
-                        src="/hero/rate-alerts.png"
-                      />
+                    <img
+                      alt="rate alert bell"
+                      src="/images/alarm.png"
+                      style={{
+                        position: "absolute",
+                        right: "-10px",
+                        bottom: "-10px",
+                        width: "120px",
+                        height: "120px",
+                        objectFit: "contain",
+                        filter: "drop-shadow(0 8px 20px rgba(74,222,128,0.3))",
+                        animation: "float 4s ease-in-out infinite"
+                      }}
+                    />
+                    <div className="absolute right-2 top-2 flex h-[22px] w-[22px] items-center justify-center rounded-full bg-[#ef4444] text-[11px] font-extrabold text-white">
+                      1
                     </div>
 
                     <div className="relative z-10 max-w-[132px]">
