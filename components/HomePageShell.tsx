@@ -523,11 +523,11 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
           onSenderCountryChange={setSenderCountry}
         />
 
-        <LearnAndSaveMoreSection />
-
         <RateAlertsSection />
 
         <BuildCreditSection />
+
+        <LearnAndSaveMoreSection />
 
         <section id="compare-rates" className={sectionDividerClassName}>
           <div className={comparisonSectionInnerClassName}>
