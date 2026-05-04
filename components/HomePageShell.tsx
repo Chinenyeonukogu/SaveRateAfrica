@@ -9,9 +9,11 @@ import {
 import Link from "next/link";
 
 import { ComparisonTable } from "@/components/ComparisonTable";
+import { BuildCreditSection } from "@/components/BuildCreditSection";
 import { HeroSection } from "@/components/HeroSection";
 import { RateChart } from "@/components/RateChart";
 import { RateDisclaimer } from "@/components/RateDisclaimer";
+import { RateAlertsSection } from "@/components/RateAlertsSection";
 import { SiteHeader } from "@/components/SiteHeader";
 import {
   formatCompact,
@@ -522,6 +524,10 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
         />
 
         <LearnAndSaveMoreSection />
+
+        <RateAlertsSection />
+
+        <BuildCreditSection />
 
         <section id="compare-rates" className={sectionDividerClassName}>
           <div className={comparisonSectionInnerClassName}>
