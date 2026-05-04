@@ -246,9 +246,9 @@ export function HomeHero({
   return (
     <section
       id="home"
-      className="relative w-full max-w-full overflow-hidden bg-gradient-to-br from-[#0a1f14] via-[#0f2d1a] to-[#061209]"
+      className="relative w-full max-w-[100vw] overflow-hidden overflow-x-hidden bg-gradient-to-br from-[#0a1f14] via-[#0f2d1a] to-[#061209]"
     >
-      <div className="mx-auto w-full max-w-[1200px] px-5 pb-8 pt-4 text-white min-[600px]:px-7 min-[600px]:pb-9 lg:px-6 lg:pb-10">
+      <div className="mx-auto w-full max-w-[1200px] overflow-x-hidden px-5 pb-8 pt-4 text-white min-[600px]:px-7 min-[600px]:pb-9 lg:px-6 lg:pb-10">
         <div className="mb-4 flex flex-col gap-2 border-b border-white/10 pb-2 min-[760px]:flex-row min-[760px]:items-center min-[760px]:justify-between">
           <div className="text-[11px] font-medium leading-5 text-white/78 min-[600px]:text-[12px]">
             <span>
@@ -271,7 +271,7 @@ export function HomeHero({
           </div>
         </div>
 
-        <div className="flex flex-col items-stretch gap-5 lg:grid lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start lg:gap-x-7">
+        <div className="grid min-w-0 grid-cols-1 items-stretch gap-5 lg:grid-cols-[1fr_minmax(0,340px)] lg:items-start lg:gap-x-7">
           <div className="flex min-w-0 flex-col gap-4 overflow-hidden pt-0">
             <div className="inline-flex w-fit items-center rounded-full border border-green-800/60 bg-green-950/40 px-3 py-[5px] text-[9px] font-bold uppercase tracking-[0.6px] text-green-400">
               • REAL-TIME RATES · COMPARE &amp; SAVE INSTANTLY
@@ -310,7 +310,7 @@ export function HomeHero({
                 className="grid w-full max-w-full grid-cols-1 gap-2 overflow-hidden min-[520px]:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]"
               >
                   <Link
-                    className="group relative min-h-[160px] min-w-0 overflow-hidden rounded-[12px] bg-[#e8f5e9] p-3 text-left transition hover:translate-y-[-2px]"
+                    className="group relative min-h-[160px] min-w-0 max-w-full overflow-hidden rounded-[12px] bg-[#e8f5e9] p-3 text-left transition hover:translate-y-[-2px]"
                     href="/alerts"
                   >
                     <img
@@ -348,7 +348,7 @@ export function HomeHero({
                   </Link>
 
                   <Link
-                    className="group relative min-h-[96px] min-w-0 overflow-hidden rounded-[12px] border-2 border-[#4ade80] bg-[#e8f5e2] p-3 text-left transition hover:translate-y-[-2px] min-[520px]:min-h-[108px]"
+                    className="group relative min-h-[96px] min-w-0 max-w-full overflow-hidden rounded-[12px] border-2 border-[#4ade80] bg-[#e8f5e2] p-3 text-left transition hover:translate-y-[-2px] min-[520px]:min-h-[108px]"
                     href="/credit-cards"
                   >
                     <div className="relative z-10 max-w-[150px] min-w-0">
@@ -376,8 +376,8 @@ export function HomeHero({
             </div>
           </div>
 
-          <div className="w-full lg:flex lg:flex-col">
-            <div className="flex w-full flex-col rounded-[14px] bg-white p-3 text-[#1a2e1a] shadow-[0_8px_32px_rgba(0,0,0,0.18)]">
+          <div className="w-full min-w-0 max-w-full overflow-hidden lg:flex lg:flex-col">
+            <div className="flex w-full max-w-full flex-col overflow-hidden rounded-[14px] bg-white p-3 text-[#1a2e1a] shadow-[0_8px_32px_rgba(0,0,0,0.18)]">
                 <p className="mb-1 text-[9px] font-semibold uppercase tracking-[1.8px] text-[#2e7d32]">
                   COMPARE NOW
                 </p>
@@ -448,7 +448,7 @@ export function HomeHero({
                     <p className="mb-[6px] text-[10px] font-medium uppercase tracking-[0.5px] text-[#8a9a8a]">
                       Sender country
                     </p>
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-[repeat(3,minmax(0,1fr))] gap-2">
                       {senderCountries.map((country) => {
                         const active = country.code === senderCountry;
 
@@ -509,7 +509,7 @@ export function HomeHero({
                       Based on ${sendAmount.toLocaleString("en-US")} · {topProvider.name} vs {lowerProvider.name}
                     </p>
 
-                    <div className="mt-2 grid grid-cols-[minmax(0,1fr)_24px_minmax(0,1fr)] items-center gap-1.5">
+                    <div className="mt-2 grid grid-cols-[minmax(0,1fr)_24px_minmax(0,1fr)] items-center gap-1.5 overflow-hidden">
                       <div className={`rounded-[8px] border border-[#c8e6c9] bg-[#e8f5e9] px-2 py-2 transition-all duration-300 ${flashActive ? "border-[#2e7d32] shadow-[0_0_10px_rgba(46,125,50,0.25)]" : ""}`}>
                         <p className="mb-1 text-[9px] font-semibold uppercase tracking-[0.8px] text-[#5a8a5a]">
                           Top payout
