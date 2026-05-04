@@ -5,10 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import {
-  ArrowUpDown,
-  ShieldCheck,
-  Target,
-  Zap
+  ArrowUpDown
 } from "lucide-react";
 
 import { senderCountries, type SenderCountry } from "@/lib/providers";
@@ -86,24 +83,6 @@ const trustPills = [
   "\u23f1 Real-time data",
   "\u2713 No sign-up needed",
   "\u2605 99% rate accuracy"
-] as const;
-
-const alertFeatures = [
-  {
-    icon: Zap,
-    title: "Instant Notifications",
-    subtitle: "Get real-time alerts the moment rates change."
-  },
-  {
-    icon: Target,
-    title: "Set Your Target",
-    subtitle: "Choose your ideal rate and let us watch for you."
-  },
-  {
-    icon: ShieldCheck,
-    title: "Trusted & Secure",
-    subtitle: "Your data is safe with us. Always."
-  }
 ] as const;
 
 function formatCalculatedNgn(value: number) {
@@ -362,49 +341,30 @@ export function HomeHero({
                   </Link>
 
                   <Link
-                    className="group relative min-h-[96px] min-w-0 overflow-hidden rounded-[12px] bg-[#fff8e1] p-3 text-left transition hover:translate-y-[-2px] min-[520px]:min-h-[108px]"
+                    className="group relative min-h-[96px] min-w-0 overflow-hidden rounded-[12px] border-2 border-[#4ade80] bg-[#e8f5e2] p-3 text-left transition hover:translate-y-[-2px] min-[520px]:min-h-[108px]"
                     href="/credit-cards"
                   >
-                    <div className="relative z-10 max-w-[132px] min-w-0">
-                      <p className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#d66b1f]">
+                    <div className="relative z-10 max-w-[150px] min-w-0">
+                      <p className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#166534]">
                         BUILD CREDIT
                       </p>
-                      <p className="mt-1 text-[12px] font-extrabold leading-[1.2] text-[#1a2e1a]">
+                      <p className="mt-1 text-[12px] font-extrabold leading-[1.2] text-[#111111]">
                         Build credit while you send money
                       </p>
-                      <p className="mt-1 text-[10px] font-medium leading-[1.3] text-[#5d4a2d]">
-                        Immigrant-friendly credit cards.
+                      <p className="mt-1 text-[10px] font-medium leading-[1.3] text-[#374151]">
+                        Immigrant-friendly credit cards
                       </p>
-                      <span className="mt-1 inline-flex text-[11px] font-extrabold text-[#d66b1f]">
-                        Explore Cards &rarr;
+                      <span className="mt-1 inline-flex text-[11px] font-extrabold text-[#166534]">
+                        Explore Credit &rarr;
                       </span>
                     </div>
-                    <div className="absolute bottom-[-4px] right-[-10px] h-12 w-16 rotate-[-8deg] overflow-hidden">
-                      <Image
-                        alt=""
-                        className="object-cover object-center"
-                        fill
-                        sizes="80px"
-                        src="/hero/build-credit.png"
-                      />
+                    <div className="absolute bottom-3 right-3 h-10 w-14 rotate-[-8deg] overflow-hidden rounded-[6px] bg-[linear-gradient(135deg,#fde68a,#d97706)]">
+                      <div className="absolute inset-[7px] rounded-[4px] border border-[rgba(180,83,9,0.3)]" />
+                      <div className="absolute left-0 top-1/2 h-px w-full bg-[rgba(180,83,9,0.3)]" />
+                      <div className="absolute left-1/3 top-0 h-full w-px bg-[rgba(180,83,9,0.3)]" />
+                      <div className="absolute left-2/3 top-0 h-full w-px bg-[rgba(180,83,9,0.3)]" />
                     </div>
                   </Link>
-              </div>
-
-              <div className="grid gap-2 min-[760px]:grid-cols-3">
-                {alertFeatures.map(({ icon: Icon, title, subtitle }) => (
-                  <div key={title} className="flex items-start gap-3">
-                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-green-900/50 text-green-400">
-                      <Icon className="h-3.5 w-3.5" />
-                    </div>
-                    <div>
-                      <h3 className="text-[12px] font-bold text-white">{title}</h3>
-                      <p className="mt-px text-[10px] leading-4 text-gray-400">
-                        {subtitle}
-                      </p>
-                    </div>
-                  </div>
-                ))}
               </div>
             </div>
           </div>
