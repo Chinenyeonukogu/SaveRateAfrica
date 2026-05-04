@@ -248,12 +248,8 @@ export function HomeHero({
       id="home"
       className="relative w-full max-w-[100vw] overflow-hidden overflow-x-hidden bg-[linear-gradient(160deg,#2d6a4f_0%,#1b5e3b_40%,#145a32_100%)]"
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_20%_20%,rgba(200,255,220,0.25)_0%,transparent_55%),radial-gradient(ellipse_at_85%_80%,rgba(134,239,172,0.18)_0%,transparent_50%)]"
-      />
       <div className="relative z-10 mx-auto w-full max-w-[1200px] overflow-x-hidden px-5 pb-8 pt-4 text-white min-[600px]:px-7 min-[600px]:pb-9 lg:px-6 lg:pb-10">
-        <div className="mb-4 flex flex-col gap-2 border-b border-white/10 pb-2 min-[760px]:flex-row min-[760px]:items-center min-[760px]:justify-between">
+        <div className="mb-4 flex flex-col gap-2 pb-2 min-[760px]:flex-row min-[760px]:items-center min-[760px]:justify-between">
           <div className="text-[11px] font-medium leading-5 text-white/78 min-[600px]:text-[12px]">
             <span>
               ✦ Real-time NGN rates · No hidden fees · Compare 14 providers and
@@ -318,57 +314,36 @@ export function HomeHero({
                     className="group relative min-h-[190px] min-w-0 max-w-full overflow-hidden rounded-[20px] border-2 border-[rgba(74,222,128,0.4)] bg-[linear-gradient(145deg,#ffffff_0%,#f0fff4_100%)] p-5 text-left shadow-[0_8px_32px_rgba(0,0,0,0.12)] transition hover:translate-y-[-4px] hover:shadow-[0_16px_48px_rgba(0,0,0,0.18)]"
                     href="/alerts"
                   >
-                    <div
+                    <svg
                       style={{
                         position: "absolute",
-                        right: "-20px",
-                        bottom: "-20px",
-                        width: "180px",
-                        height: "180px",
-                        background:
-                          "radial-gradient(circle, rgba(74,222,128,0.2) 0%, transparent 70%)",
-                        borderRadius: "50%",
-                        pointerEvents: "none"
-                      }}
-                    />
-                    <img
-                      alt="rate alert bell"
-                      src="/images/alarm.png"
-                      style={{
-                        position: "absolute",
-                        right: "-14px",
-                        bottom: "-14px",
-                        width: "155px",
-                        height: "155px",
-                        objectFit: "contain",
-                        filter:
-                          "drop-shadow(0 8px 20px rgba(180,83,9,0.35)) drop-shadow(0 0 30px rgba(245,158,11,0.25))",
-                        animation: "float 3.5s ease-in-out infinite",
-                        zIndex: 2
-                      }}
-                    />
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: "14px",
                         right: "14px",
-                        width: "30px",
-                        height: "30px",
-                        borderRadius: "50%",
-                        background: "#ef4444",
-                        color: "#fff",
-                        fontSize: "14px",
-                        fontWeight: "900",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        boxShadow: "0 4px 14px rgba(239,68,68,0.6)",
-                        zIndex: 5,
-                        animation: "pulse 1.8s ease-in-out infinite"
+                        bottom: "10px",
+                        width: "80px",
+                        height: "80px",
+                        opacity: 0.85
                       }}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#f59e0b"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     >
-                      1
-                    </div>
+                      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                      <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                      <circle cx="17" cy="5" r="3" fill="#ef4444" stroke="none" />
+                      <text
+                        x="17"
+                        y="8"
+                        textAnchor="middle"
+                        fontSize="4"
+                        fontWeight="900"
+                        fill="white"
+                      >
+                        1
+                      </text>
+                    </svg>
 
                     <div className="relative z-10 max-w-[132px]">
                       <p className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#16a34a]">
