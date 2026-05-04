@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import {
   Check,
   Star
@@ -125,6 +126,8 @@ const learnCards = [
     description: "Read practical tips on rates, fees, timing, and smarter ways to send to Nigeria.",
     cta: "Read articles",
     href: "/blog",
+    imageSrc: "/learn/money-transfer-guides.jpg",
+    imageAlt: "Notebook, laptop, coffee, and desk setup for money transfer guides",
     mediaClassName: "bg-[#e8f5e9]",
     labelClassName: "text-[#2e7d32]",
     illustration: <NotebookPenIllustration />
@@ -134,7 +137,9 @@ const learnCards = [
     title: "Quick video explainers",
     description: "Watch simple breakdowns for comparing providers and avoiding transfer mistakes.",
     cta: "Watch now",
-    href: "/blog",
+    href: "/learn/stop-losing-money.mp4",
+    imageSrc: "/learn/quick-video.png",
+    imageAlt: "Person watching a SaveRateAfrica money transfer video on a phone",
     mediaClassName: "bg-[#fff8e1]",
     labelClassName: "text-[#d88a00]",
     illustration: <TabletPersonIllustration />
@@ -145,6 +150,8 @@ const learnCards = [
     description: "Explore provider guides before choosing where to send your next transfer.",
     cta: "Explore guides",
     href: "/providers",
+    imageSrc: "/learn/provider-review.png",
+    imageAlt: "Provider reviews screen showing transfer providers and ratings",
     mediaClassName: "bg-[#f4faf5]",
     labelClassName: "text-[#2e7d32]",
     illustration: <PhoneReviewIllustration />
@@ -174,11 +181,15 @@ function LearnAndSaveMoreSection() {
               className="overflow-hidden rounded-[12px] border border-[#e8e8e8] bg-white"
             >
               <div className={`relative h-[110px] overflow-hidden ${card.mediaClassName}`}>
+                <Image
+                  alt={card.imageAlt}
+                  className="object-cover"
+                  fill
+                  sizes="(min-width: 768px) 33vw, 100vw"
+                  src={card.imageSrc}
+                />
                 <div className="absolute left-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-[#2e7d32] text-white shadow-[0_8px_18px_rgba(46,125,50,0.24)]">
                   <LearnIcon type={card.type} />
-                </div>
-                <div className="absolute bottom-[-4px] right-2">
-                  {card.illustration}
                 </div>
               </div>
 
