@@ -20,16 +20,16 @@ const alertFeatures = [
 
 export function RateAlertsSection() {
   return (
-    <div className="w-full overflow-x-hidden">
-      <section className="relative w-full max-w-full overflow-hidden bg-gradient-to-br from-[#0a1f14] via-[#0f2d1a] to-[#061209] py-24">
-        <div className="mx-auto grid w-full max-w-[1200px] grid-cols-1 items-center gap-12 px-6 lg:grid-cols-3">
-          <div>
+    <div className="w-full max-w-full overflow-x-hidden">
+      <section className="relative w-full max-w-full overflow-hidden bg-gradient-to-br from-[#0a1f14] via-[#0f2d1a] to-[#061209] py-16 md:py-24">
+        <div className="mx-auto grid w-full max-w-[1200px] grid-cols-1 items-center gap-10 px-6 lg:grid-cols-3 lg:gap-12">
+          <div className="min-w-0">
             <div className="inline-flex items-center gap-2 rounded-full border border-green-800/60 bg-green-950/40 px-4 py-2 text-xs font-bold uppercase tracking-widest text-green-400">
               <Bell className="h-3.5 w-3.5" />
               RATE ALERTS
             </div>
 
-            <h2 className="mt-8 text-5xl font-bold leading-[1.05] tracking-tight text-white md:text-6xl">
+            <h2 className="mt-8 max-w-full text-4xl font-bold leading-[1.08] tracking-tight text-white sm:text-5xl md:text-6xl">
               Never miss your{" "}
               <span className="bg-gradient-to-r from-green-400 to-green-300 bg-clip-text text-transparent">
                 ideal rate
@@ -58,7 +58,7 @@ export function RateAlertsSection() {
             </div>
           </div>
 
-          <div className="relative flex min-h-[340px] items-center justify-center overflow-hidden">
+          <div className="relative flex min-h-[300px] min-w-0 items-center justify-center overflow-hidden md:min-h-[340px]">
             <div className="absolute h-64 w-64 rounded-full bg-green-500/10 blur-3xl" />
             <div className="absolute h-[200px] w-[200px] rounded-full border border-green-800/30" />
             <div className="absolute h-[300px] w-[300px] rounded-full border border-green-800/30" />
@@ -72,7 +72,7 @@ export function RateAlertsSection() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-[0_0_60px_rgba(34,197,94,0.12)] backdrop-blur-md transition-all duration-300 hover:border-green-700/50 hover:shadow-[0_0_30px_rgba(34,197,94,0.08)]">
+          <div className="min-w-0 rounded-2xl border border-white/10 bg-white/5 p-5 shadow-[0_0_60px_rgba(34,197,94,0.12)] backdrop-blur-md transition-all duration-300 hover:border-green-700/50 hover:shadow-[0_0_30px_rgba(34,197,94,0.08)]">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#0a1f14] text-base font-bold text-white">

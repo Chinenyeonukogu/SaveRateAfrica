@@ -347,10 +347,10 @@ export function HeroSection({
               <div
                 id="rate-alerts"
                 ref={alertsAnchorRef}
-                className="grid w-full grid-cols-2 gap-3"
+                className="grid w-full max-w-full grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-3 overflow-hidden"
               >
                   <Link
-                    className="group relative h-[140px] overflow-hidden rounded-[14px] bg-[#e8f5e9] p-4 text-left transition hover:translate-y-[-2px]"
+                    className="group relative h-[140px] min-w-0 overflow-hidden rounded-[14px] bg-[#e8f5e9] p-4 text-left transition hover:translate-y-[-2px]"
                     href="/alerts"
                   >
                     <div className="absolute bottom-[-4px] right-[-4px] h-16 w-16 overflow-hidden">
@@ -380,10 +380,10 @@ export function HeroSection({
                   </Link>
 
                   <Link
-                    className="group relative h-[140px] overflow-hidden rounded-[14px] bg-[#fff8e1] p-4 text-left transition hover:translate-y-[-2px]"
+                    className="group relative h-[140px] min-w-0 overflow-hidden rounded-[14px] bg-[#fff8e1] p-4 text-left transition hover:translate-y-[-2px]"
                     href="/credit-cards"
                   >
-                    <div className="relative z-10 max-w-[100px]">
+                    <div className="relative z-10 max-w-[100px] min-w-0">
                       <p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#d66b1f]">
                         BUILD CREDIT
                       </p>

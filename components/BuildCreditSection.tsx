@@ -58,13 +58,13 @@ function ContactlessIcon() {
 
 export function BuildCreditSection() {
   return (
-    <div className="w-full overflow-x-hidden">
-      <section className="relative w-full max-w-full overflow-hidden bg-gradient-to-br from-[#0a1f14] via-[#0f2d1a] to-[#061209] py-24">
+    <div className="w-full max-w-full overflow-x-hidden">
+      <section className="relative w-full max-w-full overflow-hidden bg-gradient-to-br from-[#0a1f14] via-[#0f2d1a] to-[#061209] py-16 md:py-24">
         <div className="mx-auto w-full max-w-[1200px] px-6">
-          <div className="relative w-full max-w-full overflow-hidden rounded-3xl border border-green-900/40 bg-gradient-to-br from-[#0d2b1a] via-[#0f3320] to-[#071a0f] p-12 shadow-[0_0_80px_rgba(34,197,94,0.08)] transition-shadow duration-500 hover:shadow-[0_0_100px_rgba(34,197,94,0.15)] md:p-16">
+          <div className="relative w-full max-w-full overflow-hidden rounded-3xl border border-green-900/40 bg-gradient-to-br from-[#0d2b1a] via-[#0f3320] to-[#071a0f] p-6 shadow-[0_0_80px_rgba(34,197,94,0.08)] transition-shadow duration-500 hover:shadow-[0_0_100px_rgba(34,197,94,0.15)] sm:p-8 md:p-12 lg:p-16">
             <WavePattern />
 
-            <div className="relative z-10 grid grid-cols-1 items-center gap-12 md:grid-cols-[auto_auto_1fr]">
+            <div className="relative z-10 grid min-w-0 grid-cols-1 items-center gap-8 lg:grid-cols-[auto_auto_1fr] lg:gap-12">
               <div className="flex items-center gap-4">
                 <GoldChip />
                 <ContactlessIcon />
@@ -74,11 +74,11 @@ export function BuildCreditSection() {
                 <TrendingUp className="h-7 w-7" />
               </div>
 
-              <div className="md:text-left">
-                <h2 className="text-4xl font-bold tracking-tight text-white md:text-5xl">
+              <div className="min-w-0 md:text-left">
+                <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl">
                   BUILD YOUR
                 </h2>
-                <p className="bg-gradient-to-r from-green-400 to-green-300 bg-clip-text text-4xl font-bold tracking-tight text-transparent md:text-5xl">
+                <p className="bg-gradient-to-r from-green-400 to-green-300 bg-clip-text text-3xl font-bold tracking-tight text-transparent sm:text-4xl md:text-5xl">
                   CREDIT
                 </p>
                 <div className="my-3 h-px w-16 bg-green-500/50" />
