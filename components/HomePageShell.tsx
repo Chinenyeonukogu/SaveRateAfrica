@@ -5,6 +5,7 @@ import {
   Check,
   Star
 } from "lucide-react";
+import Link from "next/link";
 
 import { AlertsForm } from "@/components/AlertsForm";
 import { ComparisonTable } from "@/components/ComparisonTable";
@@ -44,6 +45,164 @@ const smartSendingChecklistItems = [
   "Review hidden charges and unfavorable exchange rates before they cost you",
   "Use our AI assistant to instantly find top rates and get personalized recommendations"
 ] as const;
+
+function NotebookPenIllustration() {
+  return (
+    <svg aria-hidden="true" className="h-[92px] w-[112px]" viewBox="0 0 112 92">
+      <rect fill="#ffffff" height="62" rx="10" stroke="#d9eadb" strokeWidth="2" width="72" x="16" y="20" />
+      <path d="M31 20v62" stroke="#c8e6c9" strokeWidth="2" />
+      <path d="M43 36h28M43 49h22M43 62h31" stroke="#8aa58f" strokeLinecap="round" strokeWidth="3" />
+      <path d="m70 68 22-40 10 6-22 40-14 8 4-14Z" fill="#f6c619" />
+      <path d="m92 28 5-9 10 6-5 9Z" fill="#1a3a2a" />
+      <path d="m70 68-4 14 14-8Z" fill="#2e7d32" />
+      <circle cx="21" cy="32" fill="#2e7d32" r="3" />
+      <circle cx="21" cy="46" fill="#2e7d32" r="3" />
+      <circle cx="21" cy="60" fill="#2e7d32" r="3" />
+    </svg>
+  );
+}
+
+function TabletPersonIllustration() {
+  return (
+    <svg aria-hidden="true" className="h-[96px] w-[118px]" viewBox="0 0 118 96">
+      <rect fill="#ffffff" height="58" rx="12" stroke="#d9eadb" strokeWidth="2" width="76" x="34" y="24" />
+      <rect fill="#e8f5e9" height="34" rx="7" width="52" x="46" y="35" />
+      <path d="M55 47h34M55 57h25" stroke="#2e7d32" strokeLinecap="round" strokeWidth="4" />
+      <circle cx="30" cy="30" fill="#1a3a2a" r="13" />
+      <path d="M12 85c2-22 12-35 28-35s26 13 28 35Z" fill="#2e7d32" />
+      <path d="M24 53c5 6 16 6 22 0" stroke="#ffffff" strokeLinecap="round" strokeWidth="3" />
+      <path d="M58 75h39" stroke="#1a3a2a" strokeLinecap="round" strokeWidth="4" />
+      <circle cx="101" cy="53" fill="#f6c619" r="4" />
+    </svg>
+  );
+}
+
+function PhoneReviewIllustration() {
+  return (
+    <svg aria-hidden="true" className="h-[98px] w-[116px]" viewBox="0 0 116 98">
+      <rect fill="#1a3a2a" height="82" rx="14" width="52" x="44" y="8" />
+      <rect fill="#ffffff" height="64" rx="9" width="42" x="49" y="18" />
+      <circle cx="70" cy="75" fill="#2e7d32" r="3" />
+      <rect fill="#e8f5e9" height="11" rx="5.5" width="30" x="55" y="28" />
+      <rect fill="#f6c619" height="11" rx="5.5" width="22" x="55" y="45" />
+      <path d="M59 63h22" stroke="#8aa58f" strokeLinecap="round" strokeWidth="3" />
+      <path d="m22 35 5 10 11 2-8 8 2 11-10-5-10 5 2-11-8-8 11-2 5-10Z" fill="#2e7d32" />
+      <path d="M23 78c11-3 23-3 34 0" stroke="#f6c619" strokeLinecap="round" strokeWidth="5" />
+      <circle cx="100" cy="26" fill="#f6c619" r="7" />
+    </svg>
+  );
+}
+
+function LearnIcon({ type }: { type: "blog" | "video" | "review" }) {
+  if (type === "video") {
+    return (
+      <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 24 24">
+        <path d="M9 7.5v9l7-4.5-7-4.5Z" fill="currentColor" />
+      </svg>
+    );
+  }
+
+  if (type === "review") {
+    return (
+      <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 24 24">
+        <path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9L12 3Z" fill="currentColor" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 24 24">
+      <path d="M5 4.8C5 3.8 5.8 3 6.8 3H19v16H7.8A2.8 2.8 0 0 0 5 21.8v-17Z" fill="currentColor" opacity="0.35" />
+      <path d="M5 4.8A2.8 2.8 0 0 1 7.8 2H19v16H7.8A2.8 2.8 0 0 0 5 20.8v-16Zm4.5 3.7h6M9.5 12h4.8" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="2" />
+    </svg>
+  );
+}
+
+const learnCards = [
+  {
+    type: "blog" as const,
+    title: "Money transfer guides",
+    description: "Read practical tips on rates, fees, timing, and smarter ways to send to Nigeria.",
+    cta: "Read articles",
+    href: "/blog",
+    mediaClassName: "bg-[#e8f5e9]",
+    labelClassName: "text-[#2e7d32]",
+    illustration: <NotebookPenIllustration />
+  },
+  {
+    type: "video" as const,
+    title: "Quick video explainers",
+    description: "Watch simple breakdowns for comparing providers and avoiding transfer mistakes.",
+    cta: "Watch now",
+    href: "/blog",
+    mediaClassName: "bg-[#fff8e1]",
+    labelClassName: "text-[#d88a00]",
+    illustration: <TabletPersonIllustration />
+  },
+  {
+    type: "review" as const,
+    title: "Provider reviews",
+    description: "Explore provider guides before choosing where to send your next transfer.",
+    cta: "Explore guides",
+    href: "/providers",
+    mediaClassName: "bg-[#f4faf5]",
+    labelClassName: "text-[#2e7d32]",
+    illustration: <PhoneReviewIllustration />
+  }
+] as const;
+
+function LearnAndSaveMoreSection() {
+  return (
+    <section className="bg-white">
+      <div className="mx-auto w-full max-w-[1200px] px-6 py-6 min-[600px]:py-7 lg:py-8">
+        <div className="mb-4 flex items-center justify-between gap-4">
+          <h2 className="text-[18px] font-extrabold leading-tight text-[#1a3a2a] min-[600px]:text-[22px]">
+            Learn &amp; save more
+          </h2>
+          <Link
+            className="shrink-0 text-[13px] font-bold text-[#2e7d32] transition hover:text-[#1a3a2a]"
+            href="/blog"
+          >
+            View all →
+          </Link>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-3">
+          {learnCards.map((card) => (
+            <article
+              key={card.title}
+              className="overflow-hidden rounded-[12px] border border-[#e8e8e8] bg-white"
+            >
+              <div className={`relative h-[110px] overflow-hidden ${card.mediaClassName}`}>
+                <div className="absolute left-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-[#2e7d32] text-white shadow-[0_8px_18px_rgba(46,125,50,0.24)]">
+                  <LearnIcon type={card.type} />
+                </div>
+                <div className="absolute bottom-[-4px] right-2">
+                  {card.illustration}
+                </div>
+              </div>
+
+              <div className="flex min-h-[128px] flex-col px-4 py-3">
+                <h3 className="text-[13px] font-extrabold leading-[1.35] text-[#1a3a2a]">
+                  {card.title}
+                </h3>
+                <p className="mt-2 text-[11px] font-medium leading-[1.6] text-[#666666]">
+                  {card.description}
+                </p>
+                <Link
+                  className={`mt-auto inline-flex items-center gap-1 pt-3 text-[11px] font-extrabold ${card.labelClassName}`}
+                  href={card.href}
+                >
+                  {card.cta} →
+                </Link>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function SmartSendingIllustration() {
   return (
@@ -352,6 +511,8 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
           onCompare={handleCompare}
           onSenderCountryChange={setSenderCountry}
         />
+
+        <LearnAndSaveMoreSection />
 
         <section id="compare-rates" className={sectionDividerClassName}>
           <div className={comparisonSectionInnerClassName}>
