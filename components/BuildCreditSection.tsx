@@ -5,7 +5,7 @@ function WavePattern() {
     <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-3xl">
       <svg
         aria-hidden="true"
-        className="absolute -right-10 top-0 h-full w-[58%]"
+        className="absolute right-0 top-0 h-full w-[58%]"
         preserveAspectRatio="none"
         viewBox="0 0 520 420"
       >
@@ -58,36 +58,38 @@ function ContactlessIcon() {
 
 export function BuildCreditSection() {
   return (
-    <section className="bg-gradient-to-br from-[#0a1f14] via-[#0f2d1a] to-[#061209] px-6 py-24 md:px-16 lg:px-24">
-      <div className="mx-auto max-w-7xl">
-        <div className="relative overflow-hidden rounded-3xl border border-green-900/40 bg-gradient-to-br from-[#0d2b1a] via-[#0f3320] to-[#071a0f] p-12 shadow-[0_0_80px_rgba(34,197,94,0.08)] transition-shadow duration-500 hover:shadow-[0_0_100px_rgba(34,197,94,0.15)] md:p-16">
-          <WavePattern />
+    <div className="w-full overflow-x-hidden">
+      <section className="relative w-full max-w-full overflow-hidden bg-gradient-to-br from-[#0a1f14] via-[#0f2d1a] to-[#061209] py-24">
+        <div className="mx-auto w-full max-w-[1200px] px-6">
+          <div className="relative w-full max-w-full overflow-hidden rounded-3xl border border-green-900/40 bg-gradient-to-br from-[#0d2b1a] via-[#0f3320] to-[#071a0f] p-12 shadow-[0_0_80px_rgba(34,197,94,0.08)] transition-shadow duration-500 hover:shadow-[0_0_100px_rgba(34,197,94,0.15)] md:p-16">
+            <WavePattern />
 
-          <div className="relative z-10 flex flex-col items-start justify-between gap-12 md:flex-row md:items-center">
-            <div className="flex items-center gap-4">
-              <GoldChip />
-              <ContactlessIcon />
-            </div>
+            <div className="relative z-10 grid grid-cols-1 items-center gap-12 md:grid-cols-[auto_auto_1fr]">
+              <div className="flex items-center gap-4">
+                <GoldChip />
+                <ContactlessIcon />
+              </div>
 
-            <div className="flex h-16 w-16 items-center justify-center rounded-full border border-green-800/50 bg-[#0a2015] text-green-400">
-              <TrendingUp className="h-7 w-7" />
-            </div>
+              <div className="flex h-16 w-16 items-center justify-center rounded-full border border-green-800/50 bg-[#0a2015] text-green-400">
+                <TrendingUp className="h-7 w-7" />
+              </div>
 
-            <div className="md:text-left">
-              <h2 className="text-4xl font-bold tracking-tight text-white md:text-5xl">
-                BUILD YOUR
-              </h2>
-              <p className="bg-gradient-to-r from-green-400 to-green-300 bg-clip-text text-4xl font-bold tracking-tight text-transparent md:text-5xl">
-                CREDIT
-              </p>
-              <div className="my-3 h-px w-16 bg-green-500/50" />
-              <p className="text-lg text-gray-400">
-                Immigrant-friendly credit cards
-              </p>
+              <div className="md:text-left">
+                <h2 className="text-4xl font-bold tracking-tight text-white md:text-5xl">
+                  BUILD YOUR
+                </h2>
+                <p className="bg-gradient-to-r from-green-400 to-green-300 bg-clip-text text-4xl font-bold tracking-tight text-transparent md:text-5xl">
+                  CREDIT
+                </p>
+                <div className="my-3 h-px w-16 bg-green-500/50" />
+                <p className="text-lg text-gray-400">
+                  Immigrant-friendly credit cards
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 }
