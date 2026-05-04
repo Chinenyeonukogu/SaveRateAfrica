@@ -4,9 +4,9 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { LucideIcon } from "lucide-react";
 import {
-  Activity,
   Clock3,
   CreditCard,
+  Mail,
   Menu,
   Search,
   UserRound,
@@ -39,6 +39,16 @@ interface NavigationItem {
   sectionId?: string;
 }
 
+const aboutNavigationItem: NavigationItem = {
+  description: "Our story",
+  href: "/about",
+  icon: UserRound,
+  iconBoxClassName: "bg-[#fff4d8]",
+  iconColorClassName: "text-[#d88a00]",
+  label: "About Us",
+  matchPathnames: ["/about"]
+};
+
 const navigationItems: NavigationItem[] = [
   {
     description: "Cards for the Nigerian diaspora",
@@ -59,30 +69,14 @@ const navigationItems: NavigationItem[] = [
     routeHref: "/#how-it-works",
     sectionId: "how-it-works"
   },
-  {
-    description: "Top time and route guidance",
-    href: "#smart-sending",
-    icon: Activity,
-    iconBoxClassName: "bg-[#fce4ec]",
-    iconColorClassName: "text-[#c62828]",
-    label: "Send Smart",
-    routeHref: "/#smart-sending",
-    sectionId: "smart-sending"
-  }
+  aboutNavigationItem
 ] as const;
-
-const aboutNavigationItem: NavigationItem = {
-  description: "Our story",
-  href: "/about",
-  icon: UserRound,
-  iconBoxClassName: "bg-[#fff4d8]",
-  iconColorClassName: "text-[#d88a00]",
-  label: "About Us",
-  matchPathnames: ["/about"]
-};
 
 const contactNavigationItem: NavigationItem = {
   href: "#contact",
+  icon: Mail,
+  iconBoxClassName: "bg-[#e8f5e9]",
+  iconColorClassName: "text-[#2e7d32]",
   label: "Contact Us",
   routeHref: "/#contact",
   sectionId: "contact"
@@ -94,7 +88,7 @@ const brandFontStyle = {
 const headerShellClassName = "mx-auto w-full max-w-[1200px] px-4 lg:px-6";
 const breadcrumbShellClassName =
   "mx-auto w-full max-w-[1200px] px-4 min-[600px]:px-6 lg:px-10";
-const allNavigationItems = [...navigationItems, aboutNavigationItem, contactNavigationItem];
+const allNavigationItems = [...navigationItems, contactNavigationItem];
 
 function SaveRateAfricaLogo({
   href,
@@ -537,18 +531,6 @@ export function SiteHeader({
             <div className="hidden shrink-0 items-center gap-2 lg:flex">
               <Link
                 className={`inline-flex h-9 items-center gap-2 rounded-full px-3 text-[13px] font-semibold transition ${
-                  isActiveNavigationItem(aboutNavigationItem)
-                    ? "bg-[#f4faf5] text-[#1b5e20]"
-                    : "text-[#2e4a2e] hover:bg-[#f4faf5] hover:text-[#2e7d32]"
-                }`}
-                href={getNavigationHref(aboutNavigationItem)}
-                onClick={(event) => handleNavigationClick(event, aboutNavigationItem)}
-              >
-                {renderFeatureIcon(aboutNavigationItem, true)}
-                {aboutNavigationItem.label}
-              </Link>
-              <Link
-                className={`inline-flex h-9 items-center rounded-full px-3 text-[13px] font-semibold transition ${
                   isActiveNavigationItem(contactNavigationItem)
                     ? "bg-[#f4faf5] text-[#1b5e20]"
                     : "text-[#2e4a2e] hover:bg-[#f4faf5] hover:text-[#2e7d32]"
@@ -556,6 +538,7 @@ export function SiteHeader({
                 href={getNavigationHref(contactNavigationItem)}
                 onClick={(event) => handleNavigationClick(event, contactNavigationItem)}
               >
+                {renderFeatureIcon(contactNavigationItem, true)}
                 {contactNavigationItem.label}
               </Link>
               <div
@@ -618,18 +601,6 @@ export function SiteHeader({
             <div className="hidden w-full shrink-0 items-center justify-end gap-2 md:flex lg:hidden">
               <Link
                 className={`inline-flex h-9 items-center gap-2 rounded-full px-3 text-[13px] font-semibold transition ${
-                  isActiveNavigationItem(aboutNavigationItem)
-                    ? "bg-[#f4faf5] text-[#1b5e20]"
-                    : "text-[#2e4a2e] hover:bg-[#f4faf5] hover:text-[#2e7d32]"
-                }`}
-                href={getNavigationHref(aboutNavigationItem)}
-                onClick={(event) => handleNavigationClick(event, aboutNavigationItem)}
-              >
-                {renderFeatureIcon(aboutNavigationItem, true)}
-                {aboutNavigationItem.label}
-              </Link>
-              <Link
-                className={`inline-flex h-9 items-center rounded-full px-3 text-[13px] font-semibold transition ${
                   isActiveNavigationItem(contactNavigationItem)
                     ? "bg-[#f4faf5] text-[#1b5e20]"
                     : "text-[#2e4a2e] hover:bg-[#f4faf5] hover:text-[#2e7d32]"
@@ -637,6 +608,7 @@ export function SiteHeader({
                 href={getNavigationHref(contactNavigationItem)}
                 onClick={(event) => handleNavigationClick(event, contactNavigationItem)}
               >
+                {renderFeatureIcon(contactNavigationItem, true)}
                 {contactNavigationItem.label}
               </Link>
 
@@ -757,7 +729,7 @@ export function SiteHeader({
             </button>
           </div>
 
-          {[...navigationItems, aboutNavigationItem, contactNavigationItem].map((item) => {
+          {[...navigationItems, contactNavigationItem].map((item) => {
             const isActive = isActiveNavigationItem(item);
 
             return (
