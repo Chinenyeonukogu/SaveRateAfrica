@@ -65,6 +65,16 @@ summary::-webkit-details-marker {
   }
 }
 
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
 .alert-hero-card .toggle-btn {
   background: transparent;
   border: 2px solid #1a5c2a;
