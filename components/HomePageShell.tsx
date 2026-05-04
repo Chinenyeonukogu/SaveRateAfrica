@@ -9,11 +9,9 @@ import {
 import Link from "next/link";
 
 import { ComparisonTable } from "@/components/ComparisonTable";
-import { BuildCreditSection } from "@/components/BuildCreditSection";
-import { HeroSection } from "@/components/HeroSection";
+import { HomeHero } from "@/components/HomeHero";
 import { RateChart } from "@/components/RateChart";
 import { RateDisclaimer } from "@/components/RateDisclaimer";
-import { RateAlertsSection } from "@/components/RateAlertsSection";
 import { SiteHeader } from "@/components/SiteHeader";
 import {
   formatCompact,
@@ -510,10 +508,10 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
 
   return (
     <>
-      <SiteHeader showAnnouncementBar />
+      <SiteHeader />
 
       <main className="overflow-x-hidden pb-32 md:pb-20">
-        <HeroSection
+        <HomeHero
           alertsAnchorRef={alertsRef}
           amount={amount}
           isLoading={isLoading}
@@ -522,10 +520,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
           onCompare={handleCompare}
           onSenderCountryChange={setSenderCountry}
         />
-
-        <RateAlertsSection />
-
-        <BuildCreditSection />
 
         <LearnAndSaveMoreSection />
 
