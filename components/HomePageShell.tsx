@@ -8,7 +8,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-import { AlertsForm } from "@/components/AlertsForm";
 import { ComparisonTable } from "@/components/ComparisonTable";
 import { HeroSection } from "@/components/HeroSection";
 import { RateChart } from "@/components/RateChart";
@@ -514,7 +513,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
       <main className="overflow-x-hidden pb-32 md:pb-20">
         <HeroSection
           alertsAnchorRef={alertsRef}
-          alertsContent={<AlertsForm variant="hero" />}
           amount={amount}
           isLoading={isLoading}
           senderCountry={senderCountry}

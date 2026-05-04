@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, type MutableRefObject, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type MutableRefObject } from "react";
 import Link from "next/link";
 
 import {
@@ -11,7 +11,6 @@ import { senderCountries, type SenderCountry } from "@/lib/providers";
 
 interface HeroSectionProps {
   alertsAnchorRef?: MutableRefObject<HTMLDivElement | null>;
-  alertsContent?: ReactNode;
   amount: string;
   senderCountry: SenderCountry;
   isLoading: boolean;
@@ -139,9 +138,63 @@ function HeroStoreBadge({
   );
 }
 
+function RateAlertsBellIllustration() {
+  return (
+    <svg aria-hidden="true" className="h-16 w-16" viewBox="0 0 96 96">
+      <path
+        d="M32 72h32c-4-5-5-12-5-24 0-13-8-21-19-21S21 35 21 48c0 12-1 19-5 24h16Z"
+        fill="#f5c800"
+      />
+      <path d="M35 75c2 5 6 8 13 8s11-3 13-8H35Z" fill="#d89f00" />
+      <path
+        d="M42 25c0-4 2-7 6-7s6 3 6 7"
+        fill="none"
+        stroke="#d89f00"
+        strokeLinecap="round"
+        strokeWidth="5"
+      />
+      <circle cx="71" cy="28" fill="#2e7d32" r="12" />
+      <text
+        fill="#ffffff"
+        fontFamily="Arial, sans-serif"
+        fontSize="14"
+        fontWeight="700"
+        textAnchor="middle"
+        x="71"
+        y="33"
+      >
+        1
+      </text>
+    </svg>
+  );
+}
+
+function SaveRateCreditCardIllustration() {
+  return (
+    <svg aria-hidden="true" className="h-auto w-20" viewBox="0 0 132 82">
+      <rect fill="#1a3a2a" height="72" rx="10" width="120" x="6" y="5" />
+      <rect fill="#2e7d32" height="20" rx="4" width="34" x="18" y="35" />
+      <circle cx="95" cy="57" fill="#e53935" r="12" />
+      <circle cx="110" cy="57" fill="#f5a623" r="12" />
+      <rect fill="#69f0ae" height="11" rx="4" width="52" x="18" y="17" />
+      <text
+        fill="#ffffff"
+        fontFamily="Arial, sans-serif"
+        fontSize="9"
+        fontWeight="700"
+        x="32"
+        y="25"
+      >
+        SaveRate
+      </text>
+      <circle cx="25" cy="22" fill="#69f0ae" r="6" />
+      <path d="M97 17h20M101 22h16M105 27h12" stroke="#ffffff" strokeLinecap="round" strokeWidth="3" />
+    </svg>
+  );
+}
+
 export function HeroSection({
   alertsAnchorRef,
-  alertsContent,
   amount,
   senderCountry,
   isLoading,
@@ -250,9 +303,9 @@ export function HeroSection({
       id="home"
       className="mx-3 my-3 overflow-hidden rounded-[10px] bg-[linear-gradient(140deg,#1b5e20_0%,#2e7d32_35%,#1a3a22_70%,#0d2010_100%)] min-[600px]:mx-4 min-[600px]:my-4 min-[600px]:rounded-[12px] lg:mx-auto lg:my-6 lg:max-w-[1200px] lg:rounded-[16px]"
     >
-      <div className="px-5 py-7 text-white min-[600px]:px-7 min-[600px]:py-9 lg:px-10 lg:pb-11 lg:pt-12">
-        <div className="flex flex-col items-stretch gap-8 lg:grid lg:grid-cols-[minmax(0,1fr)_420px] lg:items-stretch lg:gap-x-10">
-          <div className="flex min-w-0 flex-col gap-8 overflow-hidden pt-0 lg:h-full lg:justify-between">
+      <div className="px-5 py-10 text-white min-[600px]:px-7 min-[600px]:py-10 lg:px-10 lg:py-10">
+        <div className="flex flex-col items-stretch gap-8 lg:grid lg:grid-cols-[minmax(0,1fr)_420px] lg:items-start lg:gap-x-10">
+          <div className="flex min-w-0 flex-col gap-8 overflow-hidden pt-0">
             <div className="mb-[18px] inline-flex w-fit items-center rounded-full border border-white/20 bg-white/10 px-[14px] py-[5px] text-[10px] font-medium uppercase tracking-[0.8px] text-[#a5d6a7]">
               <span className="mr-[6px] inline-flex h-[6px] w-[6px] rounded-full bg-[#69f0ae] animate-hero-live-pulse" />
               Real-Time Rates · Compare &amp; Save Instantly
@@ -290,56 +343,69 @@ export function HeroSection({
                 ))}
               </div>
 
-              {alertsContent ? (
-                <div
-                  id="rate-alerts"
-                  ref={alertsAnchorRef}
-                  className="flex h-full w-full max-w-full min-w-0 flex-col box-border [&_.alert-hero-card]:mt-0"
-                >
-                  {alertsContent}
+              <div
+                id="rate-alerts"
+                ref={alertsAnchorRef}
+                className="grid w-full max-w-[380px] grid-cols-2 gap-3"
+              >
                   <Link
-                    className="build-credit-card group mt-3 flex w-full max-w-full min-w-0 items-center gap-4 rounded-[14px] bg-[#1a2e1a] px-5 py-[18px] text-left box-border hover:bg-[#243d24] hover:translate-y-[-2px]"
+                    className="group relative h-[140px] overflow-hidden rounded-[14px] bg-[#e8f5e9] p-4 text-left transition hover:translate-y-[-2px]"
+                    href="/alerts"
+                  >
+                    <div className="absolute bottom-[-8px] right-[-2px]">
+                      <RateAlertsBellIllustration />
+                    </div>
+
+                    <div className="relative z-10 max-w-[100px]">
+                      <p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#2e7d32]">
+                        RATE ALERTS
+                      </p>
+                      <p className="mt-2 text-[14px] font-extrabold leading-[1.25] text-[#1a2e1a]">
+                        Never miss your ideal rate
+                      </p>
+                      <p className="mt-2 text-[11px] font-medium leading-[1.35] text-[#2d4a35]">
+                        We&apos;ll email you when NGN hits your target.
+                      </p>
+                      <span className="mt-2 inline-flex text-[12px] font-extrabold text-[#2e7d32]">
+                        Set Rate Alert &rarr;
+                      </span>
+                    </div>
+                  </Link>
+
+                  <Link
+                    className="group relative h-[140px] overflow-hidden rounded-[14px] bg-[#fff8e1] p-4 text-left transition hover:translate-y-[-2px]"
                     href="/credit-cards"
                   >
-                    <div className="relative h-[46px] w-[72px] shrink-0 rounded-[8px] bg-[linear-gradient(135deg,#2e7d32,#43a047)]">
-                      <div className="absolute left-[8px] top-[8px] h-[12px] w-[16px] rounded-[3px] bg-[#f5c800]" />
-                      <div className="absolute bottom-[8px] left-[8px] flex gap-[4px]">
-                        <span className="h-[4px] w-[4px] rounded-full bg-white/75" />
-                        <span className="h-[4px] w-[4px] rounded-full bg-white/75" />
-                        <span className="h-[4px] w-[4px] rounded-full bg-white/75" />
-                        <span className="h-[4px] w-[4px] rounded-full bg-white/75" />
-                      </div>
-                    </div>
-
-                    <div className="min-w-0 flex-1">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#a8e6b8]">
+                    <div className="relative z-10 max-w-[100px]">
+                      <p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#d66b1f]">
                         BUILD CREDIT
                       </p>
-                      <p className="mt-1 text-[15px] font-bold leading-[1.35] text-white">
-                        Build credit while you send from the USA
+                      <p className="mt-2 text-[14px] font-extrabold leading-[1.25] text-[#1a2e1a]">
+                        Build credit while you send money
                       </p>
-                      <p className="mt-1 text-[12px] font-medium leading-[1.5] text-white/70">
-                        Explore immigrant-friendly card picks →
+                      <p className="mt-2 text-[11px] font-medium leading-[1.35] text-[#5d4a2d]">
+                        Immigrant-friendly credit cards.
                       </p>
+                      <span className="mt-2 inline-flex text-[12px] font-extrabold text-[#d66b1f]">
+                        Explore Cards &rarr;
+                      </span>
                     </div>
-
-                    <span className="ml-auto text-[28px] leading-none text-white/65 transition-colors group-hover:text-[#a8e6b8]">
-                      ›
-                    </span>
+                    <div className="absolute bottom-[-6px] right-[-14px] rotate-[-8deg]">
+                      <SaveRateCreditCardIllustration />
+                    </div>
                   </Link>
-                </div>
-              ) : null}
+              </div>
             </div>
           </div>
 
-          <div className="w-full lg:flex lg:h-full lg:flex-col">
+          <div className="w-full lg:flex lg:flex-col">
             <div className="mb-3 hidden flex-col items-end gap-[10px] lg:flex">
               {appDownloadButtons.map((button) => (
                 <HeroStoreBadge key={button.platform} {...button} />
               ))}
             </div>
 
-            <div className="flex h-full w-full flex-col rounded-[14px] bg-white p-5 text-[#1a2e1a] shadow-[0_8px_32px_rgba(0,0,0,0.18)]">
+            <div className="flex w-full flex-col rounded-[14px] bg-white p-5 text-[#1a2e1a] shadow-[0_8px_32px_rgba(0,0,0,0.18)]">
                 <p className="mb-1 text-[9px] font-semibold uppercase tracking-[1.8px] text-[#2e7d32]">
                   COMPARE NOW
                 </p>
