@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 
 import { MobileNav } from "@/components/MobileNav";
+import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 import SaveRateAI from "@/components/SaveRateAI.jsx";
 import { SiteFooter } from "@/components/SiteFooter";
 
@@ -10,7 +11,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://saverateafrica.com"),
-  manifest: "/manifest.webmanifest",
+  manifest: "/manifest.json",
   title: "SaveRateAfrica | Best Way to Send Money to Nigeria",
   description:
     "Compare USD, GBP and CAD to NGN rates today. Find the cheapest way to send money to Nigeria from USA, UK and Canada.",
@@ -61,7 +62,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#00C853"
+  themeColor: "#145a32"
 };
 
 export default function RootLayout({
@@ -76,6 +77,13 @@ export default function RootLayout({
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=DM+Sans:wght@400;500&display=swap"
         />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#145a32" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="SaveRateAfrica" />
+        <link rel="apple-touch-icon" href="/icon-192.png" />
       </head>
       <body className="bg-brand-light text-brand-navy">
         {children}
@@ -83,6 +91,7 @@ export default function RootLayout({
         <SaveRateAI />
         <MobileNav />
         <Analytics />
+        <ServiceWorkerRegistration />
       </body>
     </html>
   );
