@@ -479,8 +479,8 @@ export function SiteHeader({
 
         <header className="border-b border-[#e0ede2] bg-white shadow-[0_2px_8px_rgba(46,125,50,0.08)]">
           <div className={headerShellClassName}>
-            <div className="relative flex h-[60px] items-center justify-between gap-4 md:h-auto md:min-h-[60px] md:flex-wrap md:py-2 lg:h-[60px] lg:min-h-0 lg:flex-nowrap lg:py-0">
-            <div className="flex min-w-0 flex-1 items-center md:w-full lg:w-auto">
+            <div className="relative flex h-[60px] items-center justify-between gap-4">
+            <div className="flex min-w-0 flex-1 items-center">
               <SaveRateAfricaLogo href={getHomeHref()} onClick={handleLogoClick} />
               <nav aria-label="Primary" className="ml-3 hidden min-w-0 flex-1 lg:flex xl:ml-4">
                 <ul className="strip grid min-w-0 flex-1 grid-cols-3 items-center gap-2 xl:gap-3">
@@ -515,18 +515,6 @@ export function SiteHeader({
                 </ul>
               </nav>
 
-              <nav
-                aria-label="Tablet primary"
-                className="ml-3 hidden min-w-0 flex-1 items-center md:flex lg:hidden"
-              >
-                <ul className="strip grid w-full min-w-0 grid-cols-3 items-center gap-1 pr-2">
-                  {navigationItems.map((item) => (
-                    <li key={item.label} className="min-w-0 list-none">
-                      {renderTabletNavigationItem(item)}
-                    </li>
-                  ))}
-                </ul>
-              </nav>
             </div>
 
             <div className="hidden shrink-0 items-center gap-2 lg:flex">
@@ -599,49 +587,7 @@ export function SiteHeader({
               </div>
             </div>
 
-            <div className="hidden w-full shrink-0 items-center justify-end gap-2 md:flex lg:hidden">
-              <Link
-                className={`inline-flex h-9 items-center gap-2 rounded-full px-3 text-[13px] font-semibold transition ${
-                  isActiveNavigationItem(contactNavigationItem)
-                    ? "bg-[#f4faf5] text-[#1b5e20]"
-                    : "text-[#2e4a2e] hover:bg-[#f4faf5] hover:text-[#2e7d32]"
-                }`}
-                href={getNavigationHref(contactNavigationItem)}
-                onClick={(event) => handleNavigationClick(event, contactNavigationItem)}
-              >
-                {renderFeatureIcon(contactNavigationItem, true)}
-                {contactNavigationItem.label}
-              </Link>
-
-              <button
-                aria-expanded={isSearchOpen}
-                aria-label={isSearchOpen ? "Close search" : "Open search"}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full p-2 text-[#2e4a2e] transition hover:bg-[#f4faf5]"
-                type="button"
-                onClick={() => {
-                  closeDrawer();
-                  setIsSearchOpen((current) => !current);
-                  setNoResultsQuery(null);
-                }}
-              >
-                <Search className="h-4 w-4" />
-              </button>
-
-              <button
-                aria-expanded={isDrawerOpen}
-                aria-label={isDrawerOpen ? "Close menu" : "Open menu"}
-                className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-[#dcedc8] text-[#1a2e1a]"
-                type="button"
-                onClick={() => {
-                  closeSearch();
-                  setIsDrawerOpen((current) => !current);
-                }}
-              >
-                {isDrawerOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-              </button>
-            </div>
-
-            <div className="flex shrink-0 items-center md:hidden">
+            <div className="flex shrink-0 items-center lg:hidden">
               <button
                 aria-expanded={isDrawerOpen}
                 aria-label={isDrawerOpen ? "Close menu" : "Open menu"}
