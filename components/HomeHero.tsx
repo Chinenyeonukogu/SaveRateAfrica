@@ -280,10 +280,10 @@ export function HomeHero({
 
             <div className="flex flex-col gap-4">
               <h1
-                className="max-w-[580px] font-heading text-[25px] font-bold leading-[1.08] tracking-[-0.5px] text-white min-[600px]:text-[34px] lg:text-[40px]"
+                className="max-w-[580px] font-heading text-[23px] font-bold leading-[1.08] tracking-[-0.5px] text-white min-[600px]:text-[31px] lg:text-[36px]"
                 style={brandFontStyle}
               >
-                Real-time rates to <span className="text-[#4ade80]">Nigeria</span> compare remittance providers, save on fees and send more money from USA, UK, and Canada.
+                Save on fees and send more money from USA, UK, and Canada.
               </h1>
 
             </div>
