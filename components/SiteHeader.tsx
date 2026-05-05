@@ -453,32 +453,33 @@ export function SiteHeader({
 
   return (
     <>
-      {showAnnouncementBar ? (
-        <div className="bg-[#2e7d32]">
-          <div className="mx-auto max-w-[1200px] px-5 py-[10px] text-center text-[13px] text-white">
-            <span>
-              ✦ Real-time NGN rates · No hidden fees · Compare 14 providers and
-              save on every transfer.{" "}
-            </span>
-            <Link
-              className="font-bold underline underline-offset-2"
-              href={pathname === "/" ? "#compare-rates" : "/#compare-rates"}
-              onClick={(event) => {
-                if (pathname === "/") {
-                  event.preventDefault();
-                  navigateTo("#compare-rates", "compare-rates");
-                }
-              }}
-            >
-              Compare now →
-            </Link>
+      <div className="sticky top-0 z-[999]">
+        {showAnnouncementBar ? (
+          <div className="bg-[#2e7d32]">
+            <div className="mx-auto max-w-[1200px] px-5 py-[10px] text-center text-[13px] text-white">
+              <span>
+                ✦ Real-time NGN rates · No hidden fees · Compare 14 providers and
+                save on every transfer.{" "}
+              </span>
+              <Link
+                className="font-bold underline underline-offset-2"
+                href={pathname === "/" ? "#compare-rates" : "/#compare-rates"}
+                onClick={(event) => {
+                  if (pathname === "/") {
+                    event.preventDefault();
+                    navigateTo("#compare-rates", "compare-rates");
+                  }
+                }}
+              >
+                Compare now →
+              </Link>
+            </div>
           </div>
-        </div>
-      ) : null}
+        ) : null}
 
-      <header className="sticky top-0 z-[999] border-b border-[#e0ede2] bg-white shadow-[0_2px_8px_rgba(46,125,50,0.08)]">
-        <div className={headerShellClassName}>
-          <div className="relative flex h-[60px] items-center justify-between gap-4 md:h-auto md:min-h-[60px] md:flex-wrap md:py-2 lg:h-[60px] lg:min-h-0 lg:flex-nowrap lg:py-0">
+        <header className="border-b border-[#e0ede2] bg-white shadow-[0_2px_8px_rgba(46,125,50,0.08)]">
+          <div className={headerShellClassName}>
+            <div className="relative flex h-[60px] items-center justify-between gap-4 md:h-auto md:min-h-[60px] md:flex-wrap md:py-2 lg:h-[60px] lg:min-h-0 lg:flex-nowrap lg:py-0">
             <div className="flex min-w-0 flex-1 items-center md:w-full lg:w-auto">
               <SaveRateAfricaLogo href={getHomeHref()} onClick={handleLogoClick} />
               <nav aria-label="Primary" className="ml-3 hidden min-w-0 flex-1 lg:flex xl:ml-4">
@@ -683,9 +684,10 @@ export function SiteHeader({
                 ) : null}
               </div>
             ) : null}
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
+      </div>
 
       <div
         className={`fixed inset-0 z-[998] bg-brand-navy/20 transition lg:hidden ${
