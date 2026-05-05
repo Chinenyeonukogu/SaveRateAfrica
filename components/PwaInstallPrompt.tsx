@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Share2, Smartphone, X } from "lucide-react";
+import { Download, Smartphone, X } from "lucide-react";
+
+type BeforeInstallPromptEvent = Event & {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
+};
 
 function isStandalone() {
   const navigatorWithStandalone = window.navigator as Navigator & { standalone?: boolean };
@@ -13,6 +18,7 @@ function isStandalone() {
 }
 
 export function PwaInstallPrompt() {
+  const [installEvent, setInstallEvent] = useState<BeforeInstallPromptEvent | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
 
@@ -25,7 +31,9 @@ export function PwaInstallPrompt() {
     setIsIOS(isiOSDevice);
     setIsVisible(!dismissed && !isStandalone());
 
-    const handleBeforeInstallPrompt = () => {
+    const handleBeforeInstallPrompt = (event: Event) => {
+      event.preventDefault();
+      setInstallEvent(event as BeforeInstallPromptEvent);
       setIsVisible(!dismissed && !isStandalone());
     };
 
@@ -36,6 +44,14 @@ export function PwaInstallPrompt() {
     };
   }, []);
 
+  useEffect(() => {
+    document.body.classList.toggle("pwa-install-visible", isVisible);
+
+    return () => {
+      document.body.classList.remove("pwa-install-visible");
+    };
+  }, [isVisible]);
+
   if (!isVisible) {
     return null;
   }
@@ -43,6 +59,22 @@ export function PwaInstallPrompt() {
   const handleDismiss = () => {
     window.localStorage.setItem("sra-pwa-install-dismissed", "true");
     setIsVisible(false);
+  };
+
+  const handleInstall = async () => {
+    if (installEvent) {
+      await installEvent.prompt();
+      await installEvent.userChoice;
+      setInstallEvent(null);
+      setIsVisible(false);
+      return;
+    }
+
+    window.alert(
+      isIOS
+        ? "On iPhone or iPad: tap Share, then Add to Home Screen."
+        : "Open your browser menu, then tap Install app or Add to Home screen."
+    );
   };
 
   return (
@@ -57,10 +89,10 @@ export function PwaInstallPrompt() {
             <div className="flex items-start justify-between gap-2">
               <div>
                 <p className="text-[13px] font-extrabold leading-tight">
-                  Download SaveRateAfrica
+                  Install SaveRateAfrica
                 </p>
                 <p className="mt-1 text-[11px] font-semibold leading-snug text-[#3f5f4d]">
-                  Add it to your device home screen and open it like an app.
+                  Free · Add to home screen.
                 </p>
               </div>
               <button
@@ -73,14 +105,14 @@ export function PwaInstallPrompt() {
               </button>
             </div>
 
-            <div className="mt-3 flex items-start gap-2 rounded-xl bg-[#e8f5e2] p-2 text-[11px] font-bold leading-snug text-[#166534]">
-              <Share2 className="mt-[1px] h-4 w-4 shrink-0" />
-              <span>
-                {isIOS
-                  ? "On iPhone or iPad: tap Share, then Add to Home Screen."
-                  : "Use the browser install banner, or tap the browser menu, then Install app or Add to Home screen."}
-              </span>
-            </div>
+            <button
+              className="mt-3 inline-flex min-h-9 items-center gap-2 rounded-full bg-[#145a32] px-4 text-[12px] font-extrabold text-white shadow-[0_8px_20px_rgba(20,90,50,0.22)]"
+              type="button"
+              onClick={handleInstall}
+            >
+              <Download className="h-4 w-4" />
+              Install ✓
+            </button>
           </div>
         </div>
       </div>

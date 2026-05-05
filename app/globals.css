@@ -21,6 +21,16 @@ body {
   color: #0a1628;
 }
 
+body.pwa-install-visible {
+  padding-bottom: calc(220px + env(safe-area-inset-bottom));
+}
+
+@media (min-width: 768px) {
+  body.pwa-install-visible {
+    padding-bottom: calc(150px + env(safe-area-inset-bottom));
+  }
+}
+
 ::selection {
   background: rgba(0, 200, 83, 0.18);
   color: #0a1628;
