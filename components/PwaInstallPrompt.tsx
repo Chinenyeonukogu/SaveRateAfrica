@@ -8,6 +8,8 @@ type BeforeInstallPromptEvent = Event & {
   userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
 };
 
+const DISMISSED_STORAGE_KEY = "sra-pwa-install-dismissed-v2";
+
 function isStandalone() {
   const navigatorWithStandalone = window.navigator as Navigator & { standalone?: boolean };
 
@@ -23,18 +25,20 @@ export function PwaInstallPrompt() {
   const [isIOS, setIsIOS] = useState(false);
 
   useEffect(() => {
-    const dismissed = window.localStorage.getItem("sra-pwa-install-dismissed") === "true";
     const isiOSDevice =
       /iphone|ipad|ipod/i.test(window.navigator.userAgent) ||
       (window.navigator.platform === "MacIntel" && window.navigator.maxTouchPoints > 1);
+    const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+    const dismissed = window.localStorage.getItem(DISMISSED_STORAGE_KEY) === "true";
+    const shouldShow = !isStandalone() && (!dismissed || isTouchDevice);
 
     setIsIOS(isiOSDevice);
-    setIsVisible(!dismissed && !isStandalone());
+    setIsVisible(shouldShow);
 
     const handleBeforeInstallPrompt = (event: Event) => {
       event.preventDefault();
       setInstallEvent(event as BeforeInstallPromptEvent);
-      setIsVisible(!dismissed && !isStandalone());
+      setIsVisible(shouldShow);
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
@@ -57,7 +61,7 @@ export function PwaInstallPrompt() {
   }
 
   const handleDismiss = () => {
-    window.localStorage.setItem("sra-pwa-install-dismissed", "true");
+    window.localStorage.setItem(DISMISSED_STORAGE_KEY, "true");
     setIsVisible(false);
   };
 
@@ -78,7 +82,7 @@ export function PwaInstallPrompt() {
   };
 
   return (
-    <div className="fixed inset-x-3 bottom-[92px] z-50 sm:left-auto sm:right-4 sm:w-[360px] md:bottom-4">
+    <div className="fixed inset-x-3 bottom-[92px] z-[10000] sm:left-auto sm:right-4 sm:w-[360px] md:bottom-6">
       <div className="rounded-2xl border border-emerald-200 bg-white p-3 text-[#123524] shadow-[0_14px_40px_rgba(0,0,0,0.18)]">
         <div className="flex items-start gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#145a32] text-white">
