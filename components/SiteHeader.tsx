@@ -137,7 +137,7 @@ function SaveRateAfricaLogo({
 }
 
 export function SiteHeader({
-  showAnnouncementBar = false,
+  showAnnouncementBar = true,
   showBreadcrumb = false
 }: SiteHeaderProps) {
   const pathname = usePathname() ?? "/";

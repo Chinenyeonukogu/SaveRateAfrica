@@ -188,22 +188,6 @@ export function HomeHero({
       className="relative w-full max-w-[100vw] overflow-hidden overflow-x-hidden bg-[linear-gradient(160deg,#2d6a4f_0%,#1b5e3b_40%,#145a32_100%)]"
     >
       <div className="relative z-10 mx-auto w-full max-w-[1200px] overflow-x-hidden px-5 pb-8 pt-4 text-white min-[600px]:px-7 min-[600px]:pb-9 lg:px-6 lg:pb-10">
-        <div className="mb-4 flex flex-col gap-2 pb-2 min-[760px]:flex-row min-[760px]:items-center min-[760px]:justify-between">
-          <div className="text-[11px] font-medium leading-5 text-white/78 min-[600px]:text-[12px]">
-            <span>
-              ✦ Real-time NGN rates · No hidden fees · Compare 14 providers and
-              save on every transfer.{" "}
-            </span>
-            <button
-              className="font-bold text-[#4ade80] underline underline-offset-2 transition hover:text-white"
-              type="button"
-              onClick={onCompare}
-            >
-              Compare now →
-            </button>
-          </div>
-
-        </div>
 
         <div className="grid min-w-0 grid-cols-1 items-stretch gap-5 lg:grid-cols-[1fr_minmax(0,340px)] lg:items-start lg:gap-x-7">
           <div className="flex min-w-0 flex-col gap-4 overflow-hidden pt-0">
