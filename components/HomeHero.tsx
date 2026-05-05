@@ -288,7 +288,7 @@ export function HomeHero({
 
             </div>
 
-            <p className="max-w-[540px] text-[12px] leading-[1.55] text-gray-400 min-[600px]:text-[13px]">
+            <p className="max-w-[540px] text-[12px] font-bold leading-[1.55] text-white min-[600px]:text-[13px]">
               Real-time rates from 14 trusted providers. No hidden fees. Ranked by
               the exact NGN your recipient receives after all charges.
             </p>
@@ -311,36 +311,71 @@ export function HomeHero({
                 className="grid w-full max-w-full grid-cols-1 gap-2 overflow-hidden min-[520px]:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]"
               >
                   <Link
-                    className="group relative min-h-[190px] min-w-0 max-w-full overflow-hidden rounded-[20px] border-2 border-[rgba(74,222,128,0.4)] bg-[linear-gradient(145deg,#ffffff_0%,#f0fff4_100%)] p-5 text-left shadow-[0_8px_32px_rgba(0,0,0,0.12)] transition hover:translate-y-[-4px] hover:shadow-[0_16px_48px_rgba(0,0,0,0.18)]"
+                    className="group relative min-h-[190px] min-w-0 max-w-full overflow-hidden rounded-[20px] border-2 border-[#4ade80] bg-[#e8f5e2] p-5 text-left shadow-[0_8px_32px_rgba(0,0,0,0.12)] transition hover:translate-y-[-4px] hover:shadow-[0_16px_48px_rgba(0,0,0,0.18)]"
                     href="/alerts"
                   >
                     <svg
                       style={{
                         position: "absolute",
-                        right: "14px",
-                        bottom: "10px",
-                        width: "80px",
-                        height: "80px",
-                        opacity: 0.85
+                        right: "10px",
+                        bottom: "8px",
+                        width: "90px",
+                        height: "90px",
+                        zIndex: 2
                       }}
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="#f59e0b"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                      viewBox="0 0 100 100"
+                      xmlns="http://www.w3.org/2000/svg"
                     >
-                      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                      <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                      <circle cx="17" cy="5" r="3" fill="#ef4444" stroke="none" />
-                      <text
-                        x="17"
-                        y="8"
-                        textAnchor="middle"
-                        fontSize="4"
-                        fontWeight="900"
-                        fill="white"
-                      >
+                      <defs>
+                        <radialGradient id="bellBody" cx="35%" cy="25%" r="70%">
+                          <stop offset="0%" stopColor="#fef3c7" />
+                          <stop offset="30%" stopColor="#fde68a" />
+                          <stop offset="65%" stopColor="#f59e0b" />
+                          <stop offset="100%" stopColor="#78350f" />
+                        </radialGradient>
+                        <radialGradient id="bellShine" cx="30%" cy="20%" r="50%">
+                          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.6" />
+                          <stop offset="100%" stopColor="#fbbf24" stopOpacity="0" />
+                        </radialGradient>
+                        <linearGradient id="rimGrad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#fbbf24" />
+                          <stop offset="100%" stopColor="#92400e" />
+                        </linearGradient>
+                        <filter id="bellShadow">
+                          <feDropShadow
+                            dx="0"
+                            dy="4"
+                            stdDeviation="4"
+                            floodColor="#78350f"
+                            floodOpacity="0.4"
+                          />
+                        </filter>
+                      </defs>
+                      <ellipse cx="50" cy="95" rx="22" ry="4" fill="rgba(0,0,0,0.2)" />
+                      <rect x="46" y="4" width="8" height="14" rx="4" fill="url(#rimGrad)" />
+                      <path
+                        d="M50 14 C28 14 14 30 14 50 L14 74 Q14 82 22 82 L78 82 Q86 82 86 74 L86 50 C86 30 72 14 50 14Z"
+                        fill="url(#bellBody)"
+                        filter="url(#bellShadow)"
+                      />
+                      <path
+                        d="M50 14 C28 14 14 30 14 50 L14 74 Q14 82 22 82 L78 82 Q86 82 86 74 L86 50 C86 30 72 14 50 14Z"
+                        fill="url(#bellShine)"
+                      />
+                      <ellipse cx="50" cy="81" rx="36" ry="6" fill="#92400e" />
+                      <ellipse cx="50" cy="79" rx="36" ry="6" fill="url(#bellBody)" />
+                      <circle cx="50" cy="90" r="6" fill="url(#rimGrad)" />
+                      <ellipse
+                        cx="37"
+                        cy="36"
+                        rx="7"
+                        ry="11"
+                        fill="#fef9c3"
+                        opacity="0.3"
+                        transform="rotate(-15 37 36)"
+                      />
+                      <circle cx="72" cy="18" r="10" fill="#ef4444" />
+                      <text x="72" y="22" textAnchor="middle" fontSize="10" fontWeight="900" fill="white">
                         1
                       </text>
                     </svg>
