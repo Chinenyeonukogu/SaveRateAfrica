@@ -185,7 +185,7 @@ export function HomeHero({
   return (
     <section
       id="home"
-      className="relative w-full max-w-[100vw] overflow-hidden overflow-x-hidden bg-[#e8f5e2]"
+      className="relative w-full max-w-[100vw] overflow-hidden overflow-x-hidden bg-[linear-gradient(135deg,#1a3a1a_0%,#2e7d32_50%,#0d2416_100%)]"
     >
       <div className="relative z-10 mx-auto w-full max-w-[1200px] overflow-x-hidden px-5 pb-8 pt-4 text-white min-[600px]:px-7 min-[600px]:pb-9 lg:px-6 lg:pb-10">
 
