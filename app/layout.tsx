@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 
 import { MobileNav } from "@/components/MobileNav";
+import { PwaInstallPrompt } from "@/components/PwaInstallPrompt";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 import SaveRateAI from "@/components/SaveRateAI.jsx";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -89,6 +90,7 @@ export default function RootLayout({
         {children}
         <SiteFooter />
         <SaveRateAI />
+        <PwaInstallPrompt />
         <MobileNav />
         <Analytics />
         <ServiceWorkerRegistration />
