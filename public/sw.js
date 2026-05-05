@@ -1,8 +1,18 @@
-const CACHE_NAME = 'saverateafrica-v1';
-const urlsToCache = ['/', '/manifest.json'];
-self.addEventListener('install', event => {
-  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache)));
+const CACHE_VERSION = "saverateafrica-safe-v2";
+
+self.addEventListener("install", () => {
+  self.skipWaiting();
 });
-self.addEventListener('fetch', event => {
-  event.respondWith(caches.match(event.request).then(response => response || fetch(event.request)));
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches
+      .keys()
+      .then((cacheNames) => Promise.all(cacheNames.map((cacheName) => caches.delete(cacheName))))
+      .then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener("fetch", () => {
+  // Intentionally do not intercept requests. Let the network handle page loads.
 });
