@@ -189,8 +189,8 @@ export function HomeHero({
     >
       <div className="relative z-10 mx-auto w-full max-w-[1200px] overflow-x-hidden px-5 pb-8 pt-4 text-white min-[600px]:px-7 min-[600px]:pb-9 lg:px-6 lg:pb-10">
 
-        <div className="grid min-w-0 grid-cols-1 items-stretch gap-5 lg:grid-cols-[1fr_minmax(0,340px)] lg:items-start lg:gap-x-7">
-          <div className="flex min-w-0 flex-col gap-4 overflow-hidden pt-0">
+        <div className="grid min-w-0 grid-cols-1 items-stretch gap-5 lg:grid-cols-[1fr_minmax(0,340px)] lg:gap-x-7">
+          <div className="flex min-w-0 flex-col justify-between gap-4 overflow-hidden pt-0">
             <div className="inline-flex w-fit items-center rounded-full border border-green-800/60 bg-green-950/40 px-3 py-[5px] text-[9px] font-bold uppercase tracking-[0.6px] text-green-400">
               <span className="mr-2 inline-flex h-2 w-2 rounded-full bg-[#4ade80] animate-hero-live-pulse shadow-[0_0_10px_rgba(74,222,128,0.8)]" />
               REAL-TIME RATES · COMPARE &amp; SAVE INSTANTLY
@@ -211,8 +211,8 @@ export function HomeHero({
               the exact NGN your recipient receives after all charges.
             </p>
 
-            <div className="flex w-full max-w-full min-w-0 flex-col gap-2 box-border">
-              <div className="flex w-full min-w-0 flex-wrap gap-2 box-border">
+            <div className="flex w-full max-w-full min-w-0 flex-1 flex-col box-border">
+              <div className="mb-8 flex w-full min-w-0 flex-wrap gap-2 box-border">
                 {trustPills.map((pill) => (
                   <div
                     key={pill}
@@ -226,10 +226,10 @@ export function HomeHero({
               <div
                 id="rate-alerts"
                 ref={alertsAnchorRef}
-                className="grid w-full max-w-full grid-cols-1 gap-2 overflow-hidden min-[520px]:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]"
+                className="mt-auto grid w-full max-w-full grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-stretch gap-[14px] overflow-hidden"
               >
                   <Link
-                    className="group relative min-h-[190px] min-w-0 max-w-full overflow-hidden rounded-[20px] border-2 border-[#4ade80] bg-[#e8f5e2] p-5 text-left shadow-[0_8px_32px_rgba(0,0,0,0.12)] transition hover:translate-y-[-4px] hover:shadow-[0_16px_48px_rgba(0,0,0,0.18)]"
+                    className="group relative h-full min-h-[190px] min-w-0 max-w-full overflow-hidden rounded-[20px] border-2 border-[#4ade80] bg-[#e8f5e2] p-[22px] text-left shadow-[0_8px_32px_rgba(0,0,0,0.12)] transition hover:translate-y-[-4px] hover:shadow-[0_16px_48px_rgba(0,0,0,0.18)]"
                     href="/alerts"
                   >
                     <svg
@@ -315,10 +315,10 @@ export function HomeHero({
                   </Link>
 
                   <Link
-                    className="group relative min-h-[96px] min-w-0 max-w-full overflow-hidden rounded-[12px] border-2 border-[#4ade80] bg-[#e8f5e2] p-3 text-left transition hover:translate-y-[-2px] min-[520px]:min-h-[108px]"
+                    className="group relative h-full min-h-[190px] min-w-0 max-w-full overflow-hidden rounded-[12px] border-2 border-[#4ade80] bg-[#e8f5e2] p-[22px] text-left transition hover:translate-y-[-2px]"
                     href="/credit-cards"
                   >
-                    <div className="relative z-10 max-w-[150px] min-w-0">
+                    <div className="relative z-10 max-w-[240px] min-w-0 pr-[80px]">
                       <p className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#166534]">
                         BUILD CREDIT
                       </p>
