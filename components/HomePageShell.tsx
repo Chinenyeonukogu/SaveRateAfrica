@@ -114,8 +114,8 @@ function LearnIcon({ type }: { type: "blog" | "video" | "review" }) {
 const learnCards = [
   {
     type: "blog" as const,
-    title: "Money transfer guides",
-    description: "Read practical tips on rates, fees, timing, and smarter ways to send to Nigeria.",
+    title: "Blog / Insights",
+    description: "Expert tips to help you save more and make smarter money transfers home.",
     cta: "Read articles",
     href: "/blog",
     imageSrc: "/learn/money-transfer-guides.jpg",
@@ -126,7 +126,7 @@ const learnCards = [
   },
   {
     type: "video" as const,
-    title: "Quick video explainers",
+    title: "Quick Videos",
     description: "Watch simple breakdowns for comparing providers and avoiding transfer mistakes.",
     cta: "Watch now",
     href: "/learn/stop-losing-money.mp4",
@@ -139,8 +139,8 @@ const learnCards = [
   {
     type: "review" as const,
     title: "Provider reviews",
-    description: "Explore provider guides before choosing where to send your next transfer.",
-    cta: "Explore guides",
+    description: "View what people are saying about each provider.",
+    cta: "Review Providers",
     href: "/providers",
     imageSrc: "/learn/provider-review.png",
     imageAlt: "Provider reviews screen showing transfer providers and ratings",

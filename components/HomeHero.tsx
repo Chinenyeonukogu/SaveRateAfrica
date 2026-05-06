@@ -323,13 +323,13 @@ export function HomeHero({
                         BUILD CREDIT
                       </p>
                       <p className="mt-1 text-[12px] font-extrabold leading-[1.2] text-[#111111]">
-                        Build credit while you send money
+                        Build US credit while send money
                       </p>
                       <p className="mt-1 text-[10px] font-medium leading-[1.3] text-[#374151]">
-                        Immigrant-friendly credit cards
+                        Get access to immigrant-friendly credit cards with little/ no credit history.
                       </p>
                       <span className="mt-1 inline-flex text-[11px] font-extrabold text-[#166534]">
-                        Explore Credit &rarr;
+                        Explore Credit Cards &rarr;
                       </span>
                     </div>
                     <div className="absolute bottom-3 right-3 h-10 w-14 rotate-[-8deg] overflow-hidden rounded-[6px] bg-[linear-gradient(135deg,#fde68a,#d97706)]">
