@@ -2,9 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import {
-  Star
-} from "lucide-react";
 import Link from "next/link";
 
 import { ComparisonTable } from "@/components/ComparisonTable";
@@ -12,12 +9,6 @@ import { HomeHero } from "@/components/HomeHero";
 import { RateChart } from "@/components/RateChart";
 import { RateDisclaimer } from "@/components/RateDisclaimer";
 import { SiteHeader } from "@/components/SiteHeader";
-import {
-  formatCompact,
-  formatCurrency,
-  formatDateTime,
-  formatNaira
-} from "@/lib/format";
 import {
   buildComparisonFromLiveRates,
   fetchRates,
@@ -33,7 +24,6 @@ interface HomePageShellProps {
   initialComparison: ComparisonResult;
 }
 
-const reviewCountries = ["USA", "UK", "Canada"] as const;
 const pageShellClassName = "mx-auto w-full max-w-[1200px] px-6";
 const comparisonSectionInnerClassName = `${pageShellClassName} py-9 min-[600px]:py-[52px] lg:py-[72px]`;
 const postComparisonSectionInnerClassName = `${pageShellClassName} py-6 min-[600px]:py-8 lg:py-10`;
@@ -201,28 +191,6 @@ function LearnAndSaveMoreSection() {
   );
 }
 
-function buildLiveReviewComparisons(
-  comparison: ComparisonResult
-): Record<SenderCountry, ComparisonResult> {
-  return Object.fromEntries(
-    reviewCountries.map((country) => [
-      country,
-      buildComparisonFromLiveRates({
-        amount: comparison.amount,
-        senderCountry: country,
-        sortBy: "best-rate",
-        liveBaseRates: {
-          provider: comparison.rateProvider,
-          updatedAt: comparison.updatedAt,
-          sourceUpdatedAt: comparison.sourceUpdatedAt,
-          cachedUntil: comparison.cachedUntil,
-          rates: comparison.liveBaseRates
-        }
-      })
-    ])
-  ) as Record<SenderCountry, ComparisonResult>;
-}
-
 export function HomePageShell({ initialComparison }: HomePageShellProps) {
   const compareRef = useRef<HTMLDivElement | null>(null);
   const alertsRef = useRef<HTMLDivElement | null>(null);
@@ -230,9 +198,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
   const rateChartRef = useRef<HTMLDivElement | null>(null);
   const [amount, setAmount] = useState(String(initialComparison.amount));
   const [senderCountry, setSenderCountry] = useState<SenderCountry>(
-    initialComparison.senderCountry
-  );
-  const [reviewCountry, setReviewCountry] = useState<SenderCountry>(
     initialComparison.senderCountry
   );
   const [comparison, setComparison] = useState(initialComparison);
@@ -315,10 +280,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
   }, [sortBy]);
 
   useEffect(() => {
-    setReviewCountry(senderCountry);
-  }, [senderCountry]);
-
-  useEffect(() => {
     const parsedAmount = Number.parseFloat(amount);
     const normalizedAmount =
       Number.isFinite(parsedAmount) && parsedAmount > 0
@@ -387,10 +348,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
   function handleSortChange(nextSort: ComparisonSort) {
     setSortBy(nextSort);
   }
-
-  const liveReviewComparisons = buildLiveReviewComparisons(comparison);
-  const selectedReviewComparison = liveReviewComparisons[reviewCountry];
-  const liveReviewProviders = selectedReviewComparison.providers.slice(0, 3);
 
   return (
     <>
@@ -471,131 +428,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                     <p className="text-[12px] leading-6 text-brand-navy/70 min-[600px]:text-sm">
                       {step.description}
                     </p>
-                  </article>
-                ))}
-              </div>
-            </section>
-          </div>
-        </section>
-
-        <section className={sectionDividerClassName}>
-          <div className={postComparisonSectionInnerClassName}>
-            <section className="rounded-[16px] border border-[#c8e6c9] bg-white px-4 py-5 min-[600px]:px-6 min-[600px]:py-6 lg:px-8 lg:py-8">
-              <div className="flex flex-col gap-4">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-green">
-                    Live provider reviews
-                  </p>
-                  <h2 className="mb-4 mt-2 text-[28px] font-heading text-brand-navy min-[600px]:text-3xl">
-                    Real-time provider pulse for Nigerians sending abroad
-                  </h2>
-                  <p className="text-[12px] text-brand-navy/60 min-[600px]:text-sm">
-                    Updated {formatDateTime(selectedReviewComparison.updatedAt)} for the{" "}
-                    {reviewCountry} corridor.
-                  </p>
-                </div>
-
-                <div className="flex gap-2 overflow-x-auto pb-1 min-[600px]:grid min-[600px]:grid-cols-3">
-                  {reviewCountries.map((country) => (
-                    <button
-                      key={country}
-                      className={`min-h-11 shrink-0 rounded-2xl px-4 text-sm font-semibold transition ${
-                        country === reviewCountry
-                          ? "bg-brand-green text-white"
-                          : "bg-brand-light text-brand-navy hover:bg-brand-navy hover:text-white"
-                      }`}
-                      type="button"
-                      onClick={() => setReviewCountry(country)}
-                    >
-                      {country} senders
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mt-4 grid gap-4 lg:grid-cols-3">
-                {liveReviewProviders.map((provider) => (
-                  <article
-                    key={`${reviewCountry}-${provider.slug}`}
-                    className="rounded-[12px] border border-[#c8e6c9] bg-white p-5"
-                  >
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-1">
-                        {Array.from({ length: 5 }).map((_, index) => (
-                          <Star
-                            key={`${provider.slug}-${index}`}
-                            className={`h-4 w-4 ${
-                              index < provider.rating
-                                ? "fill-brand-yellow text-brand-yellow"
-                                : "text-brand-navy/20"
-                            }`}
-                          />
-                        ))}
-                      </div>
-
-                      {provider.isBestValue ? (
-                        <span className="rounded-full bg-brand-green/10 px-3 py-1 text-[9px] font-semibold uppercase tracking-[0.16em] text-brand-green">
-                          Top pick now
-                        </span>
-                      ) : null}
-                    </div>
-
-                    <div className="mt-3 flex flex-wrap items-center gap-3 text-[12px] text-brand-navy/60 min-[600px]:text-sm">
-                      <span className="font-semibold text-brand-green">
-                        {provider.name}
-                      </span>
-                      <span>{provider.rating.toFixed(1)} rating</span>
-                      <span>{formatCompact(provider.reviewCount)} reviews</span>
-                    </div>
-
-                    <p className="mt-3 text-[14px] leading-7 text-brand-navy/75 min-[600px]:text-base">
-                      {provider.name} is currently delivering{" "}
-                      <span className="font-semibold text-brand-green">
-                        {formatNaira(provider.amountReceived, {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2
-                        })}
-                      </span>{" "}
-                      on a{" "}
-                      <span className="font-semibold text-brand-navy">
-                        {formatCurrency(
-                          selectedReviewComparison.amount,
-                          selectedReviewComparison.sourceCurrency,
-                          {
-                            minimumFractionDigits: 0,
-                            maximumFractionDigits: 0
-                          }
-                        )}
-                      </span>{" "}
-                      send from {reviewCountry}. {provider.trustNote}
-                    </p>
-
-                    <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                      <div className="rounded-[12px] bg-brand-light px-4 py-3">
-                        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-navy/45">
-                          Popular for
-                        </p>
-                        <p className="mt-2 text-[12px] font-semibold text-brand-navy min-[600px]:text-sm">
-                          {provider.bestFor}
-                        </p>
-                      </div>
-
-                      <div className="rounded-[12px] bg-brand-light px-4 py-3">
-                        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-navy/45">
-                          Delivery
-                        </p>
-                        <p className="mt-2 text-[12px] font-semibold text-brand-navy min-[600px]:text-sm">
-                          {provider.deliveryLabel}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="mt-4 border-t border-brand-navy/10 pt-4">
-                      <p className="text-[12px] text-brand-navy/60 min-[600px]:text-sm">
-                        Supported by live provider ratings and current payout data
-                        for the {reviewCountry} to Nigeria route.
-                      </p>
-                    </div>
                   </article>
                 ))}
               </div>
