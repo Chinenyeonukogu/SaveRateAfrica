@@ -10,7 +10,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 
 import "./globals.css";
 
-const GA_ID = "G-QV5C85FNTV";
+const GA_ID = "G-QV5C8SFWTV";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://saverateafrica.com"),
