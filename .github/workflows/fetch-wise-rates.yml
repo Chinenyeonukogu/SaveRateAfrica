@@ -1,0 +1,104 @@
+name: Fetch Wise exchange rates
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch:
+
+jobs:
+  fetch-and-save-rates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Fetch Wise rates and save to Supabase
+        env:
+          SUPABASE_URL: https://lbcntbalsinojbbsvcra.supabase.co
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          WISE_API_TOKEN: ${{ secrets.WISE_API_TOKEN }}
+        run: |
+          node <<'NODE'
+          const supabaseUrl = process.env.SUPABASE_URL?.replace(/\/$/, "");
+          const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+          const wiseToken = process.env.WISE_API_TOKEN;
+
+          if (!supabaseUrl) {
+            throw new Error("SUPABASE_URL is required.");
+          }
+
+          if (!supabaseKey) {
+            throw new Error("Add SUPABASE_SERVICE_ROLE_KEY to this repository's GitHub Actions secrets.");
+          }
+
+          const pairs = [
+            { source: "USD", target: "NGN" },
+            { source: "GBP", target: "NGN" },
+            { source: "CAD", target: "NGN" }
+          ];
+
+          async function fetchWiseRate(pair) {
+            const url = new URL("https://api.wise.com/v1/rates");
+            url.searchParams.set("source", pair.source);
+            url.searchParams.set("target", pair.target);
+
+            const headers = {
+              Accept: "application/json"
+            };
+
+            if (wiseToken) {
+              headers.Authorization = `Bearer ${wiseToken}`;
+            }
+
+            const response = await fetch(url, { headers });
+            const responseText = await response.text();
+
+            if (!response.ok) {
+              throw new Error(
+                `Wise rate fetch failed for ${pair.source}/${pair.target}: ${response.status} ${responseText}`
+              );
+            }
+
+            const payload = JSON.parse(responseText);
+            const rateObject = Array.isArray(payload) ? payload[0] : payload;
+            const rate = Number(rateObject?.rate);
+
+            if (!Number.isFinite(rate)) {
+              throw new Error(`Wise returned an invalid rate for ${pair.source}/${pair.target}.`);
+            }
+
+            return {
+              provider: "Wise",
+              source_currency: pair.source,
+              target_currency: pair.target,
+              currency: pair.source,
+              pair: `${pair.source}/${pair.target}`,
+              rate,
+              exchange_rate: rate,
+              ngn_rate: rate,
+              wise_time: rateObject?.time ?? null,
+              fetched_at: new Date().toISOString()
+            };
+          }
+
+          const rows = await Promise.all(pairs.map(fetchWiseRate));
+
+          const insertResponse = await fetch(`${supabaseUrl}/rest/v1/exchange_rates`, {
+            method: "POST",
+            headers: {
+              apikey: supabaseKey,
+              Authorization: `Bearer ${supabaseKey}`,
+              "Content-Type": "application/json",
+              Prefer: "return=representation"
+            },
+            body: JSON.stringify(rows)
+          });
+
+          const insertText = await insertResponse.text();
+
+          if (!insertResponse.ok) {
+            throw new Error(`Supabase insert failed: ${insertResponse.status} ${insertText}`);
+          }
+
+          console.log(`Saved ${rows.length} Wise exchange rates to Supabase.`);
+          console.table(rows.map(({ pair, rate, wise_time }) => ({ pair, rate, wise_time })));
+          NODE
