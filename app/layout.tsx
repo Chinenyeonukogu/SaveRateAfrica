@@ -2,7 +2,6 @@ import { Analytics } from '@vercel/analytics/react'
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 
-import GoogleAnalytics from "./components/GoogleAnalytics";
 import { MobileNav } from "@/components/MobileNav";
 import { PwaInstallPrompt } from "@/components/PwaInstallPrompt";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
@@ -10,6 +9,8 @@ import SaveRateAI from "@/components/SaveRateAI.jsx";
 import { SiteFooter } from "@/components/SiteFooter";
 
 import "./globals.css";
+
+const GA_ID = "G-QV5C85FNTV";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://saverateafrica.com"),
@@ -86,9 +87,22 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="SaveRateAfrica" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
+        <script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${GA_ID}');
+            `
+          }}
+        />
       </head>
       <body className="bg-brand-light text-brand-navy">
-        <GoogleAnalytics />
         {children}
         <SiteFooter />
         <SaveRateAI />
