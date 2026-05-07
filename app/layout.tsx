@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/react'
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 
+import GoogleAnalytics from "./components/GoogleAnalytics";
 import { MobileNav } from "@/components/MobileNav";
 import { PwaInstallPrompt } from "@/components/PwaInstallPrompt";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
@@ -87,6 +88,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icon-192.png" />
       </head>
       <body className="bg-brand-light text-brand-navy">
+        <GoogleAnalytics />
         {children}
         <SiteFooter />
         <SaveRateAI />
