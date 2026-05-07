@@ -61,6 +61,9 @@ export const metadata: Metadata = {
     shortcut: ["/favicon.ico"],
     apple: [{ url: "/icons/apple-touch-icon.png", sizes: "180x180" }]
   },
+  other: {
+    "impact-site-verification": "9cbeb41a-8be1-40d7-835b-0afd8f2ff0a6"
+  },
   category: "finance"
 };
 
@@ -87,10 +90,6 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="SaveRateAfrica" />
         <meta name="fo-verify" content="7fa9dafe-9dbb-4692-9cb7-a208826baaba" />
-        <meta
-          name="impact-site-verification"
-          {...{ value: "9cbeb41a-8be1-40d7-835b-0afd8f2ff0a6" }}
-        />
         <link rel="apple-touch-icon" href="/icon-192.png" />
         <script
           async
