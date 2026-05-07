@@ -16,11 +16,13 @@ jobs:
           SUPABASE_URL: https://lbcntbalsinojbbsvcra.supabase.co
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           WISE_API_TOKEN: ${{ secrets.WISE_API_TOKEN }}
+          WISE_APP_KEY: ${{ secrets.WISE_APP_KEY }}
         run: |
           node <<'NODE'
           const supabaseUrl = process.env.SUPABASE_URL?.replace(/\/$/, "");
           const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
           const wiseToken = process.env.WISE_API_TOKEN;
+          const wiseAppKey = process.env.WISE_APP_KEY;
 
           if (!supabaseUrl) {
             throw new Error("SUPABASE_URL is required.");
@@ -28,6 +30,14 @@ jobs:
 
           if (!supabaseKey) {
             throw new Error("Add SUPABASE_SERVICE_ROLE_KEY to this repository's GitHub Actions secrets.");
+          }
+
+          if (!wiseToken) {
+            throw new Error("Add WISE_API_TOKEN to this repository's GitHub Actions secrets.");
+          }
+
+          if (!wiseAppKey) {
+            throw new Error("Add WISE_APP_KEY to this repository's GitHub Actions secrets.");
           }
 
           const pairs = [
@@ -42,12 +52,10 @@ jobs:
             url.searchParams.set("target", pair.target);
 
             const headers = {
-              Accept: "application/json"
+              Accept: "application/json",
+              Authorization: `Bearer ${wiseToken}`,
+              "X-Application-Key": wiseAppKey
             };
-
-            if (wiseToken) {
-              headers.Authorization = `Bearer ${wiseToken}`;
-            }
 
             const response = await fetch(url, { headers });
             const responseText = await response.text();
