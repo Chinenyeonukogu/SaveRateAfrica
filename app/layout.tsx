@@ -86,6 +86,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="SaveRateAfrica" />
+        <meta name="fo-verify" content="7fa9dafe-9dbb-4692-9cb7-a208826baaba" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
         <script
           async
