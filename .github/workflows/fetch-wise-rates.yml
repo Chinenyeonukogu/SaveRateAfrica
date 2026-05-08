@@ -68,16 +68,12 @@ jobs:
             }
 
             return {
+              send_currency: pair.source,
+              receive_currency: pair.target,
               provider: "Wise",
-              source_currency: pair.source,
-              target_currency: pair.target,
-              currency: pair.source,
-              pair: `${pair.source}/${pair.target}`,
               rate,
-              exchange_rate: rate,
-              ngn_rate: rate,
-              wise_time: rateObject?.time ?? null,
-              fetched_at: new Date().toISOString()
+              fee: 0,
+              updated_at: new Date().toISOString()
             };
           }
 
@@ -101,5 +97,14 @@ jobs:
           }
 
           console.log(`Saved ${rows.length} Wise exchange rates to Supabase.`);
-          console.table(rows.map(({ pair, rate, wise_time }) => ({ pair, rate, wise_time })));
+          console.table(
+            rows.map(({ send_currency, receive_currency, provider, rate, fee, updated_at }) => ({
+              send_currency,
+              receive_currency,
+              provider,
+              rate,
+              fee,
+              updated_at
+            }))
+          );
           NODE
