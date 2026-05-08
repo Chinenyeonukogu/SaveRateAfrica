@@ -47,18 +47,99 @@ jobs:
           ];
 
           const apifyProviders = [
-            { provider: "Remitly", url: "https://www.remitly.com" },
-            { provider: "LemFi", url: "https://www.lemfi.com" },
-            { provider: "TapTap Send", url: "https://www.taptapsend.com" },
-            { provider: "WorldRemit", url: "https://www.worldremit.com" },
-            { provider: "Sendwave", url: "https://www.sendwave.com" },
-            { provider: "Western Union", url: "https://www.westernunion.com" },
-            { provider: "MoneyGram", url: "https://www.moneygram.com" },
-            { provider: "Paysend", url: "https://paysend.com" },
-            { provider: "Chipper Cash", url: "https://www.chippercash.com" },
-            { provider: "Flutterwave Send", url: "https://flutterwave.com/send" },
-            { provider: "Afriex", url: "https://www.afriex.co" },
-            { provider: "Nala", url: "https://www.nala.money" }
+            {
+              provider: "Remitly",
+              urls: ({ source }) => [
+                `https://www.remitly.com/${source === "GBP" ? "gb" : source === "CAD" ? "ca" : "us"}/en/nigeria`,
+                "https://www.remitly.com/us/en/nigeria",
+                "https://www.remitly.com/gb/en/nigeria",
+                "https://www.remitly.com/ca/en/nigeria"
+              ]
+            },
+            {
+              provider: "LemFi",
+              urls: () => [
+                "https://www.lemfi.com",
+                "https://www.lemfi.com/international-money-transfer",
+                "https://www.lemfi.com/send-money-to-nigeria"
+              ]
+            },
+            {
+              provider: "TapTap Send",
+              urls: () => [
+                "https://www.taptapsend.com",
+                "https://www.taptapsend.com/send-money-to-nigeria"
+              ]
+            },
+            {
+              provider: "WorldRemit",
+              urls: ({ source }) => [
+                `https://www.worldremit.com/${source === "USD" ? "en-us" : source === "GBP" ? "en-gb" : "en-ca"}/nigeria`,
+                "https://www.worldremit.com/en/nigeria"
+              ]
+            },
+            {
+              provider: "Sendwave",
+              urls: () => [
+                "https://www.sendwave.com",
+                "https://www.sendwave.com/send-money-to-nigeria"
+              ]
+            },
+            {
+              provider: "Western Union",
+              urls: ({ source }) => {
+                const locale = source === "USD" ? "us" : source === "GBP" ? "gb" : "ca";
+                return [
+                  `https://www.westernunion.com/${locale}/en/web/send-money/start?ReceiveCountry=NG&ISOCurrency=NGN&SendAmount=100`,
+                  `https://www.westernunion.com/${locale}/en/send-money-to-nigeria.html`
+                ];
+              }
+            },
+            {
+              provider: "MoneyGram",
+              urls: ({ source }) => {
+                const locale = source === "USD" ? "us" : source === "GBP" ? "gb" : "ca";
+                return [
+                  `https://www.moneygram.com/mgo/${locale}/en/send/how-to-send-money-to-nigeria`,
+                  `https://www.moneygram.com/mgo/${locale}/en/`
+                ];
+              }
+            },
+            {
+              provider: "Paysend",
+              urls: ({ source }) => [
+                `https://paysend.com/en-${source === "USD" ? "us" : source === "GBP" ? "gb" : "ca"}/send-money/to-nigeria`,
+                "https://paysend.com/send-money/to-nigeria"
+              ]
+            },
+            {
+              provider: "Chipper Cash",
+              urls: () => [
+                "https://www.chippercash.com",
+                "https://www.chippercash.com/remittances"
+              ]
+            },
+            {
+              provider: "Flutterwave Send",
+              urls: () => [
+                "https://flutterwave.com/send",
+                "https://send.flutterwave.com"
+              ]
+            },
+            {
+              provider: "Afriex",
+              urls: () => [
+                "https://www.afriex.co",
+                "https://www.afriex.co/send-money-to-nigeria"
+              ]
+            },
+            {
+              provider: "Nala",
+              urls: () => [
+                "https://www.nala.money",
+                "https://www.nala.money/send-money-to-nigeria"
+              ]
+            }
           ];
 
           const apifyPageFunction = String.raw`async function pageFunction(context) {
@@ -67,7 +148,10 @@ jobs:
             const scriptText = Array.from(document.scripts || [])
               .map((script) => script.textContent || "")
               .join(" ");
-            const text = (bodyText + " " + scriptText).replace(/\s+/g, " ");
+            const text = (bodyText + " " + scriptText)
+              .replace(/\\u0026/g, "&")
+              .replace(/\\u003d/g, "=")
+              .replace(/\s+/g, " ");
 
             function parseAmount(value) {
               if (!value) return null;
@@ -75,27 +159,42 @@ jobs:
               return Number.isFinite(amount) ? amount : null;
             }
 
+            function addRateCandidate(candidates, value, weight, reason) {
+              if (value && value >= 100 && value <= 5000) {
+                candidates.push({ value, weight, reason });
+              }
+            }
+
             function findRate() {
-              const snippets = text.match(/.{0,120}(NGN|\u20a6|naira|nigeria).{0,120}/gi) || [];
               const candidates = [];
 
+              const directPatterns = [
+                new RegExp("1\\s*" + source + "\\s*(?:=|is|equals|gets|to)?\\s*(?:NGN|\u20a6)?\\s*([0-9][0-9,]*(?:[.][0-9]+)?)", "gi"),
+                new RegExp("(?:NGN|\u20a6)\\s*([0-9][0-9,]*(?:[.][0-9]+)?)\\s*(?:=|for|per)\\s*1\\s*" + source, "gi"),
+                new RegExp("(?:rate|exchangeRate|exchange_rate|fxRate|fx_rate)[^0-9]{0,40}([0-9][0-9,]*(?:[.][0-9]+)?)", "gi")
+              ];
+
+              for (const pattern of directPatterns) {
+                for (const match of text.matchAll(pattern)) {
+                  addRateCandidate(candidates, parseAmount(match[1]), 4, "direct-pattern");
+                }
+              }
+
+              const snippets = text.match(/.{0,180}(NGN|\u20a6|naira|nigeria).{0,180}/gi) || [];
+
               for (const snippet of snippets) {
-                const lower = snippet.toLowerCase();
-                if (!lower.includes(source.toLowerCase())) continue;
                 if (!/(rate|exchange|recipient|receive|gets|send|transfer|ngn|naira|\u20a6)/i.test(snippet)) continue;
 
                 const numbers = snippet.match(/(?:\u20a6|\bNGN\b)?\s*[0-9][0-9,]*(?:\.[0-9]+)?/gi) || [];
                 for (const numberText of numbers) {
                   const value = parseAmount(numberText);
-                  if (value && value >= 100 && value <= 5000) {
-                    candidates.push(value);
-                  }
+                  addRateCandidate(candidates, value, snippet.includes(source) ? 3 : 1, "ngn-snippet");
                 }
               }
 
               if (candidates.length === 0) return null;
-              candidates.sort((a, b) => b - a);
-              return candidates[0];
+              candidates.sort((a, b) => b.weight - a.weight || b.value - a.value);
+              return candidates[0].value;
             }
 
             function findFee() {
@@ -188,22 +287,27 @@ jobs:
 
           function buildApifyStartUrls() {
             return apifyProviders.flatMap((provider) =>
-              pairs.map((pair) => ({
-                url: provider.url,
-                uniqueKey: `${provider.provider}-${pair.source}-${pair.target}`,
-                userData: {
-                  provider: provider.provider,
-                  source: pair.source,
-                  target: pair.target
-                }
-              }))
+              pairs.flatMap((pair) => {
+                const urls = Array.from(new Set(provider.urls(pair)));
+
+                return urls.map((url, index) => ({
+                  url,
+                  uniqueKey: `${provider.provider}-${pair.source}-${pair.target}-${index}`,
+                  userData: {
+                    provider: provider.provider,
+                    source: pair.source,
+                    target: pair.target
+                  }
+                }));
+              })
             );
           }
 
           async function fetchApifyRates() {
+            const startUrls = buildApifyStartUrls();
             const input = {
-              startUrls: buildApifyStartUrls(),
-              maxRequestsPerCrawl: apifyProviders.length * pairs.length,
+              startUrls,
+              maxRequestsPerCrawl: startUrls.length,
               maxConcurrency: 6,
               injectJQuery: false,
               pageFunction: apifyPageFunction,
@@ -231,7 +335,20 @@ jobs:
             }
 
             const items = JSON.parse(responseText);
-            const rows = items.map(toSupabaseRow).filter(Boolean);
+            const rowsByProviderPair = new Map();
+
+            for (const item of items) {
+              const row = toSupabaseRow(item);
+              if (!row) continue;
+
+              const key = `${row.provider}-${row.send_currency}-${row.receive_currency}`;
+              const current = rowsByProviderPair.get(key);
+              if (!current || row.rate > current.rate) {
+                rowsByProviderPair.set(key, row);
+              }
+            }
+
+            const rows = Array.from(rowsByProviderPair.values());
             const expectedRows = apifyProviders.length * pairs.length;
 
             if (rows.length < expectedRows) {
