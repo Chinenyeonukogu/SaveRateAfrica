@@ -1,4 +1,4 @@
-name: Fetch Wise exchange rates
+name: Fetch exchange rates
 
 on:
   schedule:
@@ -8,19 +8,21 @@ on:
 jobs:
   fetch-and-save-rates:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
 
     steps:
-      - name: Fetch Wise rates and save to Supabase
+      - name: Fetch provider rates and save to Supabase
         env:
           SUPABASE_URL: https://lbcntbalsinojbbsvcra.supabase.co
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           WISE_API_TOKEN: ${{ secrets.WISE_API_TOKEN }}
+          APIFY_API_TOKEN: ${{ secrets.APIFY_API_TOKEN }}
         run: |
           node <<'NODE'
           const supabaseUrl = process.env.SUPABASE_URL?.replace(/\/$/, "");
           const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
           const wiseToken = process.env.WISE_API_TOKEN;
+          const apifyToken = process.env.APIFY_API_TOKEN;
 
           if (!supabaseUrl) {
             throw new Error("SUPABASE_URL is required.");
@@ -34,23 +36,113 @@ jobs:
             throw new Error("Add WISE_API_TOKEN to this repository's GitHub Actions secrets.");
           }
 
+          if (!apifyToken) {
+            throw new Error("Add APIFY_API_TOKEN to this repository's GitHub Actions secrets.");
+          }
+
           const pairs = [
             { source: "USD", target: "NGN" },
             { source: "GBP", target: "NGN" },
             { source: "CAD", target: "NGN" }
           ];
 
+          const apifyProviders = [
+            { provider: "Remitly", url: "https://www.remitly.com" },
+            { provider: "LemFi", url: "https://www.lemfi.com" },
+            { provider: "TapTap Send", url: "https://www.taptapsend.com" },
+            { provider: "WorldRemit", url: "https://www.worldremit.com" },
+            { provider: "Sendwave", url: "https://www.sendwave.com" },
+            { provider: "Western Union", url: "https://www.westernunion.com" },
+            { provider: "MoneyGram", url: "https://www.moneygram.com" },
+            { provider: "Paysend", url: "https://paysend.com" },
+            { provider: "Chipper Cash", url: "https://www.chippercash.com" },
+            { provider: "Flutterwave Send", url: "https://flutterwave.com/send" },
+            { provider: "Afriex", url: "https://www.afriex.co" },
+            { provider: "Nala", url: "https://www.nala.money" }
+          ];
+
+          const apifyPageFunction = String.raw`async function pageFunction(context) {
+            const { provider, source, target } = context.request.userData;
+            const bodyText = document.body?.innerText || "";
+            const scriptText = Array.from(document.scripts || [])
+              .map((script) => script.textContent || "")
+              .join(" ");
+            const text = (bodyText + " " + scriptText).replace(/\s+/g, " ");
+
+            function parseAmount(value) {
+              if (!value) return null;
+              const amount = Number(String(value).replace(/[^0-9.]/g, ""));
+              return Number.isFinite(amount) ? amount : null;
+            }
+
+            function findRate() {
+              const snippets = text.match(/.{0,120}(NGN|\u20a6|naira|nigeria).{0,120}/gi) || [];
+              const candidates = [];
+
+              for (const snippet of snippets) {
+                const lower = snippet.toLowerCase();
+                if (!lower.includes(source.toLowerCase())) continue;
+                if (!/(rate|exchange|recipient|receive|gets|send|transfer|ngn|naira|\u20a6)/i.test(snippet)) continue;
+
+                const numbers = snippet.match(/(?:\u20a6|\bNGN\b)?\s*[0-9][0-9,]*(?:\.[0-9]+)?/gi) || [];
+                for (const numberText of numbers) {
+                  const value = parseAmount(numberText);
+                  if (value && value >= 100 && value <= 5000) {
+                    candidates.push(value);
+                  }
+                }
+              }
+
+              if (candidates.length === 0) return null;
+              candidates.sort((a, b) => b - a);
+              return candidates[0];
+            }
+
+            function findFee() {
+              const sourceSymbols = {
+                USD: "$",
+                GBP: "GBP",
+                CAD: "C$"
+              };
+              const symbol = sourceSymbols[source] || source;
+              const snippets = text.match(/.{0,100}(fee|fees|charge|cost).{0,100}/gi) || [];
+
+              for (const snippet of snippets) {
+                const hasSourceCurrency = snippet.includes(source) || snippet.includes(symbol);
+                if (!hasSourceCurrency) continue;
+
+                const numbers = snippet.match(/[0-9][0-9,]*(?:\.[0-9]+)?/g) || [];
+                for (const numberText of numbers) {
+                  const value = parseAmount(numberText);
+                  if (value !== null && value >= 0 && value <= 100) {
+                    return value;
+                  }
+                }
+              }
+
+              return 0;
+            }
+
+            return {
+              provider,
+              send_currency: source,
+              receive_currency: target,
+              rate: findRate(),
+              fee: findFee()
+            };
+          }`;
+
           async function fetchWiseRate(pair) {
             const url = new URL("https://api.wise.com/v1/rates");
             url.searchParams.set("source", pair.source);
             url.searchParams.set("target", pair.target);
 
-            const headers = {
-              Accept: "application/json",
-              Authorization: `Bearer ${wiseToken}`
-            };
-
-            const response = await fetch(url, { headers });
+            const response = await fetch(url, {
+              headers: {
+                Accept: "application/json",
+                Authorization: `Bearer ${wiseToken}`
+              }
+            });
             const responseText = await response.text();
 
             if (!response.ok) {
@@ -67,44 +159,142 @@ jobs:
               throw new Error(`Wise returned an invalid rate for ${pair.source}/${pair.target}.`);
             }
 
-            return {
+            return toSupabaseRow({
               send_currency: pair.source,
               receive_currency: pair.target,
               provider: "Wise",
               rate,
-              fee: 0,
+              fee: 0
+            });
+          }
+
+          function toSupabaseRow(row) {
+            const rate = Number(row.rate);
+            const fee = Number(row.fee ?? 0);
+
+            if (!Number.isFinite(rate)) {
+              return null;
+            }
+
+            return {
+              send_currency: row.send_currency,
+              receive_currency: row.receive_currency,
+              provider: row.provider,
+              rate,
+              fee: Number.isFinite(fee) ? fee : 0,
               updated_at: new Date().toISOString()
             };
           }
 
-          const rows = await Promise.all(pairs.map(fetchWiseRate));
-
-          const insertResponse = await fetch(`${supabaseUrl}/rest/v1/exchange_rates`, {
-            method: "POST",
-            headers: {
-              apikey: supabaseKey,
-              Authorization: `Bearer ${supabaseKey}`,
-              "Content-Type": "application/json",
-              Prefer: "return=representation"
-            },
-            body: JSON.stringify(rows)
-          });
-
-          const insertText = await insertResponse.text();
-
-          if (!insertResponse.ok) {
-            throw new Error(`Supabase insert failed: ${insertResponse.status} ${insertText}`);
+          function buildApifyStartUrls() {
+            return apifyProviders.flatMap((provider) =>
+              pairs.map((pair) => ({
+                url: provider.url,
+                uniqueKey: `${provider.provider}-${pair.source}-${pair.target}`,
+                userData: {
+                  provider: provider.provider,
+                  source: pair.source,
+                  target: pair.target
+                }
+              }))
+            );
           }
 
-          console.log(`Saved ${rows.length} Wise exchange rates to Supabase.`);
-          console.table(
-            rows.map(({ send_currency, receive_currency, provider, rate, fee, updated_at }) => ({
-              send_currency,
-              receive_currency,
-              provider,
-              rate,
-              fee,
-              updated_at
-            }))
-          );
+          async function fetchApifyRates() {
+            const input = {
+              startUrls: buildApifyStartUrls(),
+              maxRequestsPerCrawl: apifyProviders.length * pairs.length,
+              maxConcurrency: 6,
+              injectJQuery: false,
+              pageFunction: apifyPageFunction,
+              proxyConfiguration: {
+                useApifyProxy: true
+              }
+            };
+
+            const url = new URL("https://api.apify.com/v2/acts/apify~web-scraper/run-sync-get-dataset-items");
+            url.searchParams.set("token", apifyToken);
+            url.searchParams.set("clean", "true");
+            url.searchParams.set("timeout", "240");
+
+            const response = await fetch(url, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify(input)
+            });
+            const responseText = await response.text();
+
+            if (!response.ok) {
+              throw new Error(`Apify scraper run failed: ${response.status} ${responseText}`);
+            }
+
+            const items = JSON.parse(responseText);
+            const rows = items.map(toSupabaseRow).filter(Boolean);
+            const expectedRows = apifyProviders.length * pairs.length;
+
+            if (rows.length < expectedRows) {
+              console.warn(`Apify extracted ${rows.length}/${expectedRows} provider rate rows.`);
+              const scrapedKeys = new Set(
+                rows.map((row) => `${row.provider}-${row.send_currency}-${row.receive_currency}`)
+              );
+              for (const provider of apifyProviders) {
+                for (const pair of pairs) {
+                  const key = `${provider.provider}-${pair.source}-${pair.target}`;
+                  if (!scrapedKeys.has(key)) {
+                    console.warn(`Missing scraped rate for ${key}`);
+                  }
+                }
+              }
+            }
+
+            return rows;
+          }
+
+          async function saveRows(rows) {
+            if (rows.length === 0) {
+              throw new Error("No exchange rate rows were collected.");
+            }
+
+            const insertResponse = await fetch(`${supabaseUrl}/rest/v1/exchange_rates`, {
+              method: "POST",
+              headers: {
+                apikey: supabaseKey,
+                Authorization: `Bearer ${supabaseKey}`,
+                "Content-Type": "application/json",
+                Prefer: "return=representation"
+              },
+              body: JSON.stringify(rows)
+            });
+
+            const insertText = await insertResponse.text();
+
+            if (!insertResponse.ok) {
+              throw new Error(`Supabase insert failed: ${insertResponse.status} ${insertText}`);
+            }
+          }
+
+          async function main() {
+            const wiseRows = await Promise.all(pairs.map(fetchWiseRate));
+            let apifyRows = [];
+
+            try {
+              apifyRows = await fetchApifyRates();
+            } catch (error) {
+              console.error(error);
+              console.warn("Continuing with Wise rows so the core API-backed rates keep updating.");
+            }
+
+            const rows = [...wiseRows, ...apifyRows].filter(Boolean);
+            await saveRows(rows);
+
+            console.log(`Saved ${rows.length} exchange rate rows to Supabase.`);
+            console.table(rows);
+          }
+
+          main().catch((error) => {
+            console.error(error);
+            process.exit(1);
+          });
           NODE
