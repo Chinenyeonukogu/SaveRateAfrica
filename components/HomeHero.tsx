@@ -71,11 +71,11 @@ const trustPills = [
 ] as const;
 
 const socialProofFaces = [
-  "https://randomuser.me/api/portraits/women/44.jpg",
-  "https://randomuser.me/api/portraits/men/32.jpg",
-  "https://randomuser.me/api/portraits/women/68.jpg",
-  "https://randomuser.me/api/portraits/men/75.jpg",
-  "https://randomuser.me/api/portraits/women/90.jpg"
+  "https://randomuser.me/api/portraits/women/65.jpg",
+  "https://randomuser.me/api/portraits/men/54.jpg",
+  "https://randomuser.me/api/portraits/women/39.jpg",
+  "https://randomuser.me/api/portraits/men/61.jpg",
+  "https://randomuser.me/api/portraits/women/58.jpg"
 ] as const;
 
 function formatCalculatedNgn(value: number) {
@@ -231,7 +231,7 @@ export function HomeHero({
                 ))}
               </div>
 
-              <div className="flex w-fit max-w-full items-center rounded-[100px] border border-[rgba(255,255,255,0.2)] bg-[rgba(255,255,255,0.1)] py-2 pl-2 pr-5 shadow-[0_10px_30px_rgba(0,0,0,0.16)] backdrop-blur-md">
+              <div className="flex w-fit max-w-full items-center">
                 <div className="flex shrink-0 items-center">
                   {socialProofFaces.map((face, index) => (
                     <img
@@ -248,7 +248,7 @@ export function HomeHero({
                 <div className="ml-3 min-w-0">
                   <div className="text-[12px] leading-none text-brand-yellow">★★★★★</div>
                   <p className="mt-1 text-[10px] font-semibold leading-[1.25] text-white min-[600px]:text-[11px]">
-                    <span className="font-extrabold text-[#5de8a0]">10,000+</span>{" "}
+                    <span className="font-extrabold text-[#9ee8c0]">10,000+</span>{" "}
                     people making a difference through smart money transfer
                   </p>
                 </div>
