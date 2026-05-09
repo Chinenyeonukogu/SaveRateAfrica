@@ -71,7 +71,7 @@ const trustPills = [
 ] as const;
 
 const socialProofFaces = [
-  "https://randomuser.me/api/portraits/women/68.jpg",
+  "https://images.pexels.com/photos/26745561/pexels-photo-26745561.jpeg?auto=compress&cs=tinysrgb&w=80&h=80&fit=crop",
   "https://randomuser.me/api/portraits/men/54.jpg",
   "https://randomuser.me/api/portraits/women/39.jpg",
   "https://randomuser.me/api/portraits/men/61.jpg",
