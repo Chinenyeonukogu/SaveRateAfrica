@@ -71,11 +71,11 @@ const trustPills = [
 ] as const;
 
 const socialProofFaces = [
-  "https://randomuser.me/api/portraits/women/65.jpg",
+  "https://randomuser.me/api/portraits/women/68.jpg",
   "https://randomuser.me/api/portraits/men/54.jpg",
   "https://randomuser.me/api/portraits/women/39.jpg",
   "https://randomuser.me/api/portraits/men/61.jpg",
-  "https://randomuser.me/api/portraits/women/58.jpg"
+  "https://randomuser.me/api/portraits/men/75.jpg"
 ] as const;
 
 function formatCalculatedNgn(value: number) {
