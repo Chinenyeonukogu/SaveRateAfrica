@@ -37,6 +37,7 @@ export interface BlogPost {
   category: string;
   readTime: string;
   excerpt: string;
+  href?: string;
 }
 
 export const howItWorksSteps: HowItWorksStep[] = [
@@ -227,20 +228,22 @@ export const creditCardOffers: CreditCardOffer[] = [
 
 export const blogPosts: BlogPost[] = [
   {
-    slug: "top-way-to-send-money-to-nigeria-from-usa-2025",
-    title: "Top Way to Send Money to Nigeria from USA in 2025",
-    category: "Guides",
-    readTime: "8 min read",
+    slug: "cheapest-way-to-send-money-to-nigeria",
+    title: "What's the Cheapest Way to Send Money to Nigeria?",
+    category: "Comparisons",
+    readTime: "4 min read",
+    href: "/blog/cheapest-way-to-send-money-to-nigeria",
     excerpt:
-      "A practical framework for choosing between fee-free apps, bank-transfer specialists, and emergency cash pickup services."
+      "A breakdown of the lowest-fee providers from USA, UK, and Canada - ranked by the exact naira your recipient receives."
   },
   {
-    slug: "wise-vs-remitly-nigeria-full-comparison",
-    title: "Wise vs Remitly for Nigeria: Full Comparison",
-    category: "Comparisons",
-    readTime: "6 min read",
+    slug: "best-time-to-transfer-money",
+    title: "The Best Time to Transfer Money Internationally",
+    category: "Guides",
+    readTime: "3 min read",
+    href: "/blog/best-time-to-transfer-money",
     excerpt:
-      "See how payout value, delivery speed, and fees shift between two of the most searched providers for Nigerian corridors."
+      "Timing your transfer by day, week, and month can mean thousands more naira reaching your family."
   },
   {
     slug: "how-to-build-credit-in-usa-as-a-nigerian-immigrant",

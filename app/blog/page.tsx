@@ -72,7 +72,7 @@ export default function BlogPage() {
                 </p>
                 <Link
                   className="mt-6 inline-flex min-h-12 items-center gap-2 rounded-2xl bg-brand-light px-4 text-sm font-semibold text-brand-navy"
-                  href="/providers"
+                  href={post.href ?? "/providers"}
                 >
                   Explore providers
                   <ArrowRight className="h-4 w-4" />
