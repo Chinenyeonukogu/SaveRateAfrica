@@ -180,8 +180,8 @@ const trustPills = [
 const socialProofFaces = [
   "https://images.pexels.com/photos/26745561/pexels-photo-26745561.jpeg?auto=compress&cs=tinysrgb&w=80&h=80&fit=crop",
   "https://randomuser.me/api/portraits/men/54.jpg",
-  "https://randomuser.me/api/portraits/women/39.jpg",
-  "https://randomuser.me/api/portraits/men/61.jpg",
+  "https://images.pexels.com/photos/18028052/pexels-photo-18028052.jpeg?auto=compress&cs=tinysrgb&w=80&h=80&fit=crop",
+  "https://images.pexels.com/photos/33844621/pexels-photo-33844621.jpeg?auto=compress&cs=tinysrgb&w=80&h=80&fit=crop",
   "https://randomuser.me/api/portraits/men/75.jpg"
 ] as const;
 
@@ -349,15 +349,11 @@ export function HomeHero({
                       src={face}
                     />
                   ))}
-                  <div className="-ml-3 flex h-10 w-10 items-center justify-center rounded-full border-[2.5px] border-[#0d2416] bg-brand-yellow text-[10px] font-extrabold text-[#1a2e1a] shadow-[0_4px_12px_rgba(0,0,0,0.28)]">
-                    +10K
-                  </div>
                 </div>
                 <div className="ml-3 min-w-0">
                   <div className="text-[12px] leading-none text-brand-yellow">★★★★★</div>
                   <p className="mt-1 text-[10px] font-semibold leading-[1.25] text-white min-[600px]:text-[11px]">
-                    <span className="font-extrabold text-[#9ee8c0]">10,000+</span>{" "}
-                    people making a difference through smart money transfer
+                    Join the thousands finding better rates for transfers to Nigeria.
                   </p>
                 </div>
               </div>
