@@ -8,19 +8,14 @@ import {
   CreditCard,
   Mail,
   Menu,
-  Search,
   UserRound,
   X
 } from "lucide-react";
 import {
   useEffect,
-  useRef,
   useState,
-  type FormEvent,
   type MouseEvent
 } from "react";
-
-import { providers } from "@/lib/providers";
 
 interface SiteHeaderProps {
   showAnnouncementBar?: boolean;
@@ -146,12 +141,6 @@ export function SiteHeader({
     pathname === "/" ? "home" : null
   );
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [noResultsQuery, setNoResultsQuery] = useState<string | null>(null);
-  const desktopSearchInputRef = useRef<HTMLInputElement | null>(null);
-  const mobileSearchInputRef = useRef<HTMLInputElement | null>(null);
-  const noResultsTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (pathname !== "/") {
@@ -192,22 +181,7 @@ export function SiteHeader({
   }, [pathname]);
 
   useEffect(() => {
-    if (!isSearchOpen) {
-      return;
-    }
-
-    const timer = window.setTimeout(() => {
-      desktopSearchInputRef.current?.focus();
-      mobileSearchInputRef.current?.focus();
-    }, 40);
-
-    return () => {
-      window.clearTimeout(timer);
-    };
-  }, [isSearchOpen]);
-
-  useEffect(() => {
-    if (!isSearchOpen && !isDrawerOpen) {
+    if (!isDrawerOpen) {
       return;
     }
 
@@ -216,9 +190,6 @@ export function SiteHeader({
         return;
       }
 
-      setIsSearchOpen(false);
-      setSearchQuery("");
-      setNoResultsQuery(null);
       setIsDrawerOpen(false);
     }
 
@@ -227,28 +198,13 @@ export function SiteHeader({
     return () => {
       window.removeEventListener("keydown", handleEscape);
     };
-  }, [isDrawerOpen, isSearchOpen]);
-
-  useEffect(() => {
-    return () => {
-      if (noResultsTimeoutRef.current) {
-        window.clearTimeout(noResultsTimeoutRef.current);
-      }
-    };
-  }, []);
-
-  function closeSearch() {
-    setIsSearchOpen(false);
-    setSearchQuery("");
-    setNoResultsQuery(null);
-  }
+  }, [isDrawerOpen]);
 
   function closeDrawer() {
     setIsDrawerOpen(false);
   }
 
   function closePanels() {
-    closeSearch();
     closeDrawer();
   }
 
@@ -301,63 +257,6 @@ export function SiteHeader({
     event.preventDefault();
     navigateTo(getHomeHref(), "home");
     setActiveSectionId("home");
-  }
-
-  function showNoResults(query: string) {
-    if (noResultsTimeoutRef.current) {
-      window.clearTimeout(noResultsTimeoutRef.current);
-    }
-
-    setNoResultsQuery(query);
-    noResultsTimeoutRef.current = window.setTimeout(() => {
-      setNoResultsQuery(null);
-    }, 2500);
-  }
-
-  function handleSearchSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    const trimmedQuery = searchQuery.trim();
-    const normalizedQuery = trimmedQuery.toLowerCase();
-
-    if (!normalizedQuery) {
-      return;
-    }
-
-    const matchedProvider = providers.find((provider) => {
-      const normalizedName = provider.name.toLowerCase();
-      const normalizedSlug = provider.slug.replace(/-/g, " ").toLowerCase();
-
-      return (
-        normalizedName.includes(normalizedQuery) ||
-        normalizedSlug.includes(normalizedQuery)
-      );
-    });
-
-    if (matchedProvider) {
-      closePanels();
-      router.push(`/providers/${matchedProvider.slug}`);
-      return;
-    }
-
-    const matchedNavTarget = allNavigationItems.find((item) => {
-      const haystack = [
-        item.label,
-        item.description ?? "",
-        item.sectionId ?? ""
-      ]
-        .join(" ")
-        .toLowerCase();
-
-      return haystack.includes(normalizedQuery);
-    });
-
-    if (matchedNavTarget) {
-      navigateTo(getNavigationHref(matchedNavTarget), matchedNavTarget.sectionId);
-      return;
-    }
-
-    showNoResults(trimmedQuery);
   }
 
   function isActiveNavigationItem(item: NavigationItem) {
@@ -530,61 +429,6 @@ export function SiteHeader({
                 {renderFeatureIcon(contactNavigationItem, true)}
                 {contactNavigationItem.label}
               </Link>
-              <div
-                className={`relative flex items-center rounded-full transition-colors ${
-                  isSearchOpen ? "border-[0.5px] border-[#1a5c2a] bg-white pl-1.5 pr-3" : ""
-                }`}
-              >
-                <button
-                  aria-expanded={isSearchOpen}
-                  aria-label={isSearchOpen ? "Close search" : "Open search"}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-full p-2 text-[#2e4a2e] transition hover:bg-[#f4faf5]"
-                  type="button"
-                  onClick={() => {
-                    closeDrawer();
-                    setIsSearchOpen((current) => !current);
-                    setNoResultsQuery(null);
-                  }}
-                >
-                  <Search className="h-4 w-4" />
-                </button>
-
-                <div
-                  className={`overflow-hidden ${
-                    isSearchOpen ? "ml-1.5 w-[200px] max-w-[200px] opacity-100" : "w-0 max-w-0 opacity-0"
-                  }`}
-                  style={{ transition: "width 0.3s ease, opacity 0.3s ease, margin 0.3s ease" }}
-                >
-                  <form
-                    className="flex items-center gap-2 border-b-2 border-[#1a5c2a] bg-white py-1"
-                    role="search"
-                    onSubmit={handleSearchSubmit}
-                  >
-                    <input
-                      ref={desktopSearchInputRef}
-                      className="w-full border-none bg-transparent pb-1 text-[13px] text-[#1a2e1a] outline-none placeholder:text-[#7a8d7a]"
-                      placeholder="Search SaveRateAfrica..."
-                      type="text"
-                      value={searchQuery}
-                      onChange={(event) => setSearchQuery(event.target.value)}
-                    />
-                    <button
-                      aria-label="Close search"
-                      className="shrink-0 pb-1 text-[13px] text-[#2e4a2e]"
-                      type="button"
-                      onClick={closeSearch}
-                    >
-                      ✕
-                    </button>
-                  </form>
-                </div>
-
-                {noResultsQuery && isSearchOpen ? (
-                  <div className="absolute right-0 top-full mt-2 rounded-[6px] bg-[#1a2e1a] px-3 py-[5px] text-[11px] text-white">
-                    No results for &apos;{noResultsQuery}&apos;
-                  </div>
-                ) : null}
-              </div>
             </div>
 
             <div className="flex shrink-0 items-center lg:hidden">
@@ -594,7 +438,6 @@ export function SiteHeader({
                 className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-[#dcedc8] text-[#1a2e1a]"
                 type="button"
                 onClick={() => {
-                  closeSearch();
                   setIsDrawerOpen((current) => !current);
                 }}
               >
@@ -602,34 +445,6 @@ export function SiteHeader({
               </button>
             </div>
 
-            {isSearchOpen ? (
-              <div className="absolute left-4 right-4 top-[calc(100%+8px)] z-[1001] rounded-[6px] border border-[#c8e6c9] bg-white px-3 py-2 shadow-[0_8px_24px_rgba(0,0,0,0.08)] lg:hidden">
-                <form className="flex items-center gap-2" role="search" onSubmit={handleSearchSubmit}>
-                  <input
-                    ref={mobileSearchInputRef}
-                    className="w-full border-none bg-transparent text-[13px] text-[#1a2e1a] outline-none placeholder:text-[#7a8d7a]"
-                    placeholder="Search SaveRateAfrica..."
-                    type="text"
-                    value={searchQuery}
-                    onChange={(event) => setSearchQuery(event.target.value)}
-                  />
-                  <button
-                    aria-label="Close search"
-                    className="text-[13px] text-[#2e4a2e]"
-                    type="button"
-                    onClick={closeSearch}
-                  >
-                    ✕
-                  </button>
-                </form>
-
-                {noResultsQuery ? (
-                  <div className="mt-2 rounded-[6px] bg-[#1a2e1a] px-3 py-[5px] text-[11px] text-white">
-                    No results for &apos;{noResultsQuery}&apos;
-                  </div>
-                ) : null}
-              </div>
-            ) : null}
             </div>
           </div>
         </header>
@@ -660,22 +475,6 @@ export function SiteHeader({
         </div>
 
         <div className="space-y-1">
-          <div className="border-b border-[#e8f5e9]">
-            <button
-              className="flex w-full items-center gap-3 py-3 text-left text-[#1a2e1a]"
-              type="button"
-              onClick={() => {
-                closeDrawer();
-                setIsSearchOpen(true);
-                setNoResultsQuery(null);
-              }}
-            >
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-[#f4faf5]">
-                <Search className="h-5 w-5 text-[#2e7d32]" />
-              </div>
-              <span className="block text-[15px]">Search</span>
-            </button>
-          </div>
 
           {[...navigationItems, contactNavigationItem].map((item) => {
             const isActive = isActiveNavigationItem(item);
