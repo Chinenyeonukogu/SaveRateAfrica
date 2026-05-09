@@ -70,6 +70,14 @@ const trustPills = [
   "\u2605 99% rate accuracy"
 ] as const;
 
+const socialProofFaces = [
+  "https://randomuser.me/api/portraits/women/44.jpg",
+  "https://randomuser.me/api/portraits/men/32.jpg",
+  "https://randomuser.me/api/portraits/women/68.jpg",
+  "https://randomuser.me/api/portraits/men/75.jpg",
+  "https://randomuser.me/api/portraits/women/90.jpg"
+] as const;
+
 function formatCalculatedNgn(value: number) {
   return value.toLocaleString("en-NG", {
     minimumFractionDigits: 2,
@@ -223,10 +231,33 @@ export function HomeHero({
                 ))}
               </div>
 
+              <div className="flex w-fit max-w-full items-center rounded-[100px] border border-[rgba(255,255,255,0.2)] bg-[rgba(255,255,255,0.1)] py-2 pl-2 pr-5 shadow-[0_10px_30px_rgba(0,0,0,0.16)] backdrop-blur-md">
+                <div className="flex shrink-0 items-center">
+                  {socialProofFaces.map((face, index) => (
+                    <img
+                      key={face}
+                      alt=""
+                      className={`h-10 w-10 rounded-full border-[2.5px] border-[#0d2416] object-cover shadow-[0_4px_12px_rgba(0,0,0,0.28)] ${index === 0 ? "" : "-ml-3"}`}
+                      src={face}
+                    />
+                  ))}
+                  <div className="-ml-3 flex h-10 w-10 items-center justify-center rounded-full border-[2.5px] border-[#0d2416] bg-brand-yellow text-[10px] font-extrabold text-[#1a2e1a] shadow-[0_4px_12px_rgba(0,0,0,0.28)]">
+                    +10K
+                  </div>
+                </div>
+                <div className="ml-3 min-w-0">
+                  <div className="text-[12px] leading-none text-brand-yellow">★★★★★</div>
+                  <p className="mt-1 text-[10px] font-semibold leading-[1.25] text-white min-[600px]:text-[11px]">
+                    <span className="font-extrabold text-[#5de8a0]">10,000+</span>{" "}
+                    people making a difference through smart money transfer
+                  </p>
+                </div>
+              </div>
+
               <div
                 id="rate-alerts"
                 ref={alertsAnchorRef}
-                className="grid w-full max-w-full grid-cols-1 items-stretch gap-[14px] overflow-hidden min-[700px]:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]"
+                className="mt-[28px] grid w-full max-w-full grid-cols-1 items-stretch gap-[14px] overflow-hidden min-[700px]:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]"
               >
                   <Link
                     className="group relative h-full min-h-[190px] min-w-0 max-w-full overflow-hidden rounded-[20px] border-2 border-[#4ade80] bg-[#e8f5e2] px-[22px] pb-[22px] pt-6 text-left shadow-[0_8px_32px_rgba(0,0,0,0.12)] transition hover:translate-y-[-4px] hover:shadow-[0_16px_48px_rgba(0,0,0,0.18)]"
