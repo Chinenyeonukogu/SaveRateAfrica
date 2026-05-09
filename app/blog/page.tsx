@@ -71,10 +71,12 @@ export default function BlogPage() {
                   {post.excerpt}
                 </p>
                 <Link
-                  className="mt-6 inline-flex min-h-12 items-center gap-2 rounded-2xl bg-brand-light px-4 text-sm font-semibold text-brand-navy"
+                  className={`mt-6 inline-flex min-h-12 items-center gap-2 rounded-2xl px-4 text-sm font-semibold text-brand-navy ${
+                    post.href ? "bg-brand-yellow" : "bg-brand-light"
+                  }`}
                   href={post.href ?? "/providers"}
                 >
-                  Explore providers
+                  {post.href ? "Read" : "Explore providers"}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </article>
