@@ -47,6 +47,113 @@ function CountryFlag({ country }: { country: SenderCountry }) {
   );
 }
 
+function TrustBadgeIcon({ icon }: { icon: (typeof trustPills)[number]["icon"] }) {
+  const iconClassName = "h-[18px] w-[18px] shrink-0";
+
+  if (icon === "lock") {
+    return (
+      <svg aria-hidden="true" className={iconClassName} viewBox="0 0 32 32">
+        <defs>
+          <radialGradient id="trust-lock-body" cx="32%" cy="20%" r="82%">
+            <stop offset="0%" stopColor="#fff7ad" />
+            <stop offset="38%" stopColor="#facc15" />
+            <stop offset="72%" stopColor="#b77905" />
+            <stop offset="100%" stopColor="#6b3a03" />
+          </radialGradient>
+          <linearGradient id="trust-lock-shackle" x1="4" x2="28" y1="4" y2="19">
+            <stop offset="0%" stopColor="#fff7c2" />
+            <stop offset="48%" stopColor="#f59e0b" />
+            <stop offset="100%" stopColor="#7c3f05" />
+          </linearGradient>
+          <filter id="trust-lock-shadow" x="-30%" y="-25%" width="160%" height="160%">
+            <feDropShadow dx="0" dy="2" stdDeviation="2" floodColor="#000000" floodOpacity="0.35" />
+          </filter>
+        </defs>
+        <path
+          d="M9 14V11.3C9 7.2 12.1 4 16 4s7 3.2 7 7.3V14h-3.5v-2.7c0-2.1-1.5-3.8-3.5-3.8s-3.5 1.7-3.5 3.8V14H9Z"
+          fill="none"
+          filter="url(#trust-lock-shadow)"
+          stroke="url(#trust-lock-shackle)"
+          strokeLinecap="round"
+          strokeWidth="3"
+        />
+        <rect x="7" y="13" width="18" height="15" rx="4" fill="url(#trust-lock-body)" filter="url(#trust-lock-shadow)" />
+        <path d="M16 18.5a2.2 2.2 0 0 0-1.1 4.1l-.6 2.8h3.4l-.6-2.8a2.2 2.2 0 0 0-1.1-4.1Z" fill="#4a2600" opacity="0.85" />
+        <ellipse cx="12.5" cy="16.5" rx="4.4" ry="2" fill="#fff8d0" opacity="0.42" transform="rotate(-22 12.5 16.5)" />
+      </svg>
+    );
+  }
+
+  if (icon === "signal") {
+    return (
+      <svg aria-hidden="true" className={iconClassName} viewBox="0 0 32 32">
+        <defs>
+          <radialGradient id="trust-signal-dot" cx="35%" cy="30%" r="70%">
+            <stop offset="0%" stopColor="#e0ffff" />
+            <stop offset="42%" stopColor="#22d3ee" />
+            <stop offset="100%" stopColor="#0e7490" />
+          </radialGradient>
+          <filter id="trust-signal-glow" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="1.4" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+        <path d="M8.5 14.2a10 10 0 0 1 15 0" fill="none" stroke="#67e8f9" strokeLinecap="round" strokeWidth="2.4" filter="url(#trust-signal-glow)" />
+        <path d="M5 10.4a14.8 14.8 0 0 1 22 0" fill="none" stroke="#22d3ee" strokeLinecap="round" strokeWidth="2.2" opacity="0.85" />
+        <path d="M12 18a5.6 5.6 0 0 1 8 0" fill="none" stroke="#cffafe" strokeLinecap="round" strokeWidth="2.4" />
+        <circle cx="16" cy="22.4" r="4" fill="url(#trust-signal-dot)" filter="url(#trust-signal-glow)" />
+        <circle cx="14.7" cy="21.2" r="1.2" fill="#ffffff" opacity="0.72" />
+      </svg>
+    );
+  }
+
+  if (icon === "check") {
+    return (
+      <svg aria-hidden="true" className={iconClassName} viewBox="0 0 32 32">
+        <defs>
+          <radialGradient id="trust-check-sphere" cx="34%" cy="22%" r="78%">
+            <stop offset="0%" stopColor="#bbf7d0" />
+            <stop offset="42%" stopColor="#22c55e" />
+            <stop offset="100%" stopColor="#14532d" />
+          </radialGradient>
+          <filter id="trust-check-shadow" x="-35%" y="-30%" width="170%" height="170%">
+            <feDropShadow dx="0" dy="2" stdDeviation="2" floodColor="#000000" floodOpacity="0.35" />
+          </filter>
+        </defs>
+        <circle cx="16" cy="16" r="12" fill="url(#trust-check-sphere)" filter="url(#trust-check-shadow)" />
+        <path d="M10.4 16.4 14 20l8-8.6" fill="none" stroke="#ffffff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3.2" />
+        <path d="M9.5 9.3c3.7-3 8.5-3.1 12.3-.5" fill="none" stroke="#dcfce7" strokeLinecap="round" strokeWidth="2" opacity="0.42" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg aria-hidden="true" className={iconClassName} viewBox="0 0 32 32">
+      <defs>
+        <linearGradient id="trust-star-fill" x1="8" x2="25" y1="4" y2="28">
+          <stop offset="0%" stopColor="#fff7ad" />
+          <stop offset="42%" stopColor="#facc15" />
+          <stop offset="76%" stopColor="#f97316" />
+          <stop offset="100%" stopColor="#9a3412" />
+        </linearGradient>
+        <filter id="trust-star-shadow" x="-35%" y="-35%" width="170%" height="170%">
+          <feDropShadow dx="0" dy="2" stdDeviation="2" floodColor="#000000" floodOpacity="0.38" />
+        </filter>
+      </defs>
+      <path
+        d="m16 3.8 3.5 7.1 7.8 1.1-5.6 5.5 1.3 7.8-7-3.7-7 3.7 1.3-7.8L4.7 12l7.8-1.1L16 3.8Z"
+        fill="url(#trust-star-fill)"
+        filter="url(#trust-star-shadow)"
+      />
+      <path d="M11.6 11.2 15 6.4l1.1 4.3-3.8 1.2Z" fill="#fff8c5" opacity="0.72" />
+      <circle cx="11.6" cy="10.5" r="1.4" fill="#ffffff" opacity="0.72" />
+    </svg>
+  );
+}
+
 const brandFontStyle = {
   fontFamily: '"Sora", var(--font-heading), sans-serif'
 } as const;
@@ -64,10 +171,10 @@ const providers = [
 ] as const;
 
 const trustPills = [
-  "\ud83d\udd12 256-bit secure",
-  "\u23f1 Real-time data",
-  "\u2713 No sign-up needed",
-  "\u2605 99% rate accuracy"
+  { label: "256-bit secure", icon: "lock" },
+  { label: "Real-time data", icon: "signal" },
+  { label: "No sign-up needed", icon: "check" },
+  { label: "99% rate accuracy", icon: "star" }
 ] as const;
 
 const socialProofFaces = [
@@ -223,10 +330,11 @@ export function HomeHero({
               <div className="mb-7 flex w-full min-w-0 flex-wrap gap-2 box-border">
                 {trustPills.map((pill) => (
                   <div
-                    key={pill}
-                    className="inline-flex min-h-8 w-[calc(50%-4px)] items-center justify-center gap-[6px] rounded-full border border-white/15 bg-white/10 px-[10px] py-[4px] text-[10px] text-white/80 min-[600px]:w-auto"
+                    key={pill.label}
+                    className="inline-flex min-h-8 w-[calc(50%-4px)] items-center justify-center gap-[6px] rounded-full border border-white/15 bg-white/10 px-[10px] py-[4px] text-[10px] text-white/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.16),inset_0_-1px_0_rgba(0,0,0,0.25)] min-[600px]:w-auto"
                   >
-                    {pill}
+                    <TrustBadgeIcon icon={pill.icon} />
+                    {pill.label}
                   </div>
                 ))}
               </div>
