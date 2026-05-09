@@ -304,7 +304,7 @@ export function HomeHero({
     >
       <div className="relative z-10 mx-auto w-full max-w-[1200px] overflow-x-hidden px-5 pb-8 pt-4 text-white min-[600px]:px-7 min-[600px]:pb-9 lg:px-6 lg:pb-10">
 
-        <div className="grid min-w-0 grid-cols-1 items-stretch gap-6 lg:grid-cols-[1fr_minmax(0,340px)] lg:gap-x-12">
+        <div className="grid min-w-0 grid-cols-1 items-stretch gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(380px,440px)] lg:gap-x-10">
           <div className="flex min-w-0 flex-col gap-4 overflow-hidden pt-0 lg:pr-2">
             <div className="inline-flex w-fit items-center rounded-full border border-green-800/60 bg-green-950/40 px-3 py-[5px] text-[9px] font-bold uppercase tracking-[0.6px] text-green-400">
               <span className="mr-2 inline-flex h-2 w-2 rounded-full bg-[#4ade80] animate-hero-live-pulse shadow-[0_0_10px_rgba(74,222,128,0.8)]" />
@@ -479,7 +479,7 @@ export function HomeHero({
           </div>
 
           <div className="w-full min-w-0 max-w-full overflow-hidden lg:flex lg:flex-col">
-            <div className="mx-auto flex w-full max-w-[95%] flex-col overflow-hidden rounded-[14px] bg-white p-3 text-[#1a2e1a] shadow-[0_8px_32px_rgba(0,0,0,0.18)]">
+            <div className="mx-auto flex w-full max-w-full flex-col overflow-hidden rounded-[14px] bg-white p-3 text-[#1a2e1a] shadow-[0_8px_32px_rgba(0,0,0,0.18)]">
                 <p className="mb-1 text-[9px] font-semibold uppercase tracking-[1.8px] text-[#2e7d32]">
                   COMPARE NOW
                 </p>
@@ -593,7 +593,7 @@ export function HomeHero({
                   </div>
 
                   <button
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-[8px] bg-brand-yellow px-4 py-2.5 text-[12px] font-bold text-[#1a1a1a] transition hover:translate-y-[-1px] hover:shadow-float disabled:cursor-not-allowed disabled:opacity-70"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-[8px] bg-brand-yellow px-4 py-2.5 text-[12px] font-extrabold text-[#1a1a1a] shadow-[0_8px_22px_rgba(246,198,25,0.34)] ring-2 ring-[#f6c619]/35 transition hover:translate-y-[-1px] hover:shadow-float disabled:cursor-not-allowed disabled:opacity-70"
                     type="button"
                     onClick={onCompare}
                   >
