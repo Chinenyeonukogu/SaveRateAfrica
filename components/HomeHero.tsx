@@ -479,7 +479,7 @@ export function HomeHero({
           </div>
 
           <div className="w-full min-w-0 max-w-full overflow-hidden lg:flex lg:flex-col">
-            <div className="flex w-full max-w-full flex-col overflow-hidden rounded-[14px] bg-white p-3 text-[#1a2e1a] shadow-[0_8px_32px_rgba(0,0,0,0.18)]">
+            <div className="mx-auto flex w-full max-w-[95%] flex-col overflow-hidden rounded-[14px] bg-white p-3 text-[#1a2e1a] shadow-[0_8px_32px_rgba(0,0,0,0.18)]">
                 <p className="mb-1 text-[9px] font-semibold uppercase tracking-[1.8px] text-[#2e7d32]">
                   COMPARE NOW
                 </p>
