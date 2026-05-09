@@ -593,7 +593,7 @@ export function HomeHero({
                   </div>
 
                   <button
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-[8px] bg-brand-yellow px-4 py-2.5 text-[12px] font-extrabold text-[#1a1a1a] shadow-[0_8px_22px_rgba(246,198,25,0.34)] ring-2 ring-[#f6c619]/35 transition hover:translate-y-[-1px] hover:shadow-float disabled:cursor-not-allowed disabled:opacity-70"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-[8px] bg-brand-yellow px-4 py-2.5 text-[12px] font-black text-[#1a1a1a] shadow-[0_8px_22px_rgba(246,198,25,0.34)] ring-2 ring-[#f6c619]/35 transition hover:translate-y-[-1px] hover:shadow-float disabled:cursor-not-allowed disabled:opacity-70"
                     type="button"
                     onClick={onCompare}
                   >
