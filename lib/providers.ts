@@ -359,7 +359,7 @@ export const providers: Provider[] = [
     headline: "Quick, easy money transfers from your phone",
     bestFor: "Quick, easy money transfers from your phone",
     trustNote: "Quick, easy money transfers from your phone",
-    supportedSenderCountries: ["USA", "UK", "Canada"],
+    supportedSenderCountries: ["USA", "UK"],
     payoutChannels: ["Bank deposit"],
     pros: ["Great rate", "Fast", "Polished mobile experience"],
     cons: ["Bank-first payout model", "Brand familiarity varies by sender"]
@@ -451,7 +451,6 @@ export const providerRankingsBySenderCountry: Record<SenderCountry, string[]> = 
     "WorldRemit",
     "Western Union",
     "MoneyGram",
-    "NALA",
     "Paysend",
     "Afriex",
     "Chipper Cash",
