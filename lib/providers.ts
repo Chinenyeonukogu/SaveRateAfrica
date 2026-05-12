@@ -211,28 +211,6 @@ export const providers: Provider[] = [
     cons: ["Fee level varies by route", "Rate details vary by route"]
   },
   {
-    slug: "pangea",
-    name: "Pangea",
-    logoFrom: "#6A1B9A",
-    logoTo: "#EC407A",
-    rating: 4.3,
-    reviewCount: 5114,
-    speedHours: 0.4,
-    speedBand: "instant",
-    deliveryLabel: "Minutes",
-    feeBand: "low",
-    fees: { USD: 4.49, GBP: 4.49, CAD: 4.49 },
-    rateMultiplier: { USD: 0.9968, GBP: 0.9968, CAD: 0.9968 },
-    summary: "Good app-first option with simple onboarding for North American senders.",
-    headline: "Simple North America onboarding.",
-    bestFor: "Diaspora users who want a quick setup",
-    trustNote: "Solid mobile-led experience for repeat transfers.",
-    supportedSenderCountries: ["Canada"],
-    payoutChannels: ["Bank deposit", "Cash pickup"],
-    pros: ["Smooth UX", "Fast setup", "Reliable delivery"],
-    cons: ["Geographic coverage varies", "Rate details vary by route"]
-  },
-  {
     slug: "chipper-cash",
     name: "Chipper Cash",
     logoFrom: "#1DE9B6",

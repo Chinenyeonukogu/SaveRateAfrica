@@ -7,7 +7,6 @@ const remittanceProviderLinks: Record<string, string> = {
   sendwave: "https://www.sendwave.com/",
   "western-union": "https://www.westernunion.com/",
   moneygram: "https://www.moneygram.com/",
-  pangea: "https://www.pangeamoneytransfer.com/",
   "chipper-cash": "https://chippercash.com/",
   lemfi: "https://lemfi.com/en-us",
   afriex: "https://www.afriex.com/",
