@@ -296,7 +296,7 @@ async function upsertRows(rows) {
     throw new Error("No exchange rate rows were collected.");
   }
 
-  const url = new URL(`${SUPABASE_URL}/rest/v1/exchange_rates`);
+  const url = new URL(`${SUPABASE_URL}/rest/v1/exchange_rates?on_conflict=provider, send_currency,recieve_currency`);
   url.searchParams.set("on_conflict", "provider,send_currency,receive_currency");
 
   const response = await fetch(url, {
