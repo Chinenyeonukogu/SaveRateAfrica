@@ -160,8 +160,9 @@ const brandFontStyle = {
 const EXCHANGE_RATE_API_URL = "https://api.exchangerate-api.com/v4/latest/USD";
 const FALLBACK_BASE_RATE = 159;
 
-const providers = [
-  { name: "Afriex", fee: 0.0, offset: 0.997 },
+const calculatorProviders = [
+  { name: "LemFi", fee: 0.0, offset: 0.9985 },
+  { name: "PayAngel", fee: 0.0, offset: 1 },
   { name: "Wise", fee: 4.5, offset: 0.995 },
   { name: "Remitly", fee: 3.99, offset: 0.992 },
   { name: "WorldRemit", fee: 5.0, offset: 0.990 },
@@ -204,7 +205,8 @@ export function HomeHero({
   const currencyMeta = currencySymbolByCountry[senderCountry];
   const sendAmount = Number.parseFloat(amount || "0") || 0;
   const [baseRate, setBaseRate] = useState<number>(FALLBACK_BASE_RATE);
-  const [currentLowerIndex, setCurrentLowerIndex] = useState<number>(providers.length - 1);
+  const [currentTopIndex, setCurrentTopIndex] = useState<number>(0);
+  const [currentLowerIndex, setCurrentLowerIndex] = useState<number>(calculatorProviders.length - 1);
   const [fade, setFade] = useState<boolean>(true);
   const [flashActive, setFlashActive] = useState<boolean>(false);
   const [swapSpin, setSwapSpin] = useState<boolean>(false);
@@ -254,9 +256,10 @@ export function HomeHero({
     refreshBaseRate();
     const interval = setInterval(() => {
       refreshBaseRate();
+      setCurrentTopIndex((prev) => (prev + 1) % calculatorProviders.length);
       setCurrentLowerIndex((prev) => {
         const next = prev - 1;
-        return next < 1 ? providers.length - 1 : next;
+        return next < 1 ? calculatorProviders.length - 1 : next;
       });
     }, 30000);
 
@@ -279,7 +282,7 @@ export function HomeHero({
   const providerResults = useMemo(() => {
     const amount = Math.max(0, sendAmount);
 
-    return providers
+    return calculatorProviders
       .map((provider) => {
         const providerRate = baseRate * provider.offset;
         const recipientReceives = Math.max(0, amount - provider.fee) * providerRate;
@@ -293,8 +296,11 @@ export function HomeHero({
       .sort((first, second) => second.recipientReceives - first.recipientReceives);
   }, [sendAmount, baseRate]);
 
-  const topProvider = providerResults[0] ?? providers[0];
-  const lowerProvider = providerResults[currentLowerIndex] ?? providers[providers.length - 1];
+  const topProvider = providerResults[currentTopIndex] ?? providerResults[0] ?? calculatorProviders[0];
+  const lowerProvider =
+    providerResults[currentLowerIndex]?.name === topProvider.name
+      ? providerResults.find((provider) => provider.name !== topProvider.name) ?? providerResults[0]
+      : providerResults[currentLowerIndex] ?? calculatorProviders[calculatorProviders.length - 1];
   const savings = Math.max(0, topProvider.recipientReceives - lowerProvider.recipientReceives);
 
   return (
