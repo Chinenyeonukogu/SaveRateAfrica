@@ -165,6 +165,28 @@ export const providers: Provider[] = [
     cons: ["Rate spread varies", "App controls vary by route"]
   },
   {
+    slug: "payangel",
+    name: "PayAngel",
+    logoFrom: "#FFD54F",
+    logoTo: "#0F766E",
+    rating: 4.6,
+    reviewCount: 7860,
+    speedHours: 0.2,
+    speedBand: "instant",
+    deliveryLabel: "Minutes",
+    feeBand: "low",
+    fees: { USD: 0, GBP: 0, CAD: 0 },
+    rateMultiplier: { USD: 0.9977, GBP: 0.9977, CAD: 0.9977 },
+    summary: "No fees. Fast and secure transfers",
+    headline: "Fast, secure transfers with no fees",
+    bestFor: "Fast, secure transfers with no fees",
+    trustNote: "Fast, secure transfers with no fees",
+    supportedSenderCountries: ["USA", "UK", "Canada"],
+    payoutChannels: ["Bank deposit"],
+    pros: ["No transfer fees", "Fast transfers", "Secure digital experience"],
+    cons: ["Payout details vary by route", "Cash pickup options vary"]
+  },
+  {
     slug: "western-union",
     name: "Western Union",
     logoFrom: "#111111",
@@ -209,6 +231,28 @@ export const providers: Provider[] = [
     payoutChannels: ["Cash pickup", "Bank deposit"],
     pros: ["Fast pickup", "Large brand", "Easy walk-in options"],
     cons: ["Fee level varies by route", "Rate details vary by route"]
+  },
+  {
+    slug: "ace-money-transfer",
+    name: "ACE Money Transfer",
+    logoFrom: "#0B5CAB",
+    logoTo: "#19A974",
+    rating: 4.6,
+    reviewCount: 9340,
+    speedHours: 1,
+    speedBand: "instant",
+    deliveryLabel: "Within 1 hour",
+    feeBand: "low",
+    fees: { USD: 0, GBP: 2.99, CAD: 0 },
+    rateMultiplier: { USD: 0.995, GBP: 0.995, CAD: 0.995 },
+    summary: "First Transfer Fees waived. Cash pickup and bank deposit",
+    headline: "UK-only transfers with first transfer fees waived",
+    bestFor: "UK-only transfers with first transfer fees waived",
+    trustNote: "UK-only transfers with first transfer fees waived",
+    supportedSenderCountries: ["UK"],
+    payoutChannels: ["Cash pickup", "Bank deposit"],
+    pros: ["First transfer fees waived", "Cash pickup available", "Bank deposit available"],
+    cons: ["UK senders only", "GBP to NGN corridor only"]
   },
   {
     slug: "chipper-cash",
@@ -369,6 +413,7 @@ export const providers: Provider[] = [
 export const providerRankingsBySenderCountry: Record<SenderCountry, string[]> = {
   USA: [
     "LemFi",
+    "PayAngel",
     "Wise",
     "TapTap Send",
     "Remitly",
@@ -384,6 +429,8 @@ export const providerRankingsBySenderCountry: Record<SenderCountry, string[]> = 
   UK: [
     "Wise",
     "LemFi",
+    "PayAngel",
+    "ACE Money Transfer",
     "TapTap Send",
     "NALA",
     "Remitly",
@@ -399,6 +446,7 @@ export const providerRankingsBySenderCountry: Record<SenderCountry, string[]> = 
     "Wise",
     "Remitly",
     "LemFi",
+    "PayAngel",
     "TapTap Send",
     "WorldRemit",
     "Western Union",

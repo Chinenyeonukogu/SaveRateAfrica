@@ -28,6 +28,7 @@ export function ProviderCard({
 }: ProviderCardProps) {
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const hasFee = provider.fee > 0;
+  const noFeeLabel = provider.slug === "payangel" ? "No Fees" : "No Fee ✅";
   const providerCtaLabel = `Go to ${provider.name}`;
   const providerRedirectNote = `You will be redirected to ${provider.name}'s website`;
   const providerDescription = [
@@ -79,7 +80,7 @@ export function ProviderCard({
 
             {!hasFee ? (
               <span className="inline-flex items-center rounded-full border border-[#c8e6c9] bg-[#e8f5e9] px-[10px] py-[3px] text-[13px] font-bold text-[#1b5e20]">
-                No Fee ✅
+                {noFeeLabel}
               </span>
             ) : null}
           </div>
@@ -173,7 +174,7 @@ export function ProviderCard({
               hasFee ? "text-[#1a2e1a]" : "text-[#1b5e20]"
             }`}
           >
-            {hasFee ? provider.feeDisplayText : "No Fee ✅"}
+            {hasFee ? provider.feeDisplayText : noFeeLabel}
           </p>
         </div>
       </div>
