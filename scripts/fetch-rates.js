@@ -277,7 +277,7 @@ async function mapWithConcurrency(items, concurrency, mapper) {
 }
 
 async function fetchApifyRows() {
-  const providerResults = await mapWithConcurrency(providers, 3, async (provider) => {
+  const providerResults = await mapWithConcurrency(providers, 1, async (provider) => {
     try {
       return await fetchProviderRows(provider);
     } catch (error) {
