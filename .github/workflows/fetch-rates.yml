@@ -1,14 +1,14 @@
-name: Fetch exchange rates
+name: Fetch Wise exchange rates
 
 on:
   schedule:
-    - cron: "0 * * * *"
+    - cron: "0 */6 * * *"
   workflow_dispatch:
 
 jobs:
   fetch-and-save-rates:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 10
 
     steps:
       - name: Checkout repository
@@ -23,10 +23,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Fetch provider rates and save to Supabase
+      - name: Fetch Wise rates and save to Supabase
         env:
           SUPABASE_URL: https://lbcntbalsinojbbsvcra.supabase.co
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           WISE_API_TOKEN: ${{ secrets.WISE_API_TOKEN }}
-          APIFY_API_TOKEN: ${{ secrets.APIFY_API_TOKEN }}
         run: node scripts/fetch-rates.js
