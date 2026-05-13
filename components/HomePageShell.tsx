@@ -364,6 +364,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
         <HomeHero
           alertsAnchorRef={alertsRef}
           amount={amount}
+          comparisonProviders={comparison.providers}
           isLoading={isLoading}
           senderCountry={senderCountry}
           onAmountChange={setAmount}

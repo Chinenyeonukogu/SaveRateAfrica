@@ -7,11 +7,13 @@ import {
   ArrowUpDown
 } from "lucide-react";
 
+import type { ComparisonProviderRow } from "@/lib/fetchRates";
 import { senderCountries, type SenderCountry } from "@/lib/providers";
 
 interface HomeHeroProps {
   alertsAnchorRef?: MutableRefObject<HTMLDivElement | null>;
   amount: string;
+  comparisonProviders: ComparisonProviderRow[];
   senderCountry: SenderCountry;
   isLoading: boolean;
   onAmountChange: (value: string) => void;
@@ -157,19 +159,6 @@ function TrustBadgeIcon({ icon }: { icon: (typeof trustPills)[number]["icon"] })
 const brandFontStyle = {
   fontFamily: '"Sora", var(--font-heading), sans-serif'
 } as const;
-const EXCHANGE_RATE_API_URL = "https://api.exchangerate-api.com/v4/latest/USD";
-const FALLBACK_BASE_RATE = 159;
-
-const calculatorProviders = [
-  { name: "LemFi", fee: 0.0, offset: 0.9985 },
-  { name: "PayAngel", fee: 0.0, offset: 1 },
-  { name: "Wise", fee: 4.5, offset: 0.995 },
-  { name: "Remitly", fee: 3.99, offset: 0.992 },
-  { name: "WorldRemit", fee: 5.0, offset: 0.990 },
-  { name: "SendWave", fee: 0.0, offset: 0.988 },
-  { name: "Western Union", fee: 5.0, offset: 0.985 },
-  { name: "MoneyGram", fee: 6.0, offset: 0.983 }
-] as const;
 
 const trustPills = [
   { label: "256-bit secure", icon: "lock" },
@@ -196,6 +185,7 @@ function formatCalculatedNgn(value: number) {
 export function HomeHero({
   alertsAnchorRef,
   amount,
+  comparisonProviders,
   senderCountry,
   isLoading,
   onAmountChange,
@@ -204,60 +194,30 @@ export function HomeHero({
 }: HomeHeroProps) {
   const currencyMeta = currencySymbolByCountry[senderCountry];
   const sendAmount = Number.parseFloat(amount || "0") || 0;
-  const [baseRate, setBaseRate] = useState<number>(FALLBACK_BASE_RATE);
   const [fade, setFade] = useState<boolean>(true);
   const [flashActive, setFlashActive] = useState<boolean>(false);
   const [swapSpin, setSwapSpin] = useState<boolean>(false);
   const [secondsRemaining, setSecondsRemaining] = useState<number>(30);
 
   useEffect(() => {
-    let cancelled = false;
     let flashTimeout: ReturnType<typeof setTimeout> | null = null;
     let fadeTimeout: ReturnType<typeof setTimeout> | null = null;
 
-    async function refreshBaseRate() {
-      try {
-        const response = await fetch(EXCHANGE_RATE_API_URL);
-        if (!response.ok) {
-          throw new Error("Rate fetch failed");
-        }
-
-        const payload = await response.json();
-        const rate = Number(payload?.rates?.NGN);
-
-        if (!Number.isFinite(rate)) {
-          throw new Error("Invalid NGN rate");
-        }
-
-        if (!cancelled) {
-          setFade(false);
-          setSwapSpin((prev) => !prev);
-          setFlashActive(true);
-          setSecondsRemaining(30);
-          setBaseRate(rate);
-          fadeTimeout = setTimeout(() => setFade(true), 100);
-          flashTimeout = setTimeout(() => setFlashActive(false), 800);
-        }
-      } catch {
-        if (!cancelled) {
-          setFade(false);
-          setSwapSpin((prev) => !prev);
-          setFlashActive(true);
-          setSecondsRemaining(30);
-          setBaseRate(FALLBACK_BASE_RATE);
-          fadeTimeout = setTimeout(() => setFade(true), 100);
-          flashTimeout = setTimeout(() => setFlashActive(false), 800);
-        }
-      }
+    function refreshCalculatorDisplay() {
+      setFade(false);
+      setSwapSpin((prev) => !prev);
+      setFlashActive(true);
+      setSecondsRemaining(30);
+      fadeTimeout = setTimeout(() => setFade(true), 100);
+      flashTimeout = setTimeout(() => setFlashActive(false), 800);
     }
 
-    refreshBaseRate();
+    refreshCalculatorDisplay();
     const interval = setInterval(() => {
-      refreshBaseRate();
+      refreshCalculatorDisplay();
     }, 30000);
 
     return () => {
-      cancelled = true;
       clearInterval(interval);
       if (flashTimeout) clearTimeout(flashTimeout);
       if (fadeTimeout) clearTimeout(fadeTimeout);
@@ -272,27 +232,25 @@ export function HomeHero({
     return () => clearInterval(countdownInterval);
   }, []);
 
-  const providerResults = useMemo(() => {
-    const amount = Math.max(0, sendAmount);
-
-    return calculatorProviders
-      .map((provider) => {
-        const providerRate = baseRate * provider.offset;
-        const recipientReceives = Math.max(0, amount - provider.fee) * providerRate;
-
-        return {
-          ...provider,
-          providerRate,
-          recipientReceives
-        };
-      })
+  const calculatorResults = useMemo(() => {
+    return comparisonProviders
+      .map((provider) => ({
+        name: provider.name,
+        recipientReceives: provider.amountReceived
+      }))
       .sort((first, second) => second.recipientReceives - first.recipientReceives);
-  }, [sendAmount, baseRate]);
+  }, [comparisonProviders]);
 
-  const topProvider = providerResults[0] ?? calculatorProviders[0];
+  const topProvider = calculatorResults[0] ?? { name: "Top provider", recipientReceives: 0 };
   const lowerProvider =
-    providerResults[providerResults.length - 1] ?? calculatorProviders[calculatorProviders.length - 1];
-  const savings = Math.max(0, topProvider.recipientReceives - lowerProvider.recipientReceives);
+    [...calculatorResults]
+      .reverse()
+      .find((provider) => provider.recipientReceives < topProvider.recipientReceives) ??
+    calculatorResults[calculatorResults.length - 1] ?? { name: "Other provider", recipientReceives: 0 };
+  const savings = Math.max(
+    0,
+    Math.round((topProvider.recipientReceives - lowerProvider.recipientReceives) * 100) / 100
+  );
 
   return (
     <section
