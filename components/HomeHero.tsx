@@ -205,8 +205,6 @@ export function HomeHero({
   const currencyMeta = currencySymbolByCountry[senderCountry];
   const sendAmount = Number.parseFloat(amount || "0") || 0;
   const [baseRate, setBaseRate] = useState<number>(FALLBACK_BASE_RATE);
-  const [currentTopIndex, setCurrentTopIndex] = useState<number>(0);
-  const [currentLowerIndex, setCurrentLowerIndex] = useState<number>(calculatorProviders.length - 1);
   const [fade, setFade] = useState<boolean>(true);
   const [flashActive, setFlashActive] = useState<boolean>(false);
   const [swapSpin, setSwapSpin] = useState<boolean>(false);
@@ -256,11 +254,6 @@ export function HomeHero({
     refreshBaseRate();
     const interval = setInterval(() => {
       refreshBaseRate();
-      setCurrentTopIndex((prev) => (prev + 1) % calculatorProviders.length);
-      setCurrentLowerIndex((prev) => {
-        const next = prev - 1;
-        return next < 1 ? calculatorProviders.length - 1 : next;
-      });
     }, 30000);
 
     return () => {
@@ -296,11 +289,9 @@ export function HomeHero({
       .sort((first, second) => second.recipientReceives - first.recipientReceives);
   }, [sendAmount, baseRate]);
 
-  const topProvider = providerResults[currentTopIndex] ?? providerResults[0] ?? calculatorProviders[0];
+  const topProvider = providerResults[0] ?? calculatorProviders[0];
   const lowerProvider =
-    providerResults[currentLowerIndex]?.name === topProvider.name
-      ? providerResults.find((provider) => provider.name !== topProvider.name) ?? providerResults[0]
-      : providerResults[currentLowerIndex] ?? calculatorProviders[calculatorProviders.length - 1];
+    providerResults[providerResults.length - 1] ?? calculatorProviders[calculatorProviders.length - 1];
   const savings = Math.max(0, topProvider.recipientReceives - lowerProvider.recipientReceives);
 
   return (
