@@ -44,35 +44,36 @@ export default function BestTimeToTransferMoneyPage() {
     <>
       <SiteHeader />
 
-      <main className="px-4 pb-32 pt-5 sm:px-6 lg:px-8 lg:pb-16">
-        <div className="mx-auto max-w-4xl space-y-8">
-          <section className="rounded-[32px] bg-white px-6 py-8 shadow-float sm:px-8 sm:py-10">
-            <p className="text-xs font-semibold uppercase tracking-[0.26em] text-brand-green">
-              Guides
+      <main className="bg-[#f4faf5] px-4 pb-32 pt-5 sm:px-6 lg:px-8 lg:pb-16">
+        <article className="mx-auto max-w-5xl overflow-hidden rounded-[34px] bg-white shadow-float">
+          <header className="bg-[#0d2416] px-6 py-8 text-white sm:px-10 sm:py-12 lg:px-14">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#9ee8c0]">
+              Guides · 3 min read · SaveRateAfrica
             </p>
-            <h1 className="mt-3 font-heading text-4xl leading-tight text-brand-navy sm:text-5xl">
+            <h1 className="mt-5 max-w-4xl font-heading text-4xl leading-tight sm:text-5xl lg:text-6xl">
               The Best Time to Transfer Money Internationally
             </h1>
-            <p className="mt-4 text-base leading-7 text-brand-navy/70">
+            <p className="mt-5 max-w-3xl text-lg leading-8 text-white/78">
               Timing your transfer by day, week, and month can mean thousands
               more naira reaching your family.
             </p>
-          </section>
+          </header>
 
-          {timingSections.map((section) => (
-            <section
-              key={section.heading}
-              className="rounded-[28px] border border-brand-navy/10 bg-white p-6 shadow-float"
-            >
-              <h2 className="font-heading text-3xl text-brand-navy">
-                {section.heading}
-              </h2>
-              <p className="mt-4 text-sm leading-7 text-brand-navy/70">
-                {section.body}
-              </p>
-            </section>
-          ))}
-        </div>
+          <div className="px-6 py-8 sm:px-10 sm:py-10 lg:px-16">
+            <div className="space-y-10 text-[17px] leading-8 text-[#243b2b]">
+              {timingSections.map((section) => (
+                <section key={section.heading}>
+                  <h2 className="font-heading text-3xl text-[#102717]">
+                    {section.heading}
+                  </h2>
+                  <p className="mt-4 border-b border-[#dcefe1] pb-6 text-[#334b38]">
+                    {section.body}
+                  </p>
+                </section>
+              ))}
+            </div>
+          </div>
+        </article>
       </main>
     </>
   );
