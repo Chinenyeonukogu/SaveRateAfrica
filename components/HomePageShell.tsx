@@ -179,6 +179,13 @@ function LearnAndSaveMoreSection() {
                 <Link
                   className={`mt-auto inline-flex items-center gap-1 pt-3 text-[11px] font-extrabold ${card.labelClassName}`}
                   href={card.href}
+                  onClick={(event) => {
+                    if (card.type === "video") {
+                      event.preventDefault();
+                      window.location.href = card.href;
+                    }
+                  }}
+                  prefetch={card.type === "video" ? false : undefined}
                 >
                   {card.cta} →
                 </Link>
