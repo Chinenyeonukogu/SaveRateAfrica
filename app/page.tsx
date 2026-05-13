@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { HomePageShell } from "@/components/HomePageShell";
 import { fetchRates } from "@/lib/fetchRates";
 
-export const revalidate = 300;
+export const revalidate = 3600;
 
 const seoKeywords = [
   "best way to send money to Nigeria",

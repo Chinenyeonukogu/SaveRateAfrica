@@ -17,7 +17,7 @@ export function RateDisclaimer() {
             RATE DISCLAIMER
           </span>
           <p className="max-w-3xl text-[11px] leading-[1.6] text-[#5a7a5a]">
-            Rates are indicative. Updated every 5 minutes. Final rates are
+            Rates are indicative. Updated every 60 minutes. Final rates are
             confirmed on the provider&apos;s checkout page.
             <button
               aria-expanded={isExpanded}

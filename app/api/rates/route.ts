@@ -9,7 +9,7 @@ import {
   type SenderCountry
 } from "@/lib/providers";
 
-export const revalidate = 300;
+export const revalidate = 3600;
 
 function getRequestAmount(value: string | null) {
   const parsedValue = Number.parseFloat(value ?? "500");

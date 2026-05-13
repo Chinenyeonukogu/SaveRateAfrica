@@ -23,7 +23,7 @@ declare global {
     | undefined;
 }
 
-export const LIVE_RATE_REVALIDATE_SECONDS = 300;
+export const LIVE_RATE_REVALIDATE_SECONDS = 3600;
 const LIVE_RATE_CACHE_TTL_MS = LIVE_RATE_REVALIDATE_SECONDS * 1000;
 
 function parseUtcDate(value?: string) {

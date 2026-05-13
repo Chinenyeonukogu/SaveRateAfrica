@@ -13,7 +13,7 @@ money to Nigeria at top rates.
 You have access to the following live data from the 
 page the user is currently viewing:
 
-LIVE PROVIDER DATA (USD to NGN, updated every 5 min):
+LIVE PROVIDER DATA (USD to NGN, updated every 60 min):
 - LemFi:          rate 1,378.58 NGN/USD · No fee · 3–5 min · 4.9★
 - Sendwave:       rate 1,378.16 NGN/USD · No fee · Instant · 4.8★
 - Pesa:           rate 1,377.75 NGN/USD · No fee · Instant · 4.5★
@@ -29,7 +29,7 @@ LIVE PROVIDER DATA (USD to NGN, updated every 5 min):
 - Western Union:  rate 1,370.98 NGN/USD · $8.99 fee · Minutes · 4.2★
 
 PLATFORM FACTS:
-- Rates refresh every 5 minutes
+- Rates refresh every 60 minutes
 - SaveRateAfrica compares but never processes transfers
 - All providers are vetted and trusted
 - Corridor: USA, UK, Canada → Nigeria only

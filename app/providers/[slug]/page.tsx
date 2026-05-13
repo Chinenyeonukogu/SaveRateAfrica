@@ -9,7 +9,7 @@ import { formatCompact, formatNaira } from "@/lib/format";
 import { getProviderAffiliateLink } from "@/lib/affiliateLinks";
 import { getProviderBySlug, providers } from "@/lib/providers";
 
-export const revalidate = 300;
+export const revalidate = 3600;
 
 const seoKeywords = [
   "best app to send money to Nigeria from US",
