@@ -53,7 +53,7 @@ export default function BlogPage() {
             </p>
           </section>
 
-          <section className="grid gap-6 lg:grid-cols-3">
+          <section className="space-y-6">
             {blogPosts.map((post) => (
               <article
                 key={post.slug}

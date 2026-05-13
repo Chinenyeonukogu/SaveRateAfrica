@@ -250,6 +250,7 @@ export const blogPosts: BlogPost[] = [
     title: "How to Build Credit in USA as a Nigerian Immigrant",
     category: "Credit",
     readTime: "7 min read",
+    href: "/blog/how-to-build-credit-in-usa-as-a-nigerian-immigrant",
     excerpt:
       "A straightforward starter plan for establishing U.S. credit without getting trapped by poor-fit products."
   }
