@@ -9,7 +9,7 @@ const remittanceProviderLinks: Record<string, string> = {
   "western-union": "https://www.westernunion.com/",
   moneygram: "https://www.moneygram.com/",
   "ace-money-transfer": "https://acemoneytransfer.com/Nigeria/Send-Money-to-Nigeria",
-  "chipper-cash": "https://chippercash.com/",
+  pesa: "https://www.pesa.co/",
   lemfi: "https://lemfi.com/en-us",
   afriex: "https://www.afriex.com/",
   "flutterwave-send": "https://send.flutterwave.com",

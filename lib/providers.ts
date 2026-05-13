@@ -255,26 +255,26 @@ export const providers: Provider[] = [
     cons: ["UK senders only", "GBP to NGN corridor only"]
   },
   {
-    slug: "chipper-cash",
-    name: "Chipper Cash",
-    logoFrom: "#1DE9B6",
-    logoTo: "#00B8D4",
-    rating: 4.4,
-    reviewCount: 9010,
-    speedHours: 0.3,
+    slug: "pesa",
+    name: "Pesa",
+    logoFrom: "#0F766E",
+    logoTo: "#FACC15",
+    rating: 4.5,
+    reviewCount: 7210,
+    speedHours: 0.03,
     speedBand: "instant",
-    deliveryLabel: "Minutes",
+    deliveryLabel: "Instant",
     feeBand: "low",
     fees: { USD: 0, GBP: 0, CAD: 0 },
-    rateMultiplier: { USD: 0.9975, GBP: 0.9975, CAD: 0.9975 },
-    summary: "Card offers & fast transfer",
-    headline: "Modern transfers with zero fees",
-    bestFor: "Modern transfers with zero fees",
-    trustNote: "Modern transfers with zero fees",
+    rateMultiplier: { USD: 0.9979, GBP: 0.9979, CAD: 0.9979 },
+    summary: "No fees. Instant transfers. Multi-currency wallet",
+    headline: "Instant no-fee transfers with a multi-currency wallet",
+    bestFor: "Instant no-fee transfers with a multi-currency wallet",
+    trustNote: "Instant no-fee transfers with a multi-currency wallet",
     supportedSenderCountries: ["USA", "UK", "Canada"],
-    payoutChannels: ["Bank deposit", "Wallet transfer"],
-    pros: ["Low fee", "Fast", "Modern app feel"],
-    cons: ["Support options vary by market", "Brand familiarity varies by sender"]
+    payoutChannels: ["Bank deposit", "Multi-currency wallet"],
+    pros: ["No fees", "Instant delivery", "Multi-currency wallet"],
+    cons: ["Payout details vary by route", "Cash pickup options vary"]
   },
   {
     slug: "lemfi",
@@ -423,7 +423,7 @@ export const providerRankingsBySenderCountry: Record<SenderCountry, string[]> = 
     "Paysend",
     "Flutterwave Send",
     "Afriex",
-    "Chipper Cash",
+    "Pesa",
     "NALA"
   ],
   UK: [
@@ -439,7 +439,7 @@ export const providerRankingsBySenderCountry: Record<SenderCountry, string[]> = 
     "MoneyGram",
     "Paysend",
     "Afriex",
-    "Chipper Cash",
+    "Pesa",
     "Flutterwave Send"
   ],
   Canada: [
@@ -453,7 +453,7 @@ export const providerRankingsBySenderCountry: Record<SenderCountry, string[]> = 
     "MoneyGram",
     "Paysend",
     "Afriex",
-    "Chipper Cash",
+    "Pesa",
     "Flutterwave Send"
   ]
 };

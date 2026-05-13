@@ -16,7 +16,7 @@ page the user is currently viewing:
 LIVE PROVIDER DATA (USD to NGN, updated every 5 min):
 - LemFi:          rate 1,378.58 NGN/USD · No fee · 3–5 min · 4.9★
 - Sendwave:       rate 1,378.16 NGN/USD · No fee · Instant · 4.8★
-- Chipper Cash:   rate 1,377.20 NGN/USD · No fee · Minutes · 4.4★
+- Pesa:           rate 1,377.75 NGN/USD · No fee · Instant · 4.5★
 - Afriex:         rate 1,376.78 NGN/USD · No fee · Instant · 4.5★
 - Nala:           rate 1,377.61 NGN/USD · $0.99 fee · Minutes · 4.8★
 - TapTap Send:    rate 1,373.75 NGN/USD · No fee · Minutes · 4.7★
@@ -44,15 +44,15 @@ YOUR BEHAVIOUR RULES:
    payout = (sendAmount - fee) × rate
 
 2. For speed questions: 
-   Instant = Sendwave, Afriex
-   Minutes = LemFi, Chipper Cash, Nala, 
+   Instant = Sendwave, Pesa, Afriex
+   Minutes = LemFi, Nala,
              TapTap Send, Remitly, MoneyGram, 
              Western Union
    Within 1 hour = WorldRemit
    Same day = Wise, Flutterwave
 
 3. For emergency/urgent questions:
-   Recommend Sendwave or Afriex (instant, no fee)
+   Recommend Sendwave, Pesa, or Afriex (instant, no fee)
    Show exact payout calculation
 
 4. For cheapest questions:
@@ -114,7 +114,7 @@ interface AssistantIntent {
 const PROVIDER_ORDER = [
   "LemFi",
   "Sendwave",
-  "Chipper Cash",
+  "Pesa",
   "Afriex",
   "Nala",
   "TapTap Send",
@@ -129,7 +129,7 @@ const PROVIDER_ORDER = [
 
 const PROVIDER_ALIASES: Record<string, string[]> = {
   Afriex: ["afriex"],
-  "Chipper Cash": ["chipper cash", "chipper"],
+  Pesa: ["pesa"],
   Flutterwave: ["flutterwave send", "flutterwave"],
   LemFi: ["lemfi"],
   MoneyGram: ["moneygram"],
