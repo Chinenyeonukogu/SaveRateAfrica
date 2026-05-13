@@ -14,7 +14,7 @@ const remittanceProviderLinks: Record<string, string> = {
   afriex: "https://www.afriex.com/",
   "flutterwave-send": "https://send.flutterwave.com",
   nala: "https://www.nala.com/",
-  "taptap-send": "https://www.taptapsend.com/",
+  "taptap-send": "https://www.taptapsend.com/en/send-money-to/nigeria",
   paysend: "https://paysend.com/"
 };
 
