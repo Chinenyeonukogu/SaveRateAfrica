@@ -53,6 +53,21 @@ FLUTTERWAVE_REQUESTS = [
     },
 ]
 
+REMITLY_REQUESTS = [
+    {
+        "send_currency": "USD",
+        "url": "https://api.remitly.io/v3/calculator/estimate?conduit=USA%3AUSD-NGA%3ANGN&anchor=SEND&amount=500&purpose=OTHER&customer_segment=STANDARD&customer_recognition=UNRECOGNIZED&strict_promo=false",
+    },
+    {
+        "send_currency": "GBP",
+        "url": "https://api.remitly.io/v3/calculator/estimate?conduit=GBR%3AGBP-NGA%3ANGN&anchor=SEND&amount=1&purpose=OTHER&customer_segment=STANDARD&customer_recognition=UNRECOGNIZED&strict_promo=false",
+    },
+    {
+        "send_currency": "CAD",
+        "url": "https://api.remitly.io/v3/calculator/estimate?conduit=CAN%3ACAD-NGA%3ANGN&anchor=SEND&amount=500&purpose=OTHER&customer_segment=STANDARD&customer_recognition=UNRECOGNIZED&strict_promo=false",
+    },
+]
+
 
 def require_env(name, value):
     if not value:
@@ -349,6 +364,51 @@ def fetch_flutterwave_exchange_rates():
     return [row for row in rows if has_required_rate_fields(row)]
 
 
+def fetch_remitly_exchange_rate(request_config):
+    request = urllib.request.Request(
+        request_config["url"],
+        headers={
+            "Accept": "application/json",
+            "User-Agent": "Mozilla/5.0",
+        },
+    )
+
+    with urllib.request.urlopen(request, timeout=30) as response:
+        payload = json.loads(response.read().decode("utf-8"))
+
+    estimate = payload.get("estimate") if isinstance(payload, dict) else None
+    if not isinstance(estimate, dict):
+        return None
+
+    exchange_rate = estimate.get("exchange_rate") or {}
+    fee = estimate.get("fee") or {}
+
+    return {
+        "provider": "Remitly",
+        "send_currency": request_config["send_currency"],
+        "receive_currency": "NGN",
+        "rate": exchange_rate.get("promotional_exchange_rate")
+        or exchange_rate.get("base_rate"),
+        "fee": fee.get("total_fee_amount"),
+        "fee_currency": request_config["send_currency"],
+        "updated_at": utc_now(),
+    }
+
+
+def fetch_remitly_exchange_rates():
+    rows = []
+
+    for request_config in REMITLY_REQUESTS:
+        try:
+            row = fetch_remitly_exchange_rate(request_config)
+            if row:
+                rows.append(row)
+        except Exception as error:
+            print(f"[Remitly] Failed {request_config['send_currency']}-NGN: {error}")
+
+    return [row for row in rows if has_required_rate_fields(row)]
+
+
 def delete_exchange_rates(filters):
     query = urllib.parse.urlencode(filters)
     request = urllib.request.Request(
@@ -415,6 +475,7 @@ def main():
         + fetch_lemfi_exchange_rates()
         + fetch_paysend_exchange_rates()
         + fetch_flutterwave_exchange_rates()
+        + fetch_remitly_exchange_rates()
     )
     deleted_rows = cleanup_exchange_rates()
     if deleted_rows:
