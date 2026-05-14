@@ -42,6 +42,17 @@ PAYSEND_REQUESTS = [
     },
 ]
 
+FLUTTERWAVE_REQUESTS = [
+    {
+        "send_currency": "GBP",
+        "url": "https://sendgateway.myflutterwave.com/api/v1/config/calculatepaymentdetails?Amount=500&FromCurrency=GBP&ToCurrency=NGN&FromCountry=GB&ToCountry=NG&IsBalanceCharge=true&Party=Sender",
+    },
+    {
+        "send_currency": "USD",
+        "url": "https://sendgateway.myflutterwave.com/api/v1/config/calculatepaymentdetails?Amount=500&FromCurrency=USD&ToCurrency=NGN&FromCountry=US&ToCountry=NG&IsBalanceCharge=true&Party=Sender",
+    },
+]
+
 
 def require_env(name, value):
     if not value:
@@ -72,6 +83,18 @@ def to_supabase_row(row):
         clean_row["fee_currency"] = row["fee_currency"]
 
     return clean_row
+
+
+def has_required_rate_fields(row):
+    required_fields = (
+        row.get("provider"),
+        row.get("send_currency"),
+        row.get("receive_currency"),
+        row.get("rate"),
+        row.get("updated_at"),
+    )
+
+    return all(value is not None and value != "" for value in required_fields)
 
 
 def dedupe_rows(rows):
@@ -122,7 +145,7 @@ def fetch_nala_exchange_rates():
             }
         )
 
-    return [row for row in rows if all(row.values())]
+    return [row for row in rows if has_required_rate_fields(row)]
 
 
 def fetch_wise_exchange_rate(corridor):
@@ -168,7 +191,7 @@ def fetch_wise_exchange_rates():
                 f"{corridor['send_currency']}-{corridor['receive_currency']}: {error}"
             )
 
-    return [row for row in rows if all(row.values())]
+    return [row for row in rows if has_required_rate_fields(row)]
 
 
 def digits_only(value):
@@ -236,7 +259,7 @@ def fetch_lemfi_exchange_rates():
         except Exception as error:
             print(f"[LemFi] Failed {payload['from']}-{payload['to']}: {error}")
 
-    return [row for row in rows if all(row.values())]
+    return [row for row in rows if has_required_rate_fields(row)]
 
 
 def fetch_paysend_exchange_rate(request_config):
@@ -280,7 +303,50 @@ def fetch_paysend_exchange_rates():
         except Exception as error:
             print(f"[Paysend] Failed {request_config['send_currency']}-NGN: {error}")
 
-    return [row for row in rows if all(row.values())]
+    return [row for row in rows if has_required_rate_fields(row)]
+
+
+def fetch_flutterwave_exchange_rate(request_config):
+    request = urllib.request.Request(
+        request_config["url"],
+        headers={
+            "Accept": "application/json",
+            "User-Agent": "Mozilla/5.0",
+        },
+    )
+
+    with urllib.request.urlopen(request, timeout=30) as response:
+        payload = json.loads(response.read().decode("utf-8"))
+
+    data = payload.get("data") if isinstance(payload, dict) else None
+    if not isinstance(data, dict):
+        return None
+
+    return {
+        "provider": "Flutterwave",
+        "send_currency": request_config["send_currency"],
+        "receive_currency": "NGN",
+        "rate": data.get("rate"),
+        "fee": data.get("fee"),
+        "fee_currency": request_config["send_currency"],
+        "updated_at": utc_now(),
+    }
+
+
+def fetch_flutterwave_exchange_rates():
+    rows = []
+
+    for request_config in FLUTTERWAVE_REQUESTS:
+        try:
+            row = fetch_flutterwave_exchange_rate(request_config)
+            if row:
+                rows.append(row)
+        except Exception as error:
+            print(
+                f"[Flutterwave] Failed {request_config['send_currency']}-NGN: {error}"
+            )
+
+    return [row for row in rows if has_required_rate_fields(row)]
 
 
 def delete_exchange_rates(filters):
@@ -348,6 +414,7 @@ def main():
         + fetch_wise_exchange_rates()
         + fetch_lemfi_exchange_rates()
         + fetch_paysend_exchange_rates()
+        + fetch_flutterwave_exchange_rates()
     )
     deleted_rows = cleanup_exchange_rates()
     if deleted_rows:
