@@ -26,6 +26,21 @@ LEMFI_REQUESTS = [
     {"from": "CAD", "to": "NGN", "sender_country": "Canada"},
 ]
 
+PAYSEND_REQUESTS = [
+    {
+        "send_currency": "USD",
+        "url": "https://paysend.com/api/calculator?lang=en&country=US&operation=send&amount=500.00&sourceCountry=us&targetCountry=ng&sourceCurrency=usd&targetCurrency=ngn",
+    },
+    {
+        "send_currency": "GBP",
+        "url": "https://paysend.com/api/calculator?lang=en&country=US&operation=send&amount=500.00&sourceCountry=uk&targetCountry=ng&sourceCurrency=gbp&targetCurrency=ngn",
+    },
+    {
+        "send_currency": "CAD",
+        "url": "https://paysend.com/api/calculator?lang=en&country=US&operation=send&amount=500&sourceCountry=ca&targetCountry=ng&sourceCurrency=cad&targetCurrency=ngn",
+    },
+]
+
 
 def require_env(name, value):
     if not value:
@@ -42,13 +57,20 @@ def to_supabase_row(row):
     except (KeyError, TypeError, ValueError):
         return None
 
-    return {
+    clean_row = {
         "provider": row["provider"],
         "send_currency": row["send_currency"],
         "receive_currency": row["receive_currency"],
         "rate": rate,
         "updated_at": row["updated_at"],
     }
+
+    if "fee" in row:
+        clean_row["fee"] = row["fee"]
+    if "fee_currency" in row:
+        clean_row["fee_currency"] = row["fee_currency"]
+
+    return clean_row
 
 
 def dedupe_rows(rows):
@@ -216,6 +238,50 @@ def fetch_lemfi_exchange_rates():
     return [row for row in rows if all(row.values())]
 
 
+def fetch_paysend_exchange_rate(request_config):
+    request = urllib.request.Request(
+        request_config["url"],
+        headers={
+            "Accept": "application/json",
+            "User-Agent": "Mozilla/5.0",
+        },
+    )
+
+    with urllib.request.urlopen(request, timeout=30) as response:
+        payload = json.loads(response.read().decode("utf-8"))
+
+    calculator = payload.get("calculator") if isinstance(payload, dict) else None
+    transaction = (
+        calculator.get("transaction") if isinstance(calculator, dict) else None
+    )
+    if not isinstance(transaction, dict):
+        return None
+
+    return {
+        "provider": "Paysend",
+        "send_currency": request_config["send_currency"],
+        "receive_currency": "NGN",
+        "rate": transaction.get("conversionRate"),
+        "fee": transaction.get("commissionAmount"),
+        "fee_currency": transaction.get("commissionCurrency"),
+        "updated_at": utc_now(),
+    }
+
+
+def fetch_paysend_exchange_rates():
+    rows = []
+
+    for request_config in PAYSEND_REQUESTS:
+        try:
+            row = fetch_paysend_exchange_rate(request_config)
+            if row:
+                rows.append(row)
+        except Exception as error:
+            print(f"[Paysend] Failed {request_config['send_currency']}-NGN: {error}")
+
+    return [row for row in rows if all(row.values())]
+
+
 def delete_unsupported_exchange_rates():
     query = urllib.parse.urlencode({"send_currency": "eq.EUR"})
     request = urllib.request.Request(
@@ -267,6 +333,7 @@ def main():
         fetch_nala_exchange_rates()
         + fetch_wise_exchange_rates()
         + fetch_lemfi_exchange_rates()
+        + fetch_paysend_exchange_rates()
     )
     deleted_rows = delete_unsupported_exchange_rates()
     if deleted_rows:
