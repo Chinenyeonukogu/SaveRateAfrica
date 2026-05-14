@@ -67,7 +67,7 @@ def fetch_nala_exchange_rates():
     with urllib.request.urlopen(request, timeout=30) as response:
         payload = json.loads(response.read().decode("utf-8"))
 
-    rates = payload if isinstance(payload, list) else payload.get("rates", [])
+    rates = payload if isinstance(payload, list) else payload.get("data", [])
     rows = []
 
     for rate in rates:
