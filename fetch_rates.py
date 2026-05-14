@@ -452,6 +452,14 @@ def cleanup_exchange_rates():
     return deleted_rows
 
 
+def collect_provider_rows(label, fetcher):
+    try:
+        return fetcher()
+    except Exception as error:
+        print(f"[{label}] Failed provider sync: {error}")
+        return []
+
+
 def upsert_exchange_rates(rows):
     clean_rows = dedupe_rows(rows)
 
@@ -482,17 +490,18 @@ def main():
     require_env("SUPABASE_SERVICE_ROLE_KEY", SUPABASE_SERVICE_ROLE_KEY)
     require_env("WISE_API_TOKEN", WISE_API_TOKEN)
 
-    rows = (
-        fetch_nala_exchange_rates()
-        + fetch_wise_exchange_rates()
-        + fetch_lemfi_exchange_rates()
-        + fetch_paysend_exchange_rates()
-        + fetch_flutterwave_exchange_rates()
-        + fetch_remitly_exchange_rates()
-    )
     deleted_rows = cleanup_exchange_rates()
     if deleted_rows:
         print(f"[Rates] Removed stale or unsupported rows: {len(deleted_rows)}")
+
+    rows = (
+        collect_provider_rows("Nala", fetch_nala_exchange_rates)
+        + collect_provider_rows("Wise", fetch_wise_exchange_rates)
+        + collect_provider_rows("LemFi", fetch_lemfi_exchange_rates)
+        + collect_provider_rows("Paysend", fetch_paysend_exchange_rates)
+        + collect_provider_rows("Flutterwave", fetch_flutterwave_exchange_rates)
+        + collect_provider_rows("Remitly", fetch_remitly_exchange_rates)
+    )
 
     saved_rows = upsert_exchange_rates(rows)
     print(f"[Rates] Rows saved: {len(saved_rows)}")
