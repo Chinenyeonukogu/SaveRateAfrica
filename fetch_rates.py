@@ -13,6 +13,11 @@ SUPABASE_URL = os.environ.get("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_ROLE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
 WISE_API_TOKEN = os.environ.get("WISE_API_TOKEN", "")
 MAX_REASONABLE_NGN_RATE = 3000
+BROWSER_USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/124.0.0.0 Safari/537.36"
+)
 
 CORRIDORS = [
     {"send_currency": "USD", "receive_currency": "NGN"},
@@ -78,6 +83,19 @@ def utc_now():
     return datetime.now(timezone.utc).isoformat()
 
 
+def browser_headers(referer, extra_headers=None):
+    headers = {
+        "User-Agent": BROWSER_USER_AGENT,
+        "Accept": "application/json",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Referer": referer,
+    }
+    if extra_headers:
+        headers.update(extra_headers)
+
+    return headers
+
+
 def to_supabase_row(row):
     try:
         rate = float(row["rate"])
@@ -135,7 +153,7 @@ def dedupe_rows(rows):
 def fetch_nala_exchange_rates():
     request = urllib.request.Request(
         NALA_RATES_URL,
-        headers={"Accept": "application/json"},
+        headers=browser_headers("https://www.nala.com/"),
     )
 
     with urllib.request.urlopen(request, timeout=30) as response:
@@ -172,10 +190,12 @@ def fetch_wise_exchange_rate(corridor):
     )
     request = urllib.request.Request(
         f"{WISE_RATES_URL}?{query}",
-        headers={
-            "Accept": "application/json",
-            "Authorization": f"Bearer {WISE_API_TOKEN}",
-        },
+        headers=browser_headers(
+            "https://wise.com/",
+            {
+                "Authorization": f"Bearer {WISE_API_TOKEN}",
+            },
+        ),
     )
 
     with urllib.request.urlopen(request, timeout=30) as response:
@@ -240,10 +260,12 @@ def fetch_lemfi_exchange_rate(payload):
         LEMFI_RATES_URL,
         data=json.dumps(payload).encode("utf-8"),
         method="POST",
-        headers={
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-        },
+        headers=browser_headers(
+            "https://www.lemfi.com/",
+            {
+                "Content-Type": "application/json",
+            },
+        ),
     )
 
     with urllib.request.urlopen(request, timeout=30) as response:
@@ -280,10 +302,7 @@ def fetch_lemfi_exchange_rates():
 def fetch_paysend_exchange_rate(request_config):
     request = urllib.request.Request(
         request_config["url"],
-        headers={
-            "Accept": "application/json",
-            "User-Agent": "Mozilla/5.0",
-        },
+        headers=browser_headers("https://paysend.com/"),
     )
 
     with urllib.request.urlopen(request, timeout=30) as response:
@@ -324,10 +343,7 @@ def fetch_paysend_exchange_rates():
 def fetch_flutterwave_exchange_rate(request_config):
     request = urllib.request.Request(
         request_config["url"],
-        headers={
-            "Accept": "application/json",
-            "User-Agent": "Mozilla/5.0",
-        },
+        headers=browser_headers("https://send.flutterwave.com/"),
     )
 
     with urllib.request.urlopen(request, timeout=30) as response:
@@ -367,10 +383,7 @@ def fetch_flutterwave_exchange_rates():
 def fetch_remitly_exchange_rate(request_config):
     request = urllib.request.Request(
         request_config["url"],
-        headers={
-            "Accept": "application/json",
-            "User-Agent": "Mozilla/5.0",
-        },
+        headers=browser_headers("https://www.remitly.com/"),
     )
 
     with urllib.request.urlopen(request, timeout=30) as response:
