@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 
 NALA_RATES_URL = "https://partners-api.prod.nala-api.com/v1/fx/rates"
 WISE_RATES_URL = "https://api.wise.com/v1/rates"
+LEMFI_RATES_URL = "https://www.lemfi.com/api/lemonade/v2/exchange"
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_ROLE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
 WISE_API_TOKEN = os.environ.get("WISE_API_TOKEN", "")
@@ -15,6 +16,12 @@ CORRIDORS = [
     {"send_currency": "USD", "receive_currency": "NGN"},
     {"send_currency": "GBP", "receive_currency": "NGN"},
     {"send_currency": "CAD", "receive_currency": "NGN"},
+]
+
+LEMFI_REQUESTS = [
+    {"from": "USD", "to": "NGN", "sender_country": "United States"},
+    {"from": "GBP", "to": "NGN", "sender_country": "United Kingdom"},
+    {"from": "CAD", "to": "NGN", "sender_country": "Canada"},
 ]
 
 
@@ -133,6 +140,63 @@ def fetch_wise_exchange_rates():
     return [row for row in rows if all(row.values())]
 
 
+def find_rate(payload):
+    if isinstance(payload, dict):
+        for key in ("rate", "exchange_rate", "exchangeRate"):
+            if key in payload:
+                return payload[key]
+
+        for value in payload.values():
+            rate = find_rate(value)
+            if rate is not None:
+                return rate
+
+    if isinstance(payload, list):
+        for value in payload:
+            rate = find_rate(value)
+            if rate is not None:
+                return rate
+
+    return None
+
+
+def fetch_lemfi_exchange_rate(payload):
+    request = urllib.request.Request(
+        LEMFI_RATES_URL,
+        data=json.dumps(payload).encode("utf-8"),
+        method="POST",
+        headers={
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        },
+    )
+
+    with urllib.request.urlopen(request, timeout=30) as response:
+        response_payload = json.loads(response.read().decode("utf-8"))
+
+    return {
+        "provider": "LemFi",
+        "send_currency": payload["from"],
+        "receive_currency": payload["to"],
+        "rate": find_rate(response_payload),
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+    }
+
+
+def fetch_lemfi_exchange_rates():
+    rows = []
+
+    for payload in LEMFI_REQUESTS:
+        try:
+            row = fetch_lemfi_exchange_rate(payload)
+            if row:
+                rows.append(row)
+        except Exception as error:
+            print(f"[LemFi] Failed {payload['from']}-{payload['to']}: {error}")
+
+    return [row for row in rows if all(row.values())]
+
+
 def upsert_exchange_rates(rows):
     clean_rows = dedupe_rows(rows)
 
@@ -163,7 +227,11 @@ def main():
     require_env("SUPABASE_SERVICE_ROLE_KEY", SUPABASE_SERVICE_ROLE_KEY)
     require_env("WISE_API_TOKEN", WISE_API_TOKEN)
 
-    rows = fetch_nala_exchange_rates() + fetch_wise_exchange_rates()
+    rows = (
+        fetch_nala_exchange_rates()
+        + fetch_wise_exchange_rates()
+        + fetch_lemfi_exchange_rates()
+    )
     saved_rows = upsert_exchange_rates(rows)
     print(f"[Rates] Rows saved: {len(saved_rows)}")
 
