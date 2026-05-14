@@ -1,4 +1,4 @@
-name: Fetch Wise exchange rates
+name: Fetch exchange rates
 
 on:
   schedule:
@@ -14,28 +14,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Fetch Wise rates and save to Supabase
-        env:
-          SUPABASE_URL: https://lbcntbalsinojbbsvcra.supabase.co
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          WISE_API_TOKEN: ${{ secrets.WISE_API_TOKEN }}
-        run: node scripts/fetch-rates.js
-
-      - name: Run Python rate sync and save to Supabase
+      - name: Fetch rates and save to Supabase
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
