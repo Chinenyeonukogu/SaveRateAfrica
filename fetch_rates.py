@@ -148,36 +148,30 @@ def fetch_wise_exchange_rates():
     return [row for row in rows if all(row.values())]
 
 
-def find_rate(payload):
-    if isinstance(payload, dict):
-        for key in ("rate", "exchange_rate", "exchangeRate"):
-            if key in payload:
-                return payload[key]
-
-        for value in payload.values():
-            rate = find_rate(value)
-            if rate is not None:
-                return rate
-
-    if isinstance(payload, list):
-        for value in payload:
-            rate = find_rate(value)
-            if rate is not None:
-                return rate
-
-    return None
+def digits_only(value):
+    return "".join(character for character in str(value) if character.isdigit())
 
 
-def normalize_lemfi_rate(rate):
+def normalize_lemfi_rate(rate, rate_id):
     try:
         decimal_rate = Decimal(str(rate))
+        divisor = Decimal(digits_only(rate_id))
     except (InvalidOperation, TypeError):
         return None
 
-    if decimal_rate > Decimal("1000000000000"):
-        decimal_rate = decimal_rate / Decimal("100000000000000000000")
+    if divisor == 0:
+        return None
 
-    return str(decimal_rate)
+    normalized_rate = decimal_rate / divisor
+    return format(normalized_rate.normalize(), "f")
+
+
+def extract_lemfi_rate(payload):
+    data = payload.get("data") if isinstance(payload, dict) else None
+    if not isinstance(data, dict):
+        return None
+
+    return normalize_lemfi_rate(data.get("rate"), data.get("ID"))
 
 
 def fetch_lemfi_exchange_rate(payload):
@@ -194,11 +188,16 @@ def fetch_lemfi_exchange_rate(payload):
     with urllib.request.urlopen(request, timeout=30) as response:
         response_payload = json.loads(response.read().decode("utf-8"))
 
+    print(
+        "[LemFi] Raw response "
+        f"{payload['from']}-{payload['to']}: {json.dumps(response_payload)}"
+    )
+
     return {
         "provider": "LemFi",
         "send_currency": payload["from"],
         "receive_currency": payload["to"],
-        "rate": normalize_lemfi_rate(find_rate(response_payload)),
+        "rate": extract_lemfi_rate(response_payload),
         "updated_at": utc_now(),
     }
 
