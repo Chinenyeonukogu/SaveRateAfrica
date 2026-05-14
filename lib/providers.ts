@@ -337,7 +337,7 @@ export const providers: Provider[] = [
     headline: "Proudly African transfers — fast and affordable",
     bestFor: "Proudly African transfers — fast and affordable",
     trustNote: "Proudly African transfers — fast and affordable",
-    supportedSenderCountries: ["USA", "UK", "Canada"],
+    supportedSenderCountries: ["USA", "UK"],
     payoutChannels: ["Bank deposit"],
     pros: ["Recognizable brand", "Good app flows", "Same-day delivery"],
     cons: ["Payout details vary by route", "Payout options vary"]
@@ -453,8 +453,7 @@ export const providerRankingsBySenderCountry: Record<SenderCountry, string[]> = 
     "MoneyGram",
     "Paysend",
     "Afriex",
-    "Pesa",
-    "Flutterwave Send"
+    "Pesa"
   ]
 };
 
