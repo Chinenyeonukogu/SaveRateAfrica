@@ -44,7 +44,7 @@ function normalizeRateRow(row) {
   const provider = row?.provider || row?.provider_name || row?.name || "Unknown provider";
   const rate = Number(row?.rate ?? row?.exchange_rate ?? row?.ngn_rate ?? row?.value);
 
-  if (!currency || !Number.isFinite(rate)) {
+  if (!currency || !Number.isFinite(rate) || rate <= 0 || rate > 3000) {
     return null;
   }
 

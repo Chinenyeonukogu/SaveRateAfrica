@@ -12,6 +12,7 @@ LEMFI_RATES_URL = "https://www.lemfi.com/api/lemonade/v2/exchange"
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_ROLE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
 WISE_API_TOKEN = os.environ.get("WISE_API_TOKEN", "")
+MAX_REASONABLE_NGN_RATE = 3000
 
 CORRIDORS = [
     {"send_currency": "USD", "receive_currency": "NGN"},
@@ -282,8 +283,8 @@ def fetch_paysend_exchange_rates():
     return [row for row in rows if all(row.values())]
 
 
-def delete_unsupported_exchange_rates():
-    query = urllib.parse.urlencode({"send_currency": "eq.EUR"})
+def delete_exchange_rates(filters):
+    query = urllib.parse.urlencode(filters)
     request = urllib.request.Request(
         f"{SUPABASE_URL}/rest/v1/exchange_rates?{query}",
         method="DELETE",
@@ -297,6 +298,19 @@ def delete_unsupported_exchange_rates():
     with urllib.request.urlopen(request, timeout=30) as response:
         response_text = response.read().decode("utf-8")
         return json.loads(response_text) if response_text else []
+
+
+def cleanup_exchange_rates():
+    deleted_rows = []
+    cleanup_filters = [
+        {"send_currency": "eq.EUR"},
+        {"rate": f"gt.{MAX_REASONABLE_NGN_RATE}"},
+    ]
+
+    for filters in cleanup_filters:
+        deleted_rows.extend(delete_exchange_rates(filters))
+
+    return deleted_rows
 
 
 def upsert_exchange_rates(rows):
@@ -335,9 +349,9 @@ def main():
         + fetch_lemfi_exchange_rates()
         + fetch_paysend_exchange_rates()
     )
-    deleted_rows = delete_unsupported_exchange_rates()
+    deleted_rows = cleanup_exchange_rates()
     if deleted_rows:
-        print(f"[Rates] Removed unsupported EUR rows: {len(deleted_rows)}")
+        print(f"[Rates] Removed stale or unsupported rows: {len(deleted_rows)}")
 
     saved_rows = upsert_exchange_rates(rows)
     print(f"[Rates] Rows saved: {len(saved_rows)}")
