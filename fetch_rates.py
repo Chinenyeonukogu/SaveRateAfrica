@@ -101,13 +101,10 @@ def to_supabase_row(row):
         "send_currency": row["send_currency"],
         "receive_currency": row["receive_currency"],
         "rate": rate,
+        "fee": row.get("fee"),
+        "fee_currency": row.get("fee_currency"),
         "updated_at": row["updated_at"],
     }
-
-    if "fee" in row:
-        clean_row["fee"] = row["fee"]
-    if "fee_currency" in row:
-        clean_row["fee_currency"] = row["fee_currency"]
 
     return clean_row
 
