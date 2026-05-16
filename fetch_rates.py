@@ -67,6 +67,21 @@ REMITLY_REQUESTS = [
     },
 ]
 
+MONEYGRAM_REQUESTS = [
+    {
+        "send_currency": "USD",
+        "url": "https://www.moneygram.com/api/send-money/fee-quote/v2?senderCountryCode=USA&senderCurrencyCode=USD&receiverCountryCode=NGA&sendAmount=500.00",
+    },
+    {
+        "send_currency": "GBP",
+        "url": "https://www.moneygram.com/api/send-money/fee-quote/v2?senderCountryCode=GBR&senderCurrencyCode=GBP&receiverCountryCode=NGA&sendAmount=900.00",
+    },
+    {
+        "send_currency": "CAD",
+        "url": "https://www.moneygram.com/api/send-money/fee-quote/v2?senderCountryCode=CAN&senderCurrencyCode=CAD&receiverCountryCode=NGA&sendAmount=900.00",
+    },
+]
+
 
 def require_env(name, value):
     if not value:
@@ -345,6 +360,84 @@ def fetch_remitly_exchange_rates():
     return [row for row in rows if has_required_rate_fields(row)]
 
 
+def find_first_value(payload, key_names):
+    normalized_keys = {key.lower() for key in key_names}
+
+    if isinstance(payload, dict):
+        for key, value in payload.items():
+            if key.lower() in normalized_keys and value is not None:
+                return value
+
+        for value in payload.values():
+            found = find_first_value(value, key_names)
+            if found is not None:
+                return found
+
+    if isinstance(payload, list):
+        for value in payload:
+            found = find_first_value(value, key_names)
+            if found is not None:
+                return found
+
+    return None
+
+
+def fetch_moneygram_exchange_rate(request_config):
+    request = urllib.request.Request(
+        request_config["url"],
+        headers=browser_headers("https://www.moneygram.com/"),
+    )
+
+    with urllib.request.urlopen(request, timeout=30) as response:
+        payload = json.loads(response.read().decode("utf-8"))
+
+    return {
+        "provider": "MoneyGram",
+        "send_currency": request_config["send_currency"],
+        "receive_currency": "NGN",
+        "rate": find_first_value(
+            payload,
+            (
+                "exchangeRate",
+                "exchange_rate",
+                "fxRate",
+                "fx_rate",
+                "rate",
+            ),
+        ),
+        "fee": find_first_value(
+            payload,
+            (
+                "fee",
+                "feeAmount",
+                "fee_amount",
+                "transferFee",
+                "transfer_fee",
+                "totalFee",
+                "total_fee",
+            ),
+        ),
+        "fee_currency": request_config["send_currency"],
+        "updated_at": utc_now(),
+    }
+
+
+def fetch_moneygram_exchange_rates():
+    rows = []
+
+    for request_config in MONEYGRAM_REQUESTS:
+        try:
+            row = fetch_moneygram_exchange_rate(request_config)
+            if row:
+                rows.append(row)
+        except Exception as error:
+            print(
+                f"[MoneyGram] Failed {request_config['send_currency']}-NGN: {error}"
+            )
+
+    return [row for row in rows if has_required_rate_fields(row)]
+
+
 def delete_exchange_rates(filters):
     query = urllib.parse.urlencode(filters)
     request = urllib.request.Request(
@@ -429,6 +522,7 @@ def main():
         + collect_provider_rows("Paysend", fetch_paysend_exchange_rates)
         + collect_provider_rows("Flutterwave", fetch_flutterwave_exchange_rates)
         + collect_provider_rows("Remitly", fetch_remitly_exchange_rates)
+        + collect_provider_rows("MoneyGram", fetch_moneygram_exchange_rates)
     )
 
     saved_rows = upsert_exchange_rates(rows)
