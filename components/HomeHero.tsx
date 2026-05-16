@@ -198,6 +198,7 @@ export function HomeHero({
   const [flashActive, setFlashActive] = useState<boolean>(false);
   const [swapSpin, setSwapSpin] = useState<boolean>(false);
   const [secondsRemaining, setSecondsRemaining] = useState<number>(30);
+  const [calculatorCycleIndex, setCalculatorCycleIndex] = useState<number>(0);
 
   useEffect(() => {
     let flashTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -208,6 +209,7 @@ export function HomeHero({
       setSwapSpin((prev) => !prev);
       setFlashActive(true);
       setSecondsRemaining(30);
+      setCalculatorCycleIndex((prev) => prev + 1);
       fadeTimeout = setTimeout(() => setFade(true), 100);
       flashTimeout = setTimeout(() => setFlashActive(false), 800);
     }
@@ -223,6 +225,10 @@ export function HomeHero({
       if (fadeTimeout) clearTimeout(fadeTimeout);
     };
   }, []);
+
+  useEffect(() => {
+    setCalculatorCycleIndex(0);
+  }, [amount, comparisonProviders, senderCountry]);
 
   useEffect(() => {
     const countdownInterval = setInterval(() => {
@@ -242,11 +248,18 @@ export function HomeHero({
   }, [comparisonProviders]);
 
   const topProvider = calculatorResults[0] ?? { name: "Top provider", recipientReceives: 0 };
+  const lowerProviderOptions = calculatorResults.filter(
+    (provider) =>
+      provider.name !== topProvider.name &&
+      provider.recipientReceives < topProvider.recipientReceives
+  );
   const lowerProvider =
-    [...calculatorResults]
-      .reverse()
-      .find((provider) => provider.recipientReceives < topProvider.recipientReceives) ??
-    calculatorResults[calculatorResults.length - 1] ?? { name: "Other provider", recipientReceives: 0 };
+    lowerProviderOptions.length > 0
+      ? lowerProviderOptions[calculatorCycleIndex % lowerProviderOptions.length]
+      : calculatorResults.find((provider) => provider.name !== topProvider.name) ?? {
+          name: "Other provider",
+          recipientReceives: topProvider.recipientReceives
+        };
   const savings = Math.max(
     0,
     Math.round((topProvider.recipientReceives - lowerProvider.recipientReceives) * 100) / 100
