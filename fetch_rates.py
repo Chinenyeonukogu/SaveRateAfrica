@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 
 NALA_RATES_URL = "https://partners-api.prod.nala-api.com/v1/fx/rates"
 WISE_RATES_URL = "https://api.wise.com/v1/rates"
+ACE_RATES_URL = "https://acemoneytransfer.com/processing/new-transfer/outer/calculations"
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_ROLE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
 WISE_API_TOKEN = os.environ.get("WISE_API_TOKEN", "")
@@ -112,6 +113,25 @@ WESTERN_UNION_REQUESTS = [
     },
 ]
 
+ACE_REQUEST = {
+    "send_currency": "GBP",
+    "receive_currency": "NGN",
+    "form": {
+        "src_currency": "GBP",
+        "dest_currency": "NGN",
+        "source_currency": "GBP",
+        "destination_currency": "NGN",
+        "from_currency": "GBP",
+        "to_currency": "NGN",
+        "send_amount": "500",
+        "amount": "500",
+        "source_country": "GB",
+        "destination_country": "NG",
+        "from_country": "GB",
+        "to_country": "NG",
+    },
+}
+
 
 def require_env(name, value):
     if not value:
@@ -133,6 +153,22 @@ def browser_headers(referer, extra_headers=None):
         headers.update(extra_headers)
 
     return headers
+
+
+def encode_multipart_form_data(fields):
+    boundary = f"----SaveRateAfricaBoundary{int(time.time() * 1000)}"
+    body = bytearray()
+
+    for key, value in fields.items():
+        body.extend(f"--{boundary}\r\n".encode("utf-8"))
+        body.extend(
+            f'Content-Disposition: form-data; name="{key}"\r\n\r\n'.encode("utf-8")
+        )
+        body.extend(str(value).encode("utf-8"))
+        body.extend(b"\r\n")
+
+    body.extend(f"--{boundary}--\r\n".encode("utf-8"))
+    return bytes(body), boundary
 
 
 def to_supabase_row(row):
@@ -586,6 +622,49 @@ def fetch_western_union_exchange_rates():
     return [row for row in rows if has_required_rate_fields(row)]
 
 
+def fetch_ace_exchange_rate():
+    body, boundary = encode_multipart_form_data(ACE_REQUEST["form"])
+    request = urllib.request.Request(
+        ACE_RATES_URL,
+        data=body,
+        method="POST",
+        headers=browser_headers(
+            "https://acemoneytransfer.com/",
+            {"Content-Type": f"multipart/form-data; boundary={boundary}"},
+        ),
+    )
+
+    with urllib.request.urlopen(request, timeout=30) as response:
+        response_text = response.read().decode("utf-8")
+
+    if not response_text.strip():
+        return None
+
+    payload = json.loads(response_text)
+    data = payload.get("data") if isinstance(payload, dict) else None
+    if not isinstance(data, dict):
+        return None
+
+    return {
+        "provider": "Ace Money Transfer",
+        "send_currency": "GBP",
+        "receive_currency": "NGN",
+        "rate": data.get("exchange_rate"),
+        "fee": data.get("transfer_fee"),
+        "fee_currency": data.get("src_currency"),
+        "updated_at": utc_now(),
+    }
+
+
+def fetch_ace_exchange_rates():
+    try:
+        row = fetch_ace_exchange_rate()
+        return [row] if row and has_required_rate_fields(row) else []
+    except Exception as error:
+        print(f"[Ace Money Transfer] Failed GBP-NGN: {error}")
+        return []
+
+
 def delete_exchange_rates(filters):
     query = urllib.parse.urlencode(filters)
     request = urllib.request.Request(
@@ -673,6 +752,7 @@ def main():
         + collect_provider_rows("MoneyGram", fetch_moneygram_exchange_rates)
         + collect_provider_rows("Sendwave", fetch_sendwave_exchange_rates)
         + collect_provider_rows("Western Union", fetch_western_union_exchange_rates)
+        + collect_provider_rows("Ace Money Transfer", fetch_ace_exchange_rates)
     )
 
     saved_rows = upsert_exchange_rates(rows)
