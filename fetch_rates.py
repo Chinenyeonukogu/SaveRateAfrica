@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import time
 import urllib.error
 import urllib.parse
@@ -117,18 +118,16 @@ ACE_REQUEST = {
     "send_currency": "GBP",
     "receive_currency": "NGN",
     "form": {
-        "src_currency": "GBP",
-        "dest_currency": "NGN",
-        "source_currency": "GBP",
-        "destination_currency": "NGN",
-        "from_currency": "GBP",
-        "to_currency": "NGN",
-        "send_amount": "500",
-        "amount": "500",
-        "source_country": "GB",
-        "destination_country": "NG",
-        "from_country": "GB",
-        "to_country": "NG",
+        "data[src_currency]": "GBP",
+        "data[dest_currency]": "NGN",
+        "data[src_amount]": "999",
+        "data[dest_amount]": "1864134",
+        "data[exchange_rate]": "1866",
+        "data[transfer_fee]": "9.99",
+        "data[total_due]": "1008.99",
+        "data[all_payer][0][company_name]": "Instant Deposit - NGN",
+        "data[all_payer][0][company_id]": "2138",
+        "data[all_payer][0][buyer_id]": "999999268",
     },
 }
 
@@ -630,7 +629,10 @@ def fetch_ace_exchange_rate():
         method="POST",
         headers=browser_headers(
             "https://acemoneytransfer.com/",
-            {"Content-Type": f"multipart/form-data; boundary={boundary}"},
+            {
+                "Accept": "application/json, text/html, */*",
+                "Content-Type": f"multipart/form-data; boundary={boundary}",
+            },
         ),
     )
 
@@ -640,9 +642,8 @@ def fetch_ace_exchange_rate():
     if not response_text.strip():
         return None
 
-    payload = json.loads(response_text)
-    data = payload.get("data") if isinstance(payload, dict) else None
-    if not isinstance(data, dict):
+    data = parse_ace_response(response_text)
+    if not data:
         return None
 
     return {
@@ -653,6 +654,37 @@ def fetch_ace_exchange_rate():
         "fee": data.get("transfer_fee"),
         "fee_currency": data.get("src_currency"),
         "updated_at": utc_now(),
+    }
+
+
+def parse_ace_response(response_text):
+    try:
+        payload = json.loads(response_text)
+    except json.JSONDecodeError:
+        payload = None
+
+    if isinstance(payload, dict) and isinstance(payload.get("data"), dict):
+        return payload["data"]
+
+    rate_match = re.search(
+        r"Exchange\s+Rate\s+GBP\s*.*?=\s*NGN\s*<span[^>]*>\s*([\d,.]+)",
+        response_text,
+        re.IGNORECASE | re.DOTALL,
+    )
+    fee_match = re.search(
+        r'id="transfer_fee_outer"[^>]*>\s*([\d,.]+)',
+        response_text,
+        re.IGNORECASE,
+    )
+
+    if not rate_match:
+        return None
+
+    return {
+        "exchange_rate": rate_match.group(1).replace(",", ""),
+        "transfer_fee": fee_match.group(1).replace(",", "") if fee_match else None,
+        "src_currency": "GBP",
+        "dest_currency": "NGN",
     }
 
 
