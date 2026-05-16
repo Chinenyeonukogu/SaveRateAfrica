@@ -259,7 +259,7 @@ def fetch_pesapeer_exchange_rates():
 
         rows.append(
             {
-                "provider": "PesaPeer",
+                "provider": "Pesa",
                 "send_currency": pair.get("from_currency_code"),
                 "receive_currency": "NGN",
                 "rate": pair.get("pesapeer_rate"),
