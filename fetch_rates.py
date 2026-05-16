@@ -117,6 +117,7 @@ def to_supabase_row(row):
         "receive_currency": row["receive_currency"],
         "rate": round(rate, 2),
         "updated_at": row["updated_at"],
+        "is_automated": True,
     }
 
     return clean_row
