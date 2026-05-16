@@ -97,6 +97,21 @@ SENDWAVE_REQUESTS = [
     },
 ]
 
+WESTERN_UNION_REQUESTS = [
+    {
+        "send_currency": "GBP",
+        "url": "https://www.westernunion.com/wuconnect/rest/api/v1.0/price/corridors/GB/GBP",
+    },
+    {
+        "send_currency": "USD",
+        "url": "https://www.westernunion.com/wuconnect/rest/api/v1.0/price/corridors/US/USD",
+    },
+    {
+        "send_currency": "CAD",
+        "url": "https://www.westernunion.com/wuconnect/rest/api/v1.0/price/corridors/CA/CAD",
+    },
+]
+
 
 def require_env(name, value):
     if not value:
@@ -397,6 +412,30 @@ def find_first_value(payload, key_names):
     return None
 
 
+def find_ngn_quote(payload):
+    if isinstance(payload, dict):
+        values = list(payload.values())
+        has_ngn = any(str(value).upper() == "NGN" for value in values)
+        has_nigeria = any(
+            str(value).upper() in {"NG", "NGA", "NIGERIA"} for value in values
+        )
+        if has_ngn or has_nigeria:
+            return payload
+
+        for value in values:
+            found = find_ngn_quote(value)
+            if found is not None:
+                return found
+
+    if isinstance(payload, list):
+        for value in payload:
+            found = find_ngn_quote(value)
+            if found is not None:
+                return found
+
+    return None
+
+
 def fetch_moneygram_exchange_rate(request_config):
     request = urllib.request.Request(
         request_config["url"],
@@ -488,6 +527,65 @@ def fetch_sendwave_exchange_rates():
     return [row for row in rows if has_required_rate_fields(row)]
 
 
+def fetch_western_union_exchange_rate(request_config):
+    request = urllib.request.Request(
+        request_config["url"],
+        headers=browser_headers("https://www.westernunion.com/"),
+    )
+
+    with urllib.request.urlopen(request, timeout=30) as response:
+        payload = json.loads(response.read().decode("utf-8"))
+
+    quote = find_ngn_quote(payload) or payload
+
+    return {
+        "provider": "Western Union",
+        "send_currency": request_config["send_currency"],
+        "receive_currency": "NGN",
+        "rate": find_first_value(
+            quote,
+            (
+                "exchangeRate",
+                "exchange_rate",
+                "fxRate",
+                "fx_rate",
+                "rate",
+            ),
+        ),
+        "fee": find_first_value(
+            quote,
+            (
+                "fee",
+                "feeAmount",
+                "fee_amount",
+                "transferFee",
+                "transfer_fee",
+                "totalFee",
+                "total_fee",
+            ),
+        ),
+        "fee_currency": request_config["send_currency"],
+        "updated_at": utc_now(),
+    }
+
+
+def fetch_western_union_exchange_rates():
+    rows = []
+
+    for request_config in WESTERN_UNION_REQUESTS:
+        try:
+            row = fetch_western_union_exchange_rate(request_config)
+            if row:
+                rows.append(row)
+        except Exception as error:
+            print(
+                "[Western Union] Failed "
+                f"{request_config['send_currency']}-NGN: {error}"
+            )
+
+    return [row for row in rows if has_required_rate_fields(row)]
+
+
 def delete_exchange_rates(filters):
     query = urllib.parse.urlencode(filters)
     request = urllib.request.Request(
@@ -574,6 +672,7 @@ def main():
         + collect_provider_rows("Remitly", fetch_remitly_exchange_rates)
         + collect_provider_rows("MoneyGram", fetch_moneygram_exchange_rates)
         + collect_provider_rows("Sendwave", fetch_sendwave_exchange_rates)
+        + collect_provider_rows("Western Union", fetch_western_union_exchange_rates)
     )
 
     saved_rows = upsert_exchange_rates(rows)
