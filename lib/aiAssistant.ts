@@ -26,7 +26,6 @@ LIVE PROVIDER DATA (USD to NGN, updated every 60 min):
 - Paysend:        rate 1,362.70 NGN/USD · $1.99 fee · 1–2 days · 4.3★
 - Wise:           rate 1,375.82 NGN/USD · from $6.90 fee · Same day · 4.8★
 - MoneyGram:      rate 1,372.36 NGN/USD · $7.00 fee · Minutes · 4.1★
-- Western Union:  rate 1,370.98 NGN/USD · $8.99 fee · Minutes · 4.2★
 
 PLATFORM FACTS:
 - Rates refresh every 60 minutes
@@ -46,8 +45,7 @@ YOUR BEHAVIOUR RULES:
 2. For speed questions: 
    Instant = Sendwave, Pesa, Afriex
    Minutes = LemFi, Nala,
-             TapTap Send, Remitly, MoneyGram, 
-             Western Union
+             TapTap Send, Remitly, MoneyGram
    Within 1 hour = WorldRemit
    Same day = Wise, Flutterwave
 
@@ -123,8 +121,7 @@ const PROVIDER_ORDER = [
   "Flutterwave",
   "Paysend",
   "Wise",
-  "MoneyGram",
-  "Western Union"
+  "MoneyGram"
 ] as const;
 
 const PROVIDER_ALIASES: Record<string, string[]> = {
@@ -138,7 +135,6 @@ const PROVIDER_ALIASES: Record<string, string[]> = {
   Remitly: ["remitly"],
   Sendwave: ["sendwave"],
   "TapTap Send": ["taptap send", "tap tap send"],
-  "Western Union": ["western union"],
   Wise: ["wise"],
   WorldRemit: ["worldremit", "world remit"]
 };
@@ -528,14 +524,9 @@ ${getNormalizedProviderName(rankedProviders[0].name)} wins by ${formatExactNaira
 function buildBestRateReply(comparison: ComparisonResult, amount: number) {
   const activeComparison = buildComparisonForAmount(comparison, amount);
   const bestRateProvider = activeComparison.providers[0];
-  const westernUnion = findProvider(activeComparison, "Western Union");
   const formattedAmount = getFormattedAmount(activeComparison, amount);
 
-  if (!westernUnion) {
   return `Top rate today is ${getNormalizedProviderName(bestRateProvider.name)} at ${formatRateValue(bestRateProvider.exchangeRate)} NGN/${activeComparison.sourceCurrency} with ${getTransferFeeLabel(bestRateProvider, activeComparison).toLowerCase()} and ${bestRateProvider.deliveryLabel.toLowerCase()} delivery. On a ${formattedAmount} send your recipient gets ${formatExactNaira(bestRateProvider.amountReceived)}.`;
-  }
-
-  return `Top rate today is ${getNormalizedProviderName(bestRateProvider.name)} at ${formatRateValue(bestRateProvider.exchangeRate)} NGN/${activeComparison.sourceCurrency} with ${getTransferFeeLabel(bestRateProvider, activeComparison).toLowerCase()} and ${bestRateProvider.deliveryLabel.toLowerCase()} delivery. On a ${formattedAmount} send your recipient gets ${formatExactNaira(bestRateProvider.amountReceived)}.\n\nThat's ${formatExactNaira(bestRateProvider.amountReceived - westernUnion.amountReceived)} more than Western Union on the same transfer.`;
 }
 
 function buildCheapestReply(comparison: ComparisonResult, amount: number) {
