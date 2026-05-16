@@ -82,6 +82,21 @@ MONEYGRAM_REQUESTS = [
     },
 ]
 
+SENDWAVE_REQUESTS = [
+    {
+        "send_currency": "USD",
+        "url": "https://app.sendwave.com/v2/pricing-public?amountType=SEND&receiveCurrency=NGN&amount=0&sendCurrency=USD&sendCountryIso2=us&receiveCountryIso2=ng",
+    },
+    {
+        "send_currency": "GBP",
+        "url": "https://app.sendwave.com/v2/pricing-public?amountType=SEND&receiveCurrency=NGN&amount=200&sendCurrency=GBP&sendCountryIso2=gb&receiveCountryIso2=ng",
+    },
+    {
+        "send_currency": "CAD",
+        "url": "https://app.sendwave.com/v2/pricing-public?amountType=SEND&receiveCurrency=NGN&amount=200&sendCurrency=CAD&sendCountryIso2=ca&receiveCountryIso2=ng",
+    },
+]
+
 
 def require_env(name, value):
     if not value:
@@ -438,6 +453,41 @@ def fetch_moneygram_exchange_rates():
     return [row for row in rows if has_required_rate_fields(row)]
 
 
+def fetch_sendwave_exchange_rate(request_config):
+    request = urllib.request.Request(
+        request_config["url"],
+        headers=browser_headers("https://www.sendwave.com/"),
+    )
+
+    with urllib.request.urlopen(request, timeout=30) as response:
+        payload = json.loads(response.read().decode("utf-8"))
+
+    return {
+        "provider": "Sendwave",
+        "send_currency": request_config["send_currency"],
+        "receive_currency": "NGN",
+        "rate": payload.get("effectiveExchangeRate")
+        or payload.get("baseExchangeRate"),
+        "fee": payload.get("effectiveFeeAmount") or payload.get("baseFeeAmount"),
+        "fee_currency": request_config["send_currency"],
+        "updated_at": utc_now(),
+    }
+
+
+def fetch_sendwave_exchange_rates():
+    rows = []
+
+    for request_config in SENDWAVE_REQUESTS:
+        try:
+            row = fetch_sendwave_exchange_rate(request_config)
+            if row:
+                rows.append(row)
+        except Exception as error:
+            print(f"[Sendwave] Failed {request_config['send_currency']}-NGN: {error}")
+
+    return [row for row in rows if has_required_rate_fields(row)]
+
+
 def delete_exchange_rates(filters):
     query = urllib.parse.urlencode(filters)
     request = urllib.request.Request(
@@ -523,6 +573,7 @@ def main():
         + collect_provider_rows("Flutterwave", fetch_flutterwave_exchange_rates)
         + collect_provider_rows("Remitly", fetch_remitly_exchange_rates)
         + collect_provider_rows("MoneyGram", fetch_moneygram_exchange_rates)
+        + collect_provider_rows("Sendwave", fetch_sendwave_exchange_rates)
     )
 
     saved_rows = upsert_exchange_rates(rows)
