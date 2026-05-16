@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 
 NALA_RATES_URL = "https://partners-api.prod.nala-api.com/v1/fx/rates"
 WISE_RATES_URL = "https://api.wise.com/v1/rates"
+PESAPEER_RATES_URL = "https://backend-api.prod.pesapeer.com/v2/public/currency-pairs"
 ACE_RATES_URL = "https://acemoneytransfer.com/processing/new-transfer/outer/calculations"
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_ROLE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
@@ -296,6 +297,41 @@ def fetch_wise_exchange_rates():
                 "[Wise] Failed "
                 f"{corridor['send_currency']}-{corridor['receive_currency']}: {error}"
             )
+
+    return [row for row in rows if has_required_rate_fields(row)]
+
+
+def fetch_pesapeer_exchange_rates():
+    request = urllib.request.Request(
+        PESAPEER_RATES_URL,
+        headers=browser_headers("https://www.pesapeer.com/"),
+    )
+
+    with urllib.request.urlopen(request, timeout=30) as response:
+        payload = json.loads(response.read().decode("utf-8"))
+
+    pairs = payload if isinstance(payload, list) else payload.get("data", [])
+    rows = []
+
+    for pair in pairs:
+        if pair.get("to_currency_code") != "NGN":
+            continue
+        if pair.get("from_currency_code") not in SUPPORTED_SEND_CURRENCIES:
+            continue
+        if pair.get("status") != "ACTIVE":
+            continue
+        if pair.get("rate_type") != "SELL":
+            continue
+
+        rows.append(
+            {
+                "provider": "PesaPeer",
+                "send_currency": pair.get("from_currency_code"),
+                "receive_currency": "NGN",
+                "rate": pair.get("pesapeer_rate"),
+                "updated_at": utc_now(),
+            }
+        )
 
     return [row for row in rows if has_required_rate_fields(row)]
 
@@ -778,6 +814,7 @@ def main():
     rows = (
         collect_provider_rows("Nala", fetch_nala_exchange_rates)
         + collect_provider_rows("Wise", fetch_wise_exchange_rates)
+        + collect_provider_rows("PesaPeer", fetch_pesapeer_exchange_rates)
         + collect_provider_rows("Paysend", fetch_paysend_exchange_rates)
         + collect_provider_rows("Flutterwave", fetch_flutterwave_exchange_rates)
         + collect_provider_rows("Remitly", fetch_remitly_exchange_rates)
