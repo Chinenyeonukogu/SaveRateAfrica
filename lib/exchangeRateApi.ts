@@ -26,7 +26,7 @@ declare global {
     | undefined;
 }
 
-export const LIVE_RATE_REVALIDATE_SECONDS = 3600;
+export const LIVE_RATE_REVALIDATE_SECONDS = 1800;
 const LIVE_RATE_CACHE_TTL_MS = LIVE_RATE_REVALIDATE_SECONDS * 1000;
 const SUPPORTED_SOURCE_CURRENCIES: SourceCurrency[] = ["USD", "GBP", "CAD"];
 
