@@ -5,18 +5,14 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
-from decimal import Decimal, InvalidOperation
 
 
 NALA_RATES_URL = "https://partners-api.prod.nala-api.com/v1/fx/rates"
 WISE_RATES_URL = "https://api.wise.com/v1/rates"
-LEMFI_RATES_URL = "https://www.lemfi.com/api/lemonade/v2/exchange"
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_ROLE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
 WISE_API_TOKEN = os.environ.get("WISE_API_TOKEN", "")
 MAX_REASONABLE_NGN_RATE = 3000
-MIN_LEMFI_NGN_RATE = 500
-MAX_LEMFI_NGN_RATE = 10000
 BROWSER_USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
     "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -29,12 +25,6 @@ CORRIDORS = [
     {"send_currency": "CAD", "receive_currency": "NGN"},
 ]
 SUPPORTED_SEND_CURRENCIES = {corridor["send_currency"] for corridor in CORRIDORS}
-
-LEMFI_REQUESTS = [
-    {"from": "USD", "to": "NGN", "sender_country": "United States"},
-    {"from": "GBP", "to": "NGN", "sender_country": "United Kingdom"},
-    {"from": "CAD", "to": "NGN", "sender_country": "Canada"},
-]
 
 PAYSEND_REQUESTS = [
     {
@@ -229,91 +219,6 @@ def fetch_wise_exchange_rates():
                 "[Wise] Failed "
                 f"{corridor['send_currency']}-{corridor['receive_currency']}: {error}"
             )
-
-    return [row for row in rows if has_required_rate_fields(row)]
-
-
-def digits_only(value):
-    return "".join(character for character in str(value) if character.isdigit())
-
-
-def normalize_lemfi_rate(rate, rate_id):
-    try:
-        decimal_rate = Decimal(str(rate))
-        divisor = Decimal(digits_only(rate_id))
-    except (InvalidOperation, TypeError):
-        return None
-
-    if divisor == 0:
-        return None
-
-    normalized_rate = decimal_rate / divisor
-    return format(normalized_rate.normalize(), "f")
-
-
-def extract_lemfi_rate(payload):
-    data = payload.get("data") if isinstance(payload, dict) else None
-    if not isinstance(data, dict):
-        return None
-
-    return normalize_lemfi_rate(data.get("rate"), data.get("ID"))
-
-
-def fetch_lemfi_exchange_rate(payload):
-    request = urllib.request.Request(
-        LEMFI_RATES_URL,
-        data=json.dumps(payload).encode("utf-8"),
-        method="POST",
-        headers=browser_headers(
-            "https://www.lemfi.com/",
-            {
-                "Content-Type": "application/json",
-            },
-        ),
-    )
-
-    with urllib.request.urlopen(request, timeout=30) as response:
-        response_payload = json.loads(response.read().decode("utf-8"))
-
-    print(
-        "[LemFi] Raw response "
-        f"{payload['from']}-{payload['to']}: {json.dumps(response_payload)}"
-    )
-
-    rate = extract_lemfi_rate(response_payload)
-    try:
-        numeric_rate = float(rate)
-    except (TypeError, ValueError):
-        print(f"[LemFi] Skipping {payload['from']}-NGN: invalid rate {rate}")
-        return None
-
-    if numeric_rate < MIN_LEMFI_NGN_RATE or numeric_rate > MAX_LEMFI_NGN_RATE:
-        print(
-            "[LemFi] Skipping "
-            f"{payload['from']}-NGN: rate {rate} outside "
-            f"{MIN_LEMFI_NGN_RATE}-{MAX_LEMFI_NGN_RATE}"
-        )
-        return None
-
-    return {
-        "provider": "LemFi",
-        "send_currency": payload["from"],
-        "receive_currency": payload["to"],
-        "rate": rate,
-        "updated_at": utc_now(),
-    }
-
-
-def fetch_lemfi_exchange_rates():
-    rows = []
-
-    for payload in LEMFI_REQUESTS:
-        try:
-            row = fetch_lemfi_exchange_rate(payload)
-            if row:
-                rows.append(row)
-        except Exception as error:
-            print(f"[LemFi] Failed {payload['from']}-{payload['to']}: {error}")
 
     return [row for row in rows if has_required_rate_fields(row)]
 
@@ -524,7 +429,6 @@ def main():
     rows = (
         collect_provider_rows("Nala", fetch_nala_exchange_rates)
         + collect_provider_rows("Wise", fetch_wise_exchange_rates)
-        + collect_provider_rows("LemFi", fetch_lemfi_exchange_rates)
         + collect_provider_rows("Paysend", fetch_paysend_exchange_rates)
         + collect_provider_rows("Flutterwave", fetch_flutterwave_exchange_rates)
         + collect_provider_rows("Remitly", fetch_remitly_exchange_rates)
