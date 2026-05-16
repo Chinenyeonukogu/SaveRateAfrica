@@ -1,6 +1,5 @@
 import json
 import os
-import re
 import time
 import urllib.error
 import urllib.parse
@@ -11,7 +10,6 @@ from datetime import datetime, timezone
 NALA_RATES_URL = "https://partners-api.prod.nala-api.com/v1/fx/rates"
 WISE_RATES_URL = "https://api.wise.com/v1/rates"
 PESAPEER_RATES_URL = "https://backend-api.prod.pesapeer.com/v2/public/currency-pairs"
-ACE_RATES_URL = "https://acemoneytransfer.com/processing/new-transfer/outer/calculations"
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_ROLE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
 WISE_API_TOKEN = os.environ.get("WISE_API_TOKEN", "")
@@ -70,21 +68,6 @@ REMITLY_REQUESTS = [
     },
 ]
 
-MONEYGRAM_REQUESTS = [
-    {
-        "send_currency": "USD",
-        "url": "https://www.moneygram.com/api/send-money/fee-quote/v2?senderCountryCode=USA&senderCurrencyCode=USD&receiverCountryCode=NGA&sendAmount=500.00",
-    },
-    {
-        "send_currency": "GBP",
-        "url": "https://www.moneygram.com/api/send-money/fee-quote/v2?senderCountryCode=GBR&senderCurrencyCode=GBP&receiverCountryCode=NGA&sendAmount=900.00",
-    },
-    {
-        "send_currency": "CAD",
-        "url": "https://www.moneygram.com/api/send-money/fee-quote/v2?senderCountryCode=CAN&senderCurrencyCode=CAD&receiverCountryCode=NGA&sendAmount=900.00",
-    },
-]
-
 SENDWAVE_REQUESTS = [
     {
         "send_currency": "USD",
@@ -99,39 +82,6 @@ SENDWAVE_REQUESTS = [
         "url": "https://app.sendwave.com/v2/pricing-public?amountType=SEND&receiveCurrency=NGN&amount=200&sendCurrency=CAD&sendCountryIso2=ca&receiveCountryIso2=ng",
     },
 ]
-
-WESTERN_UNION_REQUESTS = [
-    {
-        "send_currency": "GBP",
-        "url": "https://www.westernunion.com/wuconnect/rest/api/v1.0/price/corridors/GB/GBP",
-    },
-    {
-        "send_currency": "USD",
-        "url": "https://www.westernunion.com/wuconnect/rest/api/v1.0/price/corridors/US/USD",
-    },
-    {
-        "send_currency": "CAD",
-        "url": "https://www.westernunion.com/wuconnect/rest/api/v1.0/price/corridors/CA/CAD",
-    },
-]
-
-ACE_REQUEST = {
-    "send_currency": "GBP",
-    "receive_currency": "NGN",
-    "form": {
-        "data[src_currency]": "GBP",
-        "data[dest_currency]": "NGN",
-        "data[src_amount]": "999",
-        "data[dest_amount]": "1864134",
-        "data[exchange_rate]": "1866",
-        "data[transfer_fee]": "9.99",
-        "data[total_due]": "1008.99",
-        "data[all_payer][0][company_name]": "Instant Deposit - NGN",
-        "data[all_payer][0][company_id]": "2138",
-        "data[all_payer][0][buyer_id]": "999999268",
-    },
-}
-
 
 def require_env(name, value):
     if not value:
@@ -153,22 +103,6 @@ def browser_headers(referer, extra_headers=None):
         headers.update(extra_headers)
 
     return headers
-
-
-def encode_multipart_form_data(fields):
-    boundary = f"----SaveRateAfricaBoundary{int(time.time() * 1000)}"
-    body = bytearray()
-
-    for key, value in fields.items():
-        body.extend(f"--{boundary}\r\n".encode("utf-8"))
-        body.extend(
-            f'Content-Disposition: form-data; name="{key}"\r\n\r\n'.encode("utf-8")
-        )
-        body.extend(str(value).encode("utf-8"))
-        body.extend(b"\r\n")
-
-    body.extend(f"--{boundary}--\r\n".encode("utf-8"))
-    return bytes(body), boundary
 
 
 def to_supabase_row(row):
@@ -461,108 +395,6 @@ def fetch_remitly_exchange_rates():
     return [row for row in rows if has_required_rate_fields(row)]
 
 
-def find_first_value(payload, key_names):
-    normalized_keys = {key.lower() for key in key_names}
-
-    if isinstance(payload, dict):
-        for key, value in payload.items():
-            if key.lower() in normalized_keys and value is not None:
-                return value
-
-        for value in payload.values():
-            found = find_first_value(value, key_names)
-            if found is not None:
-                return found
-
-    if isinstance(payload, list):
-        for value in payload:
-            found = find_first_value(value, key_names)
-            if found is not None:
-                return found
-
-    return None
-
-
-def find_ngn_quote(payload):
-    if isinstance(payload, dict):
-        values = list(payload.values())
-        has_ngn = any(str(value).upper() == "NGN" for value in values)
-        has_nigeria = any(
-            str(value).upper() in {"NG", "NGA", "NIGERIA"} for value in values
-        )
-        if has_ngn or has_nigeria:
-            return payload
-
-        for value in values:
-            found = find_ngn_quote(value)
-            if found is not None:
-                return found
-
-    if isinstance(payload, list):
-        for value in payload:
-            found = find_ngn_quote(value)
-            if found is not None:
-                return found
-
-    return None
-
-
-def fetch_moneygram_exchange_rate(request_config):
-    request = urllib.request.Request(
-        request_config["url"],
-        headers=browser_headers("https://www.moneygram.com/"),
-    )
-
-    with urllib.request.urlopen(request, timeout=30) as response:
-        payload = json.loads(response.read().decode("utf-8"))
-
-    return {
-        "provider": "MoneyGram",
-        "send_currency": request_config["send_currency"],
-        "receive_currency": "NGN",
-        "rate": find_first_value(
-            payload,
-            (
-                "exchangeRate",
-                "exchange_rate",
-                "fxRate",
-                "fx_rate",
-                "rate",
-            ),
-        ),
-        "fee": find_first_value(
-            payload,
-            (
-                "fee",
-                "feeAmount",
-                "fee_amount",
-                "transferFee",
-                "transfer_fee",
-                "totalFee",
-                "total_fee",
-            ),
-        ),
-        "fee_currency": request_config["send_currency"],
-        "updated_at": utc_now(),
-    }
-
-
-def fetch_moneygram_exchange_rates():
-    rows = []
-
-    for request_config in MONEYGRAM_REQUESTS:
-        try:
-            row = fetch_moneygram_exchange_rate(request_config)
-            if row:
-                rows.append(row)
-        except Exception as error:
-            print(
-                f"[MoneyGram] Failed {request_config['send_currency']}-NGN: {error}"
-            )
-
-    return [row for row in rows if has_required_rate_fields(row)]
-
-
 def fetch_sendwave_exchange_rate(request_config):
     request = urllib.request.Request(
         request_config["url"],
@@ -596,141 +428,6 @@ def fetch_sendwave_exchange_rates():
             print(f"[Sendwave] Failed {request_config['send_currency']}-NGN: {error}")
 
     return [row for row in rows if has_required_rate_fields(row)]
-
-
-def fetch_western_union_exchange_rate(request_config):
-    request = urllib.request.Request(
-        request_config["url"],
-        headers=browser_headers("https://www.westernunion.com/"),
-    )
-
-    with urllib.request.urlopen(request, timeout=30) as response:
-        payload = json.loads(response.read().decode("utf-8"))
-
-    quote = find_ngn_quote(payload) or payload
-
-    return {
-        "provider": "Western Union",
-        "send_currency": request_config["send_currency"],
-        "receive_currency": "NGN",
-        "rate": find_first_value(
-            quote,
-            (
-                "exchangeRate",
-                "exchange_rate",
-                "fxRate",
-                "fx_rate",
-                "rate",
-            ),
-        ),
-        "fee": find_first_value(
-            quote,
-            (
-                "fee",
-                "feeAmount",
-                "fee_amount",
-                "transferFee",
-                "transfer_fee",
-                "totalFee",
-                "total_fee",
-            ),
-        ),
-        "fee_currency": request_config["send_currency"],
-        "updated_at": utc_now(),
-    }
-
-
-def fetch_western_union_exchange_rates():
-    rows = []
-
-    for request_config in WESTERN_UNION_REQUESTS:
-        try:
-            row = fetch_western_union_exchange_rate(request_config)
-            if row:
-                rows.append(row)
-        except Exception as error:
-            print(
-                "[Western Union] Failed "
-                f"{request_config['send_currency']}-NGN: {error}"
-            )
-
-    return [row for row in rows if has_required_rate_fields(row)]
-
-
-def fetch_ace_exchange_rate():
-    body, boundary = encode_multipart_form_data(ACE_REQUEST["form"])
-    request = urllib.request.Request(
-        ACE_RATES_URL,
-        data=body,
-        method="POST",
-        headers=browser_headers(
-            "https://acemoneytransfer.com/",
-            {
-                "Accept": "application/json, text/html, */*",
-                "Content-Type": f"multipart/form-data; boundary={boundary}",
-            },
-        ),
-    )
-
-    with urllib.request.urlopen(request, timeout=30) as response:
-        response_text = response.read().decode("utf-8")
-
-    if not response_text.strip():
-        return None
-
-    data = parse_ace_response(response_text)
-    if not data:
-        return None
-
-    return {
-        "provider": "Ace Money Transfer",
-        "send_currency": "GBP",
-        "receive_currency": "NGN",
-        "rate": data.get("exchange_rate"),
-        "fee": data.get("transfer_fee"),
-        "fee_currency": data.get("src_currency"),
-        "updated_at": utc_now(),
-    }
-
-
-def parse_ace_response(response_text):
-    try:
-        payload = json.loads(response_text)
-    except json.JSONDecodeError:
-        payload = None
-
-    if isinstance(payload, dict) and isinstance(payload.get("data"), dict):
-        return payload["data"]
-
-    rate_match = re.search(
-        r"Exchange\s+Rate\s+GBP\s*.*?=\s*NGN\s*<span[^>]*>\s*([\d,.]+)",
-        response_text,
-        re.IGNORECASE | re.DOTALL,
-    )
-    fee_match = re.search(
-        r'id="transfer_fee_outer"[^>]*>\s*([\d,.]+)',
-        response_text,
-        re.IGNORECASE,
-    )
-
-    if not rate_match:
-        return None
-
-    return {
-        "exchange_rate": rate_match.group(1).replace(",", ""),
-        "transfer_fee": fee_match.group(1).replace(",", "") if fee_match else None,
-        "src_currency": "GBP",
-        "dest_currency": "NGN",
-    }
-
-
-def fetch_ace_exchange_rates():
-    try:
-        row = fetch_ace_exchange_rate()
-        return [row] if row and has_required_rate_fields(row) else []
-    except Exception as error:
-        print(f"[Ace Money Transfer] Failed GBP-NGN: {error}")
-        return []
 
 
 def delete_exchange_rates(filters):
@@ -818,10 +515,7 @@ def main():
         + collect_provider_rows("Paysend", fetch_paysend_exchange_rates)
         + collect_provider_rows("Flutterwave", fetch_flutterwave_exchange_rates)
         + collect_provider_rows("Remitly", fetch_remitly_exchange_rates)
-        + collect_provider_rows("MoneyGram", fetch_moneygram_exchange_rates)
         + collect_provider_rows("Sendwave", fetch_sendwave_exchange_rates)
-        + collect_provider_rows("Western Union", fetch_western_union_exchange_rates)
-        + collect_provider_rows("Ace Money Transfer", fetch_ace_exchange_rates)
     )
 
     saved_rows = upsert_exchange_rates(rows)
