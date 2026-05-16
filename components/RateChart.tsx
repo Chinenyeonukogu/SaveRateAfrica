@@ -1,39 +1,90 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import {
-  Area,
   CartesianGrid,
-  Legend,
   Line,
   LineChart,
   ResponsiveContainer,
   Tooltip,
-  XAxis
+  XAxis,
+  YAxis
 } from "recharts";
-
-interface TrendPoint {
-  date: string;
-  USD: number;
-  GBP: number;
-  CAD: number;
-}
 
 type TrendCurrency = "USD" | "GBP" | "CAD";
 
-function formatNgRate(value: number) {
+interface ExchangeRateRow {
+  provider?: string;
+  send_currency?: string;
+  receive_currency?: string;
+  rate?: number | string;
+  updated_at?: string | null;
+}
+
+interface HistoryRow {
+  [key: string]: unknown;
+  send_currency?: string;
+  receive_currency?: string;
+  rate?: number | string;
+}
+
+interface CurrencyMeta {
+  accent: string;
+  country: string;
+  currency: TrendCurrency;
+  flag: string;
+  muted: string;
+}
+
+interface CurrencySummary extends CurrencyMeta {
+  bestProvider: string;
+  bestRate: number;
+  changePercent: number;
+}
+
+interface TrendPoint {
+  date: string;
+  label: string;
+  USD: number | null;
+  GBP: number | null;
+  CAD: number | null;
+}
+
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+const currencies: CurrencyMeta[] = [
+  {
+    accent: "#00c853",
+    country: "United States",
+    currency: "USD",
+    flag: "🇺🇸",
+    muted: "rgba(0, 200, 83, 0.12)"
+  },
+  {
+    accent: "#f5a623",
+    country: "United Kingdom",
+    currency: "GBP",
+    flag: "🇬🇧",
+    muted: "rgba(245, 166, 35, 0.14)"
+  },
+  {
+    accent: "#e53935",
+    country: "Canada",
+    currency: "CAD",
+    flag: "🇨🇦",
+    muted: "rgba(229, 57, 53, 0.12)"
+  }
+];
+
+function formatRate(value: number) {
   return value.toLocaleString("en-NG", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   });
 }
 
-function formatNgRateCompact(value: number) {
-  return `\u20a6${Math.round(value).toLocaleString("en-NG")}`;
-}
-
-function formatTrendDate(value: string) {
+function formatDateLabel(value: string) {
   const parsedDate = new Date(value);
 
   if (Number.isNaN(parsedDate.getTime())) {
@@ -46,55 +97,211 @@ function formatTrendDate(value: string) {
   });
 }
 
-function ChartTooltip({
-  active,
-  payload,
-  label,
-  activeCurrency
-}: any & { activeCurrency: TrendCurrency }) {
+function getDateKey(row: HistoryRow) {
+  const rawValue =
+    row.rate_date ??
+    row.history_date ??
+    row.recorded_at ??
+    row.created_at ??
+    row.updated_at ??
+    row.date;
+  const value = String(rawValue ?? "");
+
+  if (!value) {
+    return "";
+  }
+
+  const parsedDate = new Date(value);
+  if (Number.isNaN(parsedDate.getTime())) {
+    return value.slice(0, 10);
+  }
+
+  return parsedDate.toISOString().slice(0, 10);
+}
+
+function normalizeCurrency(value: unknown): TrendCurrency | null {
+  const currency = String(value ?? "").toUpperCase();
+  return currency === "USD" || currency === "GBP" || currency === "CAD"
+    ? currency
+    : null;
+}
+
+function normalizeRate(value: unknown) {
+  const rate = Number(value);
+  return Number.isFinite(rate) && rate > 0 ? rate : null;
+}
+
+function buildSupabaseUrl(table: string, searchParams: URLSearchParams) {
+  if (!SUPABASE_URL) {
+    return "";
+  }
+
+  return `${SUPABASE_URL.replace(/\/$/, "")}/rest/v1/${table}?${searchParams.toString()}`;
+}
+
+async function fetchSupabaseTable<T>(table: string, searchParams: URLSearchParams) {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    throw new Error("Supabase public env vars are missing.");
+  }
+
+  const response = await fetch(buildSupabaseUrl(table, searchParams), {
+    headers: {
+      apikey: SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${SUPABASE_ANON_KEY}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error(`Supabase ${table} fetch failed.`);
+  }
+
+  return (await response.json()) as T[];
+}
+
+function buildTrendPoints(historyRows: HistoryRow[]) {
+  const byDate = new Map<string, TrendPoint>();
+
+  historyRows.forEach((row) => {
+    const receiveCurrency = String(
+      row.receive_currency ?? row.destination_currency ?? row.to_currency ?? ""
+    ).toUpperCase();
+
+    if (receiveCurrency !== "NGN") {
+      return;
+    }
+
+    const currency = normalizeCurrency(
+      row.send_currency ?? row.source_currency ?? row.from_currency ?? row.currency
+    );
+    const rate = normalizeRate(row.rate ?? row.exchange_rate);
+    const date = getDateKey(row);
+
+    if (!currency || rate === null || !date) {
+      return;
+    }
+
+    const currentPoint =
+      byDate.get(date) ??
+      ({
+        date,
+        label: formatDateLabel(date),
+        USD: null,
+        GBP: null,
+        CAD: null
+      } satisfies TrendPoint);
+
+    currentPoint[currency] = Math.max(currentPoint[currency] ?? 0, rate);
+    byDate.set(date, currentPoint);
+  });
+
+  return [...byDate.values()]
+    .sort((first, second) => first.date.localeCompare(second.date))
+    .slice(-7);
+}
+
+function getPreviousRate(history: TrendPoint[], currency: TrendCurrency) {
+  const rates = history
+    .map((point) => point[currency])
+    .filter((rate): rate is number => typeof rate === "number" && rate > 0);
+
+  return rates.length >= 2 ? rates[rates.length - 2] : null;
+}
+
+function getChangePercent(currentRate: number, previousRate: number | null) {
+  if (!previousRate || previousRate <= 0) {
+    return 0;
+  }
+
+  return ((currentRate - previousRate) / previousRate) * 100;
+}
+
+function RateTooltip({ active, payload, label }: any) {
   if (!active || !payload?.length) {
     return null;
   }
 
-  const activePoint =
-    payload.find((point: any) => point.dataKey === activeCurrency) ?? payload[0];
-  const value = Number(activePoint.value);
-
-  if (!Number.isFinite(value)) {
-    return null;
-  }
-
   return (
-    <div className="rounded-[8px] bg-[#2e7d32] px-3 py-1.5 text-[12px] text-white">
-      <p>{formatTrendDate(String(label))}</p>
-      <p className="font-bold">{"\u20a6"}{formatNgRate(value)}</p>
+    <div className="min-w-[190px] rounded-[8px] border border-[#c8e6c9] bg-white px-3 py-2 text-[12px] shadow-[0_14px_30px_rgba(17,48,25,0.16)]">
+      <p className="mb-2 font-bold text-[#1a2e1a]">{label}</p>
+      <div className="space-y-1.5">
+        {currencies.map((currency) => {
+          const point = payload.find((item: any) => item.dataKey === currency.currency);
+          const value = Number(point?.value);
+
+          return (
+            <div
+              key={currency.currency}
+              className="flex items-center justify-between gap-4"
+            >
+              <span className="flex items-center gap-2 text-[#35513a]">
+                <span>{currency.flag}</span>
+                {currency.currency}/NGN
+              </span>
+              <span className="font-bold text-[#1a2e1a]">
+                {Number.isFinite(value) ? formatRate(value) : "—"}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function CurrencyLegend({ summaries }: { summaries: CurrencySummary[] }) {
+  return (
+    <div className="flex flex-wrap gap-3">
+      {summaries.map((summary) => (
+        <div
+          key={summary.currency}
+          className="inline-flex items-center gap-2 text-[12px] font-bold text-[#1a2e1a]"
+        >
+          <span>{summary.flag}</span>
+          <span
+            className="h-2.5 w-2.5 rounded-full"
+            style={{ backgroundColor: summary.accent }}
+          />
+          {summary.currency}/NGN
+          <span className="font-black">{formatRate(summary.bestRate)}</span>
+        </div>
+      ))}
     </div>
   );
 }
 
 export function RateChart() {
-  const [trendData, setTrendData] = useState<TrendPoint[] | null>(null);
+  const [currentRates, setCurrentRates] = useState<ExchangeRateRow[]>([]);
+  const [history, setHistory] = useState<TrendPoint[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [activeCurrency, setActiveCurrency] = useState<TrendCurrency>("USD");
 
   useEffect(() => {
     let mounted = true;
 
-    async function loadTrend() {
+    async function loadRates() {
       try {
-        const response = await fetch("/api/trend");
-        const json = await response.json();
+        const currentSearchParams = new URLSearchParams({
+          select: "provider,send_currency,receive_currency,rate,fee,updated_at,is_automated",
+          receive_currency: "eq.NGN",
+          order: "provider.asc,send_currency.asc"
+        });
+        const historySearchParams = new URLSearchParams({
+          select: "*",
+          receive_currency: "eq.NGN",
+          limit: "500"
+        });
 
-        if (!response.ok || !json?.trend?.length) {
-          throw new Error("Rate history unavailable.");
-        }
+        const [exchangeRows, historyRows] = await Promise.all([
+          fetchSupabaseTable<ExchangeRateRow>("exchange_rates", currentSearchParams),
+          fetchSupabaseTable<HistoryRow>("rate_history", historySearchParams)
+        ]);
 
         if (!mounted) {
           return;
         }
 
-        setTrendData(json.trend);
+        setCurrentRates(exchangeRows);
+        setHistory(buildTrendPoints(historyRows));
       } catch {
         if (!mounted) {
           return;
@@ -110,219 +317,178 @@ export function RateChart() {
       }
     }
 
-    loadTrend();
+    loadRates();
 
     return () => {
       mounted = false;
     };
   }, []);
 
-  const chartData = useMemo(() => {
-    return trendData ?? [];
-  }, [trendData]);
+  const summaries = useMemo(() => {
+    return currencies.map((currency) => {
+      const bestRow = currentRates
+        .filter(
+          (row) =>
+            normalizeCurrency(row.send_currency) === currency.currency &&
+            String(row.receive_currency ?? "").toUpperCase() === "NGN"
+        )
+        .map((row) => ({ ...row, numericRate: normalizeRate(row.rate) }))
+        .filter((row) => row.numericRate !== null)
+        .sort((first, second) => Number(second.numericRate) - Number(first.numericRate))[0];
+      const bestRate = Number(bestRow?.numericRate ?? 0);
 
-  const numericRates = useMemo(() => {
-    if (!chartData.length) {
-      return [] as number[];
-    }
+      return {
+        ...currency,
+        bestProvider: bestRow?.provider ?? "No provider yet",
+        bestRate,
+        changePercent: getChangePercent(
+          bestRate,
+          getPreviousRate(history, currency.currency)
+        )
+      };
+    });
+  }, [currentRates, history]);
 
-    return chartData.flatMap((point) => [point.USD, point.GBP, point.CAD]);
-  }, [chartData]);
-
-  const bestRate = useMemo(() => {
-    if (!numericRates.length) {
-      return 0;
-    }
-    return Math.max(...numericRates);
-  }, [numericRates]);
-
-  const lowRate = useMemo(() => {
-    if (!numericRates.length) {
-      return 0;
-    }
-    return Math.min(...numericRates);
-  }, [numericRates]);
-
-  const latestPoint = chartData[chartData.length - 1];
-
-  const renderDot = (props: any) => {
-    const { cx, cy, payload, dataKey } = props;
-    if (typeof cx !== "number" || typeof cy !== "number" || !payload) {
-      return <g />;
-    }
-
-    const currency = dataKey as TrendCurrency;
-    const value = Number(payload[currency]);
-    if (!Number.isFinite(value)) {
-      return <g />;
-    }
-
-    const isBest = value === bestRate;
-    const isLow = value === lowRate;
-    const isRecent = payload === latestPoint && dataKey === "USD";
-    const shouldShowRateLabel = isBest || isLow || isRecent;
-    const fill = isLow ? "#888888" : "#2e7d32";
-    const radius = isBest || isLow ? 5 : 3;
-    const labelColor = isLow ? "#888888" : "#2e7d32";
-    const labelWeight = isLow ? 400 : 700;
-
-    return (
-      <g
-        onClick={() => setActiveCurrency(currency)}
-        onMouseEnter={() => setActiveCurrency(currency)}
-      >
-        <circle cx={cx} cy={cy} r={radius} fill={fill} />
-        {isBest ? (
-          <text
-            fill="#2e7d32"
-            fontFamily="DM Sans, sans-serif"
-            fontSize={10}
-            fontWeight={700}
-            textAnchor="middle"
-            x={cx}
-            y={cy - 24}
-          >
-            ▲ Best
-          </text>
-        ) : null}
-        {shouldShowRateLabel ? (
-          <text
-            fill={labelColor}
-            fontFamily="DM Sans, sans-serif"
-            fontSize={10}
-            fontWeight={labelWeight}
-            textAnchor="middle"
-            x={cx}
-            y={cy - 12}
-          >
-            {formatNgRateCompact(value)}
-          </text>
-        ) : null}
-        {isLow ? (
-          <text
-            fill="#5a7a5a"
-            fontFamily="DM Sans, sans-serif"
-            fontSize={10}
-            textAnchor="middle"
-            x={cx}
-            y={cy + 16}
-          >
-            ▼ Low
-          </text>
-        ) : null}
-      </g>
-    );
-  };
+  const hasData = summaries.some((summary) => summary.bestRate > 0);
 
   return (
-    <div className="rounded-[12px] border border-[#c8e6c9] bg-white p-4 shadow-float min-[600px]:p-5 lg:p-6">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-green">
-            Currency trends
-          </p>
-          <h3 className="mb-4 mt-2 text-[28px] font-heading text-brand-navy min-[600px]:text-3xl">
-            USD, GBP, and CAD to NGN pulse
-          </h3>
-          <p className="max-w-2xl text-[12px] leading-6 text-brand-navy/70 min-[600px]:text-sm">
-            Track the last 7 days of NGN rate movement before you send. Spot
-            the best time to transfer.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <button
-            className="rounded-[999px] bg-[#2e7d32] px-[14px] py-[5px] text-[12px] font-semibold text-white"
-            type="button"
-          >
-            7D
-          </button>
-          <Link
-            className="inline-flex min-h-11 items-center rounded-full bg-brand-yellow px-4 text-[12px] font-bold text-brand-navy transition hover:shadow-float min-[600px]:min-h-12 min-[600px]:text-sm"
-            href="/alerts"
-          >
-            Set Rate Alert
-          </Link>
-        </div>
+    <section className="rounded-[12px] border border-[#c8e6c9] bg-white p-4 shadow-float min-[600px]:p-5 lg:p-6">
+      <div className="mb-6 flex flex-col gap-2">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-green">
+          Currency trends
+        </p>
+        <h3 className="text-[28px] font-heading text-brand-navy min-[600px]:text-3xl">
+          Best NGN rates by corridor
+        </h3>
       </div>
 
-      <div className="mt-6 h-[320px] w-full sm:h-[360px]">
-        {loading ? (
-          <div className="flex h-full flex-col justify-center gap-3">
-            {Array.from({ length: 5 }).map((_, index) => (
-              <div
-                key={index}
-                className="h-5 w-full rounded-full bg-[#e6e6e6] opacity-80 animate-pulse"
-                style={{ width: `${100 - index * 10}%` }}
-              />
-            ))}
+      {loading ? (
+        <div className="grid gap-4 lg:grid-cols-3">
+          {currencies.map((currency) => (
+            <div
+              key={currency.currency}
+              className="h-[168px] animate-pulse rounded-[8px] bg-[#eef7ef]"
+            />
+          ))}
+        </div>
+      ) : error || !hasData ? (
+        <div className="rounded-[8px] border border-[#c8e6c9] bg-[#f4faf5] px-4 py-10 text-center text-[#5a7a5a]">
+          Supabase rate trends are unavailable right now.
+        </div>
+      ) : (
+        <>
+          <div className="grid gap-4 lg:grid-cols-3">
+            {summaries.map((summary) => {
+              const isPositive = summary.changePercent >= 0;
+
+              return (
+                <article
+                  key={summary.currency}
+                  className="overflow-hidden rounded-[8px] border border-[#d9eadb] bg-white shadow-[0_10px_28px_rgba(17,48,25,0.08)]"
+                >
+                  <div
+                    className="h-2"
+                    style={{ backgroundColor: summary.accent }}
+                  />
+                  <div className="p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="flex items-center gap-2 text-[14px] font-black text-[#1a2e1a]">
+                          <span className="text-[20px]">{summary.flag}</span>
+                          {summary.country}
+                        </p>
+                        <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.12em] text-[#5a7a5a]">
+                          {summary.currency} → NGN
+                        </p>
+                      </div>
+                      <span
+                        className="rounded-full px-2 py-1 text-[11px] font-black"
+                        style={{ backgroundColor: summary.muted, color: summary.accent }}
+                      >
+                        {isPositive ? "+" : ""}
+                        {summary.changePercent.toFixed(2)}%
+                      </span>
+                    </div>
+
+                    <p className="mt-5 text-[30px] font-black leading-none text-[#1a2e1a]">
+                      {formatRate(summary.bestRate)}
+                    </p>
+                    <p className="mt-1 text-[11px] font-semibold text-[#5a7a5a]">
+                      NGN per {summary.currency}
+                    </p>
+
+                    <div className="mt-4 rounded-[8px] bg-[#f4faf5] px-3 py-2">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#5a7a5a]">
+                        Best provider
+                      </p>
+                      <p className="mt-1 flex items-center justify-between gap-3 text-[13px] font-black text-[#1a2e1a]">
+                        <span className="truncate">{summary.bestProvider}</span>
+                        <span>{formatRate(summary.bestRate)}</span>
+                      </p>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
           </div>
-        ) : error || !chartData.length ? (
-          <div className="flex h-full items-center justify-center text-center text-[#5a7a5a]">
-            Rate history unavailable.
+
+          <div className="mt-6 rounded-[8px] border border-[#c8e6c9] bg-white p-3 min-[600px]:p-4">
+            <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <h4 className="text-[18px] font-black text-[#1a2e1a]">
+                  7-day rate history
+                </h4>
+                <p className="mt-1 text-[12px] text-[#5a7a5a]">
+                  Pulled from Supabase rate_history for USD, GBP, and CAD to NGN.
+                </p>
+              </div>
+              <CurrencyLegend summaries={summaries} />
+            </div>
+
+            <div className="h-[320px] w-full min-[600px]:h-[380px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart
+                  data={history}
+                  margin={{ bottom: 4, left: 0, right: 18, top: 16 }}
+                >
+                  <CartesianGrid
+                    stroke="rgba(0, 200, 83, 0.18)"
+                    strokeDasharray="4 4"
+                    vertical={false}
+                  />
+                  <XAxis
+                    axisLine={false}
+                    dataKey="label"
+                    tick={{ fill: "#5a7a5a", fontSize: 11 }}
+                    tickLine={false}
+                  />
+                  <YAxis
+                    axisLine={false}
+                    domain={["dataMin - 10", "dataMax + 10"]}
+                    tick={{ fill: "#5a7a5a", fontSize: 11 }}
+                    tickFormatter={(value) => Number(value).toLocaleString("en-NG")}
+                    tickLine={false}
+                    width={54}
+                  />
+                  <Tooltip content={<RateTooltip />} />
+                  {currencies.map((currency) => (
+                    <Line
+                      key={currency.currency}
+                      connectNulls
+                      dataKey={currency.currency}
+                      dot={{ fill: currency.accent, r: 3, stroke: "#ffffff", strokeWidth: 1.5 }}
+                      name={currency.currency}
+                      stroke={currency.accent}
+                      strokeWidth={3}
+                      type="monotone"
+                    />
+                  ))}
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
           </div>
-        ) : (
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={chartData} margin={{ left: 8, right: 12, top: 30, bottom: 0 }}>
-              <CartesianGrid stroke="rgba(0,0,0,0.05)" strokeDasharray="4 4" vertical={false} />
-              <XAxis
-                axisLine={false}
-                dataKey="date"
-                tick={{ fill: "#5a7a5a", fontSize: 10 }}
-                tickFormatter={formatTrendDate}
-                tickLine={false}
-              />
-              <Tooltip
-                content={<ChartTooltip activeCurrency={activeCurrency} />}
-                cursor={{ stroke: "rgba(46,125,50,0.18)" }}
-              />
-              <Legend />
-              <Area
-                dataKey="USD"
-                type="monotone"
-                stroke="#2e7d32"
-                fill="rgba(46,125,50,0.08)"
-                strokeWidth={2}
-                name="USD/NGN"
-                activeDot={{ r: 6 }}
-              />
-              <Line
-                dataKey="USD"
-                name="USD/NGN"
-                stroke="#2e7d32"
-                strokeWidth={3}
-                type="monotone"
-                dot={renderDot}
-                activeDot={{ r: 6 }}
-                onClick={() => setActiveCurrency("USD")}
-                onMouseEnter={() => setActiveCurrency("USD")}
-              />
-              <Line
-                dataKey="GBP"
-                name="GBP/NGN"
-                stroke="#FFD600"
-                strokeWidth={3}
-                type="monotone"
-                dot={renderDot}
-                activeDot={{ r: 6 }}
-                onClick={() => setActiveCurrency("GBP")}
-                onMouseEnter={() => setActiveCurrency("GBP")}
-              />
-              <Line
-                dataKey="CAD"
-                name="CAD/NGN"
-                stroke="#FF5722"
-                strokeWidth={3}
-                type="monotone"
-                dot={renderDot}
-                activeDot={{ r: 6 }}
-                onClick={() => setActiveCurrency("CAD")}
-                onMouseEnter={() => setActiveCurrency("CAD")}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        )}
-      </div>
-    </div>
+        </>
+      )}
+    </section>
   );
 }
