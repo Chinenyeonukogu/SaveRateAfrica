@@ -100,7 +100,7 @@ def to_supabase_row(row):
         "provider": row["provider"],
         "send_currency": row["send_currency"],
         "receive_currency": row["receive_currency"],
-        "rate": rate,
+        "rate": round(rate, 2),
         "fee": row.get("fee"),
         "fee_currency": row.get("fee_currency"),
         "updated_at": row["updated_at"],
