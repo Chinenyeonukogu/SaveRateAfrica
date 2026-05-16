@@ -5,14 +5,11 @@ import {
   providerRankingsBySenderCountry,
   providers,
   type ComparisonSort,
+  type Provider,
   type SenderCountry,
   type SourceCurrency
 } from "@/lib/providers";
-import {
-  getFallbackBaseRates,
-  getLiveBaseRates,
-  type LiveBaseRatesResponse
-} from "@/lib/exchangeRateApi";
+import { getLiveBaseRates, type LiveBaseRatesResponse } from "@/lib/exchangeRateApi";
 
 export interface ComparisonProviderRow {
   slug: string;
@@ -49,6 +46,7 @@ export interface ComparisonResult {
   rateProvider: LiveBaseRatesResponse["provider"];
   baseMidMarketRate: number;
   liveBaseRates: Record<SourceCurrency, number>;
+  providerRates: LiveBaseRatesResponse["providerRates"];
   providers: ComparisonProviderRow[];
   savings: {
     bestProvider: string;
@@ -222,6 +220,51 @@ function normalizeProviderName(value: string) {
   return value.trim().toLowerCase();
 }
 
+function getProviderSlug(providerName: string) {
+  return providerName
+    .trim()
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+function getProviderMetadata(providerName: string): Provider | undefined {
+  const normalizedName = normalizeProviderName(providerName);
+  const normalizedSlug = getProviderSlug(providerName);
+
+  return providers.find(
+    (provider) =>
+      normalizeProviderName(provider.name) === normalizedName ||
+      provider.slug === normalizedSlug
+  );
+}
+
+function getGenericProviderMetadata(providerName: string): Provider {
+  return {
+    slug: getProviderSlug(providerName),
+    name: providerName,
+    logoFrom: "#0F766E",
+    logoTo: "#FACC15",
+    rating: 4.5,
+    reviewCount: 0,
+    speedHours: 1,
+    speedBand: "standard",
+    deliveryLabel: "See provider",
+    feeBand: "medium",
+    fees: { USD: 0, GBP: 0, CAD: 0 },
+    rateMultiplier: { USD: 1, GBP: 1, CAD: 1 },
+    summary: "Live rate from Supabase",
+    headline: "Live provider rate",
+    bestFor: "Live provider rate",
+    trustNote: "Live provider rate",
+    supportedSenderCountries: ["USA", "UK", "Canada"],
+    payoutChannels: ["See provider"],
+    pros: ["Live Supabase rate"],
+    cons: ["Confirm final details at checkout"]
+  };
+}
+
 function getCountryRank(providerName: string, senderCountry: SenderCountry) {
   const ranking = providerRankingsBySenderCountry[senderCountry] ?? providerRankingsBySenderCountry.USA;
   const normalizedName = normalizeProviderName(providerName);
@@ -242,13 +285,14 @@ export function buildComparisonFromLiveRates({
   const baseMidMarketRate = liveBaseRates.rates[sourceCurrency];
   const adjustedAmount = clampAmount(amount);
 
-  const rows = providers
-    .filter((provider) => provider.supportedSenderCountries.includes(senderCountry))
-    .map((provider) => {
-      const fee = getProviderFee(provider, sourceCurrency, adjustedAmount);
-      const exchangeRate = roundToTwo(
-        baseMidMarketRate * provider.rateMultiplier[sourceCurrency]
-      );
+  const rows = liveBaseRates.providerRates
+    .filter((rateRow) => rateRow.send_currency === sourceCurrency)
+    .map((rateRow) => {
+      const provider =
+        getProviderMetadata(rateRow.provider) ?? getGenericProviderMetadata(rateRow.provider);
+      const fee =
+        rateRow.fee === null ? getProviderFee(provider, sourceCurrency, adjustedAmount) : rateRow.fee;
+      const exchangeRate = roundToTwo(rateRow.rate);
       const grossRecipientAmount = adjustedAmount * exchangeRate;
       const feeInNaira = fee * exchangeRate;
       const amountReceived = roundToTwo(
@@ -257,13 +301,13 @@ export function buildComparisonFromLiveRates({
 
       return {
         slug: provider.slug,
-        name: provider.name,
+        name: rateRow.provider,
         logoFrom: provider.logoFrom,
         logoTo: provider.logoTo,
         rating: provider.rating,
         reviewCount: provider.reviewCount,
         exchangeRate,
-        fee,
+        fee: roundToTwo(fee),
         feeDisplayText: getProviderFeeDisplayText(provider, sourceCurrency, fee),
         amountReceived,
         speedHours: provider.speedHours,
@@ -282,6 +326,10 @@ export function buildComparisonFromLiveRates({
         countryRank: getCountryRank(provider.name, senderCountry)
       };
     });
+
+  if (rows.length === 0) {
+    throw new Error(`Supabase exchange_rates is missing ${sourceCurrency}-NGN rows.`);
+  }
 
   const bestValueAmount = Math.max(...rows.map((row) => row.amountReceived));
   const sortedProviders = sortRows(
@@ -311,6 +359,7 @@ export function buildComparisonFromLiveRates({
     rateProvider: liveBaseRates.provider,
     baseMidMarketRate,
     liveBaseRates: liveBaseRates.rates,
+    providerRates: liveBaseRates.providerRates,
     providers: sortedProviders,
     savings: {
       bestProvider: bestProvider.name,
@@ -333,15 +382,7 @@ export async function getLiveComparison(
   const adjustedAmount = clampAmount(amount);
   let liveBaseRates: LiveBaseRatesResponse;
 
-  try {
-    liveBaseRates = await getLiveBaseRates();
-  } catch (error) {
-    if (!options.allowFallback) {
-      throw error;
-    }
-
-    liveBaseRates = getFallbackBaseRates();
-  }
+  liveBaseRates = await getLiveBaseRates();
 
   return buildComparisonFromLiveRates({
     amount: adjustedAmount,

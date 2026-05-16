@@ -343,6 +343,7 @@ function buildComparisonForAmount(
     liveBaseRates: {
       cachedUntil: comparison.cachedUntil,
       provider: comparison.rateProvider,
+      providerRates: comparison.providerRates,
       rates: comparison.liveBaseRates,
       sourceUpdatedAt: comparison.sourceUpdatedAt,
       updatedAt: comparison.updatedAt

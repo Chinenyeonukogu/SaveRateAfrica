@@ -37,6 +37,7 @@ You are making a smart move sending with SaveRateAfrica!`;
 function normalizeRateRow(row) {
   const currency =
     row?.currency ||
+    row?.send_currency ||
     row?.source_currency ||
     row?.from_currency ||
     row?.base_currency ||
@@ -104,7 +105,7 @@ async function fetchSupabaseRates() {
 
   try {
     const response = await fetch(
-      `${SUPABASE_URL.replace(/\/$/, "")}/rest/v1/exchange_rates?select=*&limit=100`,
+      `${SUPABASE_URL.replace(/\/$/, "")}/rest/v1/exchange_rates?select=provider,send_currency,receive_currency,rate,fee,updated_at,is_automated&receive_currency=eq.NGN&order=provider.asc,send_currency.asc`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,

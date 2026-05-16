@@ -303,6 +303,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
           updatedAt: currentComparison.updatedAt,
           sourceUpdatedAt: currentComparison.sourceUpdatedAt,
           cachedUntil: currentComparison.cachedUntil,
+          providerRates: currentComparison.providerRates,
           rates: currentComparison.liveBaseRates
         }
       })
