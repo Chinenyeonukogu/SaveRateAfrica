@@ -1,5 +1,7 @@
 import json
 import os
+import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
@@ -13,6 +15,8 @@ SUPABASE_URL = os.environ.get("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_ROLE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
 WISE_API_TOKEN = os.environ.get("WISE_API_TOKEN", "")
 MAX_REASONABLE_NGN_RATE = 3000
+MIN_LEMFI_NGN_RATE = 500
+MAX_LEMFI_NGN_RATE = 10000
 BROWSER_USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
     "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -276,11 +280,26 @@ def fetch_lemfi_exchange_rate(payload):
         f"{payload['from']}-{payload['to']}: {json.dumps(response_payload)}"
     )
 
+    rate = extract_lemfi_rate(response_payload)
+    try:
+        numeric_rate = float(rate)
+    except (TypeError, ValueError):
+        print(f"[LemFi] Skipping {payload['from']}-NGN: invalid rate {rate}")
+        return None
+
+    if numeric_rate < MIN_LEMFI_NGN_RATE or numeric_rate > MAX_LEMFI_NGN_RATE:
+        print(
+            "[LemFi] Skipping "
+            f"{payload['from']}-NGN: rate {rate} outside "
+            f"{MIN_LEMFI_NGN_RATE}-{MAX_LEMFI_NGN_RATE}"
+        )
+        return None
+
     return {
         "provider": "LemFi",
         "send_currency": payload["from"],
         "receive_currency": payload["to"],
-        "rate": extract_lemfi_rate(response_payload),
+        "rate": rate,
         "updated_at": utc_now(),
     }
 
@@ -413,6 +432,8 @@ def fetch_remitly_exchange_rates():
 
     for request_config in REMITLY_REQUESTS:
         try:
+            if rows:
+                time.sleep(2)
             row = fetch_remitly_exchange_rate(request_config)
             if row:
                 rows.append(row)
@@ -481,8 +502,14 @@ def upsert_exchange_rates(rows):
         },
     )
 
-    with urllib.request.urlopen(request, timeout=30) as response:
-        return json.loads(response.read().decode("utf-8"))
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            return json.loads(response.read().decode("utf-8"))
+    except urllib.error.HTTPError as error:
+        response_body = error.read().decode("utf-8", errors="replace")
+        print(f"[Supabase] Upsert failed: HTTP {error.code}")
+        print(f"[Supabase] Error body: {response_body}")
+        raise
 
 
 def main():
