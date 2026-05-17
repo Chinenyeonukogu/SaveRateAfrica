@@ -541,10 +541,13 @@ export function RateChart() {
                   />
                   <YAxis
                     axisLine={false}
-                    domain={["dataMin - 10", "dataMax + 10"]}
+                    domain={[800, 2000]}
                     tick={{ fill: "#5a7a5a", fontSize: 11 }}
-                    tickFormatter={(value) => Number(value).toLocaleString("en-NG")}
+                    tickFormatter={(value) =>
+                      `₦${Number(value).toLocaleString("en-NG")}`
+                    }
                     tickLine={false}
+                    ticks={[800, 1000, 1200, 1400, 1600, 1800, 2000]}
                     width={54}
                   />
                   <Tooltip content={<RateTooltip />} />
