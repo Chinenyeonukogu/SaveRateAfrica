@@ -56,15 +56,15 @@ FLUTTERWAVE_REQUESTS = [
 REMITLY_REQUESTS = [
     {
         "send_currency": "USD",
-        "url": "https://api.remitly.io/v3/calculator/estimate?conduit=USA%3AUSD-NGA%3ANGN&anchor=SEND&amount=500&purpose=OTHER&customer_segment=STANDARD&customer_recognition=UNRECOGNIZED&strict_promo=false",
+        "url": "https://api.remitly.io/v3/calculator/estimate?conduit=USA%3AUSD-NGA%3ANGN&anchor=SEND&amount=500&purpose=OTHER&customer_segment=STANDARD&customer_recognition=RECOGNIZED&strict_promo=false",
     },
     {
         "send_currency": "GBP",
-        "url": "https://api.remitly.io/v3/calculator/estimate?conduit=GBR%3AGBP-NGA%3ANGN&anchor=SEND&amount=1&purpose=OTHER&customer_segment=STANDARD&customer_recognition=UNRECOGNIZED&strict_promo=false",
+        "url": "https://api.remitly.io/v3/calculator/estimate?conduit=GBR%3AGBP-NGA%3ANGN&anchor=SEND&amount=1&purpose=OTHER&customer_segment=STANDARD&customer_recognition=RECOGNIZED&strict_promo=false",
     },
     {
         "send_currency": "CAD",
-        "url": "https://api.remitly.io/v3/calculator/estimate?conduit=CAN%3ACAD-NGA%3ANGN&anchor=SEND&amount=500&purpose=OTHER&customer_segment=STANDARD&customer_recognition=UNRECOGNIZED&strict_promo=false",
+        "url": "https://api.remitly.io/v3/calculator/estimate?conduit=CAN%3ACAD-NGA%3ANGN&anchor=SEND&amount=500&purpose=OTHER&customer_segment=STANDARD&customer_recognition=RECOGNIZED&strict_promo=false",
     },
 ]
 
@@ -111,11 +111,19 @@ def to_supabase_row(row):
     except (KeyError, TypeError, ValueError):
         return None
 
+    fee = row.get("fee")
+    if fee is not None:
+        try:
+            fee = round(float(fee), 2)
+        except (TypeError, ValueError):
+            fee = None
+
     clean_row = {
         "provider": row["provider"],
         "send_currency": row["send_currency"],
         "receive_currency": row["receive_currency"],
         "rate": round(rate, 2),
+        "fee": fee,
         "updated_at": row["updated_at"],
         "is_automated": True,
     }
