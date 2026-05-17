@@ -378,8 +378,8 @@ def fetch_remitly_exchange_rate(request_config):
         "provider": "Remitly",
         "send_currency": request_config["send_currency"],
         "receive_currency": "NGN",
-        "rate": exchange_rate.get("promotional_exchange_rate")
-        or exchange_rate.get("base_rate"),
+        "rate": exchange_rate.get("base_rate")
+        or exchange_rate.get("promotional_exchange_rate"),
         "fee": fee.get("total_fee_amount"),
         "fee_currency": request_config["send_currency"],
         "updated_at": utc_now(),
