@@ -53,11 +53,11 @@ export default function BlogPage() {
             </p>
           </section>
 
-          <section className="space-y-6">
+          <section className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {blogPosts.map((post) => (
               <article
                 key={post.slug}
-                className="rounded-[28px] border border-brand-navy/10 bg-white p-6 shadow-float"
+                className="flex h-full flex-col rounded-[28px] border border-brand-navy/10 bg-white p-6 shadow-float"
               >
                 <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-brand-green">
                   <span>{post.category}</span>
@@ -67,11 +67,11 @@ export default function BlogPage() {
                 <h2 className="mt-4 font-heading text-3xl text-brand-navy">
                   {post.title}
                 </h2>
-                <p className="mt-4 text-sm leading-7 text-brand-navy/70">
+                <p className="mb-6 mt-4 text-sm leading-7 text-brand-navy/70">
                   {post.excerpt}
                 </p>
                 <Link
-                  className={`mt-6 inline-flex min-h-12 items-center gap-2 rounded-2xl px-4 text-sm font-semibold text-brand-navy ${
+                  className={`mt-auto inline-flex min-h-12 w-fit items-center gap-2 rounded-2xl px-4 text-sm font-semibold text-brand-navy ${
                     post.href ? "bg-brand-yellow" : "bg-brand-light"
                   }`}
                   href={post.href ?? "/providers"}
