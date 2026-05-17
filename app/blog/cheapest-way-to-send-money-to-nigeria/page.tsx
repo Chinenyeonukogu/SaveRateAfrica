@@ -58,29 +58,31 @@ export default function CheapestWayToSendMoneyToNigeriaPage() {
 
       <main className="bg-[#f4faf5] px-4 pb-32 pt-5 sm:px-6 lg:px-8 lg:pb-16">
         <article className="mx-auto max-w-5xl overflow-hidden rounded-[34px] bg-white shadow-float">
-          <header className="bg-[#0d2416] px-6 py-8 text-white sm:px-10 sm:py-12 lg:px-14">
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#9ee8c0]">
-              Comparisons · 4 min read · SaveRateAfrica
-            </p>
-            <h1 className="mt-5 max-w-4xl font-heading text-4xl leading-tight sm:text-5xl lg:text-6xl">
-              What&apos;s the Cheapest Way to Send Money to Nigeria?
-            </h1>
-            <p className="mt-5 max-w-3xl text-lg leading-8 text-white/78">
-              The cheapest way to send money to Nigeria is to skip your bank
-              and use a digital transfer platform.
-            </p>
-          </header>
+          <header className="grid gap-6 bg-[#0d2416] px-6 py-7 text-white sm:px-10 sm:py-9 lg:min-h-[60vh] lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.9fr)] lg:items-center lg:gap-10 lg:px-14">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#9ee8c0]">
+                Comparisons · 4 min read · SaveRateAfrica
+              </p>
+              <h1 className="mt-4 max-w-4xl font-heading text-4xl leading-tight sm:text-5xl lg:text-6xl">
+                What&apos;s the Cheapest Way to Send Money to Nigeria?
+              </h1>
+              <p className="mt-4 max-w-3xl text-lg leading-8 text-white/78">
+                The cheapest way to send money to Nigeria is to skip your bank
+                and use a digital transfer platform.
+              </p>
+            </div>
 
-          <figure className="relative border-b border-[#dcefe1] bg-[#102717]">
-            <Image
-              src="/blog/cheap-way-to-send-money.png"
-              alt="A professional reviewing SaveRateAfrica money transfer guidance for sending money to Nigeria"
-              width={1456}
-              height={1040}
-              priority
-              className="h-auto w-full object-cover"
-            />
-          </figure>
+            <figure className="relative overflow-hidden rounded-[24px] border border-white/10 bg-[#102717] shadow-2xl">
+              <Image
+                src="/blog/cheap-way-to-send-money.png"
+                alt="A professional reviewing SaveRateAfrica money transfer guidance for sending money to Nigeria"
+                width={1456}
+                height={1040}
+                priority
+                className="h-[250px] w-full object-cover object-center lg:h-[52vh]"
+              />
+            </figure>
+          </header>
 
           <div className="px-6 py-8 sm:px-10 sm:py-10 lg:px-16">
             <div className="space-y-10 text-[17px] leading-8 text-[#243b2b]">
