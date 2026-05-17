@@ -518,9 +518,6 @@ export function RateChart() {
                 <h4 className="text-[18px] font-black text-[#1a2e1a]">
                   7-day rate history
                 </h4>
-                <p className="mt-1 text-[12px] text-[#5a7a5a]">
-                  Pulled from Supabase rate_history for USD, GBP, and CAD to NGN.
-                </p>
               </div>
               <CurrencyLegend summaries={summaries} />
             </div>
