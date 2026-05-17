@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 
 import { SiteHeader } from "@/components/SiteHeader";
 
@@ -69,6 +70,17 @@ export default function CheapestWayToSendMoneyToNigeriaPage() {
               and use a digital transfer platform.
             </p>
           </header>
+
+          <figure className="relative border-b border-[#dcefe1] bg-[#102717]">
+            <Image
+              src="/blog/cheap-way-to-send-money.png"
+              alt="A professional reviewing SaveRateAfrica money transfer guidance for sending money to Nigeria"
+              width={1456}
+              height={1040}
+              priority
+              className="h-auto w-full object-cover"
+            />
+          </figure>
 
           <div className="px-6 py-8 sm:px-10 sm:py-10 lg:px-16">
             <div className="space-y-10 text-[17px] leading-8 text-[#243b2b]">
