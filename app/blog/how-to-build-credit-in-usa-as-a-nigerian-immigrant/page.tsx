@@ -61,6 +61,15 @@ export default function BuildCreditUsaNigerianImmigrantPage() {
       <SiteHeader />
 
       <main className="bg-[#f4faf5] px-4 pb-32 pt-5 sm:px-6 lg:px-8 lg:pb-16">
+        <div className="mx-auto mb-4 max-w-5xl">
+          <Link
+            className="inline-flex items-center text-sm font-bold text-[#0d7a3b] hover:text-[#075c2b]"
+            href="/blog"
+          >
+            &larr; Back to all articles
+          </Link>
+        </div>
+
         <article className="mx-auto max-w-5xl overflow-hidden rounded-[34px] bg-white shadow-float">
           <header className="bg-[#0d2416] text-white">
             <div className="px-6 py-8 sm:px-10 sm:py-12 lg:px-14">

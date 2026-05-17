@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 
 import { SiteHeader } from "@/components/SiteHeader";
 
@@ -57,6 +58,15 @@ export default function CheapestWayToSendMoneyToNigeriaPage() {
       <SiteHeader />
 
       <main className="bg-[#f4faf5] px-4 pb-32 pt-5 sm:px-6 lg:px-8 lg:pb-16">
+        <div className="mx-auto mb-4 max-w-5xl">
+          <Link
+            className="inline-flex items-center text-sm font-bold text-[#0d7a3b] hover:text-[#075c2b]"
+            href="/blog"
+          >
+            &larr; Back to all articles
+          </Link>
+        </div>
+
         <article className="mx-auto max-w-5xl overflow-hidden rounded-[34px] bg-white shadow-float">
           <header className="grid gap-6 bg-[#0d2416] px-6 py-7 text-white sm:px-10 sm:py-9 md:gap-8 lg:min-h-[60vh] lg:grid-cols-2 lg:items-center lg:gap-10 lg:px-14">
             <div>
