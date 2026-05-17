@@ -56,15 +56,15 @@ FLUTTERWAVE_REQUESTS = [
 REMITLY_REQUESTS = [
     {
         "send_currency": "USD",
-        "url": "https://api.remitly.io/v3/calculator/estimate?conduit=USA%3AUSD-NGA%3ANGN&anchor=SEND&amount=500&purpose=OTHER&customer_segment=STANDARD&customer_recognition=RECOGNIZED&strict_promo=false",
+        "url": "https://api.remitly.io/v3/calculator/estimate?conduit=USA%3AUSD-NGA%3ANGN&anchor=SEND&amount=500&purpose=OTHER&customer_segment=RETURNING&promoCode=&strict_promo=true",
     },
     {
         "send_currency": "GBP",
-        "url": "https://api.remitly.io/v3/calculator/estimate?conduit=GBR%3AGBP-NGA%3ANGN&anchor=SEND&amount=1&purpose=OTHER&customer_segment=STANDARD&customer_recognition=RECOGNIZED&strict_promo=false",
+        "url": "https://api.remitly.io/v3/calculator/estimate?conduit=GBR%3AGBP-NGA%3ANGN&anchor=SEND&amount=1&purpose=OTHER&customer_segment=RETURNING&promoCode=&strict_promo=true",
     },
     {
         "send_currency": "CAD",
-        "url": "https://api.remitly.io/v3/calculator/estimate?conduit=CAN%3ACAD-NGA%3ANGN&anchor=SEND&amount=500&purpose=OTHER&customer_segment=STANDARD&customer_recognition=RECOGNIZED&strict_promo=false",
+        "url": "https://api.remitly.io/v3/calculator/estimate?conduit=CAN%3ACAD-NGA%3ANGN&anchor=SEND&amount=500&purpose=OTHER&customer_segment=RETURNING&promoCode=&strict_promo=true",
     },
 ]
 
