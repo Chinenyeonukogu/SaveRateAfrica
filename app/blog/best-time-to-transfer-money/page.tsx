@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 
 import { SiteHeader } from "@/components/SiteHeader";
 
@@ -46,17 +47,30 @@ export default function BestTimeToTransferMoneyPage() {
 
       <main className="bg-[#f4faf5] px-4 pb-32 pt-5 sm:px-6 lg:px-8 lg:pb-16">
         <article className="mx-auto max-w-5xl overflow-hidden rounded-[34px] bg-white shadow-float">
-          <header className="bg-[#0d2416] px-6 py-8 text-white sm:px-10 sm:py-12 lg:px-14">
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#9ee8c0]">
-              Guides · 3 min read · SaveRateAfrica
-            </p>
-            <h1 className="mt-5 max-w-4xl font-heading text-4xl leading-tight sm:text-5xl lg:text-6xl">
-              The Best Time to Transfer Money Internationally
-            </h1>
-            <p className="mt-5 max-w-3xl text-lg leading-8 text-white/78">
-              Timing your transfer by day, week, and month can mean thousands
-              more naira reaching your family.
-            </p>
+          <header className="grid gap-6 bg-[#0d2416] px-6 py-7 text-white sm:px-10 sm:py-9 lg:min-h-[60vh] lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.9fr)] lg:items-center lg:gap-10 lg:px-14">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#9ee8c0]">
+                Guides · 3 min read · SaveRateAfrica
+              </p>
+              <h1 className="mt-4 max-w-4xl font-heading text-4xl leading-tight sm:text-5xl lg:text-6xl">
+                The Best Time to Transfer Money Internationally
+              </h1>
+              <p className="mt-4 max-w-3xl text-lg leading-8 text-white/78">
+                Timing your transfer by day, week, and month can mean thousands
+                more naira reaching your family.
+              </p>
+            </div>
+
+            <figure className="relative overflow-hidden rounded-[24px] border border-white/10 bg-[#102717] shadow-2xl">
+              <Image
+                src="/blog/best-time-to-transfer-money.png"
+                alt="A professional comparing remittance services and timing an international money transfer to Nigeria"
+                width={1456}
+                height={1040}
+                priority
+                className="h-[250px] w-full object-cover object-center lg:h-[52vh]"
+              />
+            </figure>
           </header>
 
           <div className="px-6 py-8 sm:px-10 sm:py-10 lg:px-16">
