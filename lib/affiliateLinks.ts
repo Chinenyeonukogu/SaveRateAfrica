@@ -12,6 +12,7 @@ const remittanceProviderLinks: Record<string, string> = {
   pesa: "https://www.pesa.co/",
   lemfi: "https://lemfi.com/en-us",
   afriex: "https://www.afriex.com/",
+  flutterwave: "https://send.flutterwave.com",
   "flutterwave-send": "https://send.flutterwave.com",
   nala: "https://www.nala.com/",
   "taptap-send": "https://www.taptapsend.com/en/send-money-to/nigeria",

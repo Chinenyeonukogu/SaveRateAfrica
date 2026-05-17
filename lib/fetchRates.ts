@@ -229,14 +229,28 @@ function getProviderSlug(providerName: string) {
     .replace(/^-|-$/g, "");
 }
 
+const providerSlugAliases: Record<string, string> = {
+  flutterwave: "flutterwave-send",
+  "flutterwave-send": "flutterwave-send",
+  flutterwavesend: "flutterwave-send",
+  nala: "nala",
+  "taptap-send": "taptap-send",
+  taptap: "taptap-send",
+  "tap-tap-send": "taptap-send",
+  "tap-tap": "taptap-send"
+};
+
 function getProviderMetadata(providerName: string): Provider | undefined {
   const normalizedName = normalizeProviderName(providerName);
   const normalizedSlug = getProviderSlug(providerName);
+  const aliasedSlug =
+    providerSlugAliases[normalizedName] ?? providerSlugAliases[normalizedSlug];
 
   return providers.find(
     (provider) =>
       normalizeProviderName(provider.name) === normalizedName ||
-      provider.slug === normalizedSlug
+      provider.slug === normalizedSlug ||
+      provider.slug === aliasedSlug
   );
 }
 
@@ -254,13 +268,13 @@ function getGenericProviderMetadata(providerName: string): Provider {
     feeBand: "medium",
     fees: { USD: 0, GBP: 0, CAD: 0 },
     rateMultiplier: { USD: 1, GBP: 1, CAD: 1 },
-    summary: "Live rate from Supabase",
-    headline: "Live provider rate",
-    bestFor: "Live provider rate",
-    trustNote: "Live provider rate",
+    summary: "Live rate for this corridor",
+    headline: "Current provider rate",
+    bestFor: "Current provider rate",
+    trustNote: "Current provider rate",
     supportedSenderCountries: ["USA", "UK", "Canada"],
     payoutChannels: ["See provider"],
-    pros: ["Live Supabase rate"],
+    pros: ["Current live rate"],
     cons: ["Confirm final details at checkout"]
   };
 }
