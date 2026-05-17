@@ -32,7 +32,8 @@ interface CurrencyMeta {
   accent: string;
   country: string;
   currency: TrendCurrency;
-  flag: string;
+  flagAlt: string;
+  flagUrl: string;
   muted: string;
 }
 
@@ -58,24 +59,46 @@ const currencies: CurrencyMeta[] = [
     accent: "#00c853",
     country: "United States",
     currency: "USD",
-    flag: "🇺🇸",
+    flagAlt: "United States flag",
+    flagUrl: "https://flagcdn.com/w40/us.png",
     muted: "rgba(0, 200, 83, 0.12)"
   },
   {
     accent: "#f5a623",
     country: "United Kingdom",
     currency: "GBP",
-    flag: "🇬🇧",
+    flagAlt: "United Kingdom flag",
+    flagUrl: "https://flagcdn.com/w40/gb.png",
     muted: "rgba(245, 166, 35, 0.14)"
   },
   {
     accent: "#e53935",
     country: "Canada",
     currency: "CAD",
-    flag: "🇨🇦",
+    flagAlt: "Canada flag",
+    flagUrl: "https://flagcdn.com/w40/ca.png",
     muted: "rgba(229, 57, 53, 0.12)"
   }
 ];
+
+function FlagIcon({
+  alt,
+  src
+}: {
+  alt: string;
+  src: string;
+}) {
+  return (
+    <img
+      alt={alt}
+      className="inline-block h-[14px] w-[20px] rounded-[2px] object-cover"
+      height={14}
+      loading="lazy"
+      src={src}
+      width={20}
+    />
+  );
+}
 
 function formatRate(value: number) {
   return value.toLocaleString("en-NG", {
@@ -282,7 +305,7 @@ function RateTooltip({ active, payload, label }: any) {
               className="flex items-center justify-between gap-4"
             >
               <span className="flex items-center gap-2 text-[#35513a]">
-                <span>{currency.flag}</span>
+                <FlagIcon alt={currency.flagAlt} src={currency.flagUrl} />
                 {currency.currency}/NGN
               </span>
               <span className="font-bold text-[#1a2e1a]">
@@ -304,7 +327,7 @@ function CurrencyLegend({ summaries }: { summaries: CurrencySummary[] }) {
           key={summary.currency}
           className="inline-flex items-center gap-2 text-[12px] font-bold text-[#1a2e1a]"
         >
-          <span>{summary.flag}</span>
+          <FlagIcon alt={summary.flagAlt} src={summary.flagUrl} />
           <span
             className="h-2.5 w-2.5 rounded-full"
             style={{ backgroundColor: summary.accent }}
@@ -474,7 +497,7 @@ export function RateChart() {
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <p className="flex items-center gap-2 text-[14px] font-black text-[#1a2e1a]">
-                          <span className="text-[20px]">{summary.flag}</span>
+                          <FlagIcon alt={summary.flagAlt} src={summary.flagUrl} />
                           {summary.country}
                         </p>
                         <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.12em] text-[#5a7a5a]">
