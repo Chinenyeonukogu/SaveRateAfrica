@@ -47,7 +47,7 @@ export default function BestTimeToTransferMoneyPage() {
 
       <main className="bg-[#f4faf5] px-4 pb-32 pt-5 sm:px-6 lg:px-8 lg:pb-16">
         <article className="mx-auto max-w-5xl overflow-hidden rounded-[34px] bg-white shadow-float">
-          <header className="grid gap-6 bg-[#0d2416] px-6 py-7 text-white sm:px-10 sm:py-9 lg:min-h-[60vh] lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.9fr)] lg:items-center lg:gap-10 lg:px-14">
+          <header className="grid gap-6 bg-[#0d2416] px-6 py-7 text-white sm:px-10 sm:py-9 md:gap-8 lg:min-h-[60vh] lg:grid-cols-2 lg:items-center lg:gap-10 lg:px-14">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#9ee8c0]">
                 Guides · 3 min read · SaveRateAfrica
@@ -68,7 +68,7 @@ export default function BestTimeToTransferMoneyPage() {
                 width={1456}
                 height={1040}
                 priority
-                className="h-[250px] w-full object-cover object-center lg:h-[52vh]"
+                className="h-[250px] w-full object-cover object-center md:h-[300px] lg:h-[300px] xl:h-[52vh] xl:max-h-[520px]"
               />
             </figure>
           </header>
