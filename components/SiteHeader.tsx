@@ -435,13 +435,14 @@ export function SiteHeader({
               <button
                 aria-expanded={isDrawerOpen}
                 aria-label={isDrawerOpen ? "Close menu" : "Open menu"}
-                className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-[#dcedc8] text-[#1a2e1a]"
+                className="inline-flex items-center justify-center gap-2 rounded-[20px] border-[1.5px] border-[#00c853] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#00a844]"
                 type="button"
                 onClick={() => {
                   setIsDrawerOpen((current) => !current);
                 }}
               >
-                {isDrawerOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                <Menu className="h-4 w-4" />
+                <span>Menu</span>
               </button>
             </div>
 
