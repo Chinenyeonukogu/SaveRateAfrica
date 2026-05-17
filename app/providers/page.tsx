@@ -41,15 +41,15 @@ export default function ProvidersPage() {
         <div className="mx-auto max-w-7xl space-y-8">
           <section className="rounded-[32px] bg-white px-6 py-8 shadow-float sm:px-8 sm:py-10">
             <p className="text-xs font-semibold uppercase tracking-[0.26em] text-brand-green">
-              Provider directory
+              Every provider is Independently reviewed.
             </p>
             <h1 className="mt-3 font-heading text-4xl leading-tight text-brand-navy sm:text-5xl">
-              Explore every provider route sending money to Nigeria
+              Provider Reviews
             </h1>
             <p className="mt-4 max-w-3xl text-base leading-7 text-brand-navy/70">
-              Compare speed, fees, corridor support, and user ratings before you
-              click out to send. Provider detail pages are structured for SEO and
-              deeper decision-making.
+              We compare speed, fees, and real user ratings so you can send money
+              to Nigeria with confidence. No provider pays to be featured or
+              ranked higher.
             </p>
           </section>
 

@@ -40,7 +40,7 @@ export function ProvidersDirectoryClient({
               Filter providers
             </p>
             <h2 className="mt-2 font-heading text-3xl text-brand-navy">
-              Find a strong route for your send pattern
+              Compare and Save more.
             </h2>
           </div>
           <div className="inline-flex min-h-12 items-center gap-2 rounded-2xl bg-brand-light px-4 text-sm font-semibold text-brand-navy/70">
