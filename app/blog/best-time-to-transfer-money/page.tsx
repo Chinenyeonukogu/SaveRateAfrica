@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 
 import { SiteHeader } from "@/components/SiteHeader";
 
@@ -14,29 +15,36 @@ export const metadata: Metadata = {
 
 const timingSections = [
   {
-    heading: "BEST DAY: Tuesday to Thursday 📅",
-    body:
-      "Mid-week is most stable. Monday markets are unsettled after the weekend. Friday risks locking into poor rates over the weekend."
+    icon: "📅",
+    heading: "BEST DAY TO SEND: Tuesday to Thursday",
+    body: [
+      "Mid-week is your sweet spot. Monday markets are volatile still recovering from weekend uncertainty. By Friday, you risk locking into poor rates that sit over the weekend. Send Tuesday through Thursday and you're moving when the market is most predictable."
+    ]
   },
   {
-    heading: "BEST TIME OF MONTH: 10th to 20th 🗓",
-    body:
-      "Most people send at month end creating high demand and worse rates. Mid-month means lower fees and faster delivery."
+    icon: "🗓️",
+    heading: "BEST TIME OF THE MONTH: 10th to 20th",
+    body: [
+      "Everyone sends at month-end. That surge in demand drives rates down and fees up. Be smarter send mid-month when volume is low, and your family gets more Naira for the same amount you sent."
+    ]
   },
   {
-    heading: "BEST TIME OF DAY: Morning ⏰",
-    body:
-      "For USA senders aim for 8AM to 12PM EST when London and New York markets overlap and spreads are tightest."
+    icon: "⏰",
+    heading: "BEST TIME OF DAY: Morning",
+    body: [
+      "Sending from the USA? Aim for 8AM to 12PM EST. That's when London and New York markets overlap. Afternoon transfers cost you more.",
+      "Sending from the UK? Aim for 8AM to 11AM GMT. This is when the London market opens, the most liquid trading window in Europe.",
+      "Sending from Canada? Aim for 8AM to 11AM EST/PST depending on your province. Eastern Canada benefits from the New York overlap window. Western Canada (Vancouver, Calgary) should target 5AM to 9AM PST to catch the same overlap before markets shift.",
+      "The universal rule: Send in the morning your local time. Avoid evenings and weekends.",
+      "Don't get caught off guard. Set a rate alert and receive your target rate when it hits."
+    ]
   },
   {
-    heading: "WATCH ECONOMIC EVENTS: 📊",
-    body:
-      "US Federal Reserve decisions, monthly jobs reports, and CBN policy updates can swing the naira fast. Set a rate alert and act when your target rate is hit."
-  },
-  {
-    heading: "THE REAL SECRET:",
-    body:
-      "Always compare providers before you send. A difference of even 1-2% in the rate on a $500 transfer can mean over 11,000 naira more or less reaching your family."
+    icon: "💡",
+    heading: "THE REAL SECRET NOBODY TELLS YOU:",
+    body: [
+      "A 1-2% difference in exchange rate on a $500 transfer means over ₦11,000 more or less reaching your family. The provider you choose matters more than the day or time you send."
+    ]
   }
 ] as const;
 
@@ -46,6 +54,15 @@ export default function BestTimeToTransferMoneyPage() {
       <SiteHeader />
 
       <main className="bg-[#f4faf5] px-4 pb-32 pt-5 sm:px-6 lg:px-8 lg:pb-16">
+        <div className="mx-auto mb-4 max-w-5xl">
+          <Link
+            className="inline-flex items-center text-sm font-bold text-[#0d7a3b] hover:text-[#075c2b]"
+            href="/blog"
+          >
+            &larr; Back to all articles
+          </Link>
+        </div>
+
         <article className="mx-auto max-w-5xl overflow-hidden rounded-[34px] bg-white shadow-float">
           <header className="grid gap-6 bg-[#0d2416] px-6 py-7 text-white sm:px-10 sm:py-9 md:gap-8 lg:min-h-[60vh] lg:grid-cols-2 lg:items-center lg:gap-10 lg:px-14">
             <div>
@@ -76,15 +93,51 @@ export default function BestTimeToTransferMoneyPage() {
           <div className="px-6 py-8 sm:px-10 sm:py-10 lg:px-16">
             <div className="space-y-10 text-[17px] leading-8 text-[#243b2b]">
               {timingSections.map((section) => (
-                <section key={section.heading}>
-                  <h2 className="font-heading text-3xl text-[#102717]">
-                    {section.heading}
-                  </h2>
-                  <p className="mt-4 border-b border-[#dcefe1] pb-6 text-[#334b38]">
-                    {section.body}
-                  </p>
+                <section
+                  key={section.heading}
+                  className="rounded-[26px] border border-[#9bd8ad] bg-[#f0fbf4] p-5 shadow-[0_14px_34px_rgba(16,39,23,0.08)] sm:p-7"
+                >
+                  <div className="flex gap-4">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white text-2xl shadow-sm">
+                      {section.icon}
+                    </div>
+                    <div>
+                      <h2 className="font-heading text-2xl leading-tight text-[#0d7a3b] sm:text-3xl">
+                        {section.heading}
+                      </h2>
+                      <div className="mt-4 space-y-4 text-[#334b38]">
+                        {section.body.map((paragraph) => (
+                          <p key={paragraph}>{paragraph}</p>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
                 </section>
               ))}
+
+              <Link
+                className="inline-flex items-center text-sm font-bold text-[#0d7a3b] hover:text-[#075c2b]"
+                href="/blog"
+              >
+                &larr; Read more articles
+              </Link>
+
+              <section className="rounded-[28px] bg-[#0d2416] px-6 py-7 text-white sm:px-8">
+                <h2 className="font-heading text-3xl">
+                  Before You Send Anything &mdash; Compare First.
+                </h2>
+                <p className="mt-4 max-w-3xl text-base leading-8 text-white/78">
+                  SaveRateAfrica shows you live rates from 14 providers side by
+                  side no sponsored rankings, no hidden fees, just the truth
+                  about who gives your family the most Naira today.
+                </p>
+                <a
+                  className="mt-6 inline-flex min-h-12 items-center rounded-2xl bg-[#f5c84b] px-5 text-sm font-extrabold text-[#102717]"
+                  href="https://saverateafrica.com"
+                >
+                  Compare rates now &rarr;
+                </a>
+              </section>
             </div>
           </div>
         </article>
