@@ -27,7 +27,7 @@ export function MobileNav() {
               key={item.href}
               className={
                 isPrimary
-                  ? "mx-auto -mt-2 flex min-h-12 w-[82px] flex-col items-center justify-center gap-1 rounded-full bg-[#00c853] text-[11px] font-extrabold text-white shadow-[0_8px_16px_rgba(0,200,83,0.24)] transition hover:bg-[#00a844]"
+                  ? "mx-auto flex min-h-12 w-[78px] flex-col items-center justify-center gap-1 rounded-2xl bg-[#00c853] text-[11px] font-bold text-white shadow-[0_4px_10px_rgba(0,200,83,0.18)] transition hover:bg-[#00a844]"
                   : `flex min-h-12 flex-col items-center justify-center gap-1 rounded-2xl text-[11px] font-semibold transition ${
                       active
                         ? "bg-[#f0fbf4] text-[#00a844]"
