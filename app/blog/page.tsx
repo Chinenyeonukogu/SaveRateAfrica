@@ -42,10 +42,10 @@ export default function BlogPage() {
         <div className="mx-auto max-w-7xl space-y-8">
           <section className="rounded-[32px] bg-white px-6 py-8 shadow-float sm:px-8 sm:py-10">
             <p className="text-xs font-semibold uppercase tracking-[0.26em] text-brand-green">
-              Main Headline
+              Blog and guides
             </p>
             <h1 className="mt-3 font-heading text-4xl leading-tight text-brand-navy sm:text-5xl">
-              Smart financial guides for Africans abroad
+              Smart financial guides for Nigerians abroad
             </h1>
             <p className="mt-4 max-w-3xl text-base leading-7 text-brand-navy/70">
               Financial education and money transfer insights designed to help
