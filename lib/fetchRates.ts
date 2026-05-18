@@ -237,7 +237,9 @@ const providerSlugAliases: Record<string, string> = {
   "taptap-send": "taptap-send",
   taptap: "taptap-send",
   "tap-tap-send": "taptap-send",
-  "tap-tap": "taptap-send"
+  "tap-tap": "taptap-send",
+  westernunion: "western-union",
+  "western-union": "western-union"
 };
 
 function getProviderMetadata(providerName: string): Provider | undefined {
