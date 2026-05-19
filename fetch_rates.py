@@ -131,7 +131,7 @@ def to_supabase_row(row):
     return clean_row
 
 
-def to_rate_history_row(row, timestamp):
+def to_rate_history_row(row):
     try:
         rate = float(row["rate"])
     except (KeyError, TypeError, ValueError):
@@ -150,7 +150,7 @@ def to_rate_history_row(row, timestamp):
         "receive_currency": row["receive_currency"],
         "rate": round(rate, 2),
         "fee": fee,
-        "timestamp": timestamp,
+        "timestamp": datetime.utcnow().isoformat(),
     }
 
 
@@ -530,11 +530,10 @@ def upsert_exchange_rates(rows):
 
 
 def insert_rate_history(rows):
-    timestamp = utc_now()
     history_rows = []
 
     for row in rows:
-        history_row = to_rate_history_row(row, timestamp)
+        history_row = to_rate_history_row(row)
         if history_row:
             history_rows.append(history_row)
 

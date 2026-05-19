@@ -27,6 +27,7 @@ interface HistoryRow {
   send_currency?: string;
   receive_currency?: string;
   rate?: number | string;
+  timestamp?: string | null;
 }
 
 interface CurrencyMeta {
@@ -123,6 +124,7 @@ function formatDateLabel(value: string) {
 
 function getDateKey(row: HistoryRow) {
   const rawValue =
+    row.timestamp ??
     row.rate_date ??
     row.history_date ??
     row.recorded_at ??
@@ -161,6 +163,18 @@ function buildSupabaseUrl(table: string, searchParams: URLSearchParams) {
   }
 
   return `${SUPABASE_URL.replace(/\/$/, "")}/rest/v1/${table}?${searchParams.toString()}`;
+}
+
+function getSevenDayUtcWindow() {
+  const now = new Date();
+  const start = new Date(now);
+  start.setUTCDate(now.getUTCDate() - 6);
+  start.setUTCHours(0, 0, 0, 0);
+
+  return {
+    endIso: now.toISOString(),
+    startIso: start.toISOString()
+  };
 }
 
 function logSupabaseConfig() {
@@ -358,11 +372,15 @@ export function RateChart() {
           receive_currency: "eq.NGN",
           order: "provider.asc,send_currency.asc"
         });
+        const { endIso, startIso } = getSevenDayUtcWindow();
         const historySearchParams = new URLSearchParams({
-          select: "*",
+          select: "provider,send_currency,receive_currency,rate,fee,timestamp",
           receive_currency: "eq.NGN",
+          order: "timestamp.asc",
           limit: "500"
         });
+        historySearchParams.append("timestamp", `gte.${startIso}`);
+        historySearchParams.append("timestamp", `lte.${endIso}`);
 
         const exchangeRows = await fetchSupabaseTable<ExchangeRateRow>(
           "exchange_rates",
