@@ -110,6 +110,20 @@ function formatRate(value: number) {
 }
 
 function formatDateLabel(value: string) {
+  const dateOnlyMatch = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+  if (dateOnlyMatch) {
+    const [, year, month, day] = dateOnlyMatch;
+    const utcDate = new Date(
+      Date.UTC(Number(year), Number(month) - 1, Number(day))
+    );
+
+    return utcDate.toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "short",
+      timeZone: "UTC"
+    });
+  }
+
   const parsedDate = new Date(value);
 
   if (Number.isNaN(parsedDate.getTime())) {
@@ -118,7 +132,8 @@ function formatDateLabel(value: string) {
 
   return parsedDate.toLocaleDateString("en-US", {
     month: "short",
-    day: "numeric"
+    day: "numeric",
+    timeZone: "UTC"
   });
 }
 
@@ -242,6 +257,18 @@ function buildFallbackHistoryRows(exchangeRows: ExchangeRateRow[]) {
   }
 
   return historyRows;
+}
+
+function buildCurrentHistoryRows(exchangeRows: ExchangeRateRow[]) {
+  const timestamp = new Date().toISOString();
+
+  return exchangeRows.map((row) => ({
+    provider: row.provider,
+    send_currency: row.send_currency,
+    receive_currency: row.receive_currency,
+    rate: row.rate,
+    timestamp
+  }));
 }
 
 function buildTrendPoints(historyRows: HistoryRow[]) {
@@ -401,7 +428,10 @@ export function RateChart() {
           historyRows = buildFallbackHistoryRows(exchangeRows);
         }
 
-        let trendPoints = buildTrendPoints(historyRows);
+        let trendPoints = buildTrendPoints([
+          ...historyRows,
+          ...buildCurrentHistoryRows(exchangeRows)
+        ]);
         if (trendPoints.length === 0) {
           console.error(
             "[CurrencyTrends] rate_history returned no usable rows; falling back to exchange_rates"
