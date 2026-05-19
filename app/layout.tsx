@@ -111,13 +111,18 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="SaveRateAfrica" />
         <meta name="fo-verify" content="7fa9dafe-9dbb-4692-9cb7-a208826baaba" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
+      </head>
+      <body className="bg-brand-light text-brand-navy">
+        {children}
+        <SiteFooter />
+        <GlobalClientWidgets />
         <Script
-          id="google-analytics"
+          id="google-tag-manager"
           strategy="lazyOnload"
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
         />
         <Script
-          id="google-analytics-config"
+          id="google-tag-manager-config"
           strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `
@@ -128,11 +133,6 @@ export default function RootLayout({
             `
           }}
         />
-      </head>
-      <body className="bg-brand-light text-brand-navy">
-        {children}
-        <SiteFooter />
-        <GlobalClientWidgets />
       </body>
     </html>
   );
