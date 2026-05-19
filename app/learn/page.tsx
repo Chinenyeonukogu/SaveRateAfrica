@@ -40,7 +40,7 @@ export default function LearnPage() {
               Quick videos
             </p>
             <h1 className="mt-3 font-heading text-4xl leading-tight text-brand-navy sm:text-5xl">
-              Watch money transfer tips before you send
+              Smart money transfer Tips.
             </h1>
             <p className="mt-4 max-w-3xl text-base leading-7 text-brand-navy/70">
               Short, practical videos to help you compare providers, spot hidden
