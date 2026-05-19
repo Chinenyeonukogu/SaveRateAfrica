@@ -35,8 +35,11 @@ const learnCards = [
     href: "/blog",
     imageSrc: "/learn/money-transfer-guides.webp",
     imageAlt: "Notebook, laptop, coffee, and desk setup for money transfer guides",
+    imageWidth: 2048,
+    imageHeight: 1365,
     mediaClassName: "bg-[#e8f5e9]",
-    labelClassName: "text-[#2e7d32]"
+    labelClassName: "text-[#2e7d32]",
+    priority: true
   },
   {
     type: "video" as const,
@@ -46,8 +49,11 @@ const learnCards = [
     href: "/learn",
     imageSrc: "/learn/quick-video.webp",
     imageAlt: "Person watching a SaveRateAfrica money transfer video on a phone",
+    imageWidth: 1536,
+    imageHeight: 1024,
     mediaClassName: "bg-[#fff8e1]",
-    labelClassName: "text-[#d88a00]"
+    labelClassName: "text-[#d88a00]",
+    priority: false
   },
   {
     type: "review" as const,
@@ -57,8 +63,11 @@ const learnCards = [
     href: "/providers",
     imageSrc: "/learn/provider-review.webp",
     imageAlt: "Provider reviews screen showing transfer providers and ratings",
+    imageWidth: 1086,
+    imageHeight: 1448,
     mediaClassName: "bg-[#f4faf5]",
-    labelClassName: "text-[#2e7d32]"
+    labelClassName: "text-[#2e7d32]",
+    priority: false
   }
 ] as const;
 
@@ -81,11 +90,13 @@ export function HomeLearnSection() {
               <div className={`relative h-[110px] overflow-hidden ${card.mediaClassName}`}>
                 <Image
                   alt={card.imageAlt}
-                  className="object-cover"
-                  fill
-                  loading="lazy"
+                  className="h-full w-full object-cover"
+                  height={card.imageHeight}
+                  loading={card.priority ? undefined : "lazy"}
+                  priority={card.priority}
                   sizes="(min-width: 768px) 33vw, 100vw"
                   src={card.imageSrc}
+                  width={card.imageWidth}
                 />
                 <div className="absolute left-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-[#2e7d32] text-white shadow-[0_8px_18px_rgba(46,125,50,0.24)]">
                   <LearnIcon type={card.type} />
