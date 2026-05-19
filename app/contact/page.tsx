@@ -22,7 +22,7 @@ export default function ContactPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.26em] text-brand-green">
             Contact us
           </p>
-          <h1 className="mt-3 font-heading text-4xl leading-tight text-brand-navy sm:text-5xl">
+          <h1 className="mt-3 font-heading text-2xl leading-tight text-brand-navy sm:text-3xl">
             We are here to help
           </h1>
           <p className="mt-4 text-base leading-7 text-brand-navy/70">
