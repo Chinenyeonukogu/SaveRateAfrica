@@ -9,6 +9,7 @@ import { HomeHero } from "@/components/HomeHero";
 import { RateChart } from "@/components/RateChart";
 import { RateDisclaimer } from "@/components/RateDisclaimer";
 import { SiteHeader } from "@/components/SiteHeader";
+import { VideoPlayer } from "@/components/VideoPlayer";
 import {
   buildComparisonFromLiveRates,
   fetchRates,
@@ -41,21 +42,6 @@ function NotebookPenIllustration() {
       <circle cx="21" cy="32" fill="#2e7d32" r="3" />
       <circle cx="21" cy="46" fill="#2e7d32" r="3" />
       <circle cx="21" cy="60" fill="#2e7d32" r="3" />
-    </svg>
-  );
-}
-
-function TabletPersonIllustration() {
-  return (
-    <svg aria-hidden="true" className="h-[96px] w-[118px]" viewBox="0 0 118 96">
-      <rect fill="#ffffff" height="58" rx="12" stroke="#d9eadb" strokeWidth="2" width="76" x="34" y="24" />
-      <rect fill="#e8f5e9" height="34" rx="7" width="52" x="46" y="35" />
-      <path d="M55 47h34M55 57h25" stroke="#2e7d32" strokeLinecap="round" strokeWidth="4" />
-      <circle cx="30" cy="30" fill="#1a3a2a" r="13" />
-      <path d="M12 85c2-22 12-35 28-35s26 13 28 35Z" fill="#2e7d32" />
-      <path d="M24 53c5 6 16 6 22 0" stroke="#ffffff" strokeLinecap="round" strokeWidth="3" />
-      <path d="M58 75h39" stroke="#1a3a2a" strokeLinecap="round" strokeWidth="4" />
-      <circle cx="101" cy="53" fill="#f6c619" r="4" />
     </svg>
   );
 }
@@ -101,6 +87,15 @@ function LearnIcon({ type }: { type: "blog" | "video" | "review" }) {
   );
 }
 
+const tutorialVideos = [
+  {
+    videoUrl: "/learn/stop-losing-money.mp4",
+    thumbnailUrl: "/learn/quick-video.png",
+    title: "Quick Videos",
+    description: "Watch simple breakdowns for comparing providers and avoiding transfer mistakes."
+  }
+] as const;
+
 const learnCards = [
   {
     type: "blog" as const,
@@ -116,15 +111,7 @@ const learnCards = [
   },
   {
     type: "video" as const,
-    title: "Quick Videos",
-    description: "Watch simple breakdowns for comparing providers and avoiding transfer mistakes.",
-    cta: "Watch now",
-    href: "/learn/stop-losing-money.mp4",
-    imageSrc: "/learn/quick-video.png",
-    imageAlt: "Person watching a SaveRateAfrica money transfer video on a phone",
-    mediaClassName: "bg-[#fff8e1]",
-    labelClassName: "text-[#d88a00]",
-    illustration: <TabletPersonIllustration />
+    ...tutorialVideos[0]
   },
   {
     type: "review" as const,
@@ -152,6 +139,15 @@ function LearnAndSaveMoreSection() {
 
         <div className="grid gap-4 md:grid-cols-3">
           {learnCards.map((card) => (
+            card.type === "video" ? (
+              <VideoPlayer
+                key={card.title}
+                description={card.description}
+                thumbnailUrl={card.thumbnailUrl}
+                title={card.title}
+                videoUrl={card.videoUrl}
+              />
+            ) : (
             <article
               key={card.title}
               className="overflow-hidden rounded-[12px] border border-[#e8e8e8] bg-white"
@@ -179,18 +175,12 @@ function LearnAndSaveMoreSection() {
                 <Link
                   className={`mt-auto inline-flex items-center gap-1 pt-3 text-[11px] font-extrabold ${card.labelClassName}`}
                   href={card.href}
-                  onClick={(event) => {
-                    if (card.type === "video") {
-                      event.preventDefault();
-                      window.location.href = card.href;
-                    }
-                  }}
-                  prefetch={card.type === "video" ? false : undefined}
                 >
                   {card.cta} →
                 </Link>
               </div>
             </article>
+            )
           ))}
         </div>
       </div>
