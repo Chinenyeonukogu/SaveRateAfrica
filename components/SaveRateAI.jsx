@@ -18,7 +18,7 @@ What can I help you with today?`;
 
 const INTRO_TYPING_DELAY_MS = 500;
 const INTRO_GREETING_DELAY_MS = 1500;
-const INTRO_MENU_DELAY_MS = 31500;
+const INTRO_MENU_DELAY_MS = 2500;
 
 function getTimeLabel() {
   return new Date().toLocaleTimeString([], {
