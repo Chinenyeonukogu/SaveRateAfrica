@@ -59,6 +59,7 @@ export function VideoPlayer({
               alt=""
               className="object-cover transition duration-300 group-hover:scale-[1.03]"
               fill
+              loading="lazy"
               sizes="(min-width: 768px) 33vw, 100vw"
               src={thumbnailUrl}
             />

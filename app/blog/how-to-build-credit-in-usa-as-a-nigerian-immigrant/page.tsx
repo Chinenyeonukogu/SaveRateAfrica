@@ -89,8 +89,10 @@ export default function BuildCreditUsaNigerianImmigrantPage() {
               <Image
                 alt="Credit card and savings tools for building financial stability"
                 className="object-cover"
+                fetchPriority="high"
                 fill
                 priority
+                quality={85}
                 sizes="(min-width: 1024px) 900px, 100vw"
                 src="/hero/build-credit.webp"
               />

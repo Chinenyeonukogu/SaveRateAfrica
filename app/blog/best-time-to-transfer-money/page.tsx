@@ -84,7 +84,10 @@ export default function BestTimeToTransferMoneyPage() {
                 alt="A professional comparing remittance services and timing an international money transfer to Nigeria"
                 width={1456}
                 height={1040}
+                fetchPriority="high"
                 priority
+                quality={85}
+                sizes="(min-width: 1280px) 500px, (min-width: 1024px) 45vw, 100vw"
                 className="h-[250px] w-full object-cover object-center md:h-[300px] lg:h-[300px] xl:h-[52vh] xl:max-h-[520px]"
               />
             </figure>

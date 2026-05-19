@@ -317,7 +317,11 @@ export function HomeHero({
                       key={face}
                       alt=""
                       className={`h-10 w-10 rounded-full border-[2.5px] border-[#0d2416] object-cover shadow-[0_4px_12px_rgba(0,0,0,0.28)] ${index === 0 ? "" : "-ml-3"}`}
+                      fetchPriority={index === 0 ? "high" : "auto"}
                       height={40}
+                      priority={index === 0}
+                      quality={85}
+                      sizes="40px"
                       src={face}
                       width={40}
                     />

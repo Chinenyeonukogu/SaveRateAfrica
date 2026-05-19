@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import type { ReactNode } from "react";
 
-import { Analytics } from "@vercel/analytics/react";
+import { LazyAnalytics } from "@/components/LazyAnalytics";
 import { LazySaveRateAI } from "@/components/LazySaveRateAI";
 import { MobileNav } from "@/components/MobileNav";
 import { PwaInstallPrompt } from "@/components/PwaInstallPrompt";
@@ -90,8 +90,22 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
+          rel="preconnect"
+          href="https://lbcntbalsinojbbsvcra.supabase.co"
+          crossOrigin="anonymous"
+        />
+        <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=DM+Sans:wght@400;500&display=swap"
+        />
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              body{margin:0;background:#f0f7f1;color:#0a1628}
+              #home{background:linear-gradient(135deg,#1a3a1a 0%,#2e7d32 50%,#0d2416 100%);contain:layout paint}
+              #home h1{font-family:"Sora","Syne","Avenir Next","Segoe UI",sans-serif}
+            `
+          }}
         />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#145a32" />
@@ -103,12 +117,12 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icon-192.png" />
         <Script
           id="google-analytics"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
         />
         <Script
           id="google-analytics-config"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
@@ -125,7 +139,7 @@ export default function RootLayout({
         <LazySaveRateAI />
         <PwaInstallPrompt />
         <MobileNav />
-        <Analytics />
+        <LazyAnalytics />
         <ServiceWorkerRegistration />
       </body>
     </html>

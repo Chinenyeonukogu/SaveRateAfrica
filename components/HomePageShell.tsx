@@ -146,6 +146,7 @@ function LearnAndSaveMoreSection() {
                   alt={card.imageAlt}
                   className="object-cover"
                   fill
+                  loading="lazy"
                   sizes="(min-width: 768px) 33vw, 100vw"
                   src={card.imageSrc}
                 />
