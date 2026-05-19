@@ -1,10 +1,14 @@
-const SUPABASE_URL = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+import { createClient } from "@supabase/supabase-js";
+
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY =
-  process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
 const GEMINI_MODEL = "gemini-1.5-flash-001";
 const SUPPORT_MESSAGE =
   "For additional support please contact us at partnerships@saverateafrica.com, we respond within 24 hours.";
 const SUPPORTED_CURRENCIES = ["USD", "GBP", "CAD"];
+
+let supabaseClient = null;
 
 const systemPrompt = `You are Eva, SaveRateAfrica's helpful AI assistant for Nigerian diaspora money transfers.
 Use only the live SaveRateAfrica exchange-rate context provided in the prompt.
@@ -151,37 +155,87 @@ function buildTopRatesReply(currency, rows, explanation) {
   return `Top 3 ${currency}/NGN rates now:\n${topRates}\n\nEva's take:\n${explanation}`;
 }
 
-async function fetchExchangeRates({ currency, limit = 3 } = {}) {
-  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-    throw new Error("Supabase public env vars are missing.");
+function buildTopRatesFallbackExplanation(currency, rows) {
+  const topProvider = rows[0];
+
+  if (!topProvider) {
+    return `I could not find live ${currency}/NGN rows right now. Please use the Compare Rates table and try Eva again shortly.`;
   }
 
-  const searchParams = new URLSearchParams({
-    select: "provider,send_currency,receive_currency,rate,fee,updated_at",
-    receive_currency: "eq.NGN",
-    order: "rate.desc",
-    limit: String(limit)
+  return `${topProvider.provider} is currently best because it has the highest live ${currency}/NGN rate at ${formatRate(topProvider.rate)}. Compare the fee before sending, because a lower fee can improve the final payout your recipient receives.`;
+}
+
+function getSupabaseClient() {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    const error = new Error("Supabase public env vars are missing.");
+    console.error("[Eva] Supabase config error", {
+      hasAnonKey: Boolean(SUPABASE_ANON_KEY),
+      hasUrl: Boolean(SUPABASE_URL)
+    });
+    throw error;
+  }
+
+  if (!supabaseClient) {
+    supabaseClient = createClient(SUPABASE_URL.replace(/\/$/, ""), SUPABASE_ANON_KEY);
+  }
+
+  return supabaseClient;
+}
+
+async function fetchExchangeRates({ currency, limit = 3 } = {}) {
+  const supabase = getSupabaseClient();
+  console.log("[Eva] Fetching exchange_rates", {
+    currency: currency || "all",
+    query:
+      ".from('exchange_rates').select('provider, rate, fee, send_currency').eq('send_currency', currency).eq('receive_currency', 'NGN').order('rate', { ascending: false }).limit(3)"
   });
 
+  let query = supabase
+    .from("exchange_rates")
+    .select("provider, rate, fee, send_currency");
+
   if (currency) {
-    searchParams.set("send_currency", `eq.${currency}`);
+    query = query.eq("send_currency", currency);
   }
 
-  const response = await fetch(
-    `${SUPABASE_URL.replace(/\/$/, "")}/rest/v1/exchange_rates?${searchParams.toString()}`,
-    {
-      headers: {
-        apikey: SUPABASE_ANON_KEY,
-        Authorization: `Bearer ${SUPABASE_ANON_KEY}`
-      }
+  query = query
+    .eq("receive_currency", "NGN")
+    .order("rate", { ascending: false })
+    .limit(limit);
+
+  const { data, error, status } = await query;
+
+  console.log("[Eva] Supabase exchange_rates result", {
+    currency: currency || "all",
+    error,
+    rows: data,
+    status
+  });
+
+  if (error) {
+    if (status === 401 || status === 403) {
+      console.error(
+        "[Eva] Supabase read was blocked. Check RLS policy on exchange_rates allows anon/public SELECT."
+      );
     }
-  );
 
-  if (!response.ok) {
-    throw new Error(`Supabase exchange_rates fetch failed: ${response.status}`);
+    console.error("[Eva] Exact Supabase error", {
+      code: error.code,
+      details: error.details,
+      hint: error.hint,
+      message: error.message,
+      status
+    });
+    throw new Error(`Supabase exchange_rates fetch failed: ${error.message}`);
   }
 
-  return response.json();
+  if (!data?.length) {
+    console.warn(
+      "[Eva] Supabase exchange_rates returned zero rows. Check that exchange_rates has matching data and that RLS allows anon/public SELECT."
+    );
+  }
+
+  return Array.isArray(data) ? data : [];
 }
 
 async function fetchTopRatesForAllCurrencies() {
@@ -317,14 +371,20 @@ export default async function handler(req, res) {
         currency: requestedCurrency,
         limit: 3
       });
-      const message = await askGemini(
-        `The user clicked "Best ${requestedCurrency} rate now".
+      let message = buildTopRatesFallbackExplanation(requestedCurrency, topRows);
+
+      try {
+        message = await askGemini(
+          `The user clicked "Best ${requestedCurrency} rate now".
 Here are the top 3 live rows from Supabase exchange_rates ordered by rate descending:
 ${buildRatesContext(topRows)}
 
 Explain which provider is best and why in exactly 2 sentences. Mention the top provider, rate, and any useful fee context if available.`,
-        { maxOutputTokens: 140 }
-      );
+          { maxOutputTokens: 140 }
+        );
+      } catch (geminiError) {
+        console.error("[Eva] Gemini explanation failed", geminiError);
+      }
 
       return res.status(200).json({
         ...responsePayload(buildTopRatesReply(requestedCurrency, topRows, message), {
