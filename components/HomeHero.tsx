@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, type MutableRefObject } from "react";
+import Image from "next/image";
 import Link from "next/link";
 
 import {
@@ -41,10 +42,12 @@ function CountryFlag({ country }: { country: SenderCountry }) {
   const flag = flagByCountry[country];
 
   return (
-    <img
+    <Image
       alt={flag.alt}
       className="mr-1 inline-block h-[12px] w-[16px] rounded-[2px] object-cover align-[-2px]"
+      height={12}
       src={flag.src}
+      width={16}
     />
   );
 }
@@ -310,11 +313,13 @@ export function HomeHero({
               <div className="flex w-fit max-w-full items-center">
                 <div className="flex shrink-0 items-center">
                   {socialProofFaces.map((face, index) => (
-                    <img
+                    <Image
                       key={face}
                       alt=""
                       className={`h-10 w-10 rounded-full border-[2.5px] border-[#0d2416] object-cover shadow-[0_4px_12px_rgba(0,0,0,0.28)] ${index === 0 ? "" : "-ml-3"}`}
+                      height={40}
                       src={face}
+                      width={40}
                     />
                   ))}
                 </div>
@@ -547,10 +552,12 @@ export function HomeHero({
                     </p>
                     <div className="flex items-center justify-between rounded-[8px] border-[1.5px] border-[#e0ede2] px-3 py-2">
                       <span className="text-[12px] font-semibold text-[#1a2e1a]">
-                        <img
+                        <Image
                           alt="Nigeria flag"
                           className="mr-2 inline-block h-[12px] w-[16px] rounded-[2px] object-cover align-[-2px]"
+                          height={12}
                           src="/flags/ng.svg"
+                          width={16}
                         />
                         Nigeria
                       </span>

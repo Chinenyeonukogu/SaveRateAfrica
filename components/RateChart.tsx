@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import {
   CartesianGrid,
   Line,
@@ -89,7 +90,7 @@ function FlagIcon({
   src: string;
 }) {
   return (
-    <img
+    <Image
       alt={alt}
       className="inline-block h-[14px] w-[20px] rounded-[2px] object-cover"
       height={14}

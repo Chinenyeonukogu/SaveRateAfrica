@@ -23,11 +23,38 @@ const securityHeaders = [
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  compress: true,
+  images: {
+    formats: ["image/avif", "image/webp"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.pexels.com"
+      },
+      {
+        protocol: "https",
+        hostname: "randomuser.me"
+      },
+      {
+        protocol: "https",
+        hostname: "flagcdn.com"
+      }
+    ]
+  },
   async headers() {
     return [
       {
         source: "/:path*",
         headers: securityHeaders
+      },
+      {
+        source: "/:path*\\.(svg|jpg|jpeg|png|webp|avif|gif|ico|mp4|woff|woff2)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable"
+          }
+        ]
       }
     ];
   }

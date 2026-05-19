@@ -120,7 +120,7 @@ export default function AboutPage() {
                     className="h-auto w-full object-cover"
                     height={720}
                     sizes="(max-width: 1023px) 240px, 280px"
-                    src="/founder-chinenye-onukogu.png"
+                    src="/founder-chinenye-onukogu.webp"
                     width={560}
                   />
                 </div>

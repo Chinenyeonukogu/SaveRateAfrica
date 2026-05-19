@@ -84,7 +84,7 @@ export default function CheapestWayToSendMoneyToNigeriaPage() {
 
             <figure className="relative overflow-hidden rounded-[24px] border border-white/10 bg-[#102717] shadow-2xl">
               <Image
-                src="/blog/cheap-way-to-send-money.png"
+                src="/blog/cheap-way-to-send-money.webp"
                 alt="A professional reviewing SaveRateAfrica money transfer guidance for sending money to Nigeria"
                 width={1456}
                 height={1040}

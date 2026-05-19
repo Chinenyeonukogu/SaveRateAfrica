@@ -92,7 +92,7 @@ export default function BuildCreditUsaNigerianImmigrantPage() {
                 fill
                 priority
                 sizes="(min-width: 1024px) 900px, 100vw"
-                src="/hero/build-credit.png"
+                src="/hero/build-credit.webp"
               />
               <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0d2416] to-transparent" />
             </div>

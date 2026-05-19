@@ -80,7 +80,7 @@ export default function BestTimeToTransferMoneyPage() {
 
             <figure className="relative overflow-hidden rounded-[24px] border border-white/10 bg-[#102717] shadow-2xl">
               <Image
-                src="/blog/best-time-to-transfer-money.png"
+                src="/blog/best-time-to-transfer-money.webp"
                 alt="A professional comparing remittance services and timing an international money transfer to Nigeria"
                 width={1456}
                 height={1040}

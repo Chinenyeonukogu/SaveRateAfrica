@@ -1,11 +1,12 @@
-import { Analytics } from '@vercel/analytics/react'
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import type { ReactNode } from "react";
 
+import { Analytics } from "@vercel/analytics/react";
+import { LazySaveRateAI } from "@/components/LazySaveRateAI";
 import { MobileNav } from "@/components/MobileNav";
 import { PwaInstallPrompt } from "@/components/PwaInstallPrompt";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
-import SaveRateAI from "@/components/SaveRateAI.jsx";
 import { SiteFooter } from "@/components/SiteFooter";
 
 import "./globals.css";
@@ -80,6 +81,15 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link
+          rel="preconnect"
+          href="https://fonts.googleapis.com"
+        />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=DM+Sans:wght@400;500&display=swap"
         />
@@ -91,11 +101,14 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="SaveRateAfrica" />
         <meta name="fo-verify" content="7fa9dafe-9dbb-4692-9cb7-a208826baaba" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
-        <script
-          async
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
         />
-        <script
+        <Script
+          id="google-analytics-config"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
@@ -109,7 +122,7 @@ export default function RootLayout({
       <body className="bg-brand-light text-brand-navy">
         {children}
         <SiteFooter />
-        <SaveRateAI />
+        <LazySaveRateAI />
         <PwaInstallPrompt />
         <MobileNav />
         <Analytics />
