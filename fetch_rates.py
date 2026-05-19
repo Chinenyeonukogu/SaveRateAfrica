@@ -131,6 +131,29 @@ def to_supabase_row(row):
     return clean_row
 
 
+def to_rate_history_row(row, timestamp):
+    try:
+        rate = float(row["rate"])
+    except (KeyError, TypeError, ValueError):
+        return None
+
+    fee = row.get("fee")
+    if fee is not None:
+        try:
+            fee = round(float(fee), 2)
+        except (TypeError, ValueError):
+            fee = None
+
+    return {
+        "provider": row["provider"],
+        "send_currency": row["send_currency"],
+        "receive_currency": row["receive_currency"],
+        "rate": round(rate, 2),
+        "fee": fee,
+        "timestamp": timestamp,
+    }
+
+
 def has_required_rate_fields(row):
     required_fields = (
         row.get("provider"),
@@ -506,6 +529,42 @@ def upsert_exchange_rates(rows):
         raise
 
 
+def insert_rate_history(rows):
+    timestamp = utc_now()
+    history_rows = []
+
+    for row in rows:
+        history_row = to_rate_history_row(row, timestamp)
+        if history_row:
+            history_rows.append(history_row)
+
+    if not history_rows:
+        print("[Rate history] No rows to insert.")
+        return []
+
+    request = urllib.request.Request(
+        f"{SUPABASE_URL}/rest/v1/rate_history",
+        data=json.dumps(history_rows).encode("utf-8"),
+        method="POST",
+        headers={
+            "apikey": SUPABASE_SERVICE_ROLE_KEY,
+            "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}",
+            "Content-Type": "application/json",
+            "Prefer": "return=representation",
+        },
+    )
+
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            response_text = response.read().decode("utf-8")
+            return json.loads(response_text) if response_text else []
+    except urllib.error.HTTPError as error:
+        response_body = error.read().decode("utf-8", errors="replace")
+        print(f"[Rate history] Insert failed: HTTP {error.code}")
+        print(f"[Rate history] Error body: {response_body}")
+        raise
+
+
 def main():
     require_env("SUPABASE_URL", SUPABASE_URL)
     require_env("SUPABASE_SERVICE_ROLE_KEY", SUPABASE_SERVICE_ROLE_KEY)
@@ -527,6 +586,9 @@ def main():
 
     saved_rows = upsert_exchange_rates(rows)
     print(f"[Rates] Rows saved: {len(saved_rows)}")
+
+    history_rows = insert_rate_history(saved_rows)
+    print(f"[Rate history] Rows inserted: {len(history_rows)}")
 
 
 if __name__ == "__main__":
