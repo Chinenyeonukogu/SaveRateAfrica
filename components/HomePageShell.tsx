@@ -91,8 +91,14 @@ const tutorialVideos = [
   {
     videoUrl: "/learn/stop-losing-money.mp4",
     thumbnailUrl: "/learn/quick-video.png",
-    title: "Quick Videos",
+    title: "Stop losing money on transfers",
     description: "Watch simple breakdowns for comparing providers and avoiding transfer mistakes."
+  },
+  {
+    videoUrl: "/learn/cheapest-way-to-send-money-to-nigeria.mp4",
+    thumbnailUrl: "/learn/quick-video.png",
+    title: "Cheapest way to send money to Nigeria",
+    description: "Learn how to compare fees and rates so more naira reaches family back home."
   }
 ] as const;
 
@@ -109,10 +115,10 @@ const learnCards = [
     labelClassName: "text-[#2e7d32]",
     illustration: <NotebookPenIllustration />
   },
-  {
+  ...tutorialVideos.map((video) => ({
     type: "video" as const,
-    ...tutorialVideos[0]
-  },
+    ...video
+  })),
   {
     type: "review" as const,
     title: "Provider reviews",
@@ -137,11 +143,12 @@ function LearnAndSaveMoreSection() {
           </h2>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {learnCards.map((card) => (
             card.type === "video" ? (
               <VideoPlayer
                 key={card.title}
+                ctaLabel="Watch video"
                 description={card.description}
                 thumbnailUrl={card.thumbnailUrl}
                 title={card.title}

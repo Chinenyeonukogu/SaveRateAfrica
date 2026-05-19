@@ -9,6 +9,7 @@ interface VideoPlayerProps {
   thumbnailUrl: string;
   title: string;
   description: string;
+  ctaLabel?: string;
   className?: string;
 }
 
@@ -17,15 +18,17 @@ export function VideoPlayer({
   thumbnailUrl,
   title,
   description,
+  ctaLabel = "Watch video",
   className = ""
 }: VideoPlayerProps) {
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const playVideo = () => setIsVideoLoaded(true);
 
   return (
     <article
       className={`overflow-hidden rounded-[12px] border border-[#e8e8e8] bg-white ${className}`}
     >
-      <div className="relative h-[110px] overflow-hidden bg-[#fff8e1]">
+      <div className="relative h-[178px] overflow-hidden bg-[#fff8e1] sm:h-[220px] md:h-[154px] lg:h-[176px]">
         {isVideoLoaded ? (
           <video
             autoPlay
@@ -42,7 +45,7 @@ export function VideoPlayer({
             aria-label={`Play ${title}`}
             className="group relative h-full w-full overflow-hidden text-left"
             type="button"
-            onClick={() => setIsVideoLoaded(true)}
+            onClick={playVideo}
           >
             <Image
               alt=""
@@ -66,6 +69,15 @@ export function VideoPlayer({
         <p className="mt-2 text-[11px] font-medium leading-[1.6] text-[#666666]">
           {description}
         </p>
+        {!isVideoLoaded ? (
+          <button
+            className="mt-auto inline-flex items-center gap-1 pt-3 text-[11px] font-extrabold text-[#2e7d32]"
+            type="button"
+            onClick={playVideo}
+          >
+            {ctaLabel} →
+          </button>
+        ) : null}
       </div>
     </article>
   );
