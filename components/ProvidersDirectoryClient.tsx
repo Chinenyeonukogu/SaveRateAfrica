@@ -182,9 +182,10 @@ export function ProvidersDirectoryClient({
               <a
                 className="inline-flex min-h-12 items-center gap-2 rounded-2xl bg-brand-green px-5 text-sm font-semibold text-white hover:shadow-glow"
                 href={getProviderAffiliateLink(provider.slug, {
+                  origin: country === "All" ? undefined : country,
                   placement: "providers-directory"
                 })}
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 target="_blank"
               >
                 Send now

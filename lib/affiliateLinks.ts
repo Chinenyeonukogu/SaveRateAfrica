@@ -1,7 +1,6 @@
-import type { SourceCurrency } from "@/lib/providers";
+import type { SenderCountry, SourceCurrency } from "@/lib/providers";
 
 const remittanceProviderLinks: Record<string, string> = {
-  wise: "https://wise.com/",
   remitly: "https://www.remitly.com/",
   worldremit: "https://www.worldremit.com/en",
   sendwave: "https://www.sendwave.com/",
@@ -26,12 +25,26 @@ const creditCardLinks: Record<string, string> = {
   petal: "https://www.petalcard.com/"
 };
 
+const wiseAffiliateLinks = {
+  UK: "https://wise.prf.hn/click/camref:1101l5Iv4U",
+  USA: "https://wise.prf.hn/click/camref:1011l5FuWv"
+} as const;
+
 type TrackingParams = Record<string, string | number | undefined>;
 
 interface ProviderTrackingParams extends TrackingParams {
   amount?: number;
   currency?: SourceCurrency;
+  origin?: SenderCountry;
   recipientCurrency?: "NGN";
+}
+
+function getWiseAffiliateLink(params: ProviderTrackingParams) {
+  if (params.currency === "GBP" || params.origin === "UK") {
+    return wiseAffiliateLinks.UK;
+  }
+
+  return wiseAffiliateLinks.USA;
 }
 
 function withTracking(baseUrl: string, params: TrackingParams, campaign: string) {
@@ -54,6 +67,10 @@ export function getProviderAffiliateLink(
   slug: string,
   params: ProviderTrackingParams = {}
 ) {
+  if (slug === "wise") {
+    return getWiseAffiliateLink(params);
+  }
+
   const {
     amount,
     currency,

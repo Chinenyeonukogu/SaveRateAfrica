@@ -193,9 +193,10 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
                   href={getProviderAffiliateLink(provider.slug, {
                     amount: comparison.amount,
                     currency: comparison.sourceCurrency,
+                    origin: comparison.senderCountry,
                     placement: "provider-page"
                   })}
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   target="_blank"
                 >
                   Send with {provider.name}

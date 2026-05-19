@@ -90,7 +90,7 @@ export function ProviderCard({
           <a
             className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-[8px] bg-[#2e7d32] px-[18px] py-[10px] text-[13px] font-bold text-white transition hover:bg-[#1b5e20]"
             href={provider.sendUrl}
-            rel="noreferrer"
+            rel="noopener noreferrer"
             target="_blank"
           >
             {providerCtaLabel}
@@ -183,7 +183,7 @@ export function ProviderCard({
         <a
           className="inline-flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-[8px] bg-[#2e7d32] px-[18px] py-[10px] text-[13px] font-bold text-white transition hover:bg-[#1b5e20]"
           href={provider.sendUrl}
-          rel="noreferrer"
+          rel="noopener noreferrer"
           target="_blank"
         >
           {providerCtaLabel}
