@@ -4,12 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import { Home } from "lucide-react";
 
 const quickReplies = [
-  "🇺🇸 Best USD rate now?",
-  "🇬🇧 Best GBP rate now?",
-  "🇨🇦 Best CAD rate now?",
-  "❓ How do I use this site?",
-  "🔔 Set a rate alert",
-  "🆘 Get help"
+  "Best USD rate now",
+  "Best GBP rate now",
+  "Best CAD rate now",
+  "How do I use this site?",
+  "Set a rate alert",
+  "Get help"
 ];
 
 const openingGreeting = `Hi, I'm Eva! 👋
@@ -23,12 +23,13 @@ function getTimeLabel() {
   });
 }
 
-function createMessage(role, text) {
+function createMessage(role, text, options = {}) {
   return {
     id: `${role}-${Date.now()}-${Math.random().toString(16).slice(2)}`,
     role,
     text,
-    timestamp: getTimeLabel()
+    timestamp: getTimeLabel(),
+    ...options
   };
 }
 
@@ -50,7 +51,10 @@ async function askGemini(message, history) {
     throw new Error("Eva returned an empty response.");
   }
 
-  return text;
+  return {
+    cta: data?.cta,
+    text
+  };
 }
 
 function fallbackReply(text) {
@@ -123,7 +127,10 @@ export function SaveRateAI() {
     try {
       const reply = await askGemini(trimmedText, nextMessages);
       if (requestTokenRef.current === requestToken) {
-        setMessages((current) => [...current, createMessage("bot", reply)]);
+        setMessages((current) => [
+          ...current,
+          createMessage("bot", reply.text, { cta: reply.cta })
+        ]);
       }
     } catch {
       if (requestTokenRef.current === requestToken) {
@@ -187,6 +194,11 @@ export function SaveRateAI() {
                   <p key={`${message.id}-${index}`}>{line}</p>
                 ))}
                 <span>{message.timestamp}</span>
+                {message.cta ? (
+                  <a className="save-rate-ai-contact-button" href={message.cta.href}>
+                    {message.cta.label}
+                  </a>
+                ) : null}
                 {message.role === "bot" && messageIndex > 0 ? (
                   <button
                     className="save-rate-ai-back-button"
@@ -415,6 +427,24 @@ export function SaveRateAI() {
         .save-rate-ai-back-button:hover {
           background: #1a6b3c;
           color: #ffffff;
+          transform: translateY(-1px);
+        }
+
+        .save-rate-ai-contact-button {
+          background: #1a6b3c;
+          border-radius: 999px;
+          color: #ffffff;
+          display: inline-flex;
+          font-size: 11px;
+          font-weight: 800;
+          margin-top: 8px;
+          padding: 8px 13px;
+          text-decoration: none;
+          transition: background 160ms ease, transform 160ms ease;
+        }
+
+        .save-rate-ai-contact-button:hover {
+          background: #0f512b;
           transform: translateY(-1px);
         }
 

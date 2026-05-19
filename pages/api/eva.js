@@ -1,141 +1,284 @@
 const SUPABASE_URL = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_ANON_KEY =
   process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const GEMINI_MODEL = "gemini-1.5-flash-001";
+const SUPPORT_MESSAGE =
+  "For additional support please contact us at partnerships@saverateafrica.com, we respond within 24 hours.";
+const SUPPORTED_CURRENCIES = ["USD", "GBP", "CAD"];
 
-const baseSystemPrompt = `You are Eva, SaveRateAfrica's warm and friendly AI assistant. Your personality is encouraging, helpful, and supportive. You help Nigerian diaspora users find the best remittance rates for sending USD, GBP, and CAD to NGN.
+const systemPrompt = `You are Eva, SaveRateAfrica's helpful AI assistant for Nigerian diaspora money transfers.
+Use only the live SaveRateAfrica exchange-rate context provided in the prompt.
+Keep answers concise, practical, and friendly.
+For best-rate button requests, explain which provider is best and why in exactly 2 sentences.
+For free-text questions, answer only if the question is about SaveRateAfrica, remittance providers, USD/GBP/CAD to NGN exchange rates, fees, transfer value, rate alerts, or using the website.
+If the user asks anything outside that scope, respond exactly with: ${SUPPORT_MESSAGE}`;
 
-About SaveRateAfrica:
-- Free remittance comparison platform for Nigerian diaspora
-- Compares 14 providers including LemFi, Wise, WorldRemit, Remitly, Western Union, MoneyGram
-- Users compare USD, GBP, and CAD to NGN rates
-- We show live rates, fees, speed, and payout value
-- We NEVER hold funds or process transfers ourselves
-- Rate alerts can be set from the Currency Trends chart on the homepage
-
-How to use the site:
-1. Go to Compare Rates section
-2. Select sending country (USA, UK, or Canada)
-3. Enter the amount to send
-4. Click Compare Rates Now
-5. View providers ranked by best payout
-6. Click preferred provider to send
-
-How to set a rate alert:
-1. Scroll to Currency Trends chart on homepage
-2. Click the gold Set Rate Alert button
-3. Enter target NGN rate and email address
-4. We notify you when any provider hits that rate
-
-Getting help:
-- Use Eva chat for instant answers
-- Visit Contact Us page for email support
-- Check How It Works section on homepage
-
-Always end responses with an encouraging line like:
-You are making a smart move sending with SaveRateAfrica!`;
-
-function normalizeRateRow(row) {
-  const currency =
-    row?.currency ||
-    row?.send_currency ||
-    row?.source_currency ||
-    row?.from_currency ||
-    row?.base_currency ||
-    row?.corridor;
-  const provider = row?.provider || row?.provider_name || row?.name || "Unknown provider";
-  const rate = Number(row?.rate ?? row?.exchange_rate ?? row?.ngn_rate ?? row?.value);
-
-  if (!currency || !Number.isFinite(rate) || rate <= 0 || rate > 3000) {
-    return null;
-  }
-
-  const currencyText = String(currency).toUpperCase();
-  const normalizedCurrency = currencyText.includes("GBP")
-    ? "GBP"
-    : currencyText.includes("CAD")
-      ? "CAD"
-      : currencyText.includes("USD")
-        ? "USD"
-        : null;
-
-  if (!normalizedCurrency) {
-    return null;
-  }
-
-  return {
-    currency: normalizedCurrency,
-    provider,
-    rate
-  };
+function normalizeCurrency(value) {
+  const currency = String(value || "").toUpperCase();
+  return SUPPORTED_CURRENCIES.includes(currency) ? currency : null;
 }
 
-function buildRatesSummary(rows) {
-  if (!Array.isArray(rows) || rows.length === 0) {
-    return "Live Supabase rates are unavailable right now.";
+function detectCurrencyRequest(message) {
+  const normalized = message.toUpperCase();
+
+  return SUPPORTED_CURRENCIES.find(
+    (currency) =>
+      normalized.includes(`BEST ${currency}`) ||
+      normalized.includes(`${currency} RATE`) ||
+      normalized.includes(`${currency}/NGN`)
+  );
+}
+
+function isHelpRequest(message) {
+  const normalized = message.toLowerCase();
+
+  return (
+    normalized.includes("get help") ||
+    normalized.includes("support") ||
+    normalized.includes("contact")
+  );
+}
+
+function isSiteGuidanceRequest(message) {
+  const normalized = message.toLowerCase();
+
+  return (
+    normalized.includes("how do i use") ||
+    normalized.includes("use this site") ||
+    normalized.includes("how it works")
+  );
+}
+
+function isRateAlertRequest(message) {
+  return message.toLowerCase().includes("alert");
+}
+
+function hasOutOfScopeTopic(message) {
+  const normalized = message.toLowerCase();
+  const outOfScopeKeywords = [
+    "bitcoin",
+    "crypto",
+    "stock",
+    "stocks",
+    "weather",
+    "sports",
+    "football",
+    "politics",
+    "medical",
+    "doctor",
+    "lawyer",
+    "recipe",
+    "homework"
+  ];
+
+  return outOfScopeKeywords.some((keyword) => normalized.includes(keyword));
+}
+
+function isLikelyInScope(message) {
+  const normalized = message.toLowerCase();
+  const keywords = [
+    "rate",
+    "rates",
+    "send",
+    "money",
+    "naira",
+    "ngn",
+    "usd",
+    "gbp",
+    "cad",
+    "provider",
+    "fee",
+    "fees",
+    "transfer",
+    "remit",
+    "remittance",
+    "wise",
+    "remitly",
+    "sendwave",
+    "pesa",
+    "nala",
+    "flutterwave",
+    "paysend",
+    "alert",
+    "saverateafrica",
+    "compare"
+  ];
+
+  return keywords.some((keyword) => normalized.includes(keyword));
+}
+
+function formatRate(rate) {
+  const numericRate = Number(rate);
+
+  return Number.isFinite(numericRate)
+    ? numericRate.toLocaleString("en-NG", {
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2
+      })
+    : "N/A";
+}
+
+function formatFee(fee) {
+  if (fee === null || fee === undefined || fee === "") {
+    return "fee unavailable";
   }
 
-  const bestByCurrency = rows
-    .map(normalizeRateRow)
-    .filter(Boolean)
-    .reduce((bestRates, row) => {
-      const current = bestRates[row.currency];
-      if (!current || row.rate > current.rate) {
-        bestRates[row.currency] = row;
-      }
-      return bestRates;
-    }, {});
+  const numericFee = Number(fee);
+  return Number.isFinite(numericFee) ? `${numericFee.toFixed(2)} fee` : "fee unavailable";
+}
 
-  const summaryLines = ["Current best rates from Supabase exchange_rates:"];
-  ["USD", "GBP", "CAD"].forEach((currency) => {
-    const best = bestByCurrency[currency];
-    if (best) {
-      summaryLines.push(`- ${currency}: ${best.provider} at ${best.rate} NGN/${currency}`);
-    }
+function buildRatesContext(rows) {
+  if (!Array.isArray(rows) || rows.length === 0) {
+    return "No live exchange_rates rows were returned.";
+  }
+
+  return rows
+    .map(
+      (row, index) =>
+        `${index + 1}. ${row.provider}: ${formatRate(row.rate)} NGN/${row.send_currency}; ${formatFee(row.fee)}; updated_at ${row.updated_at || "unknown"}`
+    )
+    .join("\n");
+}
+
+function buildTopRatesReply(currency, rows, explanation) {
+  const topRates = rows
+    .map(
+      (row, index) =>
+        `${index + 1}. ${row.provider}: ${formatRate(row.rate)} NGN/${currency} (${formatFee(row.fee)})`
+    )
+    .join("\n");
+
+  return `Top 3 ${currency}/NGN rates now:\n${topRates}\n\nEva's take:\n${explanation}`;
+}
+
+async function fetchExchangeRates({ currency, limit = 3 } = {}) {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    throw new Error("Supabase public env vars are missing.");
+  }
+
+  const searchParams = new URLSearchParams({
+    select: "provider,send_currency,receive_currency,rate,fee,updated_at",
+    receive_currency: "eq.NGN",
+    order: "rate.desc",
+    limit: String(limit)
   });
 
-  return summaryLines.length > 1
-    ? summaryLines.join("\n")
-    : "Live Supabase rates are unavailable right now.";
-}
-
-async function fetchSupabaseRates() {
-  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-    return "Live Supabase rates are unavailable right now.";
+  if (currency) {
+    searchParams.set("send_currency", `eq.${currency}`);
   }
 
-  try {
-    const response = await fetch(
-      `${SUPABASE_URL.replace(/\/$/, "")}/rest/v1/exchange_rates?select=provider,send_currency,receive_currency,rate,fee,updated_at,is_automated&receive_currency=eq.NGN&order=provider.asc,send_currency.asc`,
-      {
-        headers: {
-          apikey: SUPABASE_ANON_KEY,
-          Authorization: `Bearer ${SUPABASE_ANON_KEY}`
-        }
+  const response = await fetch(
+    `${SUPABASE_URL.replace(/\/$/, "")}/rest/v1/exchange_rates?${searchParams.toString()}`,
+    {
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`
       }
-    );
-
-    if (!response.ok) {
-      throw new Error("Supabase rates fetch failed.");
     }
+  );
 
-    return buildRatesSummary(await response.json());
-  } catch {
-    return "Live Supabase rates are unavailable right now.";
+  if (!response.ok) {
+    throw new Error(`Supabase exchange_rates fetch failed: ${response.status}`);
   }
+
+  return response.json();
 }
 
-function fallbackReply(text) {
-  const normalized = text.toLowerCase();
+async function fetchTopRatesForAllCurrencies() {
+  const results = await Promise.all(
+    SUPPORTED_CURRENCIES.map(async (currency) => ({
+      currency,
+      rows: await fetchExchangeRates({ currency, limit: 3 })
+    }))
+  );
 
-  if (normalized.includes("alert")) {
-    return "To set a rate alert, go to the Currency Trends chart on the homepage, click the gold Set Rate Alert button, then enter your target NGN rate and email address. We will notify you when your target is reached. You are making a smart move sending with SaveRateAfrica!";
+  return results
+    .map(
+      ({ currency, rows }) =>
+        `${currency}/NGN top providers:\n${buildRatesContext(rows)}`
+    )
+    .join("\n\n");
+}
+
+async function askGemini(prompt, { maxOutputTokens = 220 } = {}) {
+  if (!process.env.GEMINI_API_KEY) {
+    throw new Error("GEMINI_API_KEY is missing.");
   }
 
-  if (normalized.includes("help") || normalized.includes("use this site")) {
-    return "Start at Compare Rates, choose USA, UK, or Canada, enter the amount you want to send, then click Compare Rates Now. SaveRateAfrica ranks providers by payout value so you can choose confidently. You are making a smart move sending with SaveRateAfrica!";
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${process.env.GEMINI_API_KEY}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        contents: [
+          {
+            role: "user",
+            parts: [{ text: `${systemPrompt}\n\n${prompt}` }]
+          }
+        ],
+        generationConfig: {
+          maxOutputTokens,
+          temperature: 0.35
+        }
+      })
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(`Gemini request failed: ${response.status}`);
   }
 
-  return "SaveRateAfrica helps you compare USD, GBP, and CAD to NGN providers by live rates, fees, speed, and payout value. I can help you understand the best option for your transfer. You are making a smart move sending with SaveRateAfrica!";
+  const data = await response.json();
+  const text = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+
+  if (!text) {
+    throw new Error("Gemini returned an empty response.");
+  }
+
+  return text;
+}
+
+function supportResponse(res) {
+  return res.status(200).json({
+    cta: {
+      href: "/contact",
+      label: "Contact Us"
+    },
+    message: SUPPORT_MESSAGE,
+    mode: "support"
+  });
+}
+
+function responsePayload(message, extra = {}) {
+  const payload = {
+    message,
+    ...extra
+  };
+
+  if (message.trim() === SUPPORT_MESSAGE) {
+    payload.cta = {
+      href: "/contact",
+      label: "Contact Us"
+    };
+    payload.mode = "support";
+  }
+
+  return payload;
+}
+
+function fallbackReply(message) {
+  if (isRateAlertRequest(message)) {
+    return "To set a rate alert, open the Currency Trends section and choose Set Rate Alert, then enter your target NGN rate and email address.";
+  }
+
+  if (isSiteGuidanceRequest(message)) {
+    return "Start at Compare Rates, choose USA, UK, or Canada, enter the amount you want to send, then select Compare Rates Now to see providers ranked by payout value.";
+  }
+
+  return SUPPORT_MESSAGE;
 }
 
 export default async function handler(req, res) {
@@ -151,57 +294,85 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "A message is required." });
   }
 
-  if (!process.env.GEMINI_API_KEY) {
-    return res.status(200).json({ message: fallbackReply(userMessage), mode: "fallback" });
+  if (isHelpRequest(userMessage)) {
+    return supportResponse(res);
+  }
+
+  if (hasOutOfScopeTopic(userMessage)) {
+    return supportResponse(res);
   }
 
   try {
-    const liveRates = await fetchSupabaseRates();
-    const prompt = `${baseSystemPrompt}
-
-${liveRates}
-
-If live Supabase rates are unavailable, answer with general SaveRateAfrica guidance and avoid pretending to know live winners.
-
-Conversation so far:
-${history.map((item) => `${item.role === "user" ? "User" : "Eva"}: ${item.text}`).join("\n")}
-
-User: ${userMessage}`;
-
-    const geminiResponse = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${process.env.GEMINI_API_KEY}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          contents: [
-            {
-              role: "user",
-              parts: [{ text: prompt }]
-            }
-          ],
-          generationConfig: {
-            temperature: 0.45,
-            maxOutputTokens: 360
-          }
-        })
-      }
-    );
-
-    if (!geminiResponse.ok) {
-      throw new Error("Gemini request failed.");
+    if (isSiteGuidanceRequest(userMessage) || isRateAlertRequest(userMessage)) {
+      return res.status(200).json({
+        message: fallbackReply(userMessage),
+        mode: "guide"
+      });
     }
 
-    const data = await geminiResponse.json();
-    const message = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+    const requestedCurrency = normalizeCurrency(detectCurrencyRequest(userMessage));
+
+    if (requestedCurrency) {
+      const topRows = await fetchExchangeRates({
+        currency: requestedCurrency,
+        limit: 3
+      });
+      const message = await askGemini(
+        `The user clicked "Best ${requestedCurrency} rate now".
+Here are the top 3 live rows from Supabase exchange_rates ordered by rate descending:
+${buildRatesContext(topRows)}
+
+Explain which provider is best and why in exactly 2 sentences. Mention the top provider, rate, and any useful fee context if available.`,
+        { maxOutputTokens: 140 }
+      );
+
+      return res.status(200).json({
+        ...responsePayload(buildTopRatesReply(requestedCurrency, topRows, message), {
+          mode: "gemini",
+          rates: topRows
+        })
+      });
+    }
+
+    if (!isLikelyInScope(userMessage)) {
+      return supportResponse(res);
+    }
+
+    const ratesContext = await fetchTopRatesForAllCurrencies();
+    const conversationContext = history
+      .slice(-6)
+      .map((item) => `${item.role === "user" ? "User" : "Eva"}: ${item.text}`)
+      .join("\n");
+    const message = await askGemini(
+      `Current top live rates from Supabase exchange_rates:
+${ratesContext}
+
+Recent conversation:
+${conversationContext || "No previous conversation."}
+
+User question:
+${userMessage}
+
+Answer using the live rate context where relevant. If the question is outside SaveRateAfrica, remittance, rates, fees, providers, or site support, respond exactly with the support message.`,
+      { maxOutputTokens: 260 }
+    );
 
     return res.status(200).json({
-      message: message || fallbackReply(userMessage),
-      mode: message ? "gemini" : "fallback"
+      ...responsePayload(message, {
+        mode: "gemini"
+      })
     });
-  } catch {
-    return res.status(200).json({ message: fallbackReply(userMessage), mode: "fallback" });
+  } catch (error) {
+    console.error("[Eva] Request failed", error);
+
+    if (!isLikelyInScope(userMessage)) {
+      return supportResponse(res);
+    }
+
+    return res.status(200).json({
+      message:
+        "Eva is having trouble checking live rates right now. Please try again in a moment, or use the Compare Rates table for the latest provider rankings.",
+      mode: "fallback"
+    });
   }
 }
