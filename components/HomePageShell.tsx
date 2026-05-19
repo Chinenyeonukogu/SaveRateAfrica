@@ -9,7 +9,6 @@ import { HomeHero } from "@/components/HomeHero";
 import { RateChart } from "@/components/RateChart";
 import { RateDisclaimer } from "@/components/RateDisclaimer";
 import { SiteHeader } from "@/components/SiteHeader";
-import { VideoPlayer } from "@/components/VideoPlayer";
 import {
   buildComparisonFromLiveRates,
   fetchRates,
@@ -87,21 +86,6 @@ function LearnIcon({ type }: { type: "blog" | "video" | "review" }) {
   );
 }
 
-const tutorialVideos = [
-  {
-    videoUrl: "/learn/stop-losing-money.mp4",
-    thumbnailUrl: "/learn/quick-video.png",
-    title: "Stop losing money on transfers",
-    description: "Watch simple breakdowns for comparing providers and avoiding transfer mistakes."
-  },
-  {
-    videoUrl: "/learn/cheapest-way-to-send-money-to-nigeria.mp4",
-    thumbnailUrl: "/learn/quick-video.png",
-    title: "Cheapest way to send money to Nigeria",
-    description: "Learn how to compare fees and rates so more naira reaches family back home."
-  }
-] as const;
-
 const learnCards = [
   {
     type: "blog" as const,
@@ -115,10 +99,18 @@ const learnCards = [
     labelClassName: "text-[#2e7d32]",
     illustration: <NotebookPenIllustration />
   },
-  ...tutorialVideos.map((video) => ({
+  {
     type: "video" as const,
-    ...video
-  })),
+    title: "Quick Videos",
+    description: "Watch simple breakdowns for comparing providers and avoiding transfer mistakes.",
+    cta: "Watch now",
+    href: "/learn",
+    imageSrc: "/learn/quick-video.png",
+    imageAlt: "Person watching a SaveRateAfrica money transfer video on a phone",
+    mediaClassName: "bg-[#fff8e1]",
+    labelClassName: "text-[#d88a00]",
+    illustration: null
+  },
   {
     type: "review" as const,
     title: "Provider reviews",
@@ -143,18 +135,8 @@ function LearnAndSaveMoreSection() {
           </h2>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-3">
           {learnCards.map((card) => (
-            card.type === "video" ? (
-              <VideoPlayer
-                key={card.title}
-                ctaLabel="Watch video"
-                description={card.description}
-                thumbnailUrl={card.thumbnailUrl}
-                title={card.title}
-                videoUrl={card.videoUrl}
-              />
-            ) : (
             <article
               key={card.title}
               className="overflow-hidden rounded-[12px] border border-[#e8e8e8] bg-white"
@@ -187,7 +169,6 @@ function LearnAndSaveMoreSection() {
                 </Link>
               </div>
             </article>
-            )
           ))}
         </div>
       </div>
