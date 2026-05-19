@@ -13,8 +13,12 @@ const quickReplies = [
 ];
 
 const openingGreeting = `Hi, I'm Eva! 👋
-Your SaveRate AI assistant — here to help you find the best rates, save money on transfers, and support you every step of the way.
+Your SaveRate AI assistant, here to help you find the best rates, save money on transfers, and support you every step of the way.
 What can I help you with today?`;
+
+const INTRO_TYPING_DELAY_MS = 500;
+const INTRO_GREETING_DELAY_MS = 1500;
+const INTRO_MENU_DELAY_MS = 31500;
 
 function getTimeLabel() {
   return new Date().toLocaleTimeString([], {
@@ -78,33 +82,71 @@ export function SaveRateAI() {
   const [isTyping, setIsTyping] = useState(false);
   const [showQuickReplies, setShowQuickReplies] = useState(false);
   const messagesEndRef = useRef(null);
+  const introTimersRef = useRef([]);
   const requestTokenRef = useRef(0);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
 
+  useEffect(() => {
+    return () => {
+      clearIntroTimers();
+    };
+  }, []);
+
   function openChat() {
     setIsOpen(true);
-    resetChat();
+    startIntroSequence();
   }
 
   function closeChat(event) {
     event?.preventDefault();
     event?.stopPropagation();
+    clearIntroTimers();
     requestTokenRef.current += 1;
     setIsOpen(false);
     setIsTyping(false);
   }
 
-  function resetChat(event) {
-    event?.preventDefault();
-    event?.stopPropagation();
+  function clearIntroTimers() {
+    introTimersRef.current.forEach((timerId) => window.clearTimeout(timerId));
+    introTimersRef.current = [];
+  }
+
+  function startIntroSequence() {
+    clearIntroTimers();
     requestTokenRef.current += 1;
     setInputValue("");
     setIsTyping(false);
-    setShowQuickReplies(true);
-    setMessages([createMessage("bot", openingGreeting)]);
+    setShowQuickReplies(false);
+    setMessages([]);
+
+    const requestToken = requestTokenRef.current;
+    const typingTimer = window.setTimeout(() => {
+      if (requestTokenRef.current === requestToken) {
+        setIsTyping(true);
+      }
+    }, INTRO_TYPING_DELAY_MS);
+    const greetingTimer = window.setTimeout(() => {
+      if (requestTokenRef.current === requestToken) {
+        setIsTyping(false);
+        setMessages([createMessage("bot", openingGreeting, { animated: true })]);
+      }
+    }, INTRO_GREETING_DELAY_MS);
+    const menuTimer = window.setTimeout(() => {
+      if (requestTokenRef.current === requestToken) {
+        setShowQuickReplies(true);
+      }
+    }, INTRO_MENU_DELAY_MS);
+
+    introTimersRef.current = [typingTimer, greetingTimer, menuTimer];
+  }
+
+  function resetChat(event) {
+    event?.preventDefault();
+    event?.stopPropagation();
+    startIntroSequence();
   }
 
   async function sendMessage(text) {
@@ -116,6 +158,7 @@ export function SaveRateAI() {
     const userMessage = createMessage("user", trimmedText);
     const nextMessages = [...messages, userMessage];
 
+    clearIntroTimers();
     setMessages(nextMessages);
     setInputValue("");
     setShowQuickReplies(false);
@@ -188,7 +231,9 @@ export function SaveRateAI() {
             {messages.map((message, messageIndex) => (
               <article
                 key={message.id}
-                className={`save-rate-ai-message save-rate-ai-message-${message.role}`}
+                className={`save-rate-ai-message save-rate-ai-message-${message.role} ${
+                  message.animated ? "save-rate-ai-message-animated" : ""
+                }`}
               >
                 {message.text.split("\n").map((line, index) => (
                   <p key={`${message.id}-${index}`}>{line}</p>
@@ -213,9 +258,10 @@ export function SaveRateAI() {
 
             {isTyping ? (
               <div className="save-rate-ai-typing" aria-label="Eva is typing">
-                <span />
-                <span />
-                <span />
+                <span className="save-rate-ai-typing-label">Eva is typing...</span>
+                <span className="save-rate-ai-typing-dot" />
+                <span className="save-rate-ai-typing-dot" />
+                <span className="save-rate-ai-typing-dot" />
               </div>
             ) : null}
             <div ref={messagesEndRef} />
@@ -226,6 +272,7 @@ export function SaveRateAI() {
               {quickReplies.map((reply) => (
                 <button
                   key={reply}
+                  className="save-rate-ai-quick-reply"
                   type="button"
                   onClick={() => void sendMessage(reply)}
                 >
@@ -388,6 +435,10 @@ export function SaveRateAI() {
           padding: 12px 14px 9px;
         }
 
+        .save-rate-ai-message-animated {
+          animation: save-rate-ai-fade-in 360ms ease-out both;
+        }
+
         .save-rate-ai-message p {
           font-size: 13px;
           font-weight: 600;
@@ -455,6 +506,7 @@ export function SaveRateAI() {
         }
 
         .save-rate-ai-quick-replies {
+          animation: save-rate-ai-fade-in 180ms ease-out both;
           border-top: 1px solid #dbeedd;
           display: grid;
           gap: 8px;
@@ -481,6 +533,34 @@ export function SaveRateAI() {
           transform: translateY(-1px);
         }
 
+        .save-rate-ai-quick-reply {
+          animation: save-rate-ai-menu-slide-up 360ms ease-out both;
+        }
+
+        .save-rate-ai-quick-reply:nth-child(1) {
+          animation-delay: 0ms;
+        }
+
+        .save-rate-ai-quick-reply:nth-child(2) {
+          animation-delay: 90ms;
+        }
+
+        .save-rate-ai-quick-reply:nth-child(3) {
+          animation-delay: 180ms;
+        }
+
+        .save-rate-ai-quick-reply:nth-child(4) {
+          animation-delay: 270ms;
+        }
+
+        .save-rate-ai-quick-reply:nth-child(5) {
+          animation-delay: 360ms;
+        }
+
+        .save-rate-ai-quick-reply:nth-child(6) {
+          animation-delay: 450ms;
+        }
+
         .save-rate-ai-typing {
           align-items: center;
           align-self: flex-start;
@@ -492,7 +572,14 @@ export function SaveRateAI() {
           padding: 12px 14px;
         }
 
-        .save-rate-ai-typing span {
+        .save-rate-ai-typing-label {
+          color: #14351f;
+          font-size: 12px;
+          font-weight: 800;
+          margin-right: 3px;
+        }
+
+        .save-rate-ai-typing-dot {
           animation: save-rate-ai-bounce 900ms infinite ease-in-out;
           background: #1a6b3c;
           border-radius: 999px;
@@ -500,11 +587,11 @@ export function SaveRateAI() {
           width: 7px;
         }
 
-        .save-rate-ai-typing span:nth-child(2) {
+        .save-rate-ai-typing-dot:nth-of-type(3) {
           animation-delay: 140ms;
         }
 
-        .save-rate-ai-typing span:nth-child(3) {
+        .save-rate-ai-typing-dot:nth-of-type(4) {
           animation-delay: 280ms;
         }
 
@@ -559,12 +646,34 @@ export function SaveRateAI() {
           }
         }
 
-        @keyframes save-rate-ai-bounce {
-          0%, 80%, 100% {
+        @keyframes save-rate-ai-fade-in {
+          from {
+            opacity: 0;
+            transform: translateY(6px);
+          }
+          to {
+            opacity: 1;
             transform: translateY(0);
           }
-          40% {
-            transform: translateY(-5px);
+        }
+
+        @keyframes save-rate-ai-menu-slide-up {
+          from {
+            opacity: 0;
+            transform: translateY(12px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes save-rate-ai-bounce {
+          0%, 70%, 100% {
+            transform: translateY(0);
+          }
+          35% {
+            transform: translateY(-6px);
           }
         }
 
