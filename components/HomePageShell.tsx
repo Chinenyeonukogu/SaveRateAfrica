@@ -1,12 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 
-import { ComparisonTable } from "@/components/ComparisonTable";
 import { HomeHero } from "@/components/HomeHero";
-import { RateChart } from "@/components/RateChart";
 import { RateDisclaimer } from "@/components/RateDisclaimer";
 import { SiteHeader } from "@/components/SiteHeader";
 import {
@@ -28,6 +27,24 @@ const pageShellClassName = "mx-auto w-full max-w-[1200px] px-6";
 const comparisonSectionInnerClassName = `${pageShellClassName} py-9 min-[600px]:py-[52px] lg:py-[72px]`;
 const postComparisonSectionInnerClassName = `${pageShellClassName} py-6 min-[600px]:py-8 lg:py-10`;
 const sectionDividerClassName = "border-t border-[#e8f5e9]";
+const ComparisonTable = dynamic(
+  () => import("@/components/ComparisonTable").then((mod) => mod.ComparisonTable),
+  {
+    loading: () => (
+      <div className="min-h-[460px] rounded-[16px] border border-[#e0ede2] bg-white shadow-[0_1px_4px_rgba(0,0,0,0.05)]" />
+    ),
+    ssr: false
+  }
+);
+const RateChart = dynamic(
+  () => import("@/components/RateChart").then((mod) => mod.RateChart),
+  {
+    loading: () => (
+      <div className="min-h-[420px] rounded-[16px] border border-[#e0ede2] bg-white shadow-[0_1px_4px_rgba(0,0,0,0.05)]" />
+    ),
+    ssr: false
+  }
+);
 
 function NotebookPenIllustration() {
   return (

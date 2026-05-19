@@ -7,6 +7,12 @@
     "build": "next build --webpack",
     "start": "next start"
   },
+  "browserslist": [
+    "last 2 Chrome versions",
+    "last 2 Firefox versions",
+    "last 2 Safari versions",
+    "last 2 Edge versions"
+  ],
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.1041.0",
     "@aws-sdk/client-ses": "^3.1041.0",
