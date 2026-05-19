@@ -377,7 +377,7 @@ export function RateChart() {
           select: "provider,send_currency,receive_currency,rate,fee,timestamp",
           receive_currency: "eq.NGN",
           order: "timestamp.asc",
-          limit: "500"
+          limit: "5000"
         });
         historySearchParams.append("timestamp", `gte.${startIso}`);
         historySearchParams.append("timestamp", `lte.${endIso}`);
