@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 
 import { SiteHeader } from "@/components/SiteHeader";
-import { VideoPlayer } from "@/components/VideoPlayer";
 import { tutorialVideos } from "@/lib/tutorial-videos";
 
 const seoKeywords = [
@@ -27,6 +27,15 @@ export const metadata: Metadata = {
     url: "https://saverateafrica.com/learn"
   }
 };
+
+const VideoPlayer = dynamic(
+  () => import("@/components/VideoPlayer").then((mod) => mod.VideoPlayer),
+  {
+    loading: () => (
+      <div className="min-h-[320px] animate-pulse rounded-[28px] border border-brand-navy/10 bg-white shadow-float" />
+    )
+  }
+);
 
 export default function LearnPage() {
   return (

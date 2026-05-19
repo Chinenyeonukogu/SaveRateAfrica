@@ -2,11 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import type { ReactNode } from "react";
 
-import { LazyAnalytics } from "@/components/LazyAnalytics";
-import { LazySaveRateAI } from "@/components/LazySaveRateAI";
-import { MobileNav } from "@/components/MobileNav";
-import { PwaInstallPrompt } from "@/components/PwaInstallPrompt";
-import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
+import { GlobalClientWidgets } from "@/components/GlobalClientWidgets";
 import { SiteFooter } from "@/components/SiteFooter";
 
 import "./globals.css";
@@ -136,11 +132,7 @@ export default function RootLayout({
       <body className="bg-brand-light text-brand-navy">
         {children}
         <SiteFooter />
-        <LazySaveRateAI />
-        <PwaInstallPrompt />
-        <MobileNav />
-        <LazyAnalytics />
-        <ServiceWorkerRegistration />
+        <GlobalClientWidgets />
       </body>
     </html>
   );

@@ -2,18 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import Image from "next/image";
-import Link from "next/link";
 
 import { HomeHero } from "@/components/HomeHero";
-import { RateDisclaimer } from "@/components/RateDisclaimer";
 import { SiteHeader } from "@/components/SiteHeader";
 import {
   buildComparisonFromLiveRates,
   fetchRates,
   type ComparisonResult
 } from "@/lib/fetchRates";
-import { faqItems, howItWorksSteps } from "@/lib/site-data";
 import {
   type ComparisonSort,
   type SenderCountry
@@ -27,6 +23,58 @@ const pageShellClassName = "mx-auto w-full max-w-[1200px] px-6";
 const comparisonSectionInnerClassName = `${pageShellClassName} py-9 min-[600px]:py-[52px] lg:py-[72px]`;
 const postComparisonSectionInnerClassName = `${pageShellClassName} py-6 min-[600px]:py-8 lg:py-10`;
 const sectionDividerClassName = "border-t border-[#e8f5e9]";
+const HomeLearnSection = dynamic(
+  () => import("@/components/HomeLearnSection").then((mod) => mod.HomeLearnSection),
+  {
+    loading: () => (
+      <section className="bg-white">
+        <div className="mx-auto w-full max-w-[1200px] px-6 py-6 min-[600px]:py-7 lg:py-8">
+          <div className="mb-4 h-7 w-44 rounded-full bg-[#e8f5e9]" />
+          <div className="grid gap-4 md:grid-cols-3">
+            {Array.from({ length: 3 }).map((_, index) => (
+              <div
+                key={index}
+                className="h-[258px] animate-pulse rounded-[12px] border border-[#e8e8e8] bg-white"
+              >
+                <div className="h-[110px] bg-[#f0f7f1]" />
+                <div className="space-y-3 px-4 py-4">
+                  <div className="h-4 w-28 rounded-full bg-[#e8f5e9]" />
+                  <div className="h-3 w-full rounded-full bg-[#e8f5e9]" />
+                  <div className="h-3 w-2/3 rounded-full bg-[#e8f5e9]" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+);
+const HomeInfoSections = dynamic(
+  () => import("@/components/HomeInfoSections").then((mod) => mod.HomeInfoSections),
+  {
+    loading: () => (
+      <section className={sectionDividerClassName}>
+        <div className={postComparisonSectionInnerClassName}>
+          <div className="min-h-[260px] animate-pulse rounded-[16px] border border-[#c8e6c9] bg-white px-4 py-5 min-[600px]:px-6 min-[600px]:py-6 lg:px-8 lg:py-8">
+            <div className="h-3 w-28 rounded-full bg-[#e8f5e9]" />
+            <div className="mt-4 h-8 w-full max-w-xl rounded-full bg-[#e8f5e9]" />
+            <div className="mt-6 grid gap-4 lg:grid-cols-3">
+              {Array.from({ length: 3 }).map((_, index) => (
+                <div key={index} className="space-y-3">
+                  <div className="h-3 w-16 rounded-full bg-[#e8f5e9]" />
+                  <div className="h-5 w-36 rounded-full bg-[#e8f5e9]" />
+                  <div className="h-3 w-full rounded-full bg-[#e8f5e9]" />
+                  <div className="h-3 w-4/5 rounded-full bg-[#e8f5e9]" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+);
 const ComparisonTable = dynamic(
   () => import("@/components/ComparisonTable").then((mod) => mod.ComparisonTable),
   {
@@ -34,6 +82,14 @@ const ComparisonTable = dynamic(
       <div className="min-h-[460px] rounded-[16px] border border-[#e0ede2] bg-white shadow-[0_1px_4px_rgba(0,0,0,0.05)]" />
     ),
     ssr: false
+  }
+);
+const RateDisclaimer = dynamic(
+  () => import("@/components/RateDisclaimer").then((mod) => mod.RateDisclaimer),
+  {
+    loading: () => (
+      <div className="min-h-[96px] rounded-[16px] border border-[#e0ede2] bg-white" />
+    )
   }
 );
 const RateChart = dynamic(
@@ -46,158 +102,9 @@ const RateChart = dynamic(
   }
 );
 
-function NotebookPenIllustration() {
-  return (
-    <svg aria-hidden="true" className="h-[92px] w-[112px]" viewBox="0 0 112 92">
-      <rect fill="#ffffff" height="62" rx="10" stroke="#d9eadb" strokeWidth="2" width="72" x="16" y="20" />
-      <path d="M31 20v62" stroke="#c8e6c9" strokeWidth="2" />
-      <path d="M43 36h28M43 49h22M43 62h31" stroke="#8aa58f" strokeLinecap="round" strokeWidth="3" />
-      <path d="m70 68 22-40 10 6-22 40-14 8 4-14Z" fill="#f6c619" />
-      <path d="m92 28 5-9 10 6-5 9Z" fill="#1a3a2a" />
-      <path d="m70 68-4 14 14-8Z" fill="#2e7d32" />
-      <circle cx="21" cy="32" fill="#2e7d32" r="3" />
-      <circle cx="21" cy="46" fill="#2e7d32" r="3" />
-      <circle cx="21" cy="60" fill="#2e7d32" r="3" />
-    </svg>
-  );
-}
-
-function PhoneReviewIllustration() {
-  return (
-    <svg aria-hidden="true" className="h-[98px] w-[116px]" viewBox="0 0 116 98">
-      <rect fill="#1a3a2a" height="82" rx="14" width="52" x="44" y="8" />
-      <rect fill="#ffffff" height="64" rx="9" width="42" x="49" y="18" />
-      <circle cx="70" cy="75" fill="#2e7d32" r="3" />
-      <rect fill="#e8f5e9" height="11" rx="5.5" width="30" x="55" y="28" />
-      <rect fill="#f6c619" height="11" rx="5.5" width="22" x="55" y="45" />
-      <path d="M59 63h22" stroke="#8aa58f" strokeLinecap="round" strokeWidth="3" />
-      <path d="m22 35 5 10 11 2-8 8 2 11-10-5-10 5 2-11-8-8 11-2 5-10Z" fill="#2e7d32" />
-      <path d="M23 78c11-3 23-3 34 0" stroke="#f6c619" strokeLinecap="round" strokeWidth="5" />
-      <circle cx="100" cy="26" fill="#f6c619" r="7" />
-    </svg>
-  );
-}
-
-function LearnIcon({ type }: { type: "blog" | "video" | "review" }) {
-  if (type === "video") {
-    return (
-      <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 24 24">
-        <path d="M9 7.5v9l7-4.5-7-4.5Z" fill="currentColor" />
-      </svg>
-    );
-  }
-
-  if (type === "review") {
-    return (
-      <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 24 24">
-        <path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9L12 3Z" fill="currentColor" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 24 24">
-      <path d="M5 4.8C5 3.8 5.8 3 6.8 3H19v16H7.8A2.8 2.8 0 0 0 5 21.8v-17Z" fill="currentColor" opacity="0.35" />
-      <path d="M5 4.8A2.8 2.8 0 0 1 7.8 2H19v16H7.8A2.8 2.8 0 0 0 5 20.8v-16Zm4.5 3.7h6M9.5 12h4.8" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="2" />
-    </svg>
-  );
-}
-
-const learnCards = [
-  {
-    type: "blog" as const,
-    title: "Blog / Insights",
-    description: "Expert tips to help you save more and make smarter money transfers home.",
-    cta: "Read articles",
-    href: "/blog",
-    imageSrc: "/learn/money-transfer-guides.webp",
-    imageAlt: "Notebook, laptop, coffee, and desk setup for money transfer guides",
-    mediaClassName: "bg-[#e8f5e9]",
-    labelClassName: "text-[#2e7d32]",
-    illustration: <NotebookPenIllustration />
-  },
-  {
-    type: "video" as const,
-    title: "Quick Videos",
-    description: "Watch simple breakdowns for comparing providers and avoiding transfer mistakes.",
-    cta: "Watch now",
-    href: "/learn",
-    imageSrc: "/learn/quick-video.webp",
-    imageAlt: "Person watching a SaveRateAfrica money transfer video on a phone",
-    mediaClassName: "bg-[#fff8e1]",
-    labelClassName: "text-[#d88a00]",
-    illustration: null
-  },
-  {
-    type: "review" as const,
-    title: "Provider reviews",
-    description: "View what people are saying about each provider.",
-    cta: "Review Providers",
-    href: "/providers",
-    imageSrc: "/learn/provider-review.webp",
-    imageAlt: "Provider reviews screen showing transfer providers and ratings",
-    mediaClassName: "bg-[#f4faf5]",
-    labelClassName: "text-[#2e7d32]",
-    illustration: <PhoneReviewIllustration />
-  }
-] as const;
-
-function LearnAndSaveMoreSection() {
-  return (
-    <section className="bg-white">
-      <div className="mx-auto w-full max-w-[1200px] px-6 py-6 min-[600px]:py-7 lg:py-8">
-        <div className="mb-4 flex items-center justify-between gap-4">
-          <h2 className="text-[18px] font-extrabold leading-tight text-[#1a3a2a] min-[600px]:text-[22px]">
-            Learn &amp; save more
-          </h2>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-3">
-          {learnCards.map((card) => (
-            <article
-              key={card.title}
-              className="overflow-hidden rounded-[12px] border border-[#e8e8e8] bg-white"
-            >
-              <div className={`relative h-[110px] overflow-hidden ${card.mediaClassName}`}>
-                <Image
-                  alt={card.imageAlt}
-                  className="object-cover"
-                  fill
-                  loading="lazy"
-                  sizes="(min-width: 768px) 33vw, 100vw"
-                  src={card.imageSrc}
-                />
-                <div className="absolute left-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-[#2e7d32] text-white shadow-[0_8px_18px_rgba(46,125,50,0.24)]">
-                  <LearnIcon type={card.type} />
-                </div>
-              </div>
-
-              <div className="flex min-h-[128px] flex-col px-4 py-3">
-                <h3 className="text-[13px] font-extrabold leading-[1.35] text-[#1a3a2a]">
-                  {card.title}
-                </h3>
-                <p className="mt-2 text-[11px] font-medium leading-[1.6] text-[#666666]">
-                  {card.description}
-                </p>
-                <Link
-                  className={`mt-auto inline-flex items-center gap-1 pt-3 text-[11px] font-extrabold ${card.labelClassName}`}
-                  href={card.href}
-                >
-                  {card.cta} →
-                </Link>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 export function HomePageShell({ initialComparison }: HomePageShellProps) {
   const compareRef = useRef<HTMLDivElement | null>(null);
   const alertsRef = useRef<HTMLDivElement | null>(null);
-  const howItWorksRef = useRef<HTMLElement | null>(null);
   const rateChartRef = useRef<HTMLDivElement | null>(null);
   const [amount, setAmount] = useState(String(initialComparison.amount));
   const [senderCountry, setSenderCountry] = useState<SenderCountry>(
@@ -369,7 +276,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
           onSenderCountryChange={setSenderCountry}
         />
 
-        <LearnAndSaveMoreSection />
+        <HomeLearnSection />
 
         <section id="compare-rates" className={sectionDividerClassName}>
           <div className={comparisonSectionInnerClassName}>
@@ -397,77 +304,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
           </div>
         </section>
 
-        <section id="faq" className={sectionDividerClassName}>
-          <div className={postComparisonSectionInnerClassName}>
-            <section
-              id="how-it-works"
-              ref={howItWorksRef}
-              className="rounded-[16px] border border-[#c8e6c9] bg-white px-4 py-5 min-[600px]:px-6 min-[600px]:py-6 lg:px-8 lg:py-8"
-            >
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-green">
-                How it works
-              </p>
-              <h2 className="mb-4 mt-2 text-[28px] font-heading text-brand-navy min-[600px]:text-3xl">
-                A clearer route from diaspora wallet to Nigerian bank account
-              </h2>
-
-              <div className="grid gap-4 lg:grid-cols-3 lg:gap-0">
-                {howItWorksSteps.map((step, index) => (
-                  <article
-                    key={step.step}
-                    className={`relative lg:px-6 ${
-                      index < howItWorksSteps.length - 1
-                        ? "border-b border-[#e8f5e9] pb-4 lg:border-b-0"
-                        : ""
-                    } ${index > 0 ? "pt-4 lg:pt-0" : ""}`}
-                  >
-                    {index < howItWorksSteps.length - 1 ? (
-                      <span className="absolute right-0 top-3 hidden h-[52px] border-r border-[#c8e6c9] lg:block" />
-                    ) : null}
-                    <p className="mb-[10px] text-[11px] font-semibold uppercase tracking-[0.18em] text-[#2e7d32]">
-                      Step {step.step}
-                    </p>
-                    <h3 className="mb-[6px] text-base font-heading text-brand-navy min-[600px]:text-lg">
-                      {step.title}
-                    </h3>
-                    <p className="text-[12px] leading-6 text-brand-navy/70 min-[600px]:text-sm">
-                      {step.description}
-                    </p>
-                  </article>
-                ))}
-              </div>
-            </section>
-          </div>
-        </section>
-
-        <section className={sectionDividerClassName}>
-          <div className={postComparisonSectionInnerClassName}>
-            <section className="rounded-[16px] border border-brand-navy/10 bg-white px-4 py-5 shadow-float min-[600px]:px-6 min-[600px]:py-6 lg:px-8 lg:py-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-green">
-                FAQ
-              </p>
-              <h2 className="mb-4 mt-2 text-[28px] font-heading text-brand-navy min-[600px]:text-3xl">
-                Questions Nigerian diaspora senders ask most
-              </h2>
-
-              <div className="space-y-4">
-                {faqItems.map((item) => (
-                  <details
-                    key={item.question}
-                    className="group rounded-[16px] bg-brand-light p-4 min-[600px]:p-5"
-                  >
-                    <summary className="cursor-pointer list-none text-[14px] font-semibold text-brand-navy min-[600px]:text-base">
-                      {item.question}
-                    </summary>
-                    <p className="mt-3 text-[12px] leading-6 text-brand-navy/70 min-[600px]:text-sm min-[600px]:leading-7">
-                      {item.answer}
-                    </p>
-                  </details>
-                ))}
-              </div>
-            </section>
-          </div>
-        </section>
+        <HomeInfoSections />
       </main>
     </>
   );

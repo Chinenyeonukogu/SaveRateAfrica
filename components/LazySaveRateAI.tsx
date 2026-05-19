@@ -1,8 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 
-import SaveRateAI from "@/components/SaveRateAI.jsx";
+const SaveRateAI = dynamic(() => import("@/components/SaveRateAI.jsx"), {
+  loading: () => null,
+  ssr: false
+});
 
 export function LazySaveRateAI() {
   const [shouldRender, setShouldRender] = useState(false);

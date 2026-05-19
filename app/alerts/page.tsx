@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { BellRing, Zap } from "lucide-react";
 
-import { AlertsForm } from "@/components/AlertsForm";
 import { SiteHeader } from "@/components/SiteHeader";
 
 const seoKeywords = [
@@ -31,6 +31,15 @@ export const metadata: Metadata = {
     url: "https://saverateafrica.com/alerts"
   }
 };
+
+const AlertsForm = dynamic(
+  () => import("@/components/AlertsForm").then((mod) => mod.AlertsForm),
+  {
+    loading: () => (
+      <div className="min-h-[520px] animate-pulse rounded-[32px] bg-white shadow-float" />
+    )
+  }
+);
 
 export default function AlertsPage() {
   return (

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 
-import { ProvidersDirectoryClient } from "@/components/ProvidersDirectoryClient";
 import { SiteHeader } from "@/components/SiteHeader";
 import { providers } from "@/lib/providers";
 
@@ -31,6 +31,18 @@ export const metadata: Metadata = {
     url: "https://saverateafrica.com/providers"
   }
 };
+
+const ProvidersDirectoryClient = dynamic(
+  () =>
+    import("@/components/ProvidersDirectoryClient").then(
+      (mod) => mod.ProvidersDirectoryClient
+    ),
+  {
+    loading: () => (
+      <div className="min-h-[520px] animate-pulse rounded-[28px] border border-brand-navy/10 bg-white shadow-float" />
+    )
+  }
+);
 
 export default function ProvidersPage() {
   return (
