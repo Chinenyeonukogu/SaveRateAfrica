@@ -30,6 +30,12 @@ const wiseAffiliateLinks = {
   USA: "https://wise.prf.hn/click/camref:1011l5FuWv"
 } as const;
 
+const westernUnionLinks: Record<SenderCountry, string> = {
+  UK: "https://www.westernunion.com/gb/en/currency-converter/gbp-to-ngn-rate.html",
+  USA: "https://www.westernunion.com/us/en/currency-converter/usd-to-ngn-rate.html",
+  Canada: "https://www.westernunion.com/ca/en/send-money-to-nigeria.html"
+};
+
 type TrackingParams = Record<string, string | number | undefined>;
 
 interface ProviderTrackingParams extends TrackingParams {
@@ -45,6 +51,22 @@ function getWiseAffiliateLink(params: ProviderTrackingParams) {
   }
 
   return wiseAffiliateLinks.USA;
+}
+
+function getWesternUnionLink(params: ProviderTrackingParams) {
+  if (params.origin) {
+    return westernUnionLinks[params.origin];
+  }
+
+  if (params.currency === "GBP") {
+    return westernUnionLinks.UK;
+  }
+
+  if (params.currency === "CAD") {
+    return westernUnionLinks.Canada;
+  }
+
+  return westernUnionLinks.USA;
 }
 
 function withTracking(baseUrl: string, params: TrackingParams, campaign: string) {
@@ -69,6 +91,17 @@ export function getProviderAffiliateLink(
 ) {
   if (slug === "wise") {
     return getWiseAffiliateLink(params);
+  }
+
+  if (slug === "western-union") {
+    return withTracking(
+      getWesternUnionLink(params),
+      {
+        origin: params.origin,
+        placement: params.placement
+      },
+      "remittance-comparison"
+    );
   }
 
   const {
