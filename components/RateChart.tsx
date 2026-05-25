@@ -180,18 +180,6 @@ function buildSupabaseUrl(table: string, searchParams: URLSearchParams) {
   return `${SUPABASE_URL.replace(/\/$/, "")}/rest/v1/${table}?${searchParams.toString()}`;
 }
 
-function getSevenDayUtcWindow() {
-  const now = new Date();
-  const start = new Date(now);
-  start.setUTCDate(now.getUTCDate() - 6);
-  start.setUTCHours(0, 0, 0, 0);
-
-  return {
-    endIso: now.toISOString(),
-    startIso: start.toISOString()
-  };
-}
-
 function getSevenDayDateKeys() {
   const today = new Date();
   today.setUTCHours(0, 0, 0, 0);
@@ -201,6 +189,17 @@ function getSevenDayDateKeys() {
     date.setUTCDate(today.getUTCDate() - (6 - index));
     return date.toISOString().slice(0, 10);
   });
+}
+
+function getUtcDateRange(dateKey: string) {
+  const start = new Date(`${dateKey}T00:00:00.000Z`);
+  const end = new Date(start);
+  end.setUTCDate(start.getUTCDate() + 1);
+
+  return {
+    endIso: end.toISOString(),
+    startIso: start.toISOString()
+  };
 }
 
 function createEmptyTrendPoint(date: string): TrendPoint {
@@ -252,6 +251,38 @@ async function fetchSupabaseTable<T>(table: string, searchParams: URLSearchParam
   }
 
   return JSON.parse(responseText) as T[];
+}
+
+async function fetchRateHistoryRows() {
+  const dateKeys = getSevenDayDateKeys();
+  const rowsByDay = await Promise.all(
+    dateKeys.map(async (dateKey) => {
+      const { endIso, startIso } = getUtcDateRange(dateKey);
+      const searchParams = new URLSearchParams({
+        select: "provider,send_currency,receive_currency,rate,fee,timestamp",
+        receive_currency: "eq.NGN",
+        order: "timestamp.asc",
+        limit: "1000"
+      });
+
+      searchParams.append("timestamp", `gte.${startIso}`);
+      searchParams.append("timestamp", `lt.${endIso}`);
+
+      const rows = await fetchSupabaseTable<HistoryRow>(
+        "rate_history",
+        searchParams
+      );
+
+      console.log("[CurrencyTrends] rate_history day rows", {
+        date: dateKey,
+        rows: rows.length
+      });
+
+      return rows;
+    })
+  );
+
+  return rowsByDay.flat();
 }
 
 function buildFallbackHistoryRows(exchangeRows: ExchangeRateRow[]) {
@@ -414,15 +445,6 @@ export function RateChart() {
           receive_currency: "eq.NGN",
           order: "provider.asc,send_currency.asc"
         });
-        const { endIso, startIso } = getSevenDayUtcWindow();
-        const historySearchParams = new URLSearchParams({
-          select: "provider,send_currency,receive_currency,rate,fee,timestamp",
-          receive_currency: "eq.NGN",
-          order: "timestamp.asc",
-          limit: "5000"
-        });
-        historySearchParams.append("timestamp", `gte.${startIso}`);
-        historySearchParams.append("timestamp", `lte.${endIso}`);
 
         const exchangeRows = await fetchSupabaseTable<ExchangeRateRow>(
           "exchange_rates",
@@ -431,10 +453,7 @@ export function RateChart() {
         let historyRows: HistoryRow[] = [];
 
         try {
-          historyRows = await fetchSupabaseTable<HistoryRow>(
-            "rate_history",
-            historySearchParams
-          );
+          historyRows = await fetchRateHistoryRows();
         } catch (historyError) {
           console.error(
             "[CurrencyTrends] rate_history unavailable; falling back to exchange_rates",
