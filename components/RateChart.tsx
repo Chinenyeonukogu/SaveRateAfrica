@@ -192,6 +192,27 @@ function getSevenDayUtcWindow() {
   };
 }
 
+function getSevenDayDateKeys() {
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
+
+  return Array.from({ length: 7 }, (_, index) => {
+    const date = new Date(today);
+    date.setUTCDate(today.getUTCDate() - (6 - index));
+    return date.toISOString().slice(0, 10);
+  });
+}
+
+function createEmptyTrendPoint(date: string): TrendPoint {
+  return {
+    date,
+    label: formatDateLabel(date),
+    USD: null,
+    GBP: null,
+    CAD: null
+  };
+}
+
 function logSupabaseConfig() {
   console.log("[CurrencyTrends] Supabase env", {
     hasAnonKey: Boolean(SUPABASE_ANON_KEY),
@@ -272,7 +293,11 @@ function buildCurrentHistoryRows(exchangeRows: ExchangeRateRow[]) {
 }
 
 function buildTrendPoints(historyRows: HistoryRow[]) {
-  const byDate = new Map<string, TrendPoint>();
+  const sevenDayKeys = getSevenDayDateKeys();
+  const allowedDates = new Set(sevenDayKeys);
+  const byDate = new Map<string, TrendPoint>(
+    sevenDayKeys.map((date) => [date, createEmptyTrendPoint(date)])
+  );
 
   historyRows.forEach((row) => {
     const receiveCurrency = String(
@@ -289,27 +314,17 @@ function buildTrendPoints(historyRows: HistoryRow[]) {
     const rate = normalizeRate(row.rate ?? row.exchange_rate);
     const date = getDateKey(row);
 
-    if (!currency || rate === null || !date) {
+    if (!currency || rate === null || !date || !allowedDates.has(date)) {
       return;
     }
 
-    const currentPoint =
-      byDate.get(date) ??
-      ({
-        date,
-        label: formatDateLabel(date),
-        USD: null,
-        GBP: null,
-        CAD: null
-      } satisfies TrendPoint);
+    const currentPoint = byDate.get(date) ?? createEmptyTrendPoint(date);
 
     currentPoint[currency] = Math.max(currentPoint[currency] ?? 0, rate);
     byDate.set(date, currentPoint);
   });
 
-  return [...byDate.values()]
-    .sort((first, second) => first.date.localeCompare(second.date))
-    .slice(-7);
+  return sevenDayKeys.map((date) => byDate.get(date) ?? createEmptyTrendPoint(date));
 }
 
 function getPreviousRate(history: TrendPoint[], currency: TrendCurrency) {
@@ -608,6 +623,7 @@ export function RateChart() {
                   <XAxis
                     axisLine={false}
                     dataKey="label"
+                    interval={0}
                     tick={{ fill: "#5a7a5a", fontSize: 11 }}
                     tickLine={false}
                   />
