@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     "CAD to NGN rate"
   ],
   alternates: {
-    canonical: "/"
+    canonical: "https://www.saverateafrica.com/"
   },
   verification: {
     google: "ZkilmT1V7LJp4qCpQs4y2758O5_TPxT-iVVDieULCq4"

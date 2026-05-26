@@ -57,6 +57,16 @@ const nextConfig = {
         ]
       }
     ];
+  },
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "saverateafrica.com" }],
+        destination: "https://www.saverateafrica.com/:path*",
+        permanent: true
+      }
+    ];
   }
 };
 
