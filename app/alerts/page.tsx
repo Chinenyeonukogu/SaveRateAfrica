@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     "Set a free Nigeria exchange rate alert. Get notified instantly when USD, GBP or CAD to NGN hits your target rate. No account needed.",
   keywords: seoKeywords,
   alternates: {
-    canonical: "/alerts"
+    canonical: "https://www.saverateafrica.com/alerts"
   },
   openGraph: {
     title: "NGN Rate Alert | Get Notified When Nigeria Exchange Rate Hits Your Target",

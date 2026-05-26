@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description:
     "Learn the best day, time of month, and time of day to transfer money internationally and send more naira home.",
   alternates: {
-    canonical: "/blog/best-time-to-transfer-money"
+    canonical: "https://www.saverateafrica.com/blog/best-time-to-transfer-money"
   }
 };
 

@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     "Browse 14 money transfer providers sending to Nigeria and filter by country, speed, fee range, and rating.",
   keywords: seoKeywords,
   alternates: {
-    canonical: "/providers"
+    canonical: "https://www.saverateafrica.com/providers"
   },
   openGraph: {
     title: "All Money Transfer Providers to Nigeria | SaveRateAfrica",

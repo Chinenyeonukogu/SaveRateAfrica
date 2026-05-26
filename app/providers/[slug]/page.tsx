@@ -50,7 +50,7 @@ export async function generateMetadata({
     description: `${provider.name} review for sending money to Nigeria from USA, UK, and Canada. Compare speed, fees, and payout context.`,
     keywords: seoKeywords,
     alternates: {
-      canonical: `/providers/${provider.slug}`
+      canonical: `https://www.saverateafrica.com/providers/${provider.slug}`
     },
     openGraph: {
       title: `${provider.name} for Nigeria transfers`,

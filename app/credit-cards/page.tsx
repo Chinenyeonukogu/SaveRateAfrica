@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     "Find the best cards for sending money to Nigeria. Learn how to avoid transfer fees and get the best NGN exchange rate today.",
   keywords: seoKeywords,
   alternates: {
-    canonical: "/credit-cards"
+    canonical: "https://www.saverateafrica.com/credit-cards"
   },
   openGraph: {
     title: "Best Cards to Send Money to Nigeria | Avoid Transfer Fees",

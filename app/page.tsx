@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     "Compare USD, GBP and CAD to NGN rates today. Find the cheapest way to send money to Nigeria from USA, UK and Canada. Compare LemFi, Wise, Grey, Remitly and 10+ providers instantly.",
   keywords: seoKeywords,
   alternates: {
-    canonical: "/"
+    canonical: "https://www.saverateafrica.com/"
   },
   openGraph: {
     title: "SaveRateAfrica | Best Way to Send Money to Nigeria",

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description:
     "A straightforward starter plan for Nigerian immigrants establishing U.S. credit without getting trapped by poor-fit products.",
   alternates: {
-    canonical: "/blog/how-to-build-credit-in-usa-as-a-nigerian-immigrant"
+    canonical: "https://www.saverateafrica.com/blog/how-to-build-credit-in-usa-as-a-nigerian-immigrant"
   }
 };
 

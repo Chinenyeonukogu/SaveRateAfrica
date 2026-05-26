@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     "SaveRateAfrica helps you find the best naira rate when sending money to Nigeria. Compare which platform gives the best naira rate from USA, UK and Canada.",
   keywords: seoKeywords,
   alternates: {
-    canonical: "/about"
+    canonical: "https://www.saverateafrica.com/about"
   },
   openGraph: {
     title: "About SaveRateAfrica | Nigeria Remittance Comparison Platform",

@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     "Short video guides that help Nigerians abroad compare money transfer providers, fees, and exchange rates before sending money home.",
   keywords: seoKeywords,
   alternates: {
-    canonical: "/learn"
+    canonical: "https://www.saverateafrica.com/learn"
   },
   openGraph: {
     title: "Quick Videos | SaveRateAfrica",

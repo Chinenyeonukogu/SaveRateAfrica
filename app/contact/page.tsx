@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description:
     "Contact SaveRateAfrica for partnerships, support, and questions about comparing money transfer rates to Nigeria.",
   alternates: {
-    canonical: "/contact"
+    canonical: "https://www.saverateafrica.com/contact"
   }
 };
 

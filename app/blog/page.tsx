@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     "Guides and comparisons for Nigerians abroad sending money home and building financial stability overseas.",
   keywords: seoKeywords,
   alternates: {
-    canonical: "/blog"
+    canonical: "https://www.saverateafrica.com/blog"
   },
   openGraph: {
     title: "Blog and Guides",

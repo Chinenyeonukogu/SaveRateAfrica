@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description:
     "A breakdown of the lowest-fee providers from USA, UK, and Canada ranked by the exact naira your recipient receives.",
   alternates: {
-    canonical: "/blog/cheapest-way-to-send-money-to-nigeria"
+    canonical: "https://www.saverateafrica.com/blog/cheapest-way-to-send-money-to-nigeria"
   }
 };
 
