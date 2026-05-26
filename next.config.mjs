@@ -61,6 +61,11 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: "/providers/pangea",
+        destination: "/providers/remitly",
+        permanent: true
+      },
+      {
         source: "/:path*",
         has: [{ type: "host", value: "saverateafrica.com" }],
         destination: "https://www.saverateafrica.com/:path*",
