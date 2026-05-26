@@ -287,7 +287,7 @@ export function HomeHero({
                 className="max-w-[580px] font-heading text-[23px] font-bold leading-[1.08] tracking-[-0.5px] text-white min-[600px]:text-[31px] lg:text-[36px]"
                 style={brandFontStyle}
               >
-                Save on fees and send more money from USA, UK, and Canada.
+                Compare Live Nigeria Exchange Rates & See Which Providers Pays the Most.
               </h1>
 
             </div>
