@@ -140,6 +140,19 @@ function getProviderFeeDisplayText(
   return formattedFee;
 }
 
+function getComparisonFee(
+  provider: Provider,
+  sourceCurrency: SourceCurrency,
+  amount: number,
+  liveFee: number | null
+) {
+  if (provider.slug === "moneygram" && (!liveFee || liveFee <= 0)) {
+    return getProviderFee(provider, sourceCurrency, amount);
+  }
+
+  return liveFee === null ? getProviderFee(provider, sourceCurrency, amount) : liveFee;
+}
+
 function getRatesEndpointUrl(
   args: Required<FetchRatesArgs>,
   apiBaseUrl?: string
@@ -306,8 +319,12 @@ export function buildComparisonFromLiveRates({
     .map((rateRow) => {
       const provider =
         getProviderMetadata(rateRow.provider) ?? getGenericProviderMetadata(rateRow.provider);
-      const fee =
-        rateRow.fee === null ? getProviderFee(provider, sourceCurrency, adjustedAmount) : rateRow.fee;
+      const fee = getComparisonFee(
+        provider,
+        sourceCurrency,
+        adjustedAmount,
+        rateRow.fee
+      );
       const exchangeRate = roundToTwo(rateRow.rate);
       const grossRecipientAmount = adjustedAmount * exchangeRate;
       const feeInNaira = fee * exchangeRate;
