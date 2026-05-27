@@ -20,7 +20,7 @@ const seoKeywords = [
 export const metadata: Metadata = {
   title: "Blog and Guides",
   description:
-    "Guides and comparisons for Nigerians abroad sending money home and building financial stability overseas.",
+    "Compare Live Nigeria Exchange Rates & See Which Providers Pays the Most.",
   keywords: seoKeywords,
   alternates: {
     canonical: "https://www.saverateafrica.com/blog"

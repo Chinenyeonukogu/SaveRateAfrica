@@ -7,7 +7,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 export const metadata: Metadata = {
   title: "The Best Time to Transfer Money Internationally",
   description:
-    "Learn the best day, time of month, and time of day to transfer money internationally and send more naira home.",
+    "Compare Live Nigeria Exchange Rates & See Which Providers Pays the Most.",
   alternates: {
     canonical: "https://www.saverateafrica.com/blog/best-time-to-transfer-money"
   }

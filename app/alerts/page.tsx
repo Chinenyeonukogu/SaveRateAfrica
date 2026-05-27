@@ -19,7 +19,7 @@ const seoKeywords = [
 export const metadata: Metadata = {
   title: "NGN Rate Alert | Get Notified When Nigeria Exchange Rate Hits Your Target",
   description:
-    "Set a free Nigeria exchange rate alert. Get notified instantly when USD, GBP or CAD to NGN hits your target rate. No account needed.",
+    "Compare Live Nigeria Exchange Rates & See Which Providers Pays the Most.",
   keywords: seoKeywords,
   alternates: {
     canonical: "https://www.saverateafrica.com/alerts"

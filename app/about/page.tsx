@@ -20,7 +20,7 @@ const seoKeywords = [
 export const metadata: Metadata = {
   title: "About SaveRateAfrica | Nigeria Remittance Comparison Platform",
   description:
-    "SaveRateAfrica helps you find the best naira rate when sending money to Nigeria. Compare which platform gives the best naira rate from USA, UK and Canada.",
+    "Compare Live Nigeria Exchange Rates & See Which Providers Pays the Most.",
   keywords: seoKeywords,
   alternates: {
     canonical: "https://www.saverateafrica.com/about"

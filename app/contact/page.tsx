@@ -6,7 +6,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 export const metadata: Metadata = {
   title: "Contact Us | SaveRateAfrica",
   description:
-    "Contact SaveRateAfrica for partnerships, support, and questions about comparing money transfer rates to Nigeria.",
+    "Compare Live Nigeria Exchange Rates & See Which Providers Pays the Most.",
   alternates: {
     canonical: "https://www.saverateafrica.com/contact"
   }

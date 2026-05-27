@@ -47,7 +47,8 @@ export async function generateMetadata({
 
   return {
     title: `${provider.name} money transfer to Nigeria`,
-    description: `${provider.name} review for sending money to Nigeria from USA, UK, and Canada. Compare speed, fees, and payout context.`,
+    description:
+      "Compare Live Nigeria Exchange Rates & See Which Providers Pays the Most.",
     keywords: seoKeywords,
     alternates: {
       canonical: `https://www.saverateafrica.com/providers/${provider.slug}`

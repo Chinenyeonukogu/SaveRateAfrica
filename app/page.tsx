@@ -21,7 +21,7 @@ const seoKeywords = [
 export const metadata: Metadata = {
   title: "SaveRateAfrica | Best Way to Send Money to Nigeria",
   description:
-    "Compare USD, GBP and CAD to NGN rates today. Find the cheapest way to send money to Nigeria from USA, UK and Canada. Compare LemFi, Wise, Grey, Remitly and 10+ providers instantly.",
+    "Compare Live Nigeria Exchange Rates & See Which Providers Pays the Most.",
   keywords: seoKeywords,
   alternates: {
     canonical: "https://www.saverateafrica.com/"

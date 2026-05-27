@@ -7,7 +7,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 export const metadata: Metadata = {
   title: "What's the Cheapest Way to Send Money to Nigeria?",
   description:
-    "A breakdown of the lowest-fee providers from USA, UK, and Canada ranked by the exact naira your recipient receives.",
+    "Compare Live Nigeria Exchange Rates & See Which Providers Pays the Most.",
   alternates: {
     canonical: "https://www.saverateafrica.com/blog/cheapest-way-to-send-money-to-nigeria"
   }

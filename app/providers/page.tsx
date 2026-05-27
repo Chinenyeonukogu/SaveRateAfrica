@@ -19,7 +19,7 @@ const seoKeywords = [
 export const metadata: Metadata = {
   title: "All Money Transfer Providers to Nigeria | SaveRateAfrica",
   description:
-    "Browse 14 money transfer providers sending to Nigeria and filter by country, speed, fee range, and rating.",
+    "Compare Live Nigeria Exchange Rates & See Which Providers Pays the Most.",
   keywords: seoKeywords,
   alternates: {
     canonical: "https://www.saverateafrica.com/providers"
