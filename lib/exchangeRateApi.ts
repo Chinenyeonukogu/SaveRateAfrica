@@ -31,13 +31,12 @@ const LIVE_RATE_CACHE_TTL_MS = LIVE_RATE_REVALIDATE_SECONDS * 1000;
 const SUPPORTED_SOURCE_CURRENCIES: SourceCurrency[] = ["USD", "GBP", "CAD"];
 
 function getSupabaseConfig() {
-  const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey =
-    process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!url || !anonKey) {
     throw new Error(
-      "Supabase URL or anon key is missing. Set SUPABASE_URL and SUPABASE_ANON_KEY."
+      "Supabase URL or anon key is missing. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY."
     );
   }
 

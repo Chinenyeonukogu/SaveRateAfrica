@@ -24,7 +24,7 @@ jobs:
 
       - name: Fetch rates and save to Supabase
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           WISE_API_TOKEN: ${{ secrets.WISE_API_TOKEN }}
         run: python fetch_rates.py
