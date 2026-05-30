@@ -4,9 +4,11 @@ import { ArrowLeft, ArrowUpRight, BadgeCheck, Clock3, Star } from "lucide-react"
 import { notFound } from "next/navigation";
 
 import { SiteHeader } from "@/components/SiteHeader";
+import { TrackedProviderLink } from "@/components/TrackedProviderLink";
 import { fetchRates } from "@/lib/fetchRates";
 import { formatCompact, formatNaira } from "@/lib/format";
 import { getProviderAffiliateLink } from "@/lib/affiliateLinks";
+import { buildNigeriaCorridor } from "@/lib/analytics";
 import { getProviderBySlug, providers } from "@/lib/providers";
 
 export const revalidate = 1800;
@@ -77,6 +79,13 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
     (item) => item.slug === provider.slug
   );
   const providerHasFee = (providerSnapshot?.fee ?? 0) > 0;
+  const affiliateLink = getProviderAffiliateLink(provider.slug, {
+    amount: comparison.amount,
+    currency: comparison.sourceCurrency,
+    origin: comparison.senderCountry,
+    placement: "provider-page"
+  });
+  const corridor = buildNigeriaCorridor(comparison.senderCountry);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -189,20 +198,17 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
                   </div>
                 ) : null}
 
-                <a
+                <TrackedProviderLink
+                  affiliateLink={affiliateLink}
                   className="mt-6 inline-flex min-h-12 items-center gap-2 rounded-2xl bg-brand-yellow px-5 text-sm font-bold text-brand-navy"
-                  href={getProviderAffiliateLink(provider.slug, {
-                    amount: comparison.amount,
-                    currency: comparison.sourceCurrency,
-                    origin: comparison.senderCountry,
-                    placement: "provider-page"
-                  })}
+                  corridor={corridor}
+                  providerName={provider.name}
                   rel="noopener noreferrer"
                   target="_blank"
                 >
                   Send with {provider.name}
                   <ArrowUpRight className="h-4 w-4" />
-                </a>
+                </TrackedProviderLink>
               </div>
             </div>
           </section>

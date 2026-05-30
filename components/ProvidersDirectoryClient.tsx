@@ -7,6 +7,8 @@ import { ArrowUpRight, Search, Star } from "lucide-react";
 import { feeBandLabel, speedBandLabel, type Provider, type SenderCountry } from "@/lib/providers";
 import { formatCompact } from "@/lib/format";
 import { getProviderAffiliateLink } from "@/lib/affiliateLinks";
+import { buildNigeriaCorridor } from "@/lib/analytics";
+import { TrackedProviderLink } from "@/components/TrackedProviderLink";
 
 interface ProvidersDirectoryClientProps {
   providers: Provider[];
@@ -115,10 +117,33 @@ export function ProvidersDirectoryClient({
 
       <div className="grid gap-5 lg:grid-cols-2">
         {filteredProviders.map((provider) => (
-          <article
+          <ProviderDirectoryCard
             key={provider.slug}
-            className="rounded-[28px] border border-brand-navy/10 bg-white p-5 shadow-float"
-          >
+            country={country}
+            provider={provider}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ProviderDirectoryCard({
+  country,
+  provider
+}: {
+  country: SenderCountry | "All";
+  provider: Provider;
+}) {
+  const origin = country === "All" ? undefined : country;
+  const affiliateLink = getProviderAffiliateLink(provider.slug, {
+    origin,
+    placement: "providers-directory"
+  });
+  const corridor = buildNigeriaCorridor(origin ?? "All");
+
+  return (
+    <article className="rounded-[28px] border border-brand-navy/10 bg-white p-5 shadow-float">
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-start gap-4">
                 <div
@@ -179,22 +204,18 @@ export function ProvidersDirectoryClient({
               >
                 Provider review
               </Link>
-              <a
+              <TrackedProviderLink
+                affiliateLink={affiliateLink}
                 className="inline-flex min-h-12 items-center gap-2 rounded-2xl bg-brand-green px-5 text-sm font-semibold text-white hover:shadow-glow"
-                href={getProviderAffiliateLink(provider.slug, {
-                  origin: country === "All" ? undefined : country,
-                  placement: "providers-directory"
-                })}
+                corridor={corridor}
+                providerName={provider.name}
                 rel="noopener noreferrer"
                 target="_blank"
               >
                 Send now
                 <ArrowUpRight className="h-4 w-4" />
-              </a>
+              </TrackedProviderLink>
             </div>
           </article>
-        ))}
-      </div>
-    </div>
   );
 }

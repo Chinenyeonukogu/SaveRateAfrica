@@ -6,11 +6,14 @@ import { ArrowUpRight, Clock3, Info, Star } from "lucide-react";
 
 import { formatCompact, formatNaira, formatRate } from "@/lib/format";
 import { getDeliverySortValue, type ComparisonProviderRow } from "@/lib/fetchRates";
-import type { SourceCurrency } from "@/lib/providers";
+import type { SenderCountry, SourceCurrency } from "@/lib/providers";
+import { buildNigeriaCorridor } from "@/lib/analytics";
+import { TrackedProviderLink } from "@/components/TrackedProviderLink";
 
 interface ProviderCardProps {
   index: number;
   provider: ComparisonProviderRow;
+  senderCountry: SenderCountry;
   sourceCurrency: SourceCurrency;
 }
 
@@ -24,6 +27,7 @@ function neutralizeRankingLanguage(value: string) {
 export function ProviderCard({
   index,
   provider,
+  senderCountry,
   sourceCurrency
 }: ProviderCardProps) {
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
@@ -31,6 +35,7 @@ export function ProviderCard({
   const noFeeLabel = provider.slug === "payangel" ? "No Fees" : "No Fee ✅";
   const providerCtaLabel = `Go to ${provider.name}`;
   const providerRedirectNote = `You will be redirected to ${provider.name}'s website`;
+  const corridor = buildNigeriaCorridor(senderCountry);
   const providerDescription = [
     provider.summary
   ]
@@ -87,15 +92,17 @@ export function ProviderCard({
         </div>
 
         <div className="hidden shrink-0 flex-col items-end md:flex">
-          <a
+          <TrackedProviderLink
+            affiliateLink={provider.sendUrl}
             className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-[8px] bg-[#2e7d32] px-[18px] py-[10px] text-[13px] font-bold text-white transition hover:bg-[#1b5e20]"
-            href={provider.sendUrl}
+            corridor={corridor}
+            providerName={provider.name}
             rel="noopener noreferrer"
             target="_blank"
           >
             {providerCtaLabel}
             <ArrowUpRight className="h-3.5 w-3.5" />
-          </a>
+          </TrackedProviderLink>
           <span className="mt-1 max-w-[180px] text-right text-[12px] font-semibold leading-[1.4] text-[#2e4a2e]">
             {providerRedirectNote}
           </span>
@@ -180,15 +187,17 @@ export function ProviderCard({
       </div>
 
       <div className="mb-[10px] md:hidden">
-        <a
+        <TrackedProviderLink
+          affiliateLink={provider.sendUrl}
           className="inline-flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-[8px] bg-[#2e7d32] px-[18px] py-[10px] text-[13px] font-bold text-white transition hover:bg-[#1b5e20]"
-          href={provider.sendUrl}
+          corridor={corridor}
+          providerName={provider.name}
           rel="noopener noreferrer"
           target="_blank"
         >
           {providerCtaLabel}
           <ArrowUpRight className="h-4 w-4" />
-        </a>
+        </TrackedProviderLink>
         <span className="mt-1 block text-right text-[12px] font-semibold leading-[1.4] text-[#2e4a2e]">
           {providerRedirectNote}
         </span>

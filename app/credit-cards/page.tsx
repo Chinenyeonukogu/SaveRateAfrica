@@ -10,6 +10,7 @@ import {
 
 import { CreditEligibilityCounterBadge } from "@/components/CreditEligibilityCounterBadge";
 import { SiteHeader } from "@/components/SiteHeader";
+import { TrackedCreditCardLink } from "@/components/TrackedCreditCardLink";
 import { creditCardOffers } from "@/lib/site-data";
 
 const seoKeywords = [
@@ -330,15 +331,17 @@ export default function CreditCardsPage() {
                   </ul>
 
                   <div className="mt-6">
-                    <a
+                    <TrackedCreditCardLink
+                      affiliateLink={card.url}
+                      cardCategory={card.bestFor}
+                      cardName={card.name}
                       className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-[8px] bg-[#2e7d32] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#256a2a]"
-                      href={card.url}
                       rel="noopener noreferrer"
                       target="_blank"
                     >
                       Check if you qualify
                       <ArrowRight className="h-4 w-4" />
-                    </a>
+                    </TrackedCreditCardLink>
                     <p className="mt-2 text-center text-[11px] text-[#6b7b6d]">
                       No impact to your credit score
                     </p>
