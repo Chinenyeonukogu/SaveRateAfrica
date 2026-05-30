@@ -1,4 +1,8 @@
-import type { SourceCurrency } from "@/lib/providers";
+import {
+  baseMidMarketRates,
+  providers,
+  type SourceCurrency
+} from "@/lib/providers";
 
 export interface SupabaseExchangeRateRow {
   provider: string;
@@ -29,6 +33,41 @@ declare global {
 export const LIVE_RATE_REVALIDATE_SECONDS = 1800;
 const LIVE_RATE_CACHE_TTL_MS = LIVE_RATE_REVALIDATE_SECONDS * 1000;
 const SUPPORTED_SOURCE_CURRENCIES: SourceCurrency[] = ["USD", "GBP", "CAD"];
+
+function buildFallbackProviderRates(): SupabaseExchangeRateRow[] {
+  const now = new Date().toISOString();
+
+  return providers.flatMap((provider) =>
+    SUPPORTED_SOURCE_CURRENCIES.map((currency) => ({
+      provider: provider.name,
+      send_currency: currency,
+      receive_currency: "NGN" as const,
+      rate:
+        Math.round(
+          baseMidMarketRates[currency] *
+            provider.rateMultiplier[currency] *
+            100
+        ) / 100,
+      fee: null,
+      updated_at: now,
+      is_automated: false
+    }))
+  );
+}
+
+export function getFallbackLiveBaseRates(): LiveBaseRatesResponse {
+  const now = Date.now();
+  const updatedAt = new Date(now).toISOString();
+
+  return {
+    provider: "Supabase",
+    updatedAt,
+    sourceUpdatedAt: updatedAt,
+    cachedUntil: new Date(now + LIVE_RATE_CACHE_TTL_MS).toISOString(),
+    rates: baseMidMarketRates,
+    providerRates: buildFallbackProviderRates()
+  };
+}
 
 function getSupabaseConfig() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
