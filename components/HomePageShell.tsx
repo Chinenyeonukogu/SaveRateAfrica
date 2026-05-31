@@ -104,7 +104,6 @@ const RateChart = dynamic(
 
 export function HomePageShell({ initialComparison }: HomePageShellProps) {
   const compareRef = useRef<HTMLDivElement | null>(null);
-  const alertsRef = useRef<HTMLDivElement | null>(null);
   const rateChartRef = useRef<HTMLDivElement | null>(null);
   const [amount, setAmount] = useState(String(initialComparison.amount));
   const [senderCountry, setSenderCountry] = useState<SenderCountry>(
@@ -266,7 +265,6 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
 
       <main className="overflow-x-hidden pb-32 md:pb-20">
         <HomeHero
-          alertsAnchorRef={alertsRef}
           amount={amount}
           comparisonProviders={comparison.providers}
           isLoading={isLoading}
