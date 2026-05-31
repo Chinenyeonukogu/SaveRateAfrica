@@ -9,7 +9,11 @@ import {
   type SenderCountry,
   type SourceCurrency
 } from "@/lib/providers";
-import { getLiveBaseRates, type LiveBaseRatesResponse } from "@/lib/exchangeRateApi";
+import {
+  getFallbackLiveBaseRates,
+  getLiveBaseRates,
+  type LiveBaseRatesResponse
+} from "@/lib/exchangeRateApi";
 
 export interface ComparisonProviderRow {
   slug: string;
@@ -415,7 +419,15 @@ export async function getLiveComparison(
   const adjustedAmount = clampAmount(amount);
   let liveBaseRates: LiveBaseRatesResponse;
 
-  liveBaseRates = await getLiveBaseRates();
+  try {
+    liveBaseRates = await getLiveBaseRates();
+  } catch (error) {
+    if (!options.allowFallback) {
+      throw error;
+    }
+
+    liveBaseRates = getFallbackLiveBaseRates();
+  }
 
   return buildComparisonFromLiveRates({
     amount: adjustedAmount,

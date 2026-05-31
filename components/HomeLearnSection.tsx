@@ -1,7 +1,54 @@
 import Image from "next/image";
 import Link from "next/link";
 
-function LearnIcon({ type }: { type: "blog" | "video" | "review" }) {
+function LearnIcon({
+  type
+}: {
+  type: "alerts" | "blog" | "credit" | "video" | "review";
+}) {
+  if (type === "alerts") {
+    return (
+      <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 24 24">
+        <path
+          d="M12 3a5 5 0 0 0-5 5v3.6c0 .8-.3 1.6-.9 2.2L5 15h14l-1.1-1.2a3.2 3.2 0 0 1-.9-2.2V8a5 5 0 0 0-5-5Z"
+          fill="currentColor"
+          opacity="0.35"
+        />
+        <path
+          d="M9.5 18a2.5 2.5 0 0 0 5 0M7 8a5 5 0 0 1 10 0v3.6c0 .8.3 1.6.9 2.2L19 15H5l1.1-1.2c.6-.6.9-1.4.9-2.2V8Z"
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+        />
+      </svg>
+    );
+  }
+
+  if (type === "credit") {
+    return (
+      <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 24 24">
+        <rect
+          height="13"
+          rx="3"
+          width="18"
+          x="3"
+          y="6"
+          fill="currentColor"
+          opacity="0.32"
+        />
+        <path
+          d="M3 10h18M7 15h4"
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeWidth="2"
+        />
+      </svg>
+    );
+  }
+
   if (type === "video") {
     return (
       <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 24 24">
@@ -28,6 +75,20 @@ function LearnIcon({ type }: { type: "blog" | "video" | "review" }) {
 
 const learnCards = [
   {
+    type: "alerts" as const,
+    title: "Rate alerts",
+    description: "Set your target NGN rate and get notified when the market moves.",
+    cta: "Set alert",
+    href: "/alerts",
+    imageSrc: "/hero/rate-alerts.webp",
+    imageAlt: "Rate alert dashboard for monitoring Nigeria exchange rates",
+    imageWidth: 1200,
+    imageHeight: 800,
+    mediaClassName: "bg-[#e8f5e9]",
+    labelClassName: "text-[#2e7d32]",
+    priority: true
+  },
+  {
     type: "blog" as const,
     title: "Blog / Insights",
     description: "Expert tips to help you save more and make smarter money transfers home.",
@@ -39,7 +100,7 @@ const learnCards = [
     imageHeight: 1365,
     mediaClassName: "bg-[#e8f5e9]",
     labelClassName: "text-[#2e7d32]",
-    priority: true
+    priority: false
   },
   {
     type: "video" as const,
@@ -56,8 +117,22 @@ const learnCards = [
     priority: false
   },
   {
+    type: "credit" as const,
+    title: "Build credit",
+    description: "Find immigrant-friendly credit cards for building financial freedom.",
+    cta: "Explore cards",
+    href: "/credit-cards",
+    imageSrc: "/hero/build-credit.webp",
+    imageAlt: "Credit card tools for building US credit",
+    imageWidth: 1200,
+    imageHeight: 800,
+    mediaClassName: "bg-[#e8f5e9]",
+    labelClassName: "text-[#2e7d32]",
+    priority: false
+  },
+  {
     type: "review" as const,
-    title: "Provider reviews",
+    title: "Review providers",
     description: "View what people are saying about each provider.",
     cta: "Review Providers",
     href: "/providers",
@@ -75,19 +150,22 @@ export function HomeLearnSection() {
   return (
     <section className="bg-white">
       <div className="mx-auto w-full max-w-[1200px] px-6 py-6 min-[600px]:py-7 lg:py-8">
-        <div className="mb-4 flex items-center justify-between gap-4">
-          <h2 className="text-[18px] font-extrabold leading-tight text-[#1a3a2a] min-[600px]:text-[22px]">
+        <div className="mb-5 max-w-[620px]">
+          <h2 className="text-[22px] font-extrabold leading-tight text-[#1a3a2a] min-[600px]:text-[28px]">
             Learn &amp; save more
           </h2>
+          <p className="mt-2 text-[13px] font-semibold leading-6 text-[#5d6b5f] min-[600px]:text-[15px]">
+            Tools to help you send smarter and build financial freedom.
+          </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 min-[700px]:grid-cols-2 lg:grid-cols-5">
           {learnCards.map((card) => (
             <article
               key={card.title}
               className="overflow-hidden rounded-[12px] border border-[#e8e8e8] bg-white"
             >
-              <div className={`relative h-[110px] overflow-hidden ${card.mediaClassName}`}>
+              <div className={`relative h-[118px] overflow-hidden ${card.mediaClassName}`}>
                 <Image
                   alt={card.imageAlt}
                   className="h-full w-full object-cover"
@@ -103,7 +181,7 @@ export function HomeLearnSection() {
                 </div>
               </div>
 
-              <div className="flex min-h-[128px] flex-col px-4 py-3">
+              <div className="flex min-h-[142px] flex-col px-4 py-3">
                 <h3 className="text-[13px] font-extrabold leading-[1.35] text-[#1a3a2a]">
                   {card.title}
                 </h3>

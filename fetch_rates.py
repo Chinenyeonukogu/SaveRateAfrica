@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 NALA_RATES_URL = "https://partners-api.prod.nala-api.com/v1/fx/rates"
 WISE_RATES_URL = "https://api.wise.com/v1/rates"
 PESAPEER_RATES_URL = "https://backend-api.prod.pesapeer.com/v2/public/currency-pairs"
-SUPABASE_URL = os.environ.get("SUPABASE_URL", "").rstrip("/")
+SUPABASE_URL = os.environ.get("NEXT_PUBLIC_SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_ROLE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
 WISE_API_TOKEN = os.environ.get("WISE_API_TOKEN", "")
 MAX_REASONABLE_NGN_RATE = 3000
@@ -565,7 +565,7 @@ def insert_rate_history(rows):
 
 
 def main():
-    require_env("SUPABASE_URL", SUPABASE_URL)
+    require_env("NEXT_PUBLIC_SUPABASE_URL", SUPABASE_URL)
     require_env("SUPABASE_SERVICE_ROLE_KEY", SUPABASE_SERVICE_ROLE_KEY)
     require_env("WISE_API_TOKEN", WISE_API_TOKEN)
 

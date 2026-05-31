@@ -1,5 +1,6 @@
 import { ArrowUpRight, Star } from "lucide-react";
 
+import { TrackedCreditCardLink } from "@/components/TrackedCreditCardLink";
 import type { CreditCardOffer } from "@/lib/site-data";
 
 interface CreditCardCardProps {
@@ -77,15 +78,17 @@ export function CreditCardCard({ offer }: CreditCardCardProps) {
           </ul>
 
           <div className="mt-6 flex flex-wrap items-center gap-4">
-            <a
+            <TrackedCreditCardLink
+              affiliateLink={offer.url}
+              cardCategory={offer.bestFor}
+              cardName={offer.name}
               className="inline-flex min-h-12 items-center gap-2 rounded-[8px] bg-brand-yellow px-5 py-3 text-sm font-bold text-[#1a1a1a] transition hover:opacity-[0.88]"
-              href={offer.url}
               rel="noreferrer"
               target="_blank"
             >
               Apply Now
               <ArrowUpRight className="h-4 w-4" />
-            </a>
+            </TrackedCreditCardLink>
             <p className="text-sm text-brand-navy/60">
               Commission eligible affiliate placement
             </p>

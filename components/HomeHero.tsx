@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState, type MutableRefObject } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 
 import {
   ArrowUpDown
@@ -12,7 +11,6 @@ import type { ComparisonProviderRow } from "@/lib/fetchRates";
 import { senderCountries, type SenderCountry } from "@/lib/providers";
 
 interface HomeHeroProps {
-  alertsAnchorRef?: MutableRefObject<HTMLDivElement | null>;
   amount: string;
   comparisonProviders: ComparisonProviderRow[];
   senderCountry: SenderCountry;
@@ -186,7 +184,6 @@ function formatCalculatedNgn(value: number) {
 }
 
 export function HomeHero({
-  alertsAnchorRef,
   amount,
   comparisonProviders,
   senderCountry,
@@ -273,10 +270,10 @@ export function HomeHero({
       id="home"
       className="relative w-full max-w-[100vw] overflow-hidden overflow-x-hidden bg-[linear-gradient(135deg,#1a3a1a_0%,#2e7d32_50%,#0d2416_100%)]"
     >
-      <div className="relative z-10 mx-auto w-full max-w-[1200px] overflow-x-hidden px-5 pb-8 pt-4 text-white min-[600px]:px-7 min-[600px]:pb-9 lg:px-6 lg:pb-10">
+      <div className="relative z-10 mx-auto w-full max-w-[1200px] overflow-x-hidden px-5 pb-8 pt-5 text-white min-[600px]:px-7 min-[600px]:pb-10 lg:px-6 lg:pb-12">
 
-        <div className="grid min-w-0 grid-cols-1 items-stretch gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(380px,440px)] lg:gap-x-10">
-          <div className="flex min-w-0 flex-col gap-4 overflow-hidden pt-0 lg:pr-2">
+        <div className="mx-auto flex min-w-0 max-w-[880px] flex-col items-center gap-5 text-center">
+          <div className="flex min-w-0 flex-col items-center gap-4 overflow-hidden pt-0">
             <div className="inline-flex w-fit items-center rounded-full border border-green-800/60 bg-green-950/40 px-3 py-[5px] text-[9px] font-bold uppercase tracking-[0.6px] text-green-400">
               <span className="mr-2 inline-flex h-2 w-2 rounded-full bg-[#4ade80] animate-hero-live-pulse shadow-[0_0_10px_rgba(74,222,128,0.8)]" />
               REAL-TIME RATES · COMPARE &amp; SAVE INSTANTLY
@@ -284,7 +281,7 @@ export function HomeHero({
 
             <div className="flex flex-col gap-4">
               <h1
-                className="max-w-[580px] font-heading text-[23px] font-bold leading-[1.08] tracking-[-0.5px] text-white min-[600px]:text-[31px] lg:text-[36px]"
+                className="mx-auto max-w-[760px] font-heading text-[25px] font-bold leading-[1.08] tracking-[-0.5px] text-white min-[600px]:text-[36px] lg:text-[44px]"
                 style={brandFontStyle}
               >
                 Compare Live Nigeria Exchange Rates & See Which Providers Pays the Most.
@@ -292,13 +289,13 @@ export function HomeHero({
 
             </div>
 
-            <p className="max-w-[540px] text-[12px] font-bold leading-[1.55] text-white min-[600px]:text-[13px]">
+            <p className="mx-auto max-w-[620px] text-[13px] font-bold leading-[1.65] text-white min-[600px]:text-[15px]">
               Real-time rates from 14 trusted providers. No hidden fees. Ranked by
               the exact NGN your recipient receives after all charges.
             </p>
 
-            <div className="flex w-full max-w-full min-w-0 flex-col box-border">
-              <div className="mb-7 flex w-full min-w-0 flex-wrap gap-2 box-border">
+            <div className="flex w-full max-w-full min-w-0 flex-col items-center box-border">
+              <div className="mb-4 flex w-full min-w-0 flex-wrap justify-center gap-2 box-border">
                 {trustPills.map((pill) => (
                   <div
                     key={pill.label}
@@ -310,7 +307,7 @@ export function HomeHero({
                 ))}
               </div>
 
-              <div className="flex w-fit max-w-full items-center">
+              <div className="flex w-fit max-w-full items-center text-left">
                 <div className="flex shrink-0 items-center">
                   {socialProofFaces.map((face, index) => (
                     <Image
@@ -335,136 +332,19 @@ export function HomeHero({
                 </div>
               </div>
 
-              <div
-                id="rate-alerts"
-                ref={alertsAnchorRef}
-                className="mt-[28px] grid w-full max-w-full grid-cols-1 items-stretch gap-[14px] overflow-hidden min-[700px]:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]"
-              >
-                  <Link
-                    className="group relative h-full min-h-[190px] min-w-0 max-w-full overflow-hidden rounded-[20px] border-2 border-[#4ade80] bg-[#e8f5e2] px-[22px] pb-[22px] pt-6 text-left shadow-[0_8px_32px_rgba(0,0,0,0.12)] transition hover:translate-y-[-4px] hover:shadow-[0_16px_48px_rgba(0,0,0,0.18)]"
-                    href="/alerts"
-                  >
-                    <svg
-                      style={{
-                        position: "absolute",
-                        right: "10px",
-                        bottom: "8px",
-                        width: "90px",
-                        height: "90px",
-                        zIndex: 2
-                      }}
-                      viewBox="0 0 100 100"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <defs>
-                        <radialGradient id="bellBody" cx="35%" cy="25%" r="70%">
-                          <stop offset="0%" stopColor="#fef3c7" />
-                          <stop offset="30%" stopColor="#fde68a" />
-                          <stop offset="65%" stopColor="#f59e0b" />
-                          <stop offset="100%" stopColor="#78350f" />
-                        </radialGradient>
-                        <radialGradient id="bellShine" cx="30%" cy="20%" r="50%">
-                          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.6" />
-                          <stop offset="100%" stopColor="#fbbf24" stopOpacity="0" />
-                        </radialGradient>
-                        <linearGradient id="rimGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#fbbf24" />
-                          <stop offset="100%" stopColor="#92400e" />
-                        </linearGradient>
-                        <filter id="bellShadow">
-                          <feDropShadow
-                            dx="0"
-                            dy="4"
-                            stdDeviation="4"
-                            floodColor="#78350f"
-                            floodOpacity="0.4"
-                          />
-                        </filter>
-                      </defs>
-                      <ellipse cx="50" cy="95" rx="22" ry="4" fill="rgba(0,0,0,0.2)" />
-                      <rect x="46" y="4" width="8" height="14" rx="4" fill="url(#rimGrad)" />
-                      <path
-                        d="M50 14 C28 14 14 30 14 50 L14 74 Q14 82 22 82 L78 82 Q86 82 86 74 L86 50 C86 30 72 14 50 14Z"
-                        fill="url(#bellBody)"
-                        filter="url(#bellShadow)"
-                      />
-                      <path
-                        d="M50 14 C28 14 14 30 14 50 L14 74 Q14 82 22 82 L78 82 Q86 82 86 74 L86 50 C86 30 72 14 50 14Z"
-                        fill="url(#bellShine)"
-                      />
-                      <ellipse cx="50" cy="81" rx="36" ry="6" fill="#92400e" />
-                      <ellipse cx="50" cy="79" rx="36" ry="6" fill="url(#bellBody)" />
-                      <circle cx="50" cy="90" r="6" fill="url(#rimGrad)" />
-                      <ellipse
-                        cx="37"
-                        cy="36"
-                        rx="7"
-                        ry="11"
-                        fill="#fef9c3"
-                        opacity="0.3"
-                        transform="rotate(-15 37 36)"
-                      />
-                      <circle cx="72" cy="18" r="10" fill="#ef4444" />
-                      <text x="72" y="22" textAnchor="middle" fontSize="10" fontWeight="900" fill="white">
-                        1
-                      </text>
-                    </svg>
-
-                    <div className="relative z-10 max-w-[132px]">
-                      <p className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#16a34a]">
-                        RATE ALERTS
-                      </p>
-                      <p className="mt-2 text-[14px] font-extrabold leading-[1.25] text-[#1a2e1a]">
-                        Never miss your ideal rate
-                      </p>
-                      <p className="mt-1 text-[10px] font-medium leading-[1.3] text-[#2d4a35]">
-                        We&apos;ll email you when NGN hits your target.
-                      </p>
-                      <span className="mt-1 inline-flex text-[11px] font-extrabold text-[#2e7d32]">
-                        Set Rate Alert &rarr;
-                      </span>
-                    </div>
-                  </Link>
-
-                  <Link
-                    className="group relative h-full min-h-[190px] min-w-0 max-w-full overflow-hidden rounded-[12px] border-2 border-[#4ade80] bg-[#e8f5e2] px-[22px] pb-[22px] pt-6 text-left transition hover:translate-y-[-2px]"
-                    href="/credit-cards"
-                  >
-                    <div className="relative z-10 max-w-[240px] min-w-0 pr-[80px]">
-                      <p className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#166534]">
-                        BUILD CREDIT
-                      </p>
-                      <p className="mt-1 text-[12px] font-extrabold leading-[1.2] text-[#111111]">
-                        Build US credit while send money
-                      </p>
-                      <p className="mt-1 text-[10px] font-medium leading-[1.3] text-[#374151]">
-                        Get access to immigrant-friendly credit cards with little/ no credit history.
-                      </p>
-                      <span className="mt-1 inline-flex text-[11px] font-extrabold text-[#166534]">
-                        Explore Credit Cards &rarr;
-                      </span>
-                    </div>
-                    <div className="absolute bottom-3 right-3 h-10 w-14 rotate-[-8deg] overflow-hidden rounded-[6px] bg-[linear-gradient(135deg,#fde68a,#d97706)]">
-                      <div className="absolute inset-[7px] rounded-[4px] border border-[rgba(180,83,9,0.3)]" />
-                      <div className="absolute left-0 top-1/2 h-px w-full bg-[rgba(180,83,9,0.3)]" />
-                      <div className="absolute left-1/3 top-0 h-full w-px bg-[rgba(180,83,9,0.3)]" />
-                      <div className="absolute left-2/3 top-0 h-full w-px bg-[rgba(180,83,9,0.3)]" />
-                    </div>
-                  </Link>
-              </div>
             </div>
           </div>
 
-          <div className="w-full min-w-0 max-w-full overflow-hidden lg:flex lg:flex-col">
-            <div className="mx-auto flex w-full max-w-full flex-col overflow-hidden rounded-[14px] bg-white p-3 text-[#1a2e1a] shadow-[0_8px_32px_rgba(0,0,0,0.18)]">
-                <p className="mb-1 text-[9px] font-semibold uppercase tracking-[1.8px] text-[#2e7d32]">
+          <div className="w-full min-w-0 max-w-[620px] overflow-hidden">
+            <div className="mx-auto flex w-full max-w-full flex-col overflow-hidden rounded-[18px] bg-white p-4 text-left text-[#1a2e1a] shadow-[0_16px_48px_rgba(0,0,0,0.22)] ring-1 ring-white/60 min-[600px]:p-5">
+                <p className="mb-1 text-center text-[13px] font-black uppercase tracking-[2px] text-[#2e7d32]">
                   COMPARE NOW
                 </p>
-                <h2 className="mb-2 text-[15px] font-semibold text-[#1a2e1a]">
+                <h2 className="mb-3 text-center text-[21px] font-black leading-tight text-[#1a2e1a] min-[600px]:text-[26px]">
                   Check your top payout
                 </h2>
 
-                <div className="flex h-full flex-col gap-2">
+                <div className="flex h-full flex-col gap-3">
                   <label className="block">
                     <span className="mb-[6px] block text-[10px] font-medium uppercase tracking-[0.5px] text-[#8a9a8a]">
                       Send amount
@@ -572,7 +452,7 @@ export function HomeHero({
                   </div>
 
                   <button
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-[8px] bg-brand-yellow px-4 py-2.5 text-[12px] font-black text-[#1a1a1a] shadow-[0_8px_22px_rgba(246,198,25,0.34)] ring-2 ring-[#f6c619]/35 transition hover:translate-y-[-1px] hover:shadow-float disabled:cursor-not-allowed disabled:opacity-70"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-[10px] bg-brand-yellow px-4 py-3.5 text-[14px] font-black text-[#1a1a1a] shadow-[0_10px_28px_rgba(246,198,25,0.38)] ring-2 ring-[#f6c619]/35 transition hover:translate-y-[-1px] hover:shadow-float disabled:cursor-not-allowed disabled:opacity-70 min-[600px]:text-[15px]"
                     type="button"
                     onClick={onCompare}
                   >

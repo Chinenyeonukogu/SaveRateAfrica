@@ -125,6 +125,7 @@ export function ComparisonTable({
               key={`${comparison.senderCountry}-${provider.slug}-${comparison.amount}-${comparison.sortBy}`}
               index={index}
               provider={provider}
+              senderCountry={comparison.senderCountry}
               sourceCurrency={comparison.sourceCurrency}
             />
           ))}
