@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import { motion } from "framer-motion";
 
 import { HomeHero } from "@/components/HomeHero";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -112,6 +113,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
   const [comparison, setComparison] = useState(initialComparison);
   const [sortBy, setSortBy] = useState<ComparisonSort>(initialComparison.sortBy);
   const [isLoading, setIsLoading] = useState(false);
+  const [showComparisonTable, setShowComparisonTable] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [nextRefreshAt, setNextRefreshAt] = useState(initialComparison.cachedUntil);
   const amountRef = useRef(amount);
@@ -227,8 +229,29 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
   }, [nextRefreshAt]);
 
   useEffect(() => {
+    if (!showComparisonTable) {
+      return;
+    }
+
+    window.requestAnimationFrame(() => {
+      compareRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, [showComparisonTable]);
+
+  useEffect(() => {
     function scrollToHashTarget() {
       const targetId = window.location.hash.replace("#", "");
+
+      if (targetId === "compare-rates") {
+        setShowComparisonTable(true);
+
+        window.requestAnimationFrame(() => {
+          document
+            .getElementById(targetId)
+            ?.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+        return;
+      }
 
       if (targetId !== "how-it-works") {
         return;
@@ -249,10 +272,21 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
     };
   }, []);
 
+  useEffect(() => {
+    function showComparisonFromHeader() {
+      setShowComparisonTable(true);
+    }
+
+    window.addEventListener("saverate:show-comparison", showComparisonFromHeader);
+
+    return () => {
+      window.removeEventListener("saverate:show-comparison", showComparisonFromHeader);
+    };
+  }, []);
+
   function handleCompare() {
-    document
-      .querySelector("#compare-rates")
-      ?.scrollIntoView({ behavior: "smooth" });
+    setShowComparisonTable(true);
+    void refreshComparison(sortByRef.current);
   }
 
   function handleSortChange(nextSort: ComparisonSort) {
@@ -276,23 +310,30 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
 
         <HomeLearnSection />
 
-        <section id="compare-rates" className={sectionDividerClassName}>
-          <div className={comparisonSectionInnerClassName}>
-            <div ref={compareRef}>
-              <ComparisonTable
-                comparison={comparison}
-                errorMessage={errorMessage}
-                isLoading={isLoading}
-                nextRefreshAt={nextRefreshAt}
-                onSortChange={handleSortChange}
-              />
-            </div>
+        {showComparisonTable ? (
+          <section id="compare-rates" className={sectionDividerClassName}>
+            <div className={comparisonSectionInnerClassName}>
+              <motion.div
+                ref={compareRef}
+                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: -18 }}
+                transition={{ duration: 0.42, ease: "easeOut" }}
+              >
+                <ComparisonTable
+                  comparison={comparison}
+                  errorMessage={errorMessage}
+                  isLoading={isLoading}
+                  nextRefreshAt={nextRefreshAt}
+                  onSortChange={handleSortChange}
+                />
+              </motion.div>
 
-            <div className="mt-8">
-              <RateDisclaimer />
+              <div className="mt-8">
+                <RateDisclaimer />
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        ) : null}
 
         <section className={sectionDividerClassName}>
           <div className={postComparisonSectionInnerClassName}>

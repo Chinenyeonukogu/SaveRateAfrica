@@ -243,6 +243,12 @@ export function SiteHeader({
         window.history.replaceState(null, "", href);
         return;
       }
+
+      if (sectionId === "compare-rates") {
+        window.history.replaceState(null, "", href);
+        window.dispatchEvent(new Event("saverate:show-comparison"));
+        return;
+      }
     }
 
     if (href === "#home" && pathname === "/") {
