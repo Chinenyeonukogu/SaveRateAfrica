@@ -1,3 +1,4 @@
+// DEPLOYMENT MARKER: 2026-06-01 02:37:45
 // Force redeploy - June 2026
 
 import type { Metadata } from "next";
@@ -78,3 +79,4 @@ export default async function HomePage() {
     </>
   );
 }
+
