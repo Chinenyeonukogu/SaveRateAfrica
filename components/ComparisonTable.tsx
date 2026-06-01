@@ -77,7 +77,7 @@ export function ComparisonTable({
   const sectionRef = useRef<HTMLElement | null>(null);
   const visibleProviders = showAll
     ? comparison.providers
-    : comparison.providers.slice(0, 5);
+    : comparison.providers.slice(0, 6);
 
   function handleShowLess() {
     setShowAll(false);

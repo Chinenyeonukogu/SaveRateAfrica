@@ -1,77 +1,4 @@
-import Image from "next/image";
 import Link from "next/link";
-
-function LearnIcon({
-  type
-}: {
-  type: "alerts" | "blog" | "credit" | "video" | "review";
-}) {
-  if (type === "alerts") {
-    return (
-      <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 24 24">
-        <path
-          d="M12 3a5 5 0 0 0-5 5v3.6c0 .8-.3 1.6-.9 2.2L5 15h14l-1.1-1.2a3.2 3.2 0 0 1-.9-2.2V8a5 5 0 0 0-5-5Z"
-          fill="currentColor"
-          opacity="0.35"
-        />
-        <path
-          d="M9.5 18a2.5 2.5 0 0 0 5 0M7 8a5 5 0 0 1 10 0v3.6c0 .8.3 1.6.9 2.2L19 15H5l1.1-1.2c.6-.6.9-1.4.9-2.2V8Z"
-          fill="none"
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-        />
-      </svg>
-    );
-  }
-
-  if (type === "credit") {
-    return (
-      <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 24 24">
-        <rect
-          height="13"
-          rx="3"
-          width="18"
-          x="3"
-          y="6"
-          fill="currentColor"
-          opacity="0.32"
-        />
-        <path
-          d="M3 10h18M7 15h4"
-          fill="none"
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeWidth="2"
-        />
-      </svg>
-    );
-  }
-
-  if (type === "video") {
-    return (
-      <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 24 24">
-        <path d="M9 7.5v9l7-4.5-7-4.5Z" fill="currentColor" />
-      </svg>
-    );
-  }
-
-  if (type === "review") {
-    return (
-      <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 24 24">
-        <path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9L12 3Z" fill="currentColor" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 24 24">
-      <path d="M5 4.8C5 3.8 5.8 3 6.8 3H19v16H7.8A2.8 2.8 0 0 0 5 21.8v-17Z" fill="currentColor" opacity="0.35" />
-      <path d="M5 4.8A2.8 2.8 0 0 1 7.8 2H19v16H7.8A2.8 2.8 0 0 0 5 20.8v-16Zm4.5 3.7h6M9.5 12h4.8" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="2" />
-    </svg>
-  );
-}
 
 const learnCards = [
   {
@@ -165,22 +92,6 @@ export function HomeLearnSection() {
               key={card.title}
               className="overflow-hidden rounded-[12px] border border-[#e8e8e8] bg-white"
             >
-              <div className={`relative h-[118px] overflow-hidden ${card.mediaClassName}`}>
-                <Image
-                  alt={card.imageAlt}
-                  className="h-full w-full object-cover"
-                  height={card.imageHeight}
-                  loading={card.priority ? undefined : "lazy"}
-                  priority={card.priority}
-                  sizes="(min-width: 768px) 33vw, 100vw"
-                  src={card.imageSrc}
-                  width={card.imageWidth}
-                />
-                <div className="absolute left-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-[#2e7d32] text-white shadow-[0_8px_18px_rgba(46,125,50,0.24)]">
-                  <LearnIcon type={card.type} />
-                </div>
-              </div>
-
               <div className="flex min-h-[142px] flex-col px-4 py-3">
                 <h3 className="text-[13px] font-extrabold leading-[1.35] text-[#1a3a2a]">
                   {card.title}
@@ -189,7 +100,7 @@ export function HomeLearnSection() {
                   {card.description}
                 </p>
                 <Link
-                  className={`mt-auto inline-flex items-center gap-1 pt-3 text-[11px] font-extrabold ${card.labelClassName}`}
+                  className={`mt-auto inline-flex min-h-9 items-center justify-center rounded-full border border-current px-4 text-[11px] font-extrabold ${card.labelClassName}`}
                   href={card.href}
                 >
                   {card.cta} -&gt;
