@@ -332,7 +332,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
             animate={{ opacity: 1 }}
             aria-labelledby="comparison-modal-title"
             aria-modal="true"
-            className="fixed inset-0 z-[10000] flex items-end justify-center px-0 py-0 min-[600px]:px-6 min-[600px]:py-6 min-[900px]:items-center"
+            className="fixed inset-0 z-[10000] flex items-end justify-center px-0 py-0 min-[600px]:px-6 min-[600px]:py-6"
             initial={{ opacity: 0 }}
             role="dialog"
             style={{ backgroundColor: "rgba(0,0,0,0.6)" }}
