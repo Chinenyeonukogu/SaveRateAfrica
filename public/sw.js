@@ -1,4 +1,4 @@
-const CACHE_VERSION = "saverateafrica-safe-v3";
+const CACHE_VERSION = "saverateafrica-safe-v4";
 
 self.addEventListener("install", () => {
   self.skipWaiting();
