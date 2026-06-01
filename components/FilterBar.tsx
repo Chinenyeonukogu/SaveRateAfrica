@@ -4,17 +4,12 @@ import type { ComparisonSort, SenderCountry, SourceCurrency } from "@/lib/provid
 
 const sortOptions: { label: string; value: ComparisonSort }[] = [
   { label: "Top Rate", value: "best-rate" },
-  { label: "Lowest Fee", value: "lowest-fee" },
   { label: "Fastest", value: "fastest" }
 ];
 
 function getFilterDataValue(value: ComparisonSort) {
   if (value === "best-rate") {
     return "rate";
-  }
-
-  if (value === "lowest-fee") {
-    return "fee";
   }
 
   return "fastest";
@@ -47,7 +42,7 @@ export function FilterBar({
           </p>
         </div>
 
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 gap-2">
           {sortOptions.map((option) => {
             const active = option.value === sortBy;
 

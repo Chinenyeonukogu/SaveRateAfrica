@@ -216,7 +216,6 @@ function sortRows(rows: ComparisonProviderRow[], sortBy: ComparisonSort) {
   if (sortBy === "fastest") {
     return [...rows].sort(
       (first, second) =>
-        byCountryRank(first, second) ||
         getDeliverySortValue(first.deliveryLabel) -
           getDeliverySortValue(second.deliveryLabel) ||
         first.speedHours - second.speedHours ||
@@ -226,10 +225,10 @@ function sortRows(rows: ComparisonProviderRow[], sortBy: ComparisonSort) {
 
   return [...rows].sort(
     (first, second) =>
-      byCountryRank(first, second) ||
       second.exchangeRate - first.exchangeRate ||
       second.amountReceived - first.amountReceived ||
-      first.fee - second.fee
+      first.fee - second.fee ||
+      byCountryRank(first, second)
   );
 }
 

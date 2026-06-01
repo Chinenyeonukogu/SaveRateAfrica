@@ -152,11 +152,6 @@ export function ComparisonTable({
                           <h3 className="text-[18px] font-black leading-tight text-[#1a2e1a]">
                             {provider.name}
                           </h3>
-                          {isTopProvider ? (
-                            <span className="rounded-full bg-[#2e7d32] px-2 py-1 text-[9px] font-black uppercase text-white">
-                              Top
-                            </span>
-                          ) : null}
                         </div>
                         <div className="mt-2 flex flex-wrap items-center gap-2 text-[12px] font-semibold text-[#4a6a4a]">
                           <span className="inline-flex items-center gap-1 text-[#1a2e1a]">
@@ -185,7 +180,7 @@ export function ComparisonTable({
                       <p className="text-[10px] font-black uppercase tracking-[0.1em] text-[#5a8a5a]">
                         Rate
                       </p>
-                      <p className="mt-1 text-[13px] font-black text-[#1a2e1a]">
+                      <p className="mt-1 text-[18px] font-black leading-tight text-[#1a2e1a]">
                         {formatRate(provider.exchangeRate, comparison.sourceCurrency)}
                       </p>
                     </div>

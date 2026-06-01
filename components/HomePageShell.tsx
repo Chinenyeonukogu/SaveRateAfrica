@@ -256,9 +256,10 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
 
   function openComparisonModal(refresh = false) {
     setIsComparisonModalOpen(true);
+    setSortBy("best-rate");
 
     if (refresh) {
-      void refreshComparison(sortByRef.current);
+      void refreshComparison("best-rate");
     }
   }
 
