@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
+import { X } from "lucide-react";
 
 import { HomeHero } from "@/components/HomeHero";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -21,7 +22,6 @@ interface HomePageShellProps {
 }
 
 const pageShellClassName = "mx-auto w-full max-w-[1200px] px-6";
-const comparisonSectionInnerClassName = `${pageShellClassName} py-9 min-[600px]:py-[52px] lg:py-[72px]`;
 const postComparisonSectionInnerClassName = `${pageShellClassName} py-6 min-[600px]:py-8 lg:py-10`;
 const sectionDividerClassName = "border-t border-[#e8f5e9]";
 const HomeLearnSection = dynamic(
@@ -104,7 +104,7 @@ const RateChart = dynamic(
 );
 
 export function HomePageShell({ initialComparison }: HomePageShellProps) {
-  const compareRef = useRef<HTMLDivElement | null>(null);
+  const modalPanelRef = useRef<HTMLDivElement | null>(null);
   const rateChartRef = useRef<HTMLDivElement | null>(null);
   const [amount, setAmount] = useState(String(initialComparison.amount));
   const [senderCountry, setSenderCountry] = useState<SenderCountry>(
@@ -113,7 +113,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
   const [comparison, setComparison] = useState(initialComparison);
   const [sortBy, setSortBy] = useState<ComparisonSort>(initialComparison.sortBy);
   const [isLoading, setIsLoading] = useState(false);
-  const [showComparisonTable, setShowComparisonTable] = useState(false);
+  const [isComparisonModalOpen, setIsComparisonModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [nextRefreshAt, setNextRefreshAt] = useState(initialComparison.cachedUntil);
   const amountRef = useRef(amount);
@@ -229,27 +229,45 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
   }, [nextRefreshAt]);
 
   useEffect(() => {
-    if (!showComparisonTable) {
+    if (!isComparisonModalOpen) {
       return;
     }
 
+    const previousOverflow = document.body.style.overflow;
+
+    document.body.style.overflow = "hidden";
     window.requestAnimationFrame(() => {
-      compareRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      modalPanelRef.current?.focus();
     });
-  }, [showComparisonTable]);
+
+    function closeOnEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsComparisonModalOpen(false);
+      }
+    }
+
+    window.addEventListener("keydown", closeOnEscape);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [isComparisonModalOpen]);
+
+  function openComparisonModal(refresh = false) {
+    setIsComparisonModalOpen(true);
+
+    if (refresh) {
+      void refreshComparison(sortByRef.current);
+    }
+  }
 
   useEffect(() => {
     function scrollToHashTarget() {
       const targetId = window.location.hash.replace("#", "");
 
       if (targetId === "compare-rates") {
-        setShowComparisonTable(true);
-
-        window.requestAnimationFrame(() => {
-          document
-            .getElementById(targetId)
-            ?.scrollIntoView({ behavior: "smooth", block: "start" });
-        });
+        openComparisonModal();
         return;
       }
 
@@ -274,7 +292,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
 
   useEffect(() => {
     function showComparisonFromHeader() {
-      setShowComparisonTable(true);
+      openComparisonModal();
     }
 
     window.addEventListener("saverate:show-comparison", showComparisonFromHeader);
@@ -285,8 +303,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
   }, []);
 
   function handleCompare() {
-    setShowComparisonTable(true);
-    void refreshComparison(sortByRef.current);
+    openComparisonModal(true);
   }
 
   function handleSortChange(nextSort: ComparisonSort) {
@@ -310,15 +327,55 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
 
         <HomeLearnSection />
 
-        {showComparisonTable ? (
-          <section id="compare-rates" className={sectionDividerClassName}>
-            <div className={comparisonSectionInnerClassName}>
-              <motion.div
-                ref={compareRef}
-                animate={{ opacity: 1, y: 0 }}
-                initial={{ opacity: 0, y: -18 }}
-                transition={{ duration: 0.42, ease: "easeOut" }}
-              >
+        {isComparisonModalOpen ? (
+          <motion.div
+            animate={{ opacity: 1 }}
+            aria-labelledby="comparison-modal-title"
+            aria-modal="true"
+            className="fixed inset-0 z-[10000] flex items-center justify-center px-4 py-6 min-[600px]:px-6"
+            initial={{ opacity: 0 }}
+            role="dialog"
+            style={{ backgroundColor: "rgba(0,0,0,0.6)" }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            onMouseDown={(event) => {
+              if (event.target === event.currentTarget) {
+                setIsComparisonModalOpen(false);
+              }
+            }}
+          >
+            <motion.div
+              id="compare-rates"
+              ref={modalPanelRef}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              className="relative flex max-h-[calc(100vh-48px)] w-full max-w-[1180px] flex-col overflow-hidden rounded-[18px] bg-white shadow-[0_28px_90px_rgba(0,0,0,0.35)] outline-none"
+              initial={{ opacity: 0, y: 22, scale: 0.98 }}
+              tabIndex={-1}
+              transition={{ duration: 0.28, ease: "easeOut" }}
+              onMouseDown={(event) => event.stopPropagation()}
+            >
+              <div className="flex shrink-0 items-start justify-between gap-4 border-b border-[#e0ede2] px-4 py-4 min-[600px]:px-6 min-[600px]:py-5">
+                <div>
+                  <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-green">
+                    Compare now
+                  </p>
+                  <h2
+                    id="comparison-modal-title"
+                    className="mt-1 text-[22px] font-heading text-brand-navy min-[600px]:text-[30px]"
+                  >
+                    Check your top payout
+                  </h2>
+                </div>
+                <button
+                  aria-label="Close comparison results"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#d9eadb] bg-white text-[#1a2e1a] transition hover:bg-[#f4faf5]"
+                  type="button"
+                  onClick={() => setIsComparisonModalOpen(false)}
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              <div className="min-h-0 overflow-y-auto px-4 py-5 min-[600px]:px-6 lg:px-8">
                 <ComparisonTable
                   comparison={comparison}
                   errorMessage={errorMessage}
@@ -326,13 +383,13 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
                   nextRefreshAt={nextRefreshAt}
                   onSortChange={handleSortChange}
                 />
-              </motion.div>
 
-              <div className="mt-8">
-                <RateDisclaimer />
+                <div className="mt-6">
+                  <RateDisclaimer />
+                </div>
               </div>
-            </div>
-          </section>
+            </motion.div>
+          </motion.div>
         ) : null}
 
         <section className={sectionDividerClassName}>
