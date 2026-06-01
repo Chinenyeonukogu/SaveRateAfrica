@@ -21,7 +21,7 @@ interface HomeHeroProps {
   onCompare: () => void;
 }
 
-const quickAmounts = [50, 100, 200, 500, 1000] as const;
+const quickAmounts = [200, 500, 1000] as const;
 
 const currencySymbolByCountry: Record<
   SenderCountry,
@@ -316,11 +316,12 @@ export function HomeHero({
   return (
     <section
       id="home"
-      className="relative w-full max-w-[100vw] overflow-hidden overflow-x-hidden bg-[linear-gradient(135deg,#1a3a1a_0%,#2e7d32_50%,#0d2416_100%)]"
+      className="relative w-full max-w-[100vw] overflow-hidden overflow-x-hidden bg-white"
     >
-      <div className="relative z-10 mx-auto w-full max-w-[1200px] overflow-x-hidden px-5 pb-8 pt-5 text-white min-[600px]:px-7 min-[600px]:pb-10 lg:px-6 lg:pb-12">
+      <div className="absolute inset-x-0 top-0 h-[58%] min-h-[430px] bg-[linear-gradient(135deg,#1a3a1a_0%,#2e7d32_50%,#0d2416_100%)]" />
+      <div className="relative z-10 mx-auto w-full max-w-[1200px] overflow-visible px-5 pb-10 pt-5 text-white min-[600px]:px-7 min-[600px]:pb-12 lg:px-6 lg:pb-16">
 
-        <div className="mx-auto flex min-w-0 max-w-[880px] flex-col items-center gap-5 text-center">
+        <div className="mx-auto flex min-w-0 max-w-[980px] flex-col items-center gap-5 text-center">
           <div className="flex min-w-0 flex-col items-center gap-4 overflow-hidden pt-0">
             <div className="inline-flex w-fit items-center rounded-full border border-green-800/60 bg-green-950/40 px-3 py-[5px] text-[9px] font-bold uppercase tracking-[0.6px] text-green-400">
               <span className="mr-2 inline-flex h-2 w-2 rounded-full bg-[#4ade80] animate-hero-live-pulse shadow-[0_0_10px_rgba(74,222,128,0.8)]" />
@@ -383,31 +384,31 @@ export function HomeHero({
             </div>
           </div>
 
-          <div className="w-full min-w-0 max-w-[760px] overflow-visible">
-            <div className="mx-auto flex w-full max-w-full flex-col overflow-visible rounded-[18px] bg-white p-4 text-left text-[#1a2e1a] shadow-[0_16px_48px_rgba(0,0,0,0.22)] ring-1 ring-white/60 min-[600px]:p-5">
-                <p className="mb-1 text-center text-[13px] font-black uppercase tracking-[2px] text-[#2e7d32]">
+          <div className="mt-3 w-full min-w-0 max-w-[820px] overflow-visible min-[900px]:mt-5">
+            <div className="mx-auto flex w-full max-w-full flex-col overflow-visible rounded-[18px] bg-white p-0 text-left text-[#1a2e1a] shadow-[0_22px_54px_rgba(0,0,0,0.16)] ring-1 ring-[#e8e8e8]">
+                <p className="mb-1 px-4 pt-5 text-center text-[13px] font-black uppercase tracking-[2px] text-[#2e7d32] min-[760px]:pt-6">
                   COMPARE NOW
                 </p>
-                <h2 className="mb-3 text-center text-[21px] font-black leading-tight text-[#1a2e1a] min-[600px]:text-[26px]">
+                <h2 className="mb-4 px-4 text-center text-[21px] font-black leading-tight text-[#1a2e1a] min-[600px]:text-[26px]">
                   Check your top payout
                 </h2>
 
-                <div className="flex h-full flex-col gap-3">
-                  <label className="block">
-                    <span className="mb-[6px] block text-[10px] font-medium uppercase tracking-[0.5px] text-[#8a9a8a]">
+                <div className="grid h-full grid-cols-1 gap-3 overflow-visible px-4 pb-4 min-[760px]:grid-cols-2 min-[760px]:px-6 min-[760px]:pb-6">
+                  <label className="order-3 block min-[760px]:col-span-1">
+                    <span className="mb-2 block text-[11px] font-black uppercase tracking-[0.08em] text-black">
                       Send amount
                     </span>
-                    <div className="overflow-hidden rounded-[8px] border-[1.5px] border-[#e0ede2]">
+                    <div className="overflow-hidden rounded-[8px] border-[2px] border-[#2e7d32] bg-white">
                       <div className="flex items-center">
-                        <span className="border-r-[1.5px] border-[#e0ede2] bg-[#f4faf5] px-3 py-2 text-[11px] font-semibold text-[#2e4a2e]">
+                        <span className="border-r-[1.5px] border-[#e0ede2] bg-[#f4faf5] px-3 py-3 text-[12px] font-black text-black">
                           {currencyMeta.code}
                         </span>
-                        <div className="flex min-w-0 flex-1 items-center px-3 py-2">
-                          <span className="mr-2 text-[18px] font-bold text-[#1a2e1a]">
+                        <div className="flex min-w-0 flex-1 items-center px-3 py-3">
+                          <span className="mr-2 text-[22px] font-black text-black">
                             {currencyMeta.symbol}
                           </span>
                           <input
-                            className="w-full bg-transparent text-[18px] font-bold text-[#1a2e1a] outline-none placeholder:text-[#1a2e1a]/35"
+                            className="w-full bg-transparent text-[22px] font-black text-black outline-none placeholder:text-black/35"
                             inputMode="numeric"
                             pattern="[0-9]*"
                             placeholder="Enter amount"
@@ -428,17 +429,17 @@ export function HomeHero({
                       </div>
                     </div>
 
-                    <div className="mt-1 flex flex-wrap gap-1.5">
+                    <div className="mt-2 flex flex-wrap gap-2">
                       {quickAmounts.map((quickAmount) => {
                         const isActive = amount === String(quickAmount);
 
                         return (
                           <button
                             key={quickAmount}
-                            className={`rounded-full border px-2.5 py-1 text-[10px] font-medium transition ${
+                            className={`rounded-full border px-3 py-1 text-[11px] transition ${
                               isActive
-                                ? "border-[#2e7d32] bg-[#2e7d32] text-white"
-                                : "border-[#d4e8d4] bg-white text-[#4a6a4a] hover:border-[#2e7d32] hover:text-[#2e7d32]"
+                                ? "border-[#2e7d32] bg-[#2e7d32] font-black text-white"
+                                : "border-[#d4e8d4] bg-white font-bold text-[#1a2e1a] hover:border-[#2e7d32] hover:text-[#2e7d32]"
                             }`}
                             type="button"
                             onClick={() => onAmountChange(String(quickAmount))}
@@ -451,14 +452,14 @@ export function HomeHero({
                     </div>
                   </label>
 
-                  <div>
-                    <p className="mb-[6px] text-[10px] font-medium uppercase tracking-[0.5px] text-[#8a9a8a]">
+                  <div className="order-1">
+                    <p className="mb-2 text-[11px] font-black uppercase tracking-[0.08em] text-black">
                       SELECT COUNTRY OF YOUR CHOICE
                     </p>
                     <div className="relative">
                       <button
                         aria-expanded={senderDropdownOpen}
-                        className="flex w-full items-center justify-between rounded-[8px] border-[1.5px] border-[#e0ede2] bg-white px-3 py-3 text-left transition hover:border-[#2e7d32]/50"
+                        className="flex w-full items-center justify-between rounded-[10px] border-[1.5px] border-[#e0ede2] bg-white px-3 py-3 text-left transition hover:border-[#2e7d32]/50"
                         type="button"
                         onClick={() => {
                           setSenderDropdownOpen((current) => !current);
@@ -471,7 +472,7 @@ export function HomeHero({
                             className="h-[18px] w-[24px] rounded-[3px] object-cover"
                           />
                           <span className="min-w-0">
-                            <span className="block text-[13px] font-bold text-[#1a2e1a]">
+                            <span className="block text-[15px] font-black text-black">
                               {selectedSenderCountry.region}
                             </span>
                             <span className="block text-[11px] font-semibold text-[#7a9a7a]">
@@ -523,14 +524,14 @@ export function HomeHero({
                     </div>
                   </div>
 
-                  <div>
-                    <p className="mb-[6px] text-[10px] font-medium uppercase tracking-[0.5px] text-[#8a9a8a]">
+                  <div className="order-2">
+                    <p className="mb-2 text-[11px] font-black uppercase tracking-[0.08em] text-black">
                       RECIPIENT COUNTRY
                     </p>
                     <div className="relative">
                       <button
                         aria-expanded={recipientDropdownOpen}
-                        className="flex w-full items-center justify-between rounded-[8px] border-[1.5px] border-[#e0ede2] bg-white px-3 py-3 text-left transition hover:border-[#2e7d32]/50"
+                        className="flex w-full items-center justify-between rounded-[10px] border-[1.5px] border-[#e0ede2] bg-white px-3 py-3 text-left transition hover:border-[#2e7d32]/50"
                         type="button"
                         onClick={() => {
                           setRecipientDropdownOpen((current) => !current);
@@ -540,7 +541,7 @@ export function HomeHero({
                         <span className="flex min-w-0 items-center gap-2">
                           <RecipientFlag country={selectedRecipientCountry} />
                           <span className="min-w-0">
-                            <span className="block text-[13px] font-bold text-[#1a2e1a]">
+                            <span className="block text-[15px] font-black text-black">
                               {selectedRecipientCountry.name}
                             </span>
                             <span className="block text-[11px] font-semibold text-[#7a9a7a]">
@@ -607,14 +608,14 @@ export function HomeHero({
                   </div>
 
                   <button
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-[10px] bg-brand-yellow px-4 py-3.5 text-[14px] font-black text-[#1a1a1a] shadow-[0_10px_28px_rgba(246,198,25,0.38)] ring-2 ring-[#f6c619]/35 transition hover:translate-y-[-1px] hover:shadow-float disabled:cursor-not-allowed disabled:opacity-70 min-[600px]:text-[15px]"
+                    className="order-4 inline-flex h-[58px] w-full items-center justify-center gap-2 self-end rounded-[10px] bg-brand-yellow px-5 text-[15px] font-black text-[#1a1a1a] shadow-[0_10px_28px_rgba(246,198,25,0.38)] ring-2 ring-[#f6c619]/35 transition hover:translate-y-[-1px] hover:shadow-float disabled:cursor-not-allowed disabled:opacity-70"
                     type="button"
                     onClick={onCompare}
                   >
                     {isLoading ? "Refreshing rates..." : "Compare Rates Now →"}
                   </button>
 
-                  <div className="flex flex-1 flex-col rounded-[10px] border border-[#c8e6c9] bg-[#f4faf5] p-3">
+                  <div className="order-5 flex flex-1 flex-col rounded-[10px] border border-[#c8e6c9] bg-[#f4faf5] p-3 min-[760px]:col-span-2">
                     <p className="text-[11px] font-black uppercase tracking-[1px] text-[#2e7d32]">
                       💰 SAVINGS CALCULATOR
                     </p>
