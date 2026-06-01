@@ -115,7 +115,7 @@ export function ProvidersDirectoryClient({
         </div>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2">
         {filteredProviders.map((provider) => (
           <ProviderDirectoryCard
             key={provider.slug}
@@ -143,79 +143,83 @@ function ProviderDirectoryCard({
   const corridor = buildNigeriaCorridor(origin ?? "All");
 
   return (
-    <article className="rounded-[28px] border border-brand-navy/10 bg-white p-5 shadow-float">
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex items-start gap-4">
-                <div
-                  className="flex h-14 w-14 items-center justify-center rounded-2xl font-heading text-lg text-white"
-                  style={{
-                    background: `linear-gradient(145deg, ${provider.logoFrom}, ${provider.logoTo})`
-                  }}
-                >
-                  {provider.name.slice(0, 2).toUpperCase()}
-                </div>
-                <div>
-                  <h3 className="font-heading text-2xl text-brand-navy">
-                    {provider.name}
-                  </h3>
-                  <div className="mt-2 flex items-center gap-3 text-sm text-brand-navy/70">
-                    <div className="inline-flex items-center gap-1">
-                      <Star className="h-4 w-4 fill-brand-yellow text-brand-yellow" />
-                      {provider.rating.toFixed(1)}
-                    </div>
-                    <span>{formatCompact(provider.reviewCount)} reviews</span>
-                  </div>
-                </div>
-              </div>
-
-              <Link
-                className="hidden min-h-12 items-center rounded-2xl bg-brand-light px-4 text-sm font-semibold text-brand-navy hover:bg-brand-navy hover:text-white md:inline-flex"
-                href={`/providers/${provider.slug}`}
-              >
-                View details
-              </Link>
-            </div>
-
-            <p className="mt-5 text-sm leading-7 text-brand-navy/70">
-              {provider.summary}
-            </p>
-
-            <div className="mt-5 flex flex-wrap gap-2">
-              <span className="rounded-full bg-brand-green/10 px-3 py-1 text-xs font-semibold text-brand-green">
-                {speedBandLabel[provider.speedBand]}
+    <article className="flex h-full flex-col rounded-[12px] border border-[#e8e8e8] bg-white p-5 shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex min-w-0 items-start gap-3">
+          <div
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full font-heading text-base text-white"
+            style={{
+              background: `linear-gradient(145deg, ${provider.logoFrom}, ${provider.logoTo})`
+            }}
+          >
+            {provider.name.slice(0, 2).toUpperCase()}
+          </div>
+          <div className="min-w-0">
+            <h3 className="text-[22px] font-bold leading-tight text-brand-navy">
+              {provider.name}
+            </h3>
+            <div className="mt-2 flex flex-wrap items-center gap-2 text-sm font-semibold text-brand-navy/70">
+              <span className="inline-flex items-center gap-1 text-brand-navy">
+                <Star className="h-4 w-4 fill-brand-yellow text-brand-yellow" />
+                {provider.rating.toFixed(1)}
               </span>
-              <span className="rounded-full bg-brand-light px-3 py-1 text-xs font-semibold text-brand-navy/70">
-                {feeBandLabel[provider.feeBand]}
-              </span>
-              {provider.supportedSenderCountries.map((countryCode) => (
-                <span
-                  key={`${provider.slug}-${countryCode}`}
-                  className="rounded-full bg-brand-navy/5 px-3 py-1 text-xs font-semibold text-brand-navy/70"
-                >
-                  {countryCode}
-                </span>
-              ))}
+              <span>·</span>
+              <span>{formatCompact(provider.reviewCount)} reviews</span>
             </div>
+          </div>
+        </div>
 
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Link
-                className="inline-flex min-h-12 items-center gap-2 rounded-2xl bg-brand-navy px-5 text-sm font-semibold text-white hover:shadow-float"
-                href={`/providers/${provider.slug}`}
-              >
-                Provider review
-              </Link>
-              <TrackedProviderLink
-                affiliateLink={affiliateLink}
-                className="inline-flex min-h-12 items-center gap-2 rounded-2xl bg-brand-green px-5 text-sm font-semibold text-white hover:shadow-glow"
-                corridor={corridor}
-                providerName={provider.name}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                Send now
-                <ArrowUpRight className="h-4 w-4" />
-              </TrackedProviderLink>
-            </div>
-          </article>
+        <Link
+          className="shrink-0 text-sm font-bold text-brand-green hover:text-[#1a6b3c]"
+          href={`/providers/${provider.slug}`}
+        >
+          View details
+        </Link>
+      </div>
+
+      <p
+        className="mt-5 overflow-hidden text-ellipsis whitespace-nowrap text-sm leading-6 text-brand-navy/70"
+        title={provider.summary}
+      >
+        {provider.summary}
+      </p>
+
+      <div className="mt-5 flex flex-wrap gap-2">
+        <span className="rounded-full bg-brand-green/10 px-3 py-1 text-xs font-semibold text-brand-green">
+          {speedBandLabel[provider.speedBand]}
+        </span>
+        <span className="rounded-full bg-brand-light px-3 py-1 text-xs font-semibold text-brand-navy/70">
+          {feeBandLabel[provider.feeBand]}
+        </span>
+        {provider.supportedSenderCountries.map((countryCode) => (
+          <span
+            key={`${provider.slug}-${countryCode}`}
+            className="rounded-full bg-brand-navy/5 px-3 py-1 text-xs font-semibold text-brand-navy/70"
+          >
+            {countryCode}
+          </span>
+        ))}
+      </div>
+
+      <div className="mt-auto grid grid-cols-2 gap-3 pt-6">
+        <Link
+          className="inline-flex min-h-12 items-center justify-center rounded-[10px] bg-[#111111] px-4 text-sm font-bold text-white transition hover:bg-brand-navy"
+          href={`/providers/${provider.slug}`}
+        >
+          Provider review
+        </Link>
+        <TrackedProviderLink
+          affiliateLink={affiliateLink}
+          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-[10px] bg-[#1a6b3c] px-4 text-sm font-bold text-white transition hover:bg-[#14542f]"
+          corridor={corridor}
+          providerName={provider.name}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Send now
+          <ArrowUpRight className="h-4 w-4" />
+        </TrackedProviderLink>
+      </div>
+    </article>
   );
 }
