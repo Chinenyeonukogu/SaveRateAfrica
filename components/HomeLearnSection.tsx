@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const learnCards = [
@@ -92,6 +93,19 @@ export function HomeLearnSection() {
               key={card.title}
               className="overflow-hidden rounded-[12px] border border-[#e8e8e8] bg-white"
             >
+              <div className={`relative h-[118px] overflow-hidden ${card.mediaClassName}`}>
+                <Image
+                  alt={card.imageAlt}
+                  className="h-full w-full object-cover"
+                  height={card.imageHeight}
+                  loading={card.priority ? undefined : "lazy"}
+                  priority={card.priority}
+                  sizes="(min-width: 768px) 33vw, 100vw"
+                  src={card.imageSrc}
+                  width={card.imageWidth}
+                />
+              </div>
+
               <div className="flex min-h-[142px] flex-col px-4 py-3">
                 <h3 className="text-[13px] font-extrabold leading-[1.35] text-[#1a3a2a]">
                   {card.title}
@@ -100,7 +114,7 @@ export function HomeLearnSection() {
                   {card.description}
                 </p>
                 <Link
-                  className={`mt-auto inline-flex min-h-9 items-center justify-center rounded-full border border-current px-4 text-[11px] font-extrabold ${card.labelClassName}`}
+                  className="mt-auto inline-flex min-h-9 items-center justify-center rounded-full bg-[#2e7d32] px-4 text-[11px] font-extrabold text-white shadow-[0_8px_18px_rgba(46,125,50,0.22)] transition hover:bg-[#1b5e20]"
                   href={card.href}
                 >
                   {card.cta} -&gt;
