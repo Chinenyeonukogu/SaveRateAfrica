@@ -1,3 +1,5 @@
+// Force redeploy - June 2026
+
 import type { Metadata } from "next";
 
 import { HomePageShell } from "@/components/HomePageShell";
