@@ -5,9 +5,20 @@ import { useEffect } from "react";
 export function ServiceWorkerRegistration() {
   useEffect(() => {
     if ("serviceWorker" in navigator) {
+      let hasReloadedForUpdate = false;
+
+      navigator.serviceWorker.addEventListener("controllerchange", () => {
+        if (hasReloadedForUpdate) {
+          return;
+        }
+
+        hasReloadedForUpdate = true;
+        window.location.reload();
+      });
+
       navigator.serviceWorker
         .register("/sw.js")
-        .then(() => console.log("SW registered"))
+        .then((registration) => registration.update())
         .catch((err) => console.log("SW error:", err));
     }
   }, []);
