@@ -229,16 +229,10 @@ export function ComparisonTable({
                     ))}
                   </div>
 
-                  <div className="mt-auto grid grid-cols-2 gap-3 pt-5">
-                    <Link
-                      className="inline-flex min-h-11 items-center justify-center rounded-[10px] bg-[#111111] px-3 text-[13px] font-bold text-white transition hover:bg-[#0a1628]"
-                      href={`/providers/${provider.slug}`}
-                    >
-                      Provider review
-                    </Link>
+                  <div className="mt-auto pt-5">
                     <TrackedProviderLink
                       affiliateLink={provider.sendUrl}
-                      className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-[10px] bg-[#1a6b3c] px-3 text-[13px] font-bold text-white transition hover:bg-[#14542f]"
+                      className="inline-flex min-h-11 w-full items-center justify-center gap-1.5 rounded-[10px] bg-[#1a6b3c] px-3 text-[13px] font-bold text-white transition hover:bg-[#14542f]"
                       corridor={buildNigeriaCorridor(comparison.senderCountry)}
                       providerName={provider.name}
                       rel="noopener noreferrer"

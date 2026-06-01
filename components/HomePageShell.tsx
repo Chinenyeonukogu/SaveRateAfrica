@@ -347,7 +347,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
               id="compare-rates"
               ref={modalPanelRef}
               animate={{ y: 0 }}
-              className="relative flex h-[95vh] max-h-[95vh] w-full max-w-[760px] flex-col overflow-hidden rounded-t-[18px] bg-white shadow-[0_28px_90px_rgba(0,0,0,0.35)] outline-none min-[600px]:h-auto min-[600px]:rounded-[18px]"
+              className="relative flex max-h-[70vh] w-full max-w-[760px] flex-col overflow-hidden rounded-t-[18px] bg-white shadow-[0_28px_90px_rgba(0,0,0,0.35)] outline-none min-[600px]:rounded-[18px] md:max-h-[75vh] lg:max-h-[80vh]"
               initial={{ y: "100%" }}
               tabIndex={-1}
               transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
