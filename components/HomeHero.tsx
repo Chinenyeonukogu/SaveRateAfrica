@@ -318,7 +318,8 @@ export function HomeHero({
       id="home"
       className="relative w-full max-w-[100vw] overflow-hidden overflow-x-hidden bg-white"
     >
-      <div className="absolute inset-x-0 top-0 h-[390px] bg-[linear-gradient(135deg,#1a3a1a_0%,#2e7d32_50%,#0d2416_100%)] min-[600px]:h-[430px] lg:h-[460px]" />
+      <div className="absolute inset-x-0 top-0 z-0 h-[470px] bg-[linear-gradient(135deg,#1a3a1a_0%,#2e7d32_50%,#0d2416_100%)] min-[600px]:h-[520px] lg:h-[560px]" />
+      <div className="absolute inset-x-0 bottom-0 top-[470px] z-[1] bg-white min-[600px]:top-[520px] lg:top-[560px]" />
       <div className="relative z-10 mx-auto w-full max-w-[1200px] overflow-visible px-5 pb-10 pt-5 text-white min-[600px]:px-7 min-[600px]:pb-12 lg:px-6 lg:pb-16">
 
         <div className="mx-auto flex min-w-0 max-w-[980px] flex-col items-center gap-0 text-center">
@@ -384,7 +385,7 @@ export function HomeHero({
             </div>
           </div>
 
-          <div className="mt-8 w-full min-w-0 max-w-[820px] translate-y-[52px] overflow-visible min-[600px]:translate-y-[72px] min-[900px]:mt-10 lg:translate-y-[84px]">
+          <div className="mt-8 w-full min-w-0 max-w-[820px] overflow-visible min-[900px]:mt-10">
             <div className="mx-auto flex w-full max-w-full flex-col overflow-visible rounded-t-[14px] rounded-b-[34px] bg-white p-0 text-left text-[#1a2e1a] shadow-[0_22px_54px_rgba(0,0,0,0.16)] ring-1 ring-[#e8e8e8]">
                 <p className="mb-1 px-4 pt-5 text-center text-[13px] font-black uppercase tracking-[2px] text-[#2e7d32] min-[760px]:pt-6">
                   COMPARE NOW
@@ -427,28 +428,6 @@ export function HomeHero({
                           />
                         </div>
                       </div>
-                    </div>
-
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      {quickAmounts.map((quickAmount) => {
-                        const isActive = amount === String(quickAmount);
-
-                        return (
-                          <button
-                            key={quickAmount}
-                            className={`rounded-full border px-3 py-1 text-[11px] transition ${
-                              isActive
-                                ? "border-[#2e7d32] bg-[#2e7d32] font-black text-white"
-                                : "border-[#d4e8d4] bg-white font-bold text-[#1a2e1a] hover:border-[#2e7d32] hover:text-[#2e7d32]"
-                            }`}
-                            type="button"
-                            onClick={() => onAmountChange(String(quickAmount))}
-                          >
-                            {currencyMeta.symbol}
-                            {quickAmount.toLocaleString("en-US")}
-                          </button>
-                        );
-                      })}
                     </div>
                   </label>
 
@@ -615,7 +594,29 @@ export function HomeHero({
                     {isLoading ? "Refreshing rates..." : "Compare Rates Now →"}
                   </button>
 
-                  <div className="order-5 flex flex-1 flex-col rounded-[10px] border border-[#c8e6c9] bg-[#f4faf5] p-3 min-[760px]:col-span-2">
+                  <div className="order-5 flex flex-wrap gap-2 min-[760px]:col-span-2">
+                    {quickAmounts.map((quickAmount) => {
+                      const isActive = amount === String(quickAmount);
+
+                      return (
+                        <button
+                          key={quickAmount}
+                          className={`rounded-full border px-3 py-1 text-[11px] transition ${
+                            isActive
+                              ? "border-[#2e7d32] bg-[#2e7d32] font-black text-white"
+                              : "border-[#d4e8d4] bg-white font-bold text-[#1a2e1a] hover:border-[#2e7d32] hover:text-[#2e7d32]"
+                          }`}
+                          type="button"
+                          onClick={() => onAmountChange(String(quickAmount))}
+                        >
+                          {currencyMeta.symbol}
+                          {quickAmount.toLocaleString("en-US")}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div className="order-6 flex flex-1 flex-col rounded-[10px] border border-[#c8e6c9] bg-[#f4faf5] p-3 min-[760px]:col-span-2">
                     <p className="text-[11px] font-black uppercase tracking-[1px] text-[#2e7d32]">
                       💰 SAVINGS CALCULATOR
                     </p>
