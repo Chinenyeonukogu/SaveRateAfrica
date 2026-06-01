@@ -150,7 +150,12 @@ function getComparisonFee(
   amount: number,
   liveFee: number | null
 ) {
-  if (provider.slug === "moneygram" && (!liveFee || liveFee <= 0)) {
+  const shouldUseConfiguredFee =
+    provider.slug === "moneygram" ||
+    (provider.slug === "remitly" &&
+      (sourceCurrency === "USD" || sourceCurrency === "CAD"));
+
+  if (shouldUseConfiguredFee && (!liveFee || liveFee <= 0)) {
     return getProviderFee(provider, sourceCurrency, amount);
   }
 

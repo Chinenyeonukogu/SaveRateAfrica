@@ -19,6 +19,10 @@ BROWSER_USER_AGENT = (
     "AppleWebKit/537.36 (KHTML, like Gecko) "
     "Chrome/124.0.0.0 Safari/537.36"
 )
+REMITLY_FALLBACK_FEES = {
+    "USD": 3.99,
+    "CAD": 3.99,
+}
 
 CORRIDORS = [
     {"send_currency": "USD", "receive_currency": "NGN"},
@@ -396,6 +400,14 @@ def fetch_remitly_exchange_rate(request_config):
 
     exchange_rate = estimate.get("exchange_rate") or {}
     fee = estimate.get("fee") or {}
+    total_fee_amount = fee.get("total_fee_amount")
+
+    if request_config["send_currency"] in REMITLY_FALLBACK_FEES:
+        try:
+            if total_fee_amount is None or float(total_fee_amount) <= 0:
+                total_fee_amount = REMITLY_FALLBACK_FEES[request_config["send_currency"]]
+        except (TypeError, ValueError):
+            total_fee_amount = REMITLY_FALLBACK_FEES[request_config["send_currency"]]
 
     return {
         "provider": "Remitly",
@@ -403,7 +415,7 @@ def fetch_remitly_exchange_rate(request_config):
         "receive_currency": "NGN",
         "rate": exchange_rate.get("base_rate")
         or exchange_rate.get("promotional_exchange_rate"),
-        "fee": fee.get("total_fee_amount"),
+        "fee": total_fee_amount,
         "fee_currency": request_config["send_currency"],
         "updated_at": utc_now(),
     }
