@@ -332,7 +332,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
             animate={{ opacity: 1 }}
             aria-labelledby="comparison-modal-title"
             aria-modal="true"
-            className="fixed inset-0 z-[10000] flex items-center justify-center px-4 py-6 min-[600px]:px-6"
+            className="fixed inset-0 z-[10000] flex items-end justify-center px-0 py-0 min-[600px]:px-6 min-[600px]:py-6 min-[900px]:items-center"
             initial={{ opacity: 0 }}
             role="dialog"
             style={{ backgroundColor: "rgba(0,0,0,0.6)" }}
@@ -346,11 +346,11 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
             <motion.div
               id="compare-rates"
               ref={modalPanelRef}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              className="relative flex max-h-[calc(100vh-48px)] w-full max-w-[1180px] flex-col overflow-hidden rounded-[18px] bg-white shadow-[0_28px_90px_rgba(0,0,0,0.35)] outline-none"
-              initial={{ opacity: 0, y: 22, scale: 0.98 }}
+              animate={{ y: 0 }}
+              className="relative flex h-[95vh] max-h-[95vh] w-full max-w-[760px] flex-col overflow-hidden rounded-t-[18px] bg-white shadow-[0_28px_90px_rgba(0,0,0,0.35)] outline-none min-[600px]:h-auto min-[600px]:rounded-[18px]"
+              initial={{ y: "100%" }}
               tabIndex={-1}
-              transition={{ duration: 0.28, ease: "easeOut" }}
+              transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
               onMouseDown={(event) => event.stopPropagation()}
             >
               <div className="flex shrink-0 items-start justify-between gap-4 border-b border-[#e0ede2] px-4 py-4 min-[600px]:px-6 min-[600px]:py-5">
