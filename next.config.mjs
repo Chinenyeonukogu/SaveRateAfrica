@@ -21,6 +21,22 @@ const securityHeaders = [
   }
 ];
 
+const noStorePageHeaders = [
+  ...securityHeaders,
+  {
+    key: "Cache-Control",
+    value: "no-store, max-age=0"
+  },
+  {
+    key: "CDN-Cache-Control",
+    value: "no-store"
+  },
+  {
+    key: "Vercel-CDN-Cache-Control",
+    value: "no-store"
+  }
+];
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   compress: true,
@@ -46,7 +62,28 @@ const nextConfig = {
       {
         source: "/sw.js",
         headers: [
-          ...securityHeaders,
+          ...noStorePageHeaders,
+          {
+            key: "Service-Worker-Allowed",
+            value: "/"
+          }
+        ]
+      },
+      {
+        source: "/",
+        headers: noStorePageHeaders
+      },
+      {
+        source: "/providers",
+        headers: noStorePageHeaders
+      },
+      {
+        source: "/providers/:path*",
+        headers: noStorePageHeaders
+      },
+      {
+        source: "/manifest.json",
+        headers: [
           {
             key: "Cache-Control",
             value: "no-store, max-age=0"
