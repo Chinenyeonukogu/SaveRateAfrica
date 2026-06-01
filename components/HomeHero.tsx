@@ -318,10 +318,10 @@ export function HomeHero({
       id="home"
       className="relative w-full max-w-[100vw] overflow-hidden overflow-x-hidden bg-white"
     >
-      <div className="absolute inset-x-0 top-0 h-1/2 bg-[linear-gradient(135deg,#1a3a1a_0%,#2e7d32_50%,#0d2416_100%)]" />
+      <div className="absolute inset-x-0 top-0 h-[390px] bg-[linear-gradient(135deg,#1a3a1a_0%,#2e7d32_50%,#0d2416_100%)] min-[600px]:h-[430px] lg:h-[460px]" />
       <div className="relative z-10 mx-auto w-full max-w-[1200px] overflow-visible px-5 pb-10 pt-5 text-white min-[600px]:px-7 min-[600px]:pb-12 lg:px-6 lg:pb-16">
 
-        <div className="mx-auto flex min-w-0 max-w-[980px] flex-col items-center gap-5 text-center">
+        <div className="mx-auto flex min-w-0 max-w-[980px] flex-col items-center gap-0 text-center">
           <div className="flex min-w-0 flex-col items-center gap-4 overflow-hidden pt-0">
             <div className="inline-flex w-fit items-center rounded-full border border-green-800/60 bg-green-950/40 px-3 py-[5px] text-[9px] font-bold uppercase tracking-[0.6px] text-green-400">
               <span className="mr-2 inline-flex h-2 w-2 rounded-full bg-[#4ade80] animate-hero-live-pulse shadow-[0_0_10px_rgba(74,222,128,0.8)]" />
@@ -384,7 +384,7 @@ export function HomeHero({
             </div>
           </div>
 
-          <div className="mt-3 w-full min-w-0 max-w-[820px] overflow-visible min-[900px]:mt-5">
+          <div className="mt-8 w-full min-w-0 max-w-[820px] translate-y-[52px] overflow-visible min-[600px]:translate-y-[72px] min-[900px]:mt-10 lg:translate-y-[84px]">
             <div className="mx-auto flex w-full max-w-full flex-col overflow-visible rounded-t-[14px] rounded-b-[34px] bg-white p-0 text-left text-[#1a2e1a] shadow-[0_22px_54px_rgba(0,0,0,0.16)] ring-1 ring-[#e8e8e8]">
                 <p className="mb-1 px-4 pt-5 text-center text-[13px] font-black uppercase tracking-[2px] text-[#2e7d32] min-[760px]:pt-6">
                   COMPARE NOW
