@@ -4,7 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 
 import {
-  ArrowUpDown
+  ArrowUpDown,
+  ChevronDown
 } from "lucide-react";
 
 import type { ComparisonProviderRow } from "@/lib/fetchRates";
@@ -36,16 +37,57 @@ const flagByCountry: Record<SenderCountry, { alt: string; src: string }> = {
   Canada: { alt: "Canada flag", src: "/flags/ca.svg" }
 };
 
-function CountryFlag({ country }: { country: SenderCountry }) {
+const recipientCountries = [
+  {
+    code: "Nigeria",
+    name: "Nigeria",
+    flag: { alt: "Nigeria flag", src: "/flags/ng.svg" },
+    helper: "NGN · Nigeria",
+    disabled: false
+  },
+  {
+    code: "Ghana",
+    name: "Ghana",
+    flag: { alt: "Ghana flag", src: "/flags/gh.svg" },
+    helper: "We're working to bring Ghana soon!",
+    disabled: true
+  }
+] as const;
+
+function CountryFlag({
+  country,
+  className = "mr-1 inline-block h-[12px] w-[16px] rounded-[2px] object-cover align-[-2px]"
+}: {
+  country: SenderCountry;
+  className?: string;
+}) {
   const flag = flagByCountry[country];
 
   return (
     <Image
       alt={flag.alt}
-      className="mr-1 inline-block h-[12px] w-[16px] rounded-[2px] object-cover align-[-2px]"
+      className={className}
       height={12}
       src={flag.src}
       width={16}
+    />
+  );
+}
+
+function RecipientFlag({
+  country,
+  className = "h-[18px] w-[24px] rounded-[3px] object-cover"
+}: {
+  country: (typeof recipientCountries)[number];
+  className?: string;
+}) {
+  return (
+    <Image
+      alt={country.flag.alt}
+      className={className}
+      height={18}
+      src={country.flag.src}
+      width={24}
     />
   );
 }
@@ -199,6 +241,12 @@ export function HomeHero({
   const [swapSpin, setSwapSpin] = useState<boolean>(false);
   const [secondsRemaining, setSecondsRemaining] = useState<number>(30);
   const [calculatorCycleIndex, setCalculatorCycleIndex] = useState<number>(0);
+  const [senderDropdownOpen, setSenderDropdownOpen] = useState<boolean>(false);
+  const [recipientDropdownOpen, setRecipientDropdownOpen] = useState<boolean>(false);
+  const selectedSenderCountry =
+    senderCountries.find((country) => country.code === senderCountry) ??
+    senderCountries[0];
+  const selectedRecipientCountry = recipientCountries[0];
 
   useEffect(() => {
     let flashTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -335,8 +383,8 @@ export function HomeHero({
             </div>
           </div>
 
-          <div className="w-full min-w-0 max-w-[620px] overflow-hidden">
-            <div className="mx-auto flex w-full max-w-full flex-col overflow-hidden rounded-[18px] bg-white p-4 text-left text-[#1a2e1a] shadow-[0_16px_48px_rgba(0,0,0,0.22)] ring-1 ring-white/60 min-[600px]:p-5">
+          <div className="w-full min-w-0 max-w-[760px] overflow-visible">
+            <div className="mx-auto flex w-full max-w-full flex-col overflow-visible rounded-[18px] bg-white p-4 text-left text-[#1a2e1a] shadow-[0_16px_48px_rgba(0,0,0,0.22)] ring-1 ring-white/60 min-[600px]:p-5">
                 <p className="mb-1 text-center text-[13px] font-black uppercase tracking-[2px] text-[#2e7d32]">
                   COMPARE NOW
                 </p>
@@ -405,49 +453,156 @@ export function HomeHero({
 
                   <div>
                     <p className="mb-[6px] text-[10px] font-medium uppercase tracking-[0.5px] text-[#8a9a8a]">
-                      Sender country
+                      SELECT COUNTRY OF YOUR CHOICE
                     </p>
-                    <div className="grid grid-cols-[repeat(3,minmax(0,1fr))] gap-2">
-                      {senderCountries.map((country) => {
-                        const active = country.code === senderCountry;
+                    <div className="relative">
+                      <button
+                        aria-expanded={senderDropdownOpen}
+                        className="flex w-full items-center justify-between rounded-[8px] border-[1.5px] border-[#e0ede2] bg-white px-3 py-3 text-left transition hover:border-[#2e7d32]/50"
+                        type="button"
+                        onClick={() => {
+                          setSenderDropdownOpen((current) => !current);
+                          setRecipientDropdownOpen(false);
+                        }}
+                      >
+                        <span className="flex min-w-0 items-center gap-2">
+                          <CountryFlag
+                            country={selectedSenderCountry.code}
+                            className="h-[18px] w-[24px] rounded-[3px] object-cover"
+                          />
+                          <span className="min-w-0">
+                            <span className="block text-[13px] font-bold text-[#1a2e1a]">
+                              {selectedSenderCountry.region}
+                            </span>
+                            <span className="block text-[11px] font-semibold text-[#7a9a7a]">
+                              {selectedSenderCountry.currency} · {selectedSenderCountry.label}
+                            </span>
+                          </span>
+                        </span>
+                        <ChevronDown
+                          className={`h-4 w-4 shrink-0 text-[#2e7d32] transition ${
+                            senderDropdownOpen ? "rotate-180" : ""
+                          }`}
+                        />
+                      </button>
 
-                        return (
-                          <button
-                            key={country.code}
-                            className={`rounded-[8px] border-[1.5px] px-2 py-1.5 text-[10px] font-semibold transition ${
-                              active
-                                ? "border-[#2e7d32] bg-[#2e7d32] text-white"
-                                : "border-[#e0ede2] text-[#2e4a2e] hover:border-[#2e7d32]/50"
-                            }`}
-                            type="button"
-                            onClick={() => onSenderCountryChange(country.code)}
-                          >
-                            <CountryFlag country={country.code} />
-                            {country.label}
-                          </button>
-                        );
-                      })}
+                      {senderDropdownOpen ? (
+                        <div className="absolute left-0 right-0 top-full z-30 mt-2 overflow-hidden rounded-[10px] border border-[#e0ede2] bg-white shadow-[0_14px_32px_rgba(0,0,0,0.16)]">
+                          {senderCountries.map((country) => {
+                            const active = country.code === senderCountry;
+
+                            return (
+                              <button
+                                key={country.code}
+                                className={`flex w-full items-center gap-3 px-3 py-3 text-left transition ${
+                                  active ? "bg-[#e8f5e9]" : "bg-white hover:bg-[#f4faf5]"
+                                }`}
+                                type="button"
+                                onClick={() => {
+                                  onSenderCountryChange(country.code);
+                                  setSenderDropdownOpen(false);
+                                }}
+                              >
+                                <CountryFlag
+                                  country={country.code}
+                                  className="h-[18px] w-[24px] rounded-[3px] object-cover"
+                                />
+                                <span>
+                                  <span className="block text-[13px] font-bold text-[#1a2e1a]">
+                                    {country.region}
+                                  </span>
+                                  <span className="block text-[11px] font-semibold text-[#7a9a7a]">
+                                    {country.currency} · {country.label}
+                                  </span>
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      ) : null}
                     </div>
                   </div>
 
                   <div>
                     <p className="mb-[6px] text-[10px] font-medium uppercase tracking-[0.5px] text-[#8a9a8a]">
-                      Recipient country
+                      RECIPIENT COUNTRY
                     </p>
-                    <div className="flex items-center justify-between rounded-[8px] border-[1.5px] border-[#e0ede2] px-3 py-2">
-                      <span className="text-[12px] font-semibold text-[#1a2e1a]">
-                        <Image
-                          alt="Nigeria flag"
-                          className="mr-2 inline-block h-[12px] w-[16px] rounded-[2px] object-cover align-[-2px]"
-                          height={12}
-                          src="/flags/ng.svg"
-                          width={16}
+                    <div className="relative">
+                      <button
+                        aria-expanded={recipientDropdownOpen}
+                        className="flex w-full items-center justify-between rounded-[8px] border-[1.5px] border-[#e0ede2] bg-white px-3 py-3 text-left transition hover:border-[#2e7d32]/50"
+                        type="button"
+                        onClick={() => {
+                          setRecipientDropdownOpen((current) => !current);
+                          setSenderDropdownOpen(false);
+                        }}
+                      >
+                        <span className="flex min-w-0 items-center gap-2">
+                          <RecipientFlag country={selectedRecipientCountry} />
+                          <span className="min-w-0">
+                            <span className="block text-[13px] font-bold text-[#1a2e1a]">
+                              {selectedRecipientCountry.name}
+                            </span>
+                            <span className="block text-[11px] font-semibold text-[#7a9a7a]">
+                              {selectedRecipientCountry.helper}
+                            </span>
+                          </span>
+                        </span>
+                        <ChevronDown
+                          className={`h-4 w-4 shrink-0 text-[#2e7d32] transition ${
+                            recipientDropdownOpen ? "rotate-180" : ""
+                          }`}
                         />
-                        Nigeria
-                      </span>
-                      <span className="text-[12px] font-medium text-[#2e7d32]">
-                        Locked corridor
-                      </span>
+                      </button>
+
+                      {recipientDropdownOpen ? (
+                        <div className="absolute left-0 right-0 top-full z-30 mt-2 overflow-hidden rounded-[10px] border border-[#e0ede2] bg-white shadow-[0_14px_32px_rgba(0,0,0,0.16)]">
+                          {recipientCountries.map((country) => (
+                            <button
+                              key={country.code}
+                              className={`flex w-full items-center justify-between gap-3 px-3 py-3 text-left transition ${
+                                country.disabled
+                                  ? "cursor-not-allowed bg-[#fafafa]"
+                                  : "bg-[#e8f5e9] hover:bg-[#f4faf5]"
+                              }`}
+                              disabled={country.disabled}
+                              type="button"
+                              onClick={() => {
+                                if (!country.disabled) {
+                                  setRecipientDropdownOpen(false);
+                                }
+                              }}
+                            >
+                              <span className="flex min-w-0 items-center gap-3">
+                                <RecipientFlag
+                                  country={country}
+                                  className={`h-[18px] w-[24px] rounded-[3px] object-cover ${
+                                    country.disabled ? "grayscale" : ""
+                                  }`}
+                                />
+                                <span>
+                                  <span
+                                    className={`block text-[13px] font-bold ${
+                                      country.disabled ? "text-[#9a9a9a]" : "text-[#1a2e1a]"
+                                    }`}
+                                  >
+                                    {country.name}
+                                  </span>
+                                  <span className="block text-[11px] font-semibold text-[#7a9a7a]">
+                                    {country.helper}
+                                  </span>
+                                </span>
+                              </span>
+
+                              {country.disabled ? (
+                                <span className="shrink-0 rounded-full bg-brand-yellow px-2 py-1 text-[9px] font-black uppercase text-[#1a1a1a]">
+                                  Coming Soon
+                                </span>
+                              ) : null}
+                            </button>
+                          ))}
+                        </div>
+                      ) : null}
                     </div>
                   </div>
 
@@ -459,15 +614,15 @@ export function HomeHero({
                     {isLoading ? "Refreshing rates..." : "Compare Rates Now →"}
                   </button>
 
-                  <div className="flex flex-1 flex-col rounded-[10px] border border-[#c8e6c9] bg-[#f4faf5] p-2.5">
-                    <p className="text-[10px] font-semibold uppercase tracking-[1px] text-[#2e7d32]">
+                  <div className="flex flex-1 flex-col rounded-[10px] border border-[#c8e6c9] bg-[#f4faf5] p-3">
+                    <p className="text-[11px] font-black uppercase tracking-[1px] text-[#2e7d32]">
                       💰 SAVINGS CALCULATOR
                     </p>
-                    <h3 className="mt-1 text-[13px] font-bold text-[#1a2e1a]">
+                    <h3 className="mt-1 text-[15px] font-black leading-snug text-[#1a2e1a] min-[600px]:text-[17px]">
                       Compare real payouts and save up to ₦{formatCalculatedNgn(savings)}
                     </h3>
-                    <p className="mt-1 text-[10px] text-[#7a9a7a]">
-                      Based on ${sendAmount.toLocaleString("en-US")} · {topProvider.name} vs {lowerProvider.name}
+                    <p className="mt-1 text-[11px] font-bold text-[#5a8a5a]">
+                      Based on {currencyMeta.symbol}{sendAmount.toLocaleString("en-US")} · {topProvider.name} vs {lowerProvider.name}
                     </p>
 
                     <div className="mt-2 grid grid-cols-[minmax(0,1fr)_24px_minmax(0,1fr)] items-center gap-1.5 overflow-hidden">
