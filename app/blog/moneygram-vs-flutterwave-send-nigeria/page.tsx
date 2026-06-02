@@ -66,19 +66,14 @@ const flutterwaveMethods = [
 
 const flutterwaveNotes = [
   {
-    title: "No cash pickup",
+    title: "No cash pickup & Fast delivery",
     body:
-      "Flutterwave Send does not offer physical cash pickup through agent locations. If your recipient wants cash, they would need to withdraw it after receiving the transfer."
+      "Flutterwave Send does not offer physical cash pickup through agent locations. If your recipient wants cash, they would need to withdraw it after receiving the transfer. Transfers are usually fast and convenient, especially for recipients who already use Nigerian bank accounts or digital wallets."
   },
   {
     title: "Built around African payment networks",
     body:
       "Because Flutterwave is deeply connected to African payment networks, it may offer competitive exchange rates and lower hidden costs than some traditional providers."
-  },
-  {
-    title: "Fast digital delivery",
-    body:
-      "Transfers are usually fast and convenient, especially for recipients who already use Nigerian bank accounts or digital wallets."
   }
 ] as const;
 
