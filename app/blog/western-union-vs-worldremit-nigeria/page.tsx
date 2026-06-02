@@ -6,12 +6,36 @@ import { ArrowRight } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 
 export const metadata: Metadata = {
-  title: "Western Union vs WorldRemit for Sending Money to Nigeria",
+  title: "Western Union to Nigeria: Rates & Fees",
   description:
-    "Compare Western Union and WorldRemit for sending money to Nigeria, including payout methods, speed, pickup requirements, and wallet limits.",
+    "Compare Western Union money transfer to Nigeria. See rates, fees, speed, payout options, and how to receive money safely.",
+  keywords: [
+    "western union international transfer",
+    "western union money transfer to nigeria",
+    "western union",
+    "western union to nigeria",
+    "western union nigeria",
+    "western union ng",
+    "how to receive western union in nigeria",
+    "how to receive money from western union in nigeria",
+    "western union abuja",
+    "send money to nigeria western union"
+  ],
   alternates: {
     canonical:
       "https://www.saverateafrica.com/blog/western-union-vs-worldremit-nigeria"
+  },
+  openGraph: {
+    title: "Western Union to Nigeria: Rates & Fees",
+    description:
+      "Compare Western Union money transfer to Nigeria. See rates, fees, speed, payout options, and how to receive money safely.",
+    url: "https://www.saverateafrica.com/blog/western-union-vs-worldremit-nigeria"
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Western Union to Nigeria: Rates & Fees",
+    description:
+      "Compare Western Union money transfer to Nigeria. See rates, fees, speed, payout options, and how to receive money safely."
   }
 };
 
