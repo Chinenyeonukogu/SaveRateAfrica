@@ -45,11 +45,11 @@ export default function BlogPage() {
               Blog and guides
             </p>
             <h1 className="mt-3 font-heading text-4xl leading-tight text-brand-navy sm:text-5xl">
-              Smart financial guides for Nigerians abroad
+              Smart financial guides for the Nigerian diaspora.
             </h1>
             <p className="mt-4 max-w-3xl text-base leading-7 text-brand-navy/70">
-              Financial education and money transfer insights designed to help
-              Nigerians in the diaspora make smarter financial decisions.
+              Compare live exchange rates, track hidden fees, and find the
+              cheapest, fastest ways to send money to Nigeria.
             </p>
           </section>
 
