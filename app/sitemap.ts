@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 
+import { blogPosts } from "@/lib/site-data";
 import { providers } from "@/lib/providers";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -50,5 +51,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.75
   }));
 
-  return [...staticPages, ...providerPages];
+  const blogPages = blogPosts
+    .filter((post) => post.href?.startsWith("/blog/"))
+    .map((post) => ({
+      url: `${baseUrl}${post.href}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7
+    }));
+
+  return [...staticPages, ...providerPages, ...blogPages];
 }

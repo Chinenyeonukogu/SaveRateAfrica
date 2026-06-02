@@ -5,7 +5,17 @@ import { ArrowRight } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { blogPosts } from "@/lib/site-data";
 
+const blogDescription =
+  "Smart financial guides for the Nigerian diaspora. Compare live exchange rates, track hidden fees, and find the cheapest, fastest ways to send money to Nigeria.";
+
 const seoKeywords = [
+  "Blog and guides",
+  "Smart financial guides for the Nigerian diaspora",
+  "Nigerian diaspora money transfer guides",
+  "send money to Nigeria blog",
+  "compare live exchange rates Nigeria",
+  "track hidden fees money transfer",
+  "cheapest fastest ways to send money to Nigeria",
   "best app to send money to Nigeria from US",
   "which platform gives best naira rate",
   "how to avoid transfer fees Nigeria",
@@ -18,25 +28,67 @@ const seoKeywords = [
 ];
 
 export const metadata: Metadata = {
-  title: "Blog and Guides",
-  description:
-    "Compare Live Nigeria Exchange Rates & See Which Providers Pays the Most.",
+  title: "Blog and Guides | Nigerian Diaspora Money Transfer Tips",
+  description: blogDescription,
   keywords: seoKeywords,
   alternates: {
     canonical: "https://www.saverateafrica.com/blog"
   },
   openGraph: {
-    title: "Blog and Guides",
-    description:
-      "Guides and comparisons for Nigerians abroad sending money home and building financial stability overseas.",
-    url: "https://saverateafrica.com/blog"
+    title: "Blog and Guides | Nigerian Diaspora Money Transfer Tips",
+    description: blogDescription,
+    url: "https://www.saverateafrica.com/blog"
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blog and Guides | Nigerian Diaspora Money Transfer Tips",
+    description: blogDescription
   }
 };
 
 export default function BlogPage() {
+  const blogJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: "SaveRateAfrica Blog and Guides",
+    description: blogDescription,
+    url: "https://www.saverateafrica.com/blog",
+    publisher: {
+      "@type": "Organization",
+      name: "SaveRateAfrica",
+      url: "https://www.saverateafrica.com"
+    },
+    blogPost: blogPosts.map((post) => ({
+      "@type": "BlogPosting",
+      headline: post.title,
+      description: post.excerpt,
+      url: `https://www.saverateafrica.com${post.href ?? "/providers"}`
+    }))
+  };
+
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "SaveRateAfrica Blog and Guides",
+    itemListElement: blogPosts.map((post, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `https://www.saverateafrica.com${post.href ?? "/providers"}`,
+      name: post.title
+    }))
+  };
+
   return (
     <>
       <SiteHeader />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+      />
 
       <main className="px-4 pb-32 pt-5 sm:px-6 lg:px-8 lg:pb-16">
         <div className="mx-auto max-w-7xl space-y-8">
