@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, X } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import { SiteHeader } from "@/components/SiteHeader";
 
@@ -110,19 +110,12 @@ export default function WesternUnionVsWorldRemitNigeriaPage() {
       <SiteHeader />
 
       <main className="bg-[#f4faf5] px-4 pb-32 pt-5 sm:px-6 lg:px-8 lg:pb-16">
-        <div className="mx-auto mb-4 flex max-w-5xl flex-wrap items-center justify-between gap-3">
+        <div className="mx-auto mb-4 max-w-5xl">
           <Link
             className="inline-flex items-center text-sm font-bold text-[#0d7a3b] hover:text-[#075c2b]"
             href="/blog"
           >
             &larr; Back to all articles
-          </Link>
-          <Link
-            className="inline-flex min-h-10 items-center gap-2 rounded-full border border-[#0d7a3b]/20 bg-white px-4 text-sm font-extrabold text-[#102717] shadow-sm hover:border-[#0d7a3b]/45"
-            href="/blog"
-          >
-            <X className="h-4 w-4" />
-            Exit
           </Link>
         </div>
 
@@ -150,15 +143,15 @@ export default function WesternUnionVsWorldRemitNigeriaPage() {
 
             <figure className="relative overflow-hidden rounded-[24px] border border-white/10 bg-[#102717] shadow-2xl">
               <Image
-                src="/blog/western-union-vs-worldremit-nigeria.svg"
+                src="/blog/western-union-worldremit.png"
                 alt="Split comparison graphic showing Western Union and WorldRemit for Nigeria transfers"
-                width={1456}
-                height={1040}
+                width={1254}
+                height={1254}
                 fetchPriority="high"
                 priority
                 quality={85}
                 sizes="(min-width: 1280px) 500px, (min-width: 1024px) 45vw, 100vw"
-                className="h-[250px] w-full object-cover object-center md:h-[300px] lg:h-[300px] xl:h-[52vh] xl:max-h-[520px]"
+                className="h-[260px] w-full object-contain object-center p-4 sm:h-[320px] md:h-[360px] lg:h-[420px] xl:h-[52vh] xl:max-h-[540px]"
               />
             </figure>
           </header>
@@ -257,12 +250,6 @@ export default function WesternUnionVsWorldRemitNigeriaPage() {
                   >
                     Compare rates now
                     <ArrowRight className="h-4 w-4" />
-                  </Link>
-                  <Link
-                    className="inline-flex min-h-12 items-center rounded-2xl border border-white/20 px-5 text-sm font-extrabold text-white hover:bg-white/10"
-                    href="/blog"
-                  >
-                    Exit article
                   </Link>
                 </div>
               </section>
