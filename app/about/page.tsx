@@ -76,10 +76,39 @@ const standardSectionClassName =
   "rounded-[16px] px-5 py-6 min-[600px]:p-8 lg:p-10";
 const bodyTextClassName = "text-[16px] leading-[1.95] text-[#1f3523]";
 
+const aboutPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "@id": "https://www.saverateafrica.com/about#about-page",
+  url: "https://www.saverateafrica.com/about",
+  name: "About SaveRateAfrica",
+  description:
+    "Learn about SaveRateAfrica and founder Chinenye Onukogu, Founder & CEO of the Nigeria remittance comparison platform.",
+  mainEntity: {
+    "@type": "Person",
+    "@id": "https://www.saverateafrica.com/about#chinenye-onukogu",
+    name: "Chinenye Onukogu",
+    jobTitle: "Founder & CEO",
+    image: "https://www.saverateafrica.com/founder-chinenye-onukogu.webp",
+    url: "https://www.saverateafrica.com/about",
+    sameAs: ["https://www.linkedin.com/in/chinenye-onukogu"],
+    worksFor: {
+      "@type": "Organization",
+      "@id": "https://www.saverateafrica.com/#organization",
+      name: "SaveRateAfrica",
+      url: "https://www.saverateafrica.com"
+    }
+  }
+};
+
 export default function AboutPage() {
   return (
     <>
       <SiteHeader showAnnouncementBar />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutPageSchema) }}
+      />
 
       <main className="px-4 pb-32 pt-6 min-[600px]:px-6 lg:px-8 lg:pb-16">
         <div className="mx-auto max-w-[1100px] space-y-6 pb-10">

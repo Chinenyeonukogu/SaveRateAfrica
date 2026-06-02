@@ -9,6 +9,33 @@ import "./globals.css";
 
 const GA_ID = "G-QV5C8SFWTV";
 
+const founderSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://www.saverateafrica.com/about#chinenye-onukogu",
+      name: "Chinenye Onukogu",
+      jobTitle: "Founder & CEO",
+      image: "https://www.saverateafrica.com/founder-chinenye-onukogu.webp",
+      url: "https://www.saverateafrica.com/about",
+      sameAs: ["https://www.linkedin.com/in/chinenye-onukogu"],
+      worksFor: {
+        "@id": "https://www.saverateafrica.com/#organization"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.saverateafrica.com/#organization",
+      name: "SaveRateAfrica",
+      url: "https://www.saverateafrica.com",
+      founder: {
+        "@id": "https://www.saverateafrica.com/about#chinenye-onukogu"
+      }
+    }
+  ]
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://saverateafrica.com"),
   manifest: "/manifest.json",
@@ -111,6 +138,10 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="SaveRateAfrica" />
         <meta name="fo-verify" content="7fa9dafe-9dbb-4692-9cb7-a208826baaba" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(founderSchema) }}
+        />
       </head>
       <body className="bg-brand-light text-brand-navy">
         {children}
