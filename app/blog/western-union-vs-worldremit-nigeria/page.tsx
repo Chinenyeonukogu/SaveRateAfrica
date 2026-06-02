@@ -30,19 +30,14 @@ const westernUnionDetails = [
 
 const westernUnionFinePrint = [
   {
-    title: "The Naira vs FX dance",
+    title: "Important Note About Naira Payouts & Speed",
     body:
-      "Due to shifting Central Bank of Nigeria guidelines, international payouts can fluctuate between local currency and foreign currency channels. Always check the guaranteed payout currency before you send."
+      "Due to shifting Central Bank of Nigeria guidelines, international payouts can fluctuate between local currency and foreign currency channels. Always check the guaranteed payout currency before you send. For speed, cash pickups are usually ready in minutes. Bank transfers often land the same business day, but local bank processing can occasionally push delivery into the next day."
   },
   {
     title: "Strict security at pickup",
     body:
       "For physical cash pickup, the recipient usually needs the 10-digit MTCN, sender name, expected amount, and a valid government-issued ID connected to their BVN."
-  },
-  {
-    title: "Speed",
-    body:
-      "Cash pickups are usually ready in minutes. Bank transfers often land the same business day, but local bank processing can occasionally push delivery into the next day."
   }
 ] as const;
 
@@ -50,35 +45,25 @@ const worldRemitDetails = [
   {
     title: "Fintech and Mobile Money Wallets",
     body:
-      "WorldRemit can send instant deposits directly into popular digital wallets like OPay and Paga."
+      "WorldRemit can send instant deposits directly into popular digital wallets like OPay and Paga. Also, you can instantly send prepaid mobile airtime straight to a Nigerian mobile number with zero added transfer fees."
   },
   {
     title: "Bank Transfer and Cash Pickup",
     body:
       "WorldRemit also supports direct NGN or domiciliary bank routing and selected physical pickup partnerships, including FirstBank branches."
-  },
-  {
-    title: "Airtime Top-up",
-    body:
-      "You can instantly send prepaid mobile phone credit straight to a Nigerian mobile number with zero added transfer fees."
   }
 ] as const;
 
 const worldRemitFinePrint = [
   {
-    title: "Watch the wallet tiers",
+    title: "Mobile wallet tiers & Speed",
     body:
-      "If you send to OPay or Paga, your recipient's account limits matter. Tier 1 fintech accounts can have low daily limits, while upgraded verified accounts can receive more."
+      "If you send to OPay or Paga, your recipient's account limits matter. Tier 1 fintech accounts can have low daily limits, while upgraded verified accounts can receive more. For speed, mobile wallet transfers and airtime top-ups are usually instant. Bank deposits often complete within minutes to a couple of hours."
   },
   {
     title: "Name matching",
     body:
       "Because the flow is digital, the recipient's registered wallet name should match their official identity documentation to avoid transfer delays."
-  },
-  {
-    title: "Speed",
-    body:
-      "Mobile wallet drops and airtime top-ups are usually instant. Bank deposits often complete within minutes to a couple of hours."
   }
 ] as const;
 
