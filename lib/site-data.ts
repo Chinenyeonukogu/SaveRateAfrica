@@ -228,6 +228,15 @@ export const creditCardOffers: CreditCardOffer[] = [
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "moneygram-vs-flutterwave-send-nigeria",
+    title: "MoneyGram vs Flutterwave Send for Sending Money to Nigeria",
+    category: "Comparisons",
+    readTime: "5 min read",
+    href: "/blog/moneygram-vs-flutterwave-send-nigeria",
+    excerpt:
+      "Compare MoneyGram cash pickup with Flutterwave Send digital transfers, fees, speed, and exchange-rate value."
+  },
+  {
     slug: "western-union-vs-worldremit-nigeria",
     title: "Western Union vs WorldRemit for Sending Money to Nigeria",
     category: "Comparisons",
