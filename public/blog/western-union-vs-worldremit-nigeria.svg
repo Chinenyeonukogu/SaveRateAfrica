@@ -1,0 +1,18 @@
+<svg width="1456" height="1040" viewBox="0 0 1456 1040" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1456" height="1040" rx="64" fill="#0D2416"/>
+  <rect x="72" y="72" width="616" height="896" rx="48" fill="#111111"/>
+  <rect x="760" y="72" width="616" height="896" rx="48" fill="#0F5B35"/>
+  <path d="M728 112V928" stroke="#F6C619" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="344" cy="320" r="132" fill="#F6C619"/>
+  <text x="344" y="300" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="54" font-weight="900" fill="#111111">WU</text>
+  <text x="344" y="360" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="700" fill="#111111">Western Union</text>
+  <circle cx="1040" cy="320" r="132" fill="#27B45B"/>
+  <text x="1040" y="300" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="46" font-weight="900" fill="#FFFFFF">WR</text>
+  <text x="1040" y="360" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="700" fill="#FFFFFF">WorldRemit</text>
+  <rect x="176" y="610" width="416" height="72" rx="36" fill="#FFFFFF" fill-opacity="0.12"/>
+  <text x="384" y="655" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="800" fill="#FFFFFF">Cash pickup + bank deposit</text>
+  <rect x="864" y="610" width="416" height="72" rx="36" fill="#FFFFFF" fill-opacity="0.14"/>
+  <text x="1072" y="655" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="800" fill="#FFFFFF">Wallets + digital speed</text>
+  <text x="728" y="838" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="44" font-weight="900" fill="#FFFFFF">Nigeria Transfer Comparison</text>
+  <text x="728" y="890" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="600" fill="#9EE8C0">Compare payout method, speed, and recipient convenience</text>
+</svg>

@@ -228,6 +228,15 @@ export const creditCardOffers: CreditCardOffer[] = [
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "western-union-vs-worldremit-nigeria",
+    title: "Western Union vs WorldRemit for Sending Money to Nigeria",
+    category: "Comparisons",
+    readTime: "6 min read",
+    href: "/blog/western-union-vs-worldremit-nigeria",
+    excerpt:
+      "A practical comparison of payout methods, pickup rules, wallet transfers, and speed when sending money to Nigeria."
+  },
+  {
     slug: "cheapest-way-to-send-money-to-nigeria",
     title: "What's the Cheapest Way to Send Money to Nigeria?",
     category: "Comparisons",
