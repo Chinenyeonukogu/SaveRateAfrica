@@ -234,7 +234,7 @@ export const blogPosts: BlogPost[] = [
     readTime: "6 min read",
     href: "/blog/western-union-vs-worldremit-nigeria",
     excerpt:
-      "A practical comparison of payout methods, pickup rules, wallet transfers, and speed when sending money to Nigeria."
+      "How to receive money from Western Union in Nigeria vs WorldRemit"
   },
   {
     slug: "cheapest-way-to-send-money-to-nigeria",
