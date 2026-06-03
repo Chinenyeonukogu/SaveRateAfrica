@@ -63,6 +63,12 @@ export default async function HomePage() {
     "@type": "WebApplication",
     name: "SaveRateAfrica",
     applicationCategory: "FinanceApplication",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD"
+    },
+    operatingSystem: "Web",
     description:
       "Compare remittance providers sending money to Nigeria from the USA, UK, and Canada."
   };
