@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   title: "SaveRateAfrica | Best Way to Send Money to Nigeria",
   description:
-    "Compare Live Nigeria Exchange Rates & See Which Providers Pays the Most.",
+    "Compare Live Nigeria Exchange Rates & See Which Provider Pays the Most.",
   applicationName: "SaveRateAfrica",
   keywords: [
     "best app to send money to Nigeria from US",

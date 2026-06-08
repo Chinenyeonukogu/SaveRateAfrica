@@ -8,7 +8,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 export const metadata: Metadata = {
   title: "How to Build Credit in the USA as a Nigerian Immigrant",
   description:
-    "Compare Live Nigeria Exchange Rates & See Which Providers Pays the Most.",
+    "Compare Live Nigeria Exchange Rates & See Which Provider Pays the Most.",
   alternates: {
     canonical: "https://www.saverateafrica.com/blog/how-to-build-credit-in-usa-as-a-nigerian-immigrant"
   }

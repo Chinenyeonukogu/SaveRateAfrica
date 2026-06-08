@@ -50,7 +50,7 @@ export async function generateMetadata({
   return {
     title: `${provider.name} money transfer to Nigeria`,
     description:
-      "Compare Live Nigeria Exchange Rates & See Which Providers Pays the Most.",
+      "Compare Live Nigeria Exchange Rates & See Which Provider Pays the Most.",
     keywords: seoKeywords,
     alternates: {
       canonical: `https://www.saverateafrica.com/providers/${provider.slug}`

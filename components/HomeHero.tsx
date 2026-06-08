@@ -37,6 +37,26 @@ const flagByCountry: Record<SenderCountry, { alt: string; src: string }> = {
   Canada: { alt: "Canada flag", src: "/flags/ca.svg" }
 };
 
+const senderCountryOptions = [
+  ...senderCountries.map((country) => ({ ...country, disabled: false as const })),
+  {
+    code: "UAE",
+    region: "UAE",
+    label: "United Arab Emirates",
+    currency: "AED",
+    flagEmoji: "🇦🇪",
+    disabled: true as const
+  },
+  {
+    code: "Europe",
+    region: "Europe",
+    label: "Europe",
+    currency: "EUR",
+    flagEmoji: "🇪🇺",
+    disabled: true as const
+  }
+] as const;
+
 const recipientCountries = [
   {
     code: "Nigeria",
@@ -50,6 +70,27 @@ const recipientCountries = [
     name: "Ghana",
     flag: { alt: "Ghana flag", src: "/flags/gh.svg" },
     helper: "We're working to bring Ghana soon!",
+    disabled: true
+  },
+  {
+    code: "Kenya",
+    name: "Kenya",
+    flagEmoji: "🇰🇪",
+    helper: "We're working to bring Kenya soon!",
+    disabled: true
+  },
+  {
+    code: "Senegal",
+    name: "Senegal",
+    flagEmoji: "🇸🇳",
+    helper: "We're working to bring Senegal soon!",
+    disabled: true
+  },
+  {
+    code: "Egypt",
+    name: "Egypt",
+    flagEmoji: "🇪🇬",
+    helper: "We're working to bring Egypt soon!",
     disabled: true
   }
 ] as const;
@@ -81,6 +122,18 @@ function RecipientFlag({
   country: (typeof recipientCountries)[number];
   className?: string;
 }) {
+  if ("flagEmoji" in country) {
+    return (
+      <span
+        aria-label={`${country.name} flag`}
+        className={`inline-flex items-center justify-center text-[18px] leading-none ${className}`}
+        role="img"
+      >
+        {country.flagEmoji}
+      </span>
+    );
+  }
+
   return (
     <Image
       alt={country.flag.alt}
@@ -334,7 +387,7 @@ export function HomeHero({
                 className="mx-auto max-w-[760px] font-heading text-[25px] font-bold leading-[1.08] tracking-[-0.5px] text-white min-[600px]:text-[36px] lg:text-[44px]"
                 style={brandFontStyle}
               >
-                Compare Live Nigeria Exchange Rates & See Which Providers Pays the Most.
+                Compare Live Nigeria Exchange Rates & See Which Provider Pays the Most.
               </h1>
 
             </div>
@@ -468,33 +521,61 @@ export function HomeHero({
 
                       {senderDropdownOpen ? (
                         <div className="absolute left-0 right-0 top-full z-30 mt-2 overflow-hidden rounded-[10px] border border-[#e0ede2] bg-white shadow-[0_14px_32px_rgba(0,0,0,0.16)]">
-                          {senderCountries.map((country) => {
+                          {senderCountryOptions.map((country) => {
                             const active = country.code === senderCountry;
 
                             return (
                               <button
                                 key={country.code}
-                                className={`flex w-full items-center gap-3 px-3 py-3 text-left transition ${
-                                  active ? "bg-[#e8f5e9]" : "bg-white hover:bg-[#f4faf5]"
+                                className={`flex w-full items-center justify-between gap-3 px-3 py-3 text-left transition ${
+                                  country.disabled
+                                    ? "cursor-not-allowed bg-[#fafafa]"
+                                    : active
+                                      ? "bg-[#e8f5e9]"
+                                      : "bg-white hover:bg-[#f4faf5]"
                                 }`}
+                                disabled={country.disabled}
                                 type="button"
                                 onClick={() => {
-                                  onSenderCountryChange(country.code);
-                                  setSenderDropdownOpen(false);
+                                  if (!country.disabled) {
+                                    onSenderCountryChange(country.code);
+                                    setSenderDropdownOpen(false);
+                                  }
                                 }}
                               >
-                                <CountryFlag
-                                  country={country.code}
-                                  className="h-[18px] w-[24px] rounded-[3px] object-cover"
-                                />
-                                <span>
-                                  <span className="block text-[13px] font-bold text-[#1a2e1a]">
-                                    {country.region}
-                                  </span>
-                                  <span className="block text-[11px] font-semibold text-[#7a9a7a]">
-                                    {country.currency} · {country.label}
+                                <span className="flex min-w-0 items-center gap-3">
+                                  {"flagEmoji" in country ? (
+                                    <span
+                                      aria-label={`${country.region} flag`}
+                                      className="inline-flex h-[18px] w-[24px] items-center justify-center rounded-[3px] text-[18px] leading-none"
+                                      role="img"
+                                    >
+                                      {country.flagEmoji}
+                                    </span>
+                                  ) : (
+                                    <CountryFlag
+                                      country={country.code}
+                                      className="h-[18px] w-[24px] rounded-[3px] object-cover"
+                                    />
+                                  )}
+                                  <span>
+                                    <span
+                                      className={`block text-[13px] font-bold ${
+                                        country.disabled ? "text-[#9a9a9a]" : "text-[#1a2e1a]"
+                                      }`}
+                                    >
+                                      {country.region}
+                                    </span>
+                                    <span className="block text-[11px] font-semibold text-[#7a9a7a]">
+                                      {country.currency} · {country.label}
+                                    </span>
                                   </span>
                                 </span>
+                                {country.disabled ? (
+                                  <span className="shrink-0 rounded-full bg-brand-yellow px-2 py-1 text-[9px] font-black uppercase text-[#1a1a1a]">
+                                    Coming Soon
+                                  </span>
+                                ) : null}
                               </button>
                             );
                           })}
