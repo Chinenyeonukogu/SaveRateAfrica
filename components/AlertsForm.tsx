@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Bell, BellRing } from "lucide-react";
+import { Bell, BellRing, ChevronDown } from "lucide-react";
 
 interface AlertsFormProps {
   variant?: "default" | "hero";
@@ -176,15 +176,21 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
                 <span className="block text-[12px] font-bold uppercase tracking-[0.08em] text-[#0d1f12]">
                   Country
                 </span>
-                <select
-                  className="alert-input min-h-12 w-full min-w-0 rounded-[8px] border border-[#c8e6c9] bg-white px-[14px] py-[11px] outline-none"
-                  value={country}
-                  onChange={(event) => setCountry(event.target.value as AlertCountry)}
-                >
-                  <option value="USA">USA</option>
-                  <option value="Canada">Canada</option>
-                  <option value="UK">UK</option>
-                </select>
+                <div className="relative w-full min-w-0">
+                  <select
+                    className="alert-input h-12 w-full min-w-0 appearance-none rounded-[8px] border border-[#c8e6c9] bg-white px-[14px] py-0 pr-10 text-[16px] leading-[48px] outline-none [-moz-appearance:none] [-webkit-appearance:none]"
+                    value={country}
+                    onChange={(event) => setCountry(event.target.value as AlertCountry)}
+                  >
+                    <option value="USA">USA</option>
+                    <option value="Canada">Canada</option>
+                    <option value="UK">UK</option>
+                  </select>
+                  <ChevronDown
+                    aria-hidden="true"
+                    className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#1e3d28]"
+                  />
+                </div>
               </label>
 
               <label className="min-w-0 space-y-2 min-[600px]:text-sm">
