@@ -8,5 +8,6 @@ node_modules
 .env.development.local
 .env.test.local
 .env.production.local
+__MACOSX/
 SaveRateAfrica_OLD/
 SaveRateAfrica.com _ SaveRateAfrica.com.ng/
