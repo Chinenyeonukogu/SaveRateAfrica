@@ -234,12 +234,9 @@ export function ChatBot() {
         }
         @media (max-width: 768px) {
           .chat-trigger {
-            bottom: 80px;
+            bottom: 24px;
             right: 16px;
             z-index: 999;
-          }
-          :global(.mobile-nav) {
-            z-index: 1000;
           }
         }
         @media (max-width: 480px) {

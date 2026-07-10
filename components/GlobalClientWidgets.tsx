@@ -12,11 +12,6 @@ const PwaInstallPrompt = dynamic(
   { loading: () => null, ssr: false }
 );
 
-const MobileNav = dynamic(
-  () => import("@/components/MobileNav").then((mod) => mod.MobileNav),
-  { loading: () => null, ssr: false }
-);
-
 const LazyAnalytics = dynamic(
   () => import("@/components/LazyAnalytics").then((mod) => mod.LazyAnalytics),
   { loading: () => null, ssr: false }
@@ -35,7 +30,6 @@ export function GlobalClientWidgets() {
     <>
       <LazySaveRateAI />
       <PwaInstallPrompt />
-      <MobileNav />
       <LazyAnalytics />
       <ServiceWorkerRegistration />
     </>
