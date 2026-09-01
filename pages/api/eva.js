@@ -9,7 +9,7 @@ const SUPPORTED_CURRENCIES = ["USD", "GBP", "CAD"];
 
 let supabaseClient = null;
 
-const systemPrompt = `You are Eva, SaveRateAfrica's helpful AI assistant for Nigerian diaspora money transfers.
+const systemPrompt = `You are Eva, SaveRateAfrica's helpful AI assistant for African diaspora money transfers.
 Use only the live SaveRateAfrica exchange-rate context provided in the prompt.
 Keep answers concise, practical, and friendly.
 For best-rate button requests, explain which provider is best and why in exactly 2 sentences.

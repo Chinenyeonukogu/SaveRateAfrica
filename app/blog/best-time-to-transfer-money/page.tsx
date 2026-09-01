@@ -7,7 +7,11 @@ import { SiteHeader } from "@/components/SiteHeader";
 export const metadata: Metadata = {
   title: "The Best Time to Transfer Money Internationally",
   description:
+<<<<<<< HEAD
     "Compare Live Nigeria Exchange Rates & See Which Provider Pays the Most.",
+=======
+    "Compare Live Africa Exchange Rates & See Which Providers Pays the Most.",
+>>>>>>> a11c1ae (feat: generalize Nigeria copy for Africa)
   alternates: {
     canonical: "https://www.saverateafrica.com/blog/best-time-to-transfer-money"
   }
@@ -81,7 +85,7 @@ export default function BestTimeToTransferMoneyPage() {
             <figure className="relative overflow-hidden rounded-[24px] border border-white/10 bg-[#102717] shadow-2xl">
               <Image
                 src="/blog/best-time-to-transfer-money.webp"
-                alt="A professional comparing remittance services and timing an international money transfer to Nigeria"
+                alt="A professional comparing remittance services and timing an international money transfer to Africa"
                 width={1456}
                 height={1040}
                 fetchPriority="high"

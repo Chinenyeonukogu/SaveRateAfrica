@@ -14,29 +14,33 @@ import { TrackedCreditCardLink } from "@/components/TrackedCreditCardLink";
 import { creditCardOffers } from "@/lib/site-data";
 
 const seoKeywords = [
-  "best app to send money to Nigeria from US",
+  "best app to send money to Africa from US",
   "which platform gives best naira rate",
-  "how to avoid transfer fees Nigeria",
-  "cheapest way to send money to Nigeria",
-  "Nigeria exchange rate today",
+  "how to avoid transfer fees Africa",
+  "cheapest way to send money to Africa",
+  "Africa exchange rate today",
   "USD to NGN rate today",
-  "compare remittance Nigeria",
+  "compare remittance Africa",
   "GBP to NGN rate",
   "CAD to NGN rate"
 ];
 
 export const metadata: Metadata = {
-  title: "Best Cards to Send Money to Nigeria | Avoid Transfer Fees",
+  title: "Best Cards to Send Money to Africa | Avoid Transfer Fees",
   description:
+<<<<<<< HEAD
     "Compare Live Nigeria Exchange Rates & See Which Provider Pays the Most.",
+=======
+    "Compare Live Africa Exchange Rates & See Which Providers Pays the Most.",
+>>>>>>> a11c1ae (feat: generalize Nigeria copy for Africa)
   keywords: seoKeywords,
   alternates: {
     canonical: "https://www.saverateafrica.com/credit-cards"
   },
   openGraph: {
-    title: "Best Cards to Send Money to Nigeria | Avoid Transfer Fees",
+    title: "Best Cards to Send Money to Africa | Avoid Transfer Fees",
     description:
-      "Find the best cards for sending money to Nigeria. Learn how to avoid transfer fees and get the best NGN exchange rate today.",
+      "Find the best cards for sending money to Africa. Learn how to avoid transfer fees and get the best NGN exchange rate today.",
     url: "https://saverateafrica.com/credit-cards"
   }
 };
@@ -196,7 +200,7 @@ export default function CreditCardsPage() {
                 </h1>
 
                 <p className="mt-4 max-w-2xl text-[15px] font-light leading-7 text-white/82 min-[600px]:text-lg">
-                  Build your credit and earn rewards while sending money to Nigeria
+                  Build your credit and earn rewards while sending money to Africa
                 </p>
 
                 <div className="mt-8">
@@ -219,7 +223,7 @@ export default function CreditCardsPage() {
                   {[
                     "No credit history required",
                     "Fast approval decisions",
-                    "Trusted by Nigerians in 🇺🇸"
+                    "Trusted by Africans in 🇺🇸"
                   ].map((item) => (
                     <div key={item} className="inline-flex items-center gap-2">
                       <CheckCircle2 className="h-4 w-4 shrink-0 text-[#66bb6a]" />

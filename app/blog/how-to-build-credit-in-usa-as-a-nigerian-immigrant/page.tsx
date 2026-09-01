@@ -6,9 +6,13 @@ import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 
 export const metadata: Metadata = {
-  title: "How to Build Credit in the USA as a Nigerian Immigrant",
+  title: "How to Build Credit in the USA as an African Immigrant",
   description:
+<<<<<<< HEAD
     "Compare Live Nigeria Exchange Rates & See Which Provider Pays the Most.",
+=======
+    "Compare Live Africa Exchange Rates & See Which Providers Pays the Most.",
+>>>>>>> a11c1ae (feat: generalize Nigeria copy for Africa)
   alternates: {
     canonical: "https://www.saverateafrica.com/blog/how-to-build-credit-in-usa-as-a-nigerian-immigrant"
   }
@@ -55,7 +59,7 @@ function DetailList({ items }: { items: readonly (readonly [string, string])[] }
   );
 }
 
-export default function BuildCreditUsaNigerianImmigrantPage() {
+export default function BuildCreditUsaAfricanImmigrantPage() {
   return (
     <>
       <SiteHeader />
@@ -77,7 +81,7 @@ export default function BuildCreditUsaNigerianImmigrantPage() {
                 3 minute read · Personal Finance · SaveRateAfrica
               </p>
               <h1 className="mt-5 max-w-4xl font-heading text-4xl leading-tight sm:text-5xl lg:text-6xl">
-                How to Build Credit in the USA as a Nigerian Immigrant
+                How to Build Credit in the USA as an African Immigrant
               </h1>
               <p className="mt-5 max-w-3xl text-lg leading-8 text-white/78">
                 A straightforward starter plan for establishing U.S. credit
@@ -115,7 +119,7 @@ export default function BuildCreditUsaNigerianImmigrantPage() {
                   "Sorry. You have no credit history."
                 </p>
                 <p>
-                  This is one of the most frustrating realities for Nigerian
+                  This is one of the most frustrating realities for African
                   immigrants arriving in the United States. And it is not just
                   inconvenient; it is expensive. Without credit, you pay higher
                   deposits, higher interest rates, and miss out on financial
@@ -126,13 +130,13 @@ export default function BuildCreditUsaNigerianImmigrantPage() {
 
               <section className="space-y-4">
                 <h2 className="font-heading text-3xl text-[#102717]">
-                  Why Your Nigerian Credit History Does Not Transfer
+                  Why Your African Credit History Does Not Transfer
                 </h2>
                 <p>
                   The United States credit system, managed by three major
                   bureaus, Experian, Equifax, and TransUnion, operates
                   completely independently from any other country&apos;s
-                  financial records. Your Nigerian bank history, your years of
+                  financial records. Your African bank history, your years of
                   consistent bill payments, your loans repaid on time, none of
                   it follows you here.
                 </p>

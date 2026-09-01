@@ -5,29 +5,33 @@ import { BellRing, Zap } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 
 const seoKeywords = [
-  "best app to send money to Nigeria from US",
+  "best app to send money to Africa from US",
   "which platform gives best naira rate",
-  "how to avoid transfer fees Nigeria",
-  "cheapest way to send money to Nigeria",
-  "Nigeria exchange rate today",
+  "how to avoid transfer fees Africa",
+  "cheapest way to send money to Africa",
+  "Africa exchange rate today",
   "USD to NGN rate today",
-  "compare remittance Nigeria",
+  "compare remittance Africa",
   "GBP to NGN rate",
   "CAD to NGN rate"
 ];
 
 export const metadata: Metadata = {
-  title: "NGN Rate Alert | Get Notified When Nigeria Exchange Rate Hits Your Target",
+  title: "NGN Rate Alert | Get Notified When Africa Exchange Rate Hits Your Target",
   description:
+<<<<<<< HEAD
     "Compare Live Nigeria Exchange Rates & See Which Provider Pays the Most.",
+=======
+    "Compare Live Africa Exchange Rates & See Which Providers Pays the Most.",
+>>>>>>> a11c1ae (feat: generalize Nigeria copy for Africa)
   keywords: seoKeywords,
   alternates: {
     canonical: "https://www.saverateafrica.com/alerts"
   },
   openGraph: {
-    title: "NGN Rate Alert | Get Notified When Nigeria Exchange Rate Hits Your Target",
+    title: "NGN Rate Alert | Get Notified When Africa Exchange Rate Hits Your Target",
     description:
-      "Set a free Nigeria exchange rate alert. Get notified instantly when USD, GBP or CAD to NGN hits your target rate. No account needed.",
+      "Set a free Africa exchange rate alert. Get notified instantly when USD, GBP or CAD to NGN hits your target rate. No account needed.",
     url: "https://saverateafrica.com/alerts"
   }
 };

@@ -6,29 +6,33 @@ import { Check } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 
 const seoKeywords = [
-  "best app to send money to Nigeria from US",
+  "best app to send money to Africa from US",
   "which platform gives best naira rate",
-  "how to avoid transfer fees Nigeria",
-  "cheapest way to send money to Nigeria",
-  "Nigeria exchange rate today",
+  "how to avoid transfer fees Africa",
+  "cheapest way to send money to Africa",
+  "Africa exchange rate today",
   "USD to NGN rate today",
-  "compare remittance Nigeria",
+  "compare remittance Africa",
   "GBP to NGN rate",
   "CAD to NGN rate"
 ];
 
 export const metadata: Metadata = {
-  title: "About SaveRateAfrica | Nigeria Remittance Comparison Platform",
+  title: "About SaveRateAfrica | Africa Remittance Comparison Platform",
   description:
+<<<<<<< HEAD
     "Compare Live Nigeria Exchange Rates & See Which Provider Pays the Most.",
+=======
+    "Compare Live Africa Exchange Rates & See Which Providers Pays the Most.",
+>>>>>>> a11c1ae (feat: generalize Nigeria copy for Africa)
   keywords: seoKeywords,
   alternates: {
     canonical: "https://www.saverateafrica.com/about"
   },
   openGraph: {
-    title: "About SaveRateAfrica | Nigeria Remittance Comparison Platform",
+    title: "About SaveRateAfrica | Africa Remittance Comparison Platform",
     description:
-      "SaveRateAfrica helps you find the best naira rate when sending money to Nigeria. Compare which platform gives the best naira rate from USA, UK and Canada.",
+      "SaveRateAfrica helps you find the best naira rate when sending money to Africa. Compare which platform gives the best naira rate from USA, UK and Canada.",
     url: "https://saverateafrica.com/about"
   }
 };
@@ -38,7 +42,7 @@ const storyParagraphs = [
     SaveRateAfrica was born from a simple belief: your hard work deserves the
     top exchange rate possible. With over{" "}
     <strong className="font-bold text-[#102717]">$21 billion</strong> sent home
-    annually by Nigerians in the US, UK, and Canada, too much is still lost to
+    annually by Africans in the US, UK, and Canada, too much is still lost to
     hidden fees and outdated rates.
   </>,
   <>
@@ -48,7 +52,7 @@ const storyParagraphs = [
     your loved ones. We don&apos;t move your money; we just make sure your money
     moves further.
   </>,
-  "What started as a tool to solve my own frustration with inconsistent rates has grown into a platform built for all Nigerians in the diaspora."
+  "What started as a tool to solve my own frustration with inconsistent rates has grown into a platform built for all Africans in the diaspora."
 ] as const;
 
 const trustItems = [
@@ -119,10 +123,10 @@ export default function AboutPage() {
               OUR STORY
             </p>
             <h1 className="mt-4 max-w-[640px] font-heading text-[28px] font-extrabold leading-[1.15] text-white min-[600px]:text-[32px] lg:text-[36px]">
-              Helping Nigerians Abroad Send More Money Home
+              Helping Africans Abroad Send More Money Home
             </h1>
             <p className="mt-4 max-w-[520px] text-[16px] leading-[1.7] text-[rgba(255,255,255,0.88)]">
-              Built by a Nigerian in the diaspora who believes your hard work
+              Built by an African in the diaspora who believes your hard work
               deserves a better rate.
             </p>
           </section>
@@ -168,7 +172,7 @@ export default function AboutPage() {
                 </h2>
                 <p className={`${bodyTextClassName} max-w-[720px]`}>
                   I built <strong className="font-bold">SaveRateAfrica</strong>{" "}
-                  to empower fellow Nigerians in the diaspora with clear,
+                  to empower fellow Africans in the diaspora with clear,
                   real-time information on top remittance options. With a
                   background in Information Technology and current
                   specialization in IT Product Management, my goal is to make
@@ -183,7 +187,7 @@ export default function AboutPage() {
               Our Mission
             </h2>
             <p className={`${bodyTextClassName} max-w-[720px]`}>
-              To help the Nigerian diaspora maximize every dollar, pound, and
+              To help the African diaspora maximize every dollar, pound, and
               Canadian dollar sent home by providing honest, independent
               comparisons and useful tools like rate alerts and savings
               calculators.

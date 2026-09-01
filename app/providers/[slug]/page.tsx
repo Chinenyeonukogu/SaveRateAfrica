@@ -14,13 +14,13 @@ import { getProviderBySlug, providers } from "@/lib/providers";
 export const revalidate = 1800;
 
 const seoKeywords = [
-  "best app to send money to Nigeria from US",
+  "best app to send money to Africa from US",
   "which platform gives best naira rate",
-  "how to avoid transfer fees Nigeria",
-  "cheapest way to send money to Nigeria",
-  "Nigeria exchange rate today",
+  "how to avoid transfer fees Africa",
+  "cheapest way to send money to Africa",
+  "Africa exchange rate today",
   "USD to NGN rate today",
-  "compare remittance Nigeria",
+  "compare remittance Africa",
   "GBP to NGN rate",
   "CAD to NGN rate"
 ];
@@ -48,15 +48,19 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${provider.name} money transfer to Nigeria`,
+    title: `${provider.name} money transfer to Africa`,
     description:
+<<<<<<< HEAD
       "Compare Live Nigeria Exchange Rates & See Which Provider Pays the Most.",
+=======
+      "Compare Live Africa Exchange Rates & See Which Providers Pays the Most.",
+>>>>>>> a11c1ae (feat: generalize Nigeria copy for Africa)
     keywords: seoKeywords,
     alternates: {
       canonical: `https://www.saverateafrica.com/providers/${provider.slug}`
     },
     openGraph: {
-      title: `${provider.name} for Nigeria transfers`,
+      title: `${provider.name} for Africa transfers`,
       description: provider.summary,
       url: `https://saverateafrica.com/providers/${provider.slug}`
     }
@@ -131,7 +135,7 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
                   Provider review
                 </p>
                 <h1 className="mt-3 font-heading text-4xl text-brand-navy sm:text-5xl">
-                  {provider.name} money transfer to Nigeria
+                  {provider.name} money transfer to Africa
                 </h1>
                 <p className="mt-4 max-w-3xl text-base leading-7 text-brand-navy/70">
                   {provider.headline} {provider.summary}

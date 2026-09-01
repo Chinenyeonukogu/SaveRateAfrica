@@ -5,9 +5,13 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 
 export const metadata: Metadata = {
-  title: "What's the Cheapest Way to Send Money to Nigeria?",
+  title: "What's the Cheapest Way to Send Money to Africa?",
   description:
+<<<<<<< HEAD
     "Compare Live Nigeria Exchange Rates & See Which Provider Pays the Most.",
+=======
+    "Compare Live Africa Exchange Rates & See Which Providers Pays the Most.",
+>>>>>>> a11c1ae (feat: generalize Nigeria copy for Africa)
   alternates: {
     canonical: "https://www.saverateafrica.com/blog/cheapest-way-to-send-money-to-nigeria"
   }
@@ -30,7 +34,7 @@ const countrySections = [
       ["LemFi", "Zero fees, built for African diaspora"],
       ["Wise", "Low fees, best for large or regular transfers"],
       ["Remitly", "Low fees plus new user promos"],
-      ["WorldRemit", "Low fees, wide Nigerian bank coverage"]
+      ["WorldRemit", "Low fees, wide African bank coverage"]
     ]
   },
   {
@@ -52,7 +56,7 @@ const keyTips = [
   "Always compare the exchange rate not just the fee"
 ] as const;
 
-export default function CheapestWayToSendMoneyToNigeriaPage() {
+export default function CheapestWayToSendMoneyToAfricaPage() {
   return (
     <>
       <SiteHeader />
@@ -74,10 +78,10 @@ export default function CheapestWayToSendMoneyToNigeriaPage() {
                 Comparisons · 4 min read · SaveRateAfrica
               </p>
               <h1 className="mt-4 max-w-4xl font-heading text-4xl leading-tight sm:text-5xl lg:text-6xl">
-                What&apos;s the Cheapest Way to Send Money to Nigeria?
+                What&apos;s the Cheapest Way to Send Money to Africa?
               </h1>
               <p className="mt-4 max-w-3xl text-lg leading-8 text-white/78">
-                The cheapest way to send money to Nigeria is to skip your bank
+                The cheapest way to send money to Africa is to skip your bank
                 and use a digital transfer platform.
               </p>
             </div>
@@ -85,7 +89,7 @@ export default function CheapestWayToSendMoneyToNigeriaPage() {
             <figure className="relative overflow-hidden rounded-[24px] border border-white/10 bg-[#102717] shadow-2xl">
               <Image
                 src="/blog/cheap-way-to-send-money.webp"
-                alt="A professional reviewing SaveRateAfrica money transfer guidance for sending money to Nigeria"
+                alt="A professional reviewing SaveRateAfrica money transfer guidance for sending money to Africa"
                 width={1456}
                 height={1040}
                 fetchPriority="high"

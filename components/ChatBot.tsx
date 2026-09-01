@@ -26,7 +26,7 @@ const botResponses: Record<string, string> = {
   "i have a problem": "📧 We are here to help!\nFor support or any questions about SaveRateAfrica please email us at:\npatterns@saverateafrica.com\nOur team will get back to you within 24 hours."
 };
 
-const defaultResponse = "I am only able to help with questions about sending money to Nigeria and exchange rates.\n\nFor other support please email:\n📧 patterns@saverateafrica.com";
+const defaultResponse = "I am only able to help with questions about sending money to Africa and exchange rates.\n\nFor other support please email:\n📧 patterns@saverateafrica.com";
 
 const welcomeMessage: Message = {
   id: "welcome",
@@ -139,7 +139,7 @@ export function ChatBot() {
                 SaveRateAfrica Assistant
               </div>
               <div className="text-[10px] text-[rgba(255,255,255,0.72)]">
-                Ask me anything about sending money to Nigeria
+                Ask me anything about sending money to Africa
               </div>
             </div>
             <button

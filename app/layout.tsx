@@ -39,18 +39,22 @@ const founderSchema = {
 export const metadata: Metadata = {
   metadataBase: new URL("https://saverateafrica.com"),
   manifest: "/manifest.json",
-  title: "SaveRateAfrica | Best Way to Send Money to Nigeria",
+  title: "SaveRateAfrica | Best Way to Send Money to Africa",
   description:
+<<<<<<< HEAD
     "Compare Live Nigeria Exchange Rates & See Which Provider Pays the Most.",
+=======
+    "Compare Live Africa Exchange Rates & See Which Providers Pays the Most.",
+>>>>>>> a11c1ae (feat: generalize Nigeria copy for Africa)
   applicationName: "SaveRateAfrica",
   keywords: [
-    "best app to send money to Nigeria from US",
+    "best app to send money to Africa from US",
     "which platform gives best naira rate",
-    "how to avoid transfer fees Nigeria",
-    "cheapest way to send money to Nigeria",
-    "Nigeria exchange rate today",
+    "how to avoid transfer fees Africa",
+    "cheapest way to send money to Africa",
+    "Africa exchange rate today",
     "USD to NGN rate today",
-    "compare remittance Nigeria",
+    "compare remittance Africa",
     "GBP to NGN rate",
     "CAD to NGN rate"
   ],
@@ -61,9 +65,9 @@ export const metadata: Metadata = {
     google: "ZkilmT1V7LJp4qCpQs4y2758O5_TPxT-iVVDieULCq4"
   },
   openGraph: {
-    title: "SaveRateAfrica | Best Way to Send Money to Nigeria",
+    title: "SaveRateAfrica | Best Way to Send Money to Africa",
     description:
-      "Compare USD, GBP and CAD to NGN rates today. Find the cheapest way to send money to Nigeria.",
+      "Compare USD, GBP and CAD to NGN rates today. Find the cheapest way to send money to Africa.",
     siteName: "SaveRateAfrica",
     images: [{ url: "https://saverateafrica.com/logo.svg", width: 200, height: 200 }],
     type: "website",
@@ -71,7 +75,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Compare Ways to Save Money Sending to Nigeria",
+    title: "Compare Ways to Save Money Sending to Africa",
     description:
       "Find top NGN rates from USA, UK and Canada instantly."
   },

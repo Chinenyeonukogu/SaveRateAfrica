@@ -62,7 +62,7 @@ export function CreditEligibilityCounterBadge() {
         {count}
       </span>
       <span>
-        Nigerians checked this week
+        Africans checked this week
       </span>
     </div>
   );

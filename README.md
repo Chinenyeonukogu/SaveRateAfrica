@@ -1,7 +1,7 @@
 # SaveRateAfrica 🇳🇬
 
 The #1 remittance comparison platform for 
-Nigerian diaspora in USA, UK and Canada.
+African diaspora in USA, UK and Canada.
 
 ## What It Does
 - Compare real-time rates from 14 providers
@@ -14,7 +14,7 @@ Nigerian diaspora in USA, UK and Canada.
 - Works on all devices
 
 ## Built For
-Nigerians sending money home from:
+Africans sending money home from:
 - 🇺🇸 United States (USD to NGN)
 - 🇬🇧 United Kingdom (GBP to NGN)
 - 🇨🇦 Canada (CAD to NGN)
@@ -35,8 +35,8 @@ MoneyGram, Western Union and more
 [saverateafrica.com](https://saverateafrica.com)
 
 ## Vision
-You work hard abroad. Your family deserves every naira of it. SaveRateAfrica helps 
-Nigerian diaspora in USA, UK and Canada compare 14 providers in seconds — so every 
+You work hard abroad. Your family deserves every naira of it. SaveRateAfrica helps
+African diaspora in USA, UK and Canada compare 14 providers in seconds — so every
 dollar, pound and loonie lands as more naira in your loved ones hands. No hidden fees. 
 No guesswork. Just smarter sending money!
 

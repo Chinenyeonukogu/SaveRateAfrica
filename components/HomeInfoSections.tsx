@@ -17,7 +17,7 @@ export function HomeInfoSections() {
               How it works
             </p>
             <h2 className="mb-4 mt-2 text-[28px] font-heading text-brand-navy min-[600px]:text-3xl">
-              A clearer route from diaspora wallet to Nigerian bank account
+              A clearer route from diaspora wallet to African bank account
             </h2>
 
             <div className="grid gap-4 lg:grid-cols-3 lg:gap-0">
@@ -56,7 +56,7 @@ export function HomeInfoSections() {
               FAQ
             </p>
             <h2 className="mb-4 mt-2 text-[28px] font-heading text-brand-navy min-[600px]:text-3xl">
-              Questions Nigerian diaspora senders ask most
+              Questions African diaspora senders ask most
             </h2>
 
             <div className="space-y-4">

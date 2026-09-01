@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export function SiteFooter() {
   const aboutText =
-    "SaveRateAfrica is an independent comparison platform. We are not a money transfer operator and do not process transfers. Our mission is to help Nigerians in the diaspora send more money home by comparing top real rates and lowest fees.";
+    "SaveRateAfrica is an independent comparison platform. We are not a money transfer operator and do not process transfers. Our mission is to help Africans in the diaspora send more money home by comparing top real rates and lowest fees.";
   const importantItems = [
     "Rates shown are for comparison purposes only.",
     "Final rates and fees are determined by each provider at the time of transfer.",
@@ -24,7 +24,7 @@ export function SiteFooter() {
             </div>
 
             <p className="mt-2 text-[13px] font-semibold text-[#6a8a6a]">
-              Helping the Nigerian diaspora send more money home.
+              Helping the African diaspora send more money home.
             </p>
             <p className="mt-2 text-[12px] font-semibold text-[#7a9a7a]">
               Proudly built in USA

@@ -9,30 +9,34 @@ import { fetchRates } from "@/lib/fetchRates";
 export const revalidate = 1800;
 
 const seoKeywords = [
-  "best way to send money to Nigeria",
-  "best app to send money to Nigeria from US",
+  "best way to send money to Africa",
+  "best app to send money to Africa from US",
   "which platform gives best naira rate",
-  "how to avoid transfer fees Nigeria",
-  "cheapest way to send money to Nigeria",
-  "Nigeria exchange rate today",
+  "how to avoid transfer fees Africa",
+  "cheapest way to send money to Africa",
+  "Africa exchange rate today",
   "USD to NGN rate today",
-  "compare remittance Nigeria",
+  "compare remittance Africa",
   "GBP to NGN rate",
   "CAD to NGN rate"
 ];
 
 export const metadata: Metadata = {
-  title: "SaveRateAfrica | Best Way to Send Money to Nigeria",
+  title: "SaveRateAfrica | Best Way to Send Money to Africa",
   description:
+<<<<<<< HEAD
     "Compare Live Nigeria Exchange Rates & See Which Provider Pays the Most.",
+=======
+    "Compare Live Africa Exchange Rates & See Which Providers Pays the Most.",
+>>>>>>> a11c1ae (feat: generalize Nigeria copy for Africa)
   keywords: seoKeywords,
   alternates: {
     canonical: "https://www.saverateafrica.com/"
   },
   openGraph: {
-    title: "SaveRateAfrica | Best Way to Send Money to Nigeria",
+    title: "SaveRateAfrica | Best Way to Send Money to Africa",
     description:
-      "Compare USD, GBP and CAD to NGN rates today. Find the cheapest way to send money to Nigeria.",
+      "Compare USD, GBP and CAD to NGN rates today. Find the cheapest way to send money to Africa.",
     url: "https://saverateafrica.com",
     siteName: "SaveRateAfrica",
     images: [{ url: "https://saverateafrica.com/logo.svg", width: 200, height: 200 }],
@@ -49,7 +53,7 @@ export default async function HomePage() {
   const comparisonJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: "Top remittance providers to Nigeria",
+    name: "Top remittance providers to Africa",
     itemListElement: initialComparison.providers.slice(0, 5).map((provider, index) => ({
       "@type": "ListItem",
       position: index + 1,
@@ -70,7 +74,7 @@ export default async function HomePage() {
     },
     operatingSystem: "Web",
     description:
-      "Compare remittance providers sending money to Nigeria from the USA, UK, and Canada."
+      "Compare remittance providers sending money to Africa from the USA, UK, and Canada."
   };
 
   return (

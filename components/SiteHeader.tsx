@@ -46,7 +46,7 @@ const aboutNavigationItem: NavigationItem = {
 
 const navigationItems: NavigationItem[] = [
   {
-    description: "Cards for the Nigerian diaspora",
+    description: "Cards for the African diaspora",
     href: "/credit-cards",
     icon: CreditCard,
     iconBoxClassName: "bg-[#e8f5e9]",

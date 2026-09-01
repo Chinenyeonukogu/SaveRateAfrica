@@ -5,17 +5,21 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { tutorialVideos } from "@/lib/tutorial-videos";
 
 const seoKeywords = [
-  "money transfer videos Nigeria",
-  "how to send money to Nigeria",
-  "cheapest way to send money to Nigeria",
-  "Nigeria money transfer tutorials",
+  "money transfer videos Africa",
+  "how to send money to Africa",
+  "cheapest way to send money to Africa",
+  "Africa money transfer tutorials",
   "SaveRateAfrica videos"
 ];
 
 export const metadata: Metadata = {
   title: "Quick Videos | SaveRateAfrica",
   description:
+<<<<<<< HEAD
     "Compare Live Nigeria Exchange Rates & See Which Provider Pays the Most.",
+=======
+    "Compare Live Africa Exchange Rates & See Which Providers Pays the Most.",
+>>>>>>> a11c1ae (feat: generalize Nigeria copy for Africa)
   keywords: seoKeywords,
   alternates: {
     canonical: "https://www.saverateafrica.com/learn"
@@ -23,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Quick Videos | SaveRateAfrica",
     description:
-      "Short video guides for Nigerians abroad comparing money transfer providers and exchange rates.",
+      "Short video guides for Africans abroad comparing money transfer providers and exchange rates.",
     url: "https://saverateafrica.com/learn"
   }
 };

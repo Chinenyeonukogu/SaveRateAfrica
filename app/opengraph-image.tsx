@@ -42,7 +42,7 @@ export default function OpenGraphImage() {
 
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
             <div style={{ fontSize: 76, fontWeight: 700, lineHeight: 1 }}>
-              Real-time rates to Nigeria
+              Real-time rates to Africa
             </div>
             <div
               style={{

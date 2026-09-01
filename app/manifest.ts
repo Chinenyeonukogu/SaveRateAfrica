@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "SaveRateAfrica",
     short_name: "SaveRate",
-    description: "Real-time remittance comparison and rate alerts for Nigeria.",
+    description: "Real-time remittance comparison and rate alerts for Africa.",
     id: "/",
     start_url: "/",
     scope: "/",

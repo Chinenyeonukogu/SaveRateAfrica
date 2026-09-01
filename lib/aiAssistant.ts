@@ -5,10 +5,10 @@ import {
   type ComparisonResult
 } from "@/lib/fetchRates";
 
-export const SAVE_RATE_AI_SYSTEM_PROMPT = `You are SaveRateAI, the intelligent assistant for 
-SaveRateAfrica.com — a real-time comparison platform 
-helping Nigerians in the USA, UK, and Canada send 
-money to Nigeria at top rates.
+export const SAVE_RATE_AI_SYSTEM_PROMPT = `You are SaveRateAI, the intelligent assistant for
+SaveRateAfrica.com — a real-time comparison platform
+helping Africans in the USA, UK, and Canada send
+money to Africa at top rates.
 
 You have access to the following live data from the 
 page the user is currently viewing:
@@ -31,7 +31,7 @@ PLATFORM FACTS:
 - Rates refresh every 60 minutes
 - SaveRateAfrica compares but never processes transfers
 - All providers are vetted and trusted
-- Corridor: USA, UK, Canada → Nigeria only
+- Corridor: USA, UK, Canada → Africa only
 - 99% currency rate accuracy verified daily
 - 256-bit secure, no sign-up needed to compare
 
@@ -460,7 +460,7 @@ function buildComparisonReply(
     reason = `${getNormalizedProviderName(loser.name)} only wins if your recipient needs cash pickup — for bank deposit, ${getNormalizedProviderName(winner.name)} is significantly better.`;
   }
 
-  return `Comparing ${providerAName} vs ${providerBName} on a ${formattedAmount} send to Nigeria:
+  return `Comparing ${providerAName} vs ${providerBName} on a ${formattedAmount} send to Africa:
 
 ${providerAName}
   Rate:    ${formatRateValue(providerA.exchangeRate)} NGN/${activeComparison.sourceCurrency}

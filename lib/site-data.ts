@@ -105,7 +105,7 @@ export const providerReviews: Review[] = [
     rating: 4,
     role: "Truck dispatcher in Calgary",
     quote:
-      "I like that it feels built for Nigerians abroad. The app is fast, mobile-friendly, and the instant-send options are easy to trust."
+      "I like that it feels built for Africans abroad. The app is fast, mobile-friendly, and the instant-send options are easy to trust."
   }
 ];
 
@@ -143,12 +143,12 @@ export const faqItems = [
       "It changes by day, funding method, and corridor. SaveRateAfrica ranks providers by actual NGN delivered after fees so you see the top-pick option for your exact send amount."
   },
   {
-    question: "Which provider is better for Nigeria?",
+    question: "Which provider is better for Africa?",
     answer:
       "Check the comparison dashboard to see which provider gives you strong value for your amount, speed needs, and payout preference."
   },
   {
-    question: "What's a strong time to send money to Nigeria?",
+    question: "What's a strong time to send money to Africa?",
     answer:
       "Most diaspora senders benefit from watching rate momentum rather than reacting to headlines. Use the trend chart and rate alerts to catch favorable moves instead of sending blind."
   },
@@ -247,7 +247,7 @@ export const blogPosts: BlogPost[] = [
   },
   {
     slug: "cheapest-way-to-send-money-to-nigeria",
-    title: "What's the Cheapest Way to Send Money to Nigeria?",
+    title: "What's the Cheapest Way to Send Money to Africa?",
     category: "Comparisons",
     readTime: "4 min read",
     href: "/blog/cheapest-way-to-send-money-to-nigeria",
@@ -265,7 +265,7 @@ export const blogPosts: BlogPost[] = [
   },
   {
     slug: "how-to-build-credit-in-usa-as-a-nigerian-immigrant",
-    title: "How to Build Credit in USA as a Nigerian Immigrant",
+    title: "How to Build Credit in USA as an African Immigrant",
     category: "Credit",
     readTime: "7 min read",
     href: "/blog/how-to-build-credit-in-usa-as-a-nigerian-immigrant",

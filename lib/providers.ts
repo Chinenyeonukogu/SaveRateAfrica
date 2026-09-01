@@ -381,8 +381,8 @@ export const providers: Provider[] = [
     trustNote: "Support family in minutes — free and easy",
     supportedSenderCountries: ["USA", "UK", "Canada"],
     payoutChannels: ["Bank deposit"],
-    pros: ["No transfer fee for Nigeria corridor", "Fast delivery", "Strong Nigeria corridor support"],
-    cons: ["FX spread details vary", "Nigeria route is bank-deposit focused"]
+    pros: ["No transfer fee for Africa corridor", "Fast delivery", "Strong Africa corridor support"],
+    cons: ["FX spread details vary", "Africa route is bank-deposit focused"]
   },
   {
     slug: "paysend",
