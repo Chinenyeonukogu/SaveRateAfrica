@@ -59,10 +59,10 @@ const senderCountryOptions = [
 
 const recipientCountries = [
   {
-    code: "Africa",
-    name: "Africa",
-    flag: { alt: "Africa flag", src: "/flags/ng.svg" },
-    helper: "NGN · Africa",
+    code: "Nigeria",
+    name: "Nigeria",
+    flag: { alt: "Nigeria flag", src: "/flags/ng.svg" },
+    helper: "NGN · Nigeria",
     disabled: false
   },
   {

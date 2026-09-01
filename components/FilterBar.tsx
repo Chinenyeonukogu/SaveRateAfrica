@@ -38,7 +38,7 @@ export function FilterBar({
             Corridor summary
           </p>
           <p className="mt-1 text-[12px] text-brand-navy/70 min-[600px]:text-sm">
-            Sending {sourceCurrency} {amount.toLocaleString("en-US")} from {senderCountry} to Africa
+            Sending {sourceCurrency} {amount.toLocaleString("en-US")} from {senderCountry} to Nigeria
           </p>
         </div>
 
