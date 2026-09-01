@@ -59,10 +59,10 @@ const senderCountryOptions = [
 
 const recipientCountries = [
   {
-    code: "Nigeria",
-    name: "Nigeria",
-    flag: { alt: "Nigeria flag", src: "/flags/ng.svg" },
-    helper: "NGN · Nigeria",
+    code: "Africa",
+    name: "Africa",
+    flag: { alt: "Africa flag", src: "/flags/ng.svg" },
+    helper: "NGN · Africa",
     disabled: false
   },
   {
@@ -387,11 +387,7 @@ export function HomeHero({
                 className="mx-auto max-w-[760px] font-heading text-[25px] font-bold leading-[1.08] tracking-[-0.5px] text-white min-[600px]:text-[36px] lg:text-[44px]"
                 style={brandFontStyle}
               >
-<<<<<<< HEAD
-                Compare Live Nigeria Exchange Rates & See Which Provider Pays the Most.
-=======
-                Compare Live Africa Exchange Rates & See Which Providers Pays the Most.
->>>>>>> a11c1ae (feat: generalize Nigeria copy for Africa)
+                Compare Live Africa Exchange Rates & See Which Provider Pays the Most.
               </h1>
 
             </div>
@@ -592,7 +588,6 @@ export function HomeHero({
                     <p className="mb-2 text-[11px] font-black uppercase tracking-[0.08em] text-black">
                       RECIPIENT COUNTRY
                     </p>
-<<<<<<< HEAD
                     <div className="relative">
                       <button
                         aria-expanded={recipientDropdownOpen}
@@ -669,22 +664,6 @@ export function HomeHero({
                           ))}
                         </div>
                       ) : null}
-=======
-                    <div className="flex items-center justify-between rounded-[8px] border-[1.5px] border-[#e0ede2] px-3 py-2">
-                      <span className="text-[12px] font-semibold text-[#1a2e1a]">
-                        <Image
-                          alt="Africa flag"
-                          className="mr-2 inline-block h-[12px] w-[16px] rounded-[2px] object-cover align-[-2px]"
-                          height={12}
-                          src="/flags/ng.svg"
-                          width={16}
-                        />
-                        Africa
-                      </span>
-                      <span className="text-[12px] font-medium text-[#2e7d32]">
-                        Locked corridor
-                      </span>
->>>>>>> a11c1ae (feat: generalize Nigeria copy for Africa)
                     </div>
                   </div>
 

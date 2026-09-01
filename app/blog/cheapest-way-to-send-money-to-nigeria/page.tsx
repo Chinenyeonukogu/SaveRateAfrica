@@ -7,11 +7,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 export const metadata: Metadata = {
   title: "What's the Cheapest Way to Send Money to Africa?",
   description:
-<<<<<<< HEAD
-    "Compare Live Nigeria Exchange Rates & See Which Provider Pays the Most.",
-=======
-    "Compare Live Africa Exchange Rates & See Which Providers Pays the Most.",
->>>>>>> a11c1ae (feat: generalize Nigeria copy for Africa)
+    "Compare Live Africa Exchange Rates & See Which Provider Pays the Most.",
   alternates: {
     canonical: "https://www.saverateafrica.com/blog/cheapest-way-to-send-money-to-nigeria"
   }

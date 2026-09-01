@@ -24,11 +24,7 @@ const seoKeywords = [
 export const metadata: Metadata = {
   title: "SaveRateAfrica | Best Way to Send Money to Africa",
   description:
-<<<<<<< HEAD
-    "Compare Live Nigeria Exchange Rates & See Which Provider Pays the Most.",
-=======
-    "Compare Live Africa Exchange Rates & See Which Providers Pays the Most.",
->>>>>>> a11c1ae (feat: generalize Nigeria copy for Africa)
+    "Compare Live Africa Exchange Rates & See Which Provider Pays the Most.",
   keywords: seoKeywords,
   alternates: {
     canonical: "https://www.saverateafrica.com/"

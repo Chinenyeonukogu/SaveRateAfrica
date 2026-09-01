@@ -20,11 +20,7 @@ const seoKeywords = [
 export const metadata: Metadata = {
   title: "About SaveRateAfrica | Africa Remittance Comparison Platform",
   description:
-<<<<<<< HEAD
-    "Compare Live Nigeria Exchange Rates & See Which Provider Pays the Most.",
-=======
-    "Compare Live Africa Exchange Rates & See Which Providers Pays the Most.",
->>>>>>> a11c1ae (feat: generalize Nigeria copy for Africa)
+    "Compare Live Africa Exchange Rates & See Which Provider Pays the Most.",
   keywords: seoKeywords,
   alternates: {
     canonical: "https://www.saverateafrica.com/about"
@@ -87,7 +83,7 @@ const aboutPageSchema = {
   url: "https://www.saverateafrica.com/about",
   name: "About SaveRateAfrica",
   description:
-    "Learn about SaveRateAfrica and founder Chinenye Onukogu, Founder & CEO of the Nigeria remittance comparison platform.",
+    "Learn about SaveRateAfrica and founder Chinenye Onukogu, Founder & CEO of the Africa remittance comparison platform.",
   mainEntity: {
     "@type": "Person",
     "@id": "https://www.saverateafrica.com/about#chinenye-onukogu",

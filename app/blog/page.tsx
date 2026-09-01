@@ -6,21 +6,17 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { blogPosts } from "@/lib/site-data";
 
 const blogDescription =
-  "Smart financial guides for the Nigerian diaspora. Compare live exchange rates, track hidden fees, and find the cheapest, fastest ways to send money to Nigeria.";
+  "Smart financial guides for the African diaspora. Compare live exchange rates, track hidden fees, and find the cheapest, fastest ways to send money to Africa.";
 
 const seoKeywords = [
-<<<<<<< HEAD
   "Blog and guides",
-  "Smart financial guides for the Nigerian diaspora",
-  "Nigerian diaspora money transfer guides",
-  "send money to Nigeria blog",
-  "compare live exchange rates Nigeria",
+  "Smart financial guides for the African diaspora",
+  "African diaspora money transfer guides",
+  "send money to Africa blog",
+  "compare live exchange rates Africa",
   "track hidden fees money transfer",
-  "cheapest fastest ways to send money to Nigeria",
-  "best app to send money to Nigeria from US",
-=======
+  "cheapest fastest ways to send money to Africa",
   "best app to send money to Africa from US",
->>>>>>> a11c1ae (feat: generalize Nigeria copy for Africa)
   "which platform gives best naira rate",
   "how to avoid transfer fees Africa",
   "cheapest way to send money to Africa",
@@ -32,34 +28,21 @@ const seoKeywords = [
 ];
 
 export const metadata: Metadata = {
-<<<<<<< HEAD
-  title: "Blog and Guides | Nigerian Diaspora Money Transfer Tips",
+  title: "Blog and Guides | African Diaspora Money Transfer Tips",
   description: blogDescription,
-=======
-  title: "Blog and Guides",
-  description:
-    "Compare Live Africa Exchange Rates & See Which Providers Pays the Most.",
->>>>>>> a11c1ae (feat: generalize Nigeria copy for Africa)
   keywords: seoKeywords,
   alternates: {
     canonical: "https://www.saverateafrica.com/blog"
   },
   openGraph: {
-<<<<<<< HEAD
-    title: "Blog and Guides | Nigerian Diaspora Money Transfer Tips",
+    title: "Blog and Guides | African Diaspora Money Transfer Tips",
     description: blogDescription,
     url: "https://www.saverateafrica.com/blog"
   },
   twitter: {
     card: "summary_large_image",
-    title: "Blog and Guides | Nigerian Diaspora Money Transfer Tips",
+    title: "Blog and Guides | African Diaspora Money Transfer Tips",
     description: blogDescription
-=======
-    title: "Blog and Guides",
-    description:
-      "Guides and comparisons for Africans abroad sending money home and building financial stability overseas.",
-    url: "https://saverateafrica.com/blog"
->>>>>>> a11c1ae (feat: generalize Nigeria copy for Africa)
   }
 };
 
@@ -114,19 +97,11 @@ export default function BlogPage() {
               Blog and guides
             </p>
             <h1 className="mt-3 font-heading text-4xl leading-tight text-brand-navy sm:text-5xl">
-<<<<<<< HEAD
-              Smart financial guides for the Nigerian diaspora.
+              Smart financial guides for the African diaspora.
             </h1>
             <p className="mt-4 max-w-3xl text-base leading-7 text-brand-navy/70">
               Compare live exchange rates, track hidden fees, and find the
-              cheapest, fastest ways to send money to Nigeria.
-=======
-              Smart financial guides for Africans abroad
-            </h1>
-            <p className="mt-4 max-w-3xl text-base leading-7 text-brand-navy/70">
-              Financial education and money transfer insights designed to help
-              Africans in the diaspora make smarter financial decisions.
->>>>>>> a11c1ae (feat: generalize Nigeria copy for Africa)
+              cheapest, fastest ways to send money to Africa.
             </p>
           </section>
 
