@@ -1,5 +1,12 @@
-export type SenderCountry = "USA" | "UK" | "Canada";
-export type SourceCurrency = "USD" | "GBP" | "CAD";
+import {
+  originCountries,
+  isOriginCountry,
+  type OriginCountryCode,
+  type OriginCurrency
+} from "@/lib/corridors";
+
+export type SenderCountry = OriginCountryCode;
+export type SourceCurrency = OriginCurrency;
 export type ComparisonSort = "best-rate" | "lowest-fee" | "fastest";
 export type SpeedBand = "instant" | "same-day" | "standard";
 export type FeeBand = "low" | "medium" | "premium";
@@ -25,12 +32,12 @@ export interface Provider {
   deliveryLabel: string;
   feeBand: FeeBand;
   feeType?: FeeType;
-  fees: Record<SourceCurrency, number>;
+  fees: Partial<Record<SourceCurrency, number>>;
   fixedFees?: Partial<Record<SourceCurrency, number>>;
   variableFeePercents?: Partial<Record<SourceCurrency, number>>;
   feeDisplayPrefix?: string;
   transferFeeNote?: string;
-  rateMultiplier: Record<SourceCurrency, number>;
+  rateMultiplier: Partial<Record<SourceCurrency, number>>;
   summary: string;
   headline: string;
   bestFor: string;
@@ -41,31 +48,17 @@ export interface Provider {
   cons: string[];
 }
 
-export const senderCountries: SenderCountryOption[] = [
-  {
-    code: "USA",
-    label: "USA",
-    currency: "USD",
-    region: "United States",
-    dialCode: "+1"
-  },
-  {
-    code: "UK",
-    label: "UK",
-    currency: "GBP",
-    region: "United Kingdom",
-    dialCode: "+44"
-  },
-  {
-    code: "Canada",
-    label: "Canada",
-    currency: "CAD",
-    region: "Canada",
-    dialCode: "+1"
-  }
-];
+export const senderCountries: SenderCountryOption[] = originCountries.map(
+  ({ code, label, currency, region, dialCode }) => ({
+    code,
+    label,
+    currency,
+    region,
+    dialCode: dialCode ?? ""
+  })
+);
 
-export const baseMidMarketRates: Record<SourceCurrency, number> = {
+export const baseMidMarketRates: Partial<Record<SourceCurrency, number>> = {
   USD: 1564.2,
   GBP: 1983.7,
   CAD: 1149.6
@@ -405,10 +398,32 @@ export const providers: Provider[] = [
     payoutChannels: ["Bank deposit", "Card transfer"],
     pros: ["Simple flat fee", "Good app", "Widely available"],
     cons: ["Rate spread varies", "Value details vary by route"]
+  },
+  {
+    slug: "revolut",
+    name: "Revolut",
+    logoFrom: "#191C1F",
+    logoTo: "#6F5CFF",
+    rating: 4.6,
+    reviewCount: 0,
+    speedHours: 24,
+    speedBand: "same-day",
+    deliveryLabel: "See provider",
+    feeBand: "medium",
+    fees: {},
+    rateMultiplier: {},
+    summary: "Available for the Switzerland to Nigeria corridor when live rates are available.",
+    headline: "International transfers from Switzerland",
+    bestFor: "Swiss franc transfers",
+    trustNote: "Confirm final rate and delivery details at checkout",
+    supportedSenderCountries: ["Switzerland"],
+    payoutChannels: ["See provider"],
+    pros: ["Live corridor data only"],
+    cons: ["Scraper integration pending"]
   }
 ];
 
-export const providerRankingsBySenderCountry: Record<SenderCountry, string[]> = {
+export const providerRankingsBySenderCountry: Partial<Record<SenderCountry, string[]>> = {
   USA: [
     "LemFi",
     "PayAngel",
@@ -472,7 +487,7 @@ export function getCurrencyBySender(country: SenderCountry): SourceCurrency {
 }
 
 export function isSenderCountry(value: string): value is SenderCountry {
-  return senderCountries.some((country) => country.code === value);
+  return isOriginCountry(value);
 }
 
 export function isComparisonSort(value: string): value is ComparisonSort {

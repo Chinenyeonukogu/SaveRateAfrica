@@ -3,6 +3,7 @@ import {
   providers,
   type SourceCurrency
 } from "@/lib/providers";
+import { originCountries } from "@/lib/corridors";
 
 export interface SupabaseExchangeRateRow {
   provider: string;
@@ -19,7 +20,7 @@ export interface LiveBaseRatesResponse {
   updatedAt: string;
   sourceUpdatedAt: string;
   cachedUntil: string;
-  rates: Record<SourceCurrency, number>;
+  rates: Partial<Record<SourceCurrency, number>>;
   providerRates: SupabaseExchangeRateRow[];
 }
 
@@ -32,20 +33,23 @@ declare global {
 
 export const LIVE_RATE_REVALIDATE_SECONDS = 1800;
 const LIVE_RATE_CACHE_TTL_MS = LIVE_RATE_REVALIDATE_SECONDS * 1000;
-const SUPPORTED_SOURCE_CURRENCIES: SourceCurrency[] = ["USD", "GBP", "CAD"];
+const SUPPORTED_SOURCE_CURRENCIES: SourceCurrency[] = originCountries.map(
+  (origin) => origin.currency
+);
+const FALLBACK_SOURCE_CURRENCIES: SourceCurrency[] = ["USD", "GBP", "CAD"];
 
 function buildFallbackProviderRates(): SupabaseExchangeRateRow[] {
   const now = new Date().toISOString();
 
   return providers.flatMap((provider) =>
-    SUPPORTED_SOURCE_CURRENCIES.map((currency) => ({
+    FALLBACK_SOURCE_CURRENCIES.map((currency) => ({
       provider: provider.name,
       send_currency: currency,
       receive_currency: "NGN" as const,
       rate:
         Math.round(
-          baseMidMarketRates[currency] *
-            provider.rateMultiplier[currency] *
+          (baseMidMarketRates[currency] ?? 0) *
+            (provider.rateMultiplier[currency] ?? 1) *
             100
         ) / 100,
       fee: null,
@@ -128,14 +132,14 @@ function isSupabaseExchangeRateRow(
 function buildBestRates(rows: SupabaseExchangeRateRow[]) {
   const bestRates = Object.fromEntries(
     SUPPORTED_SOURCE_CURRENCIES.map((currency) => [currency, 0])
-  ) as Record<SourceCurrency, number>;
+  ) as Partial<Record<SourceCurrency, number>>;
 
   rows.forEach((row) => {
-    bestRates[row.send_currency] = Math.max(bestRates[row.send_currency], row.rate);
+    bestRates[row.send_currency] = Math.max(bestRates[row.send_currency] ?? 0, row.rate);
   });
 
-  const missingCurrency = SUPPORTED_SOURCE_CURRENCIES.find(
-    (currency) => bestRates[currency] <= 0
+  const missingCurrency = FALLBACK_SOURCE_CURRENCIES.find(
+    (currency) => (bestRates[currency] ?? 0) <= 0
   );
 
   if (missingCurrency) {

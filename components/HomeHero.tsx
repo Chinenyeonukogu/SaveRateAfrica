@@ -10,6 +10,7 @@ import {
 
 import type { ComparisonProviderRow } from "@/lib/fetchRates";
 import { senderCountries, type SenderCountry } from "@/lib/providers";
+import { getOriginCountry, originCountries } from "@/lib/corridors";
 
 interface HomeHeroProps {
   amount: string;
@@ -29,15 +30,13 @@ const currencySymbolByCountry: Record<
 > = {
   USA: { code: "USD", symbol: "$" },
   UK: { code: "GBP", symbol: "\u00a3" },
-  Canada: { code: "CAD", symbol: "CA$" }
-};
-const flagByCountry: Record<SenderCountry, { alt: string; src: string }> = {
-  USA: { alt: "USA flag", src: "/flags/us.svg" },
-  UK: { alt: "UK flag", src: "/flags/gb.svg" },
-  Canada: { alt: "Canada flag", src: "/flags/ca.svg" }
+  Canada: { code: "CAD", symbol: "CA$" },
+  UAE: { code: "AED", symbol: "AED " },
+  Eurozone: { code: "EUR", symbol: "€" },
+  Switzerland: { code: "CHF", symbol: "CHF " }
 };
 
-const senderCountryOptions = [
+const senderCountryOptions = originCountries; /*
   ...senderCountries.map((country) => ({ ...country, disabled: false as const })),
   {
     code: "UAE",
@@ -55,7 +54,7 @@ const senderCountryOptions = [
     flagEmoji: "🇪🇺",
     disabled: true as const
   }
-] as const;
+] as const; */
 
 const recipientCountries = [
   {
@@ -102,14 +101,18 @@ function CountryFlag({
   country: SenderCountry;
   className?: string;
 }) {
-  const flag = flagByCountry[country];
+  const origin = getOriginCountry(country);
+
+  if (!origin?.flagSrc) {
+    return <span aria-label={`${origin?.region ?? country} flag`} className={className} role="img">{origin?.flagEmoji}</span>;
+  }
 
   return (
     <Image
-      alt={flag.alt}
+      alt={`${origin.region} flag`}
       className={className}
       height={12}
-      src={flag.src}
+      src={origin.flagSrc}
       width={16}
     />
   );
@@ -528,40 +531,33 @@ export function HomeHero({
                               <button
                                 key={country.code}
                                 className={`flex w-full items-center justify-between gap-3 px-3 py-3 text-left transition ${
-                                  country.disabled
+                                  !country.active
                                     ? "cursor-not-allowed bg-[#fafafa]"
                                     : active
                                       ? "bg-[#e8f5e9]"
                                       : "bg-white hover:bg-[#f4faf5]"
                                 }`}
-                                disabled={country.disabled}
+                                disabled={!country.active}
                                 type="button"
                                 onClick={() => {
-                                  if (!country.disabled) {
+                                  if (country.active) {
                                     onSenderCountryChange(country.code);
                                     setSenderDropdownOpen(false);
                                   }
                                 }}
                               >
                                 <span className="flex min-w-0 items-center gap-3">
-                                  {"flagEmoji" in country ? (
-                                    <span
-                                      aria-label={`${country.region} flag`}
-                                      className="inline-flex h-[18px] w-[24px] items-center justify-center rounded-[3px] text-[18px] leading-none"
-                                      role="img"
-                                    >
-                                      {country.flagEmoji}
-                                    </span>
-                                  ) : (
-                                    <CountryFlag
-                                      country={country.code}
-                                      className="h-[18px] w-[24px] rounded-[3px] object-cover"
-                                    />
-                                  )}
+                                  <span
+                                    aria-label={`${country.region} flag`}
+                                    className="inline-flex h-[18px] w-[24px] items-center justify-center rounded-[3px] text-[18px] leading-none"
+                                    role="img"
+                                  >
+                                    {country.flagEmoji}
+                                  </span>
                                   <span>
                                     <span
                                       className={`block text-[13px] font-bold ${
-                                        country.disabled ? "text-[#9a9a9a]" : "text-[#1a2e1a]"
+                                        !country.active ? "text-[#9a9a9a]" : "text-[#1a2e1a]"
                                       }`}
                                     >
                                       {country.region}
@@ -571,7 +567,7 @@ export function HomeHero({
                                     </span>
                                   </span>
                                 </span>
-                                {country.disabled ? (
+                                {!country.active ? (
                                   <span className="shrink-0 rounded-full bg-brand-yellow px-2 py-1 text-[9px] font-black uppercase text-[#1a1a1a]">
                                     Coming Soon
                                   </span>

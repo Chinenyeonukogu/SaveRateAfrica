@@ -10,6 +10,10 @@ import {
   type SourceCurrency
 } from "@/lib/providers";
 import {
+  isProviderEligibleForNigeriaCorridor,
+  isProviderScrapeEnabledForNigeriaCorridor
+} from "@/lib/corridors";
+import {
   getFallbackLiveBaseRates,
   getLiveBaseRates,
   type LiveBaseRatesResponse
@@ -49,7 +53,7 @@ export interface ComparisonResult {
   cachedUntil: string;
   rateProvider: LiveBaseRatesResponse["provider"];
   baseMidMarketRate: number;
-  liveBaseRates: Record<SourceCurrency, number>;
+  liveBaseRates: Partial<Record<SourceCurrency, number>>;
   providerRates: LiveBaseRatesResponse["providerRates"];
   providers: ComparisonProviderRow[];
   savings: {
@@ -121,13 +125,13 @@ function getProviderFee(
   amount: number
 ) {
   if (provider.feeType === "percentage") {
-    const fixedFee = provider.fixedFees?.[sourceCurrency] ?? provider.fees[sourceCurrency];
+    const fixedFee = provider.fixedFees?.[sourceCurrency] ?? provider.fees[sourceCurrency] ?? 0;
     const variableFeePercent = provider.variableFeePercents?.[sourceCurrency] ?? 0;
 
     return roundToTwo(fixedFee + amount * (variableFeePercent / 100));
   }
 
-  return roundToTwo(provider.fees[sourceCurrency]);
+  return roundToTwo(provider.fees[sourceCurrency] ?? 0);
 }
 
 function getProviderFeeDisplayText(
@@ -303,7 +307,7 @@ function getGenericProviderMetadata(providerName: string): Provider {
 }
 
 function getCountryRank(providerName: string, senderCountry: SenderCountry) {
-  const ranking = providerRankingsBySenderCountry[senderCountry] ?? providerRankingsBySenderCountry.USA;
+  const ranking = providerRankingsBySenderCountry[senderCountry] ?? providerRankingsBySenderCountry.USA ?? [];
   const normalizedName = normalizeProviderName(providerName);
   const rankIndex = ranking.findIndex(
     (rankedProvider) => normalizeProviderName(rankedProvider) === normalizedName
@@ -319,11 +323,19 @@ export function buildComparisonFromLiveRates({
   liveBaseRates
 }: Required<FetchRatesArgs> & { liveBaseRates: LiveBaseRatesResponse }): ComparisonResult {
   const sourceCurrency = getCurrencyBySender(senderCountry);
-  const baseMidMarketRate = liveBaseRates.rates[sourceCurrency];
+  const baseMidMarketRate = liveBaseRates.rates[sourceCurrency] ?? 0;
+  if (!Number.isFinite(baseMidMarketRate) || baseMidMarketRate <= 0) {
+    throw new Error(`Supabase exchange_rates is missing ${sourceCurrency}-NGN rows.`);
+  }
   const adjustedAmount = clampAmount(amount);
 
   const rows = liveBaseRates.providerRates
-    .filter((rateRow) => rateRow.send_currency === sourceCurrency)
+    .filter(
+      (rateRow) =>
+        rateRow.send_currency === sourceCurrency &&
+        isProviderEligibleForNigeriaCorridor(senderCountry, rateRow.provider) &&
+        isProviderScrapeEnabledForNigeriaCorridor(senderCountry, rateRow.provider)
+    )
     .map((rateRow) => {
       const provider =
         getProviderMetadata(rateRow.provider) ?? getGenericProviderMetadata(rateRow.provider);

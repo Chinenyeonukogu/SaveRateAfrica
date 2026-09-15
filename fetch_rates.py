@@ -5,6 +5,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
+from pathlib import Path
 
 
 NALA_RATES_URL = "https://partners-api.prod.nala-api.com/v1/fx/rates"
@@ -14,6 +15,14 @@ SUPABASE_URL = os.environ.get("NEXT_PUBLIC_SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_ROLE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
 WISE_API_TOKEN = os.environ.get("WISE_API_TOKEN", "")
 MAX_REASONABLE_NGN_RATE = 3000
+MIN_REASONABLE_NGN_RATE_BY_CURRENCY = {
+    "USD": 500,
+    "GBP": 500,
+    "CAD": 200,
+    "AED": 100,
+    "EUR": 500,
+    "CHF": 500,
+}
 BROWSER_USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
     "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -24,12 +33,45 @@ REMITLY_FALLBACK_FEES = {
     "CAD": 3.99,
 }
 
-CORRIDORS = [
-    {"send_currency": "USD", "receive_currency": "NGN"},
-    {"send_currency": "GBP", "receive_currency": "NGN"},
-    {"send_currency": "CAD", "receive_currency": "NGN"},
-]
+CORRIDOR_CONFIG_PATH = Path(__file__).resolve().parent / "lib" / "corridor-config.json"
+
+
+def load_corridor_config():
+    with CORRIDOR_CONFIG_PATH.open(encoding="utf-8") as config_file:
+        config = json.load(config_file)
+
+    origins = {origin["code"]: origin for origin in config.get("origins", [])}
+    corridors = []
+    for corridor in config.get("corridors", []):
+        origin = origins.get(corridor.get("origin"))
+        if not origin or corridor.get("destination") != "NGN":
+            continue
+        corridors.append(
+            {
+                "origin": origin["code"],
+                "send_currency": origin["currency"],
+                "receive_currency": "NGN",
+                "scrape_providers": set(corridor.get("scrapeProviders", [])),
+            }
+        )
+
+    if not corridors:
+        raise RuntimeError("corridor-config.json contains no Nigeria corridors.")
+    return corridors
+
+
+CORRIDORS = load_corridor_config()
 SUPPORTED_SEND_CURRENCIES = {corridor["send_currency"] for corridor in CORRIDORS}
+CORRIDOR_BY_CURRENCY = {corridor["send_currency"]: corridor for corridor in CORRIDORS}
+
+
+def is_scrape_enabled_for_row(row):
+    corridor = CORRIDOR_BY_CURRENCY.get(row.get("send_currency"))
+    return bool(
+        corridor
+        and row.get("receive_currency") == corridor["receive_currency"]
+        and row.get("provider") in corridor["scrape_providers"]
+    )
 
 PAYSEND_REQUESTS = [
     {
@@ -43,6 +85,18 @@ PAYSEND_REQUESTS = [
     {
         "send_currency": "CAD",
         "url": "https://paysend.com/api/calculator?lang=en&country=US&operation=send&amount=500&sourceCountry=ca&targetCountry=ng&sourceCurrency=cad&targetCurrency=ngn",
+    },
+    {
+        "send_currency": "AED",
+        "url": "https://paysend.com/api/calculator?lang=en&country=AE&operation=send&amount=500&sourceCountry=ae&targetCountry=ng&sourceCurrency=aed&targetCurrency=ngn",
+    },
+    {
+        "send_currency": "EUR",
+        "url": "https://paysend.com/api/calculator?lang=en&country=DE&operation=send&amount=500&sourceCountry=de&targetCountry=ng&sourceCurrency=eur&targetCurrency=ngn",
+    },
+    {
+        "send_currency": "CHF",
+        "url": "https://paysend.com/api/calculator?lang=en&country=CH&operation=send&amount=500&sourceCountry=ch&targetCountry=ng&sourceCurrency=chf&targetCurrency=ngn",
     },
 ]
 
@@ -170,12 +224,48 @@ def has_required_rate_fields(row):
     return all(value is not None and value != "" for value in required_fields)
 
 
+def is_valid_scraped_rate(row):
+    if not has_required_rate_fields(row):
+        return False
+
+    try:
+        rate = float(row["rate"])
+    except (TypeError, ValueError):
+        return False
+
+    send_currency = row["send_currency"]
+    minimum_rate = MIN_REASONABLE_NGN_RATE_BY_CURRENCY.get(send_currency)
+    return bool(
+        minimum_rate
+        and minimum_rate <= rate <= MAX_REASONABLE_NGN_RATE
+        and is_scrape_enabled_for_row(row)
+    )
+
+
+def validated_rows(provider, rows):
+    valid_rows = []
+    for row in rows:
+        if is_valid_scraped_rate(row):
+            valid_rows.append(row)
+        else:
+            print(
+                f"[{provider}] Rejected {row.get('send_currency', 'unknown')}-"
+                f"{row.get('receive_currency', 'unknown')}: invalid, implausible, or ineligible rate"
+            )
+    return valid_rows
+
+
 def dedupe_rows(rows):
     rows_by_key = {}
 
     for row in rows:
         clean_row = to_supabase_row(row)
-        if not clean_row:
+        if not clean_row or not is_valid_scraped_rate(clean_row):
+            print(
+                f"[{row.get('provider', 'Unknown')}] Rejected "
+                f"{row.get('send_currency', 'unknown')}-{row.get('receive_currency', 'unknown')} "
+                "before database write"
+            )
             continue
 
         key = (
@@ -218,7 +308,7 @@ def fetch_nala_exchange_rates():
             }
         )
 
-    return [row for row in rows if has_required_rate_fields(row)]
+    return validated_rows("Nala", rows)
 
 
 def fetch_wise_exchange_rate(corridor):
@@ -266,7 +356,7 @@ def fetch_wise_exchange_rates():
                 f"{corridor['send_currency']}-{corridor['receive_currency']}: {error}"
             )
 
-    return [row for row in rows if has_required_rate_fields(row)]
+    return validated_rows("Wise", rows)
 
 
 def fetch_pesapeer_exchange_rates():
@@ -301,7 +391,7 @@ def fetch_pesapeer_exchange_rates():
             }
         )
 
-    return [row for row in rows if has_required_rate_fields(row)]
+    return validated_rows("Pesa", rows)
 
 
 def fetch_paysend_exchange_rate(request_config):
@@ -342,7 +432,7 @@ def fetch_paysend_exchange_rates():
         except Exception as error:
             print(f"[Paysend] Failed {request_config['send_currency']}-NGN: {error}")
 
-    return [row for row in rows if has_required_rate_fields(row)]
+    return validated_rows("Paysend", rows)
 
 
 def fetch_flutterwave_exchange_rate(request_config):
@@ -359,7 +449,7 @@ def fetch_flutterwave_exchange_rate(request_config):
         return None
 
     return {
-        "provider": "Flutterwave",
+        "provider": "Flutterwave Send",
         "send_currency": request_config["send_currency"],
         "receive_currency": "NGN",
         "rate": data.get("rate"),
@@ -379,10 +469,10 @@ def fetch_flutterwave_exchange_rates():
                 rows.append(row)
         except Exception as error:
             print(
-                f"[Flutterwave] Failed {request_config['send_currency']}-NGN: {error}"
+                f"[Flutterwave Send] Failed {request_config['send_currency']}-NGN: {error}"
             )
 
-    return [row for row in rows if has_required_rate_fields(row)]
+    return validated_rows("Flutterwave Send", rows)
 
 
 def fetch_remitly_exchange_rate(request_config):
@@ -434,7 +524,7 @@ def fetch_remitly_exchange_rates():
         except Exception as error:
             print(f"[Remitly] Failed {request_config['send_currency']}-NGN: {error}")
 
-    return [row for row in rows if has_required_rate_fields(row)]
+    return validated_rows("Remitly", rows)
 
 
 def fetch_sendwave_exchange_rate(request_config):
@@ -469,7 +559,7 @@ def fetch_sendwave_exchange_rates():
         except Exception as error:
             print(f"[Sendwave] Failed {request_config['send_currency']}-NGN: {error}")
 
-    return [row for row in rows if has_required_rate_fields(row)]
+    return validated_rows("Sendwave", rows)
 
 
 def delete_exchange_rates(filters):
@@ -492,7 +582,6 @@ def delete_exchange_rates(filters):
 def cleanup_exchange_rates():
     deleted_rows = []
     cleanup_filters = [
-        {"send_currency": "eq.EUR"},
         {"rate": f"gt.{MAX_REASONABLE_NGN_RATE}"},
     ]
 
@@ -590,7 +679,7 @@ def main():
         + collect_provider_rows("Wise", fetch_wise_exchange_rates)
         + collect_provider_rows("PesaPeer", fetch_pesapeer_exchange_rates)
         + collect_provider_rows("Paysend", fetch_paysend_exchange_rates)
-        + collect_provider_rows("Flutterwave", fetch_flutterwave_exchange_rates)
+        + collect_provider_rows("Flutterwave Send", fetch_flutterwave_exchange_rates)
         + collect_provider_rows("Remitly", fetch_remitly_exchange_rates)
         + collect_provider_rows("Sendwave", fetch_sendwave_exchange_rates)
     )

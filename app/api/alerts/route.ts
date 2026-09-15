@@ -1,6 +1,12 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
+import {
+  getNigeriaCorridorConfig,
+  getOriginCountry,
+  isOriginCountry,
+  isProviderEligibleForNigeriaCorridor
+} from "@/lib/corridors";
 
 const awsConfig = {
   region: "us-east-1",
@@ -14,23 +20,23 @@ const client = new DynamoDBClient(awsConfig);
 const docClient = DynamoDBDocumentClient.from(client);
 const sesClient = new SESClient(awsConfig);
 
-const currencyByCountry = {
-  USA: "USD",
-  UK: "GBP",
-  Canada: "CAD"
-} as const;
-
-type AlertCountry = keyof typeof currencyByCountry;
-
 export async function POST(req: Request) {
   try {
     const { email, targetRate, country } = (await req.json()) as {
       email?: string;
       targetRate?: number | string;
-      country?: AlertCountry;
+      country?: string;
     };
-    const alertCountry: AlertCountry = country && country in currencyByCountry ? country : "USA";
-    const currency = currencyByCountry[alertCountry];
+    const alertCountry = country && isOriginCountry(country) ? country : "USA";
+    const origin = getOriginCountry(alertCountry);
+    const corridor = getNigeriaCorridorConfig(alertCountry);
+    const alertProviders = corridor?.scrapeProviders.filter((provider) =>
+      isProviderEligibleForNigeriaCorridor(alertCountry, provider)
+    );
+    if (!origin?.active || !alertProviders?.length) {
+      return Response.json({ error: "Rate alerts are not available for this corridor yet." }, { status: 400 });
+    }
+    const currency = origin.currency;
     const targetRateText = String(targetRate);
 
     await docClient.send(
@@ -40,6 +46,8 @@ export async function POST(req: Request) {
           email,
           targetRate: targetRateText,
           country: alertCountry,
+          corridor: `${alertCountry}-NGN`,
+          destinationCurrency: "NGN",
           status: "active",
           createdAt: new Date().toISOString()
         }

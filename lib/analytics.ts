@@ -27,7 +27,7 @@ function trackEvent(eventName: string, eventParams: GtagEventParams) {
 }
 
 export function buildNigeriaCorridor(origin: string) {
-  return `${origin}-Nigeria`;
+  return `${origin}-NGN`;
 }
 
 export function trackProviderClick({
@@ -42,6 +42,8 @@ export function trackProviderClick({
   trackEvent("provider_click", {
     provider_name: providerName,
     corridor,
+    origin: corridor.replace(/-NGN$/, ""),
+    destination_currency: "NGN",
     page_url: getCurrentPageUrl(),
     affiliate_link: affiliateLink
   });

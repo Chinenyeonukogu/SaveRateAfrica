@@ -3,20 +3,21 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Bell, BellRing, ChevronDown } from "lucide-react";
+import { getOriginCountry, originCountries, type OriginCountryCode } from "@/lib/corridors";
 
 interface AlertsFormProps {
   variant?: "default" | "hero";
 }
 
-type AlertCountry = "USA" | "Canada" | "UK";
+type AlertCountry = OriginCountryCode;
 
 const subtitleText =
   "Set your ideal rate and we'll send you a free email alert instantly the moment your target rate is available.";
-const currencyByCountry: Record<AlertCountry, "USD" | "CAD" | "GBP"> = {
-  USA: "USD",
-  Canada: "CAD",
-  UK: "GBP"
-};
+const alertCountries = originCountries.filter((country) => country.active);
+
+function getAlertCurrency(country: AlertCountry) {
+  return getOriginCountry(country)?.currency ?? "USD";
+}
 
 export function AlertsForm({ variant = "default" }: AlertsFormProps) {
   const router = useRouter();
@@ -37,7 +38,7 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
 
     const parsedTargetRate = Number.parseFloat(targetRate);
     const trimmedEmail = email.trim();
-    const currency = currencyByCountry[country];
+    const currency = getAlertCurrency(country);
 
     if (!trimmedEmail || !Number.isFinite(parsedTargetRate) || parsedTargetRate <= 0) {
       setStatusType("error");
@@ -182,9 +183,9 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
                     value={country}
                     onChange={(event) => setCountry(event.target.value as AlertCountry)}
                   >
-                    <option value="USA">USA</option>
-                    <option value="Canada">Canada</option>
-                    <option value="UK">UK</option>
+                    {alertCountries.map((origin) => (
+                      <option key={origin.code} value={origin.code}>{origin.label}</option>
+                    ))}
                   </select>
                   <ChevronDown
                     aria-hidden="true"
@@ -195,7 +196,7 @@ export function AlertsForm({ variant = "default" }: AlertsFormProps) {
 
               <label className="min-w-0 space-y-2 min-[600px]:text-sm">
                 <span className="block text-[12px] font-bold uppercase tracking-[0.08em] text-[#0d1f12]">
-                  Target rate ({currencyByCountry[country]})
+                  Target rate ({getAlertCurrency(country)})
                 </span>
                 <input
                   className="alert-input min-h-12 w-full min-w-0 rounded-[8px] border border-[#c8e6c9] bg-white px-[14px] py-[11px] font-mono outline-none"

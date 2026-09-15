@@ -30,7 +30,7 @@ const wiseAffiliateLinks = {
   USA: "https://wise.prf.hn/click/camref:1011l5FuWv"
 } as const;
 
-const westernUnionLinks: Record<SenderCountry, string> = {
+const westernUnionLinks: Partial<Record<SenderCountry, string>> = {
   UK: "https://www.westernunion.com/gb/en/currency-converter/gbp-to-ngn-rate.html",
   USA: "https://www.westernunion.com/us/en/currency-converter/usd-to-ngn-rate.html",
   Canada: "https://www.westernunion.com/ca/en/send-money-to-nigeria.html"
@@ -55,18 +55,18 @@ function getWiseAffiliateLink(params: ProviderTrackingParams) {
 
 function getWesternUnionLink(params: ProviderTrackingParams) {
   if (params.origin) {
-    return westernUnionLinks[params.origin];
+    return westernUnionLinks[params.origin] ?? westernUnionLinks.USA!;
   }
 
   if (params.currency === "GBP") {
-    return westernUnionLinks.UK;
+    return westernUnionLinks.UK ?? "https://www.westernunion.com/";
   }
 
   if (params.currency === "CAD") {
-    return westernUnionLinks.Canada;
+    return westernUnionLinks.Canada ?? "https://www.westernunion.com/";
   }
 
-  return westernUnionLinks.USA;
+  return westernUnionLinks.USA ?? "https://www.westernunion.com/";
 }
 
 function withTracking(baseUrl: string, params: TrackingParams, campaign: string) {

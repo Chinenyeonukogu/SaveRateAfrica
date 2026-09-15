@@ -50,7 +50,7 @@ export interface MarketSnapshot {
   amount: number;
   updatedAt: string;
   lastUpdatedLabel: string;
-  baseRates: Record<SourceCurrency, CurrencyInsight>;
+  baseRates: Partial<Record<SourceCurrency, CurrencyInsight>>;
   corridors: Record<SenderCountry, CorridorInsight>;
 }
 
@@ -61,7 +61,7 @@ function roundToTwo(value: number) {
 function getSevenDaySeries(currency: SourceCurrency, currentRate: number) {
   const historicalSeries = trendSeries["7D"]
     .slice(0, 6)
-    .map((entry) => entry[currency]);
+    .map((entry) => entry[currency as "USD" | "GBP" | "CAD"]);
 
   return [...historicalSeries, roundToTwo(currentRate)];
 }
@@ -136,7 +136,7 @@ export function buildCorridorInsight(comparison: ComparisonResult): CorridorInsi
   const sourceCurrency = comparison.sourceCurrency;
   const rateInsight = buildCurrencyInsight(
     sourceCurrency,
-    comparison.liveBaseRates[sourceCurrency],
+    comparison.liveBaseRates[sourceCurrency] ?? 0,
     comparison.amount
   );
 
@@ -188,9 +188,9 @@ export function buildMarketSnapshot(
     updatedAt: primaryComparison.updatedAt,
     lastUpdatedLabel: formatDateTime(primaryComparison.updatedAt),
     baseRates: {
-      USD: buildCurrencyInsight("USD", liveBaseRates.USD, amount),
-      GBP: buildCurrencyInsight("GBP", liveBaseRates.GBP, amount),
-      CAD: buildCurrencyInsight("CAD", liveBaseRates.CAD, amount)
+      USD: buildCurrencyInsight("USD", liveBaseRates.USD ?? 0, amount),
+      GBP: buildCurrencyInsight("GBP", liveBaseRates.GBP ?? 0, amount),
+      CAD: buildCurrencyInsight("CAD", liveBaseRates.CAD ?? 0, amount)
     },
     corridors
   };
@@ -200,6 +200,9 @@ export function formatMarketSnapshot(snapshot: MarketSnapshot) {
   const baseRateLines = (["USD", "GBP", "CAD"] as const)
     .map((currency) => {
       const insight = snapshot.baseRates[currency];
+      if (!insight) {
+        return "";
+      }
 
       return [
         `${currency}/NGN current: ${formatRate(insight.currentRate, currency)}`,
