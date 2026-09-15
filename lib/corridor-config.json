@@ -7,7 +7,7 @@
     { "code": "Canada", "label": "Canada", "displayLabel": "🇨🇦 Canada — CAD", "currency": "CAD", "region": "Canada", "dialCode": "+1", "flagEmoji": "🇨🇦", "flagSrc": "/flags/ca.svg", "active": true },
     { "code": "UAE", "label": "United Arab Emirates", "displayLabel": "🇦🇪 United Arab Emirates — AED", "currency": "AED", "region": "UAE", "flagEmoji": "🇦🇪", "active": true },
     { "code": "Eurozone", "label": "Eurozone", "displayLabel": "🇪🇺 Eurozone — EUR", "currency": "EUR", "region": "Eurozone", "flagEmoji": "🇪🇺", "active": true },
-    { "code": "Switzerland", "label": "Switzerland", "displayLabel": "🇨🇭 Switzerland — CHF", "currency": "CHF", "region": "Switzerland", "flagEmoji": "🇨🇭", "active": false }
+    { "code": "Switzerland", "label": "Switzerland", "displayLabel": "🇨🇭 Switzerland — CHF", "currency": "CHF", "region": "Switzerland", "flagEmoji": "🇨🇭", "active": true }
   ],
   "corridors": [
     { "origin": "USA", "destination": "NGN", "eligibleProviders": ["Wise", "Remitly", "WorldRemit", "Sendwave", "PayAngel", "MoneyGram", "Western Union", "Pesa", "LemFi", "Afriex", "Flutterwave Send", "Nala", "TapTap Send", "Paysend"], "scrapeProviders": ["Nala", "Wise", "Pesa", "Paysend", "Flutterwave Send", "Remitly", "Sendwave"] },

@@ -61,7 +61,8 @@ export const senderCountries: SenderCountryOption[] = originCountries.map(
 export const baseMidMarketRates: Partial<Record<SourceCurrency, number>> = {
   USD: 1564.2,
   GBP: 1983.7,
-  CAD: 1149.6
+  CAD: 1149.6,
+  CHF: 1765
 };
 
 export const providers: Provider[] = [
@@ -86,7 +87,7 @@ export const providers: Provider[] = [
     headline: "Trusted transfers with clear, low fees",
     bestFor: "Trusted transfers with clear, low fees",
     trustNote: "Trusted transfers with clear, low fees",
-    supportedSenderCountries: ["USA", "UK", "Canada"],
+    supportedSenderCountries: ["USA", "UK", "Canada", "Switzerland"],
     payoutChannels: ["Bank deposit"],
     pros: ["Clear fee split", "Strong app", "Great for repeat transfers"],
     cons: ["Delivery timing varies by route", "Funding method details vary"]
@@ -467,6 +468,10 @@ export const providerRankingsBySenderCountry: Partial<Record<SenderCountry, stri
     "Paysend",
     "Afriex",
     "Pesa"
+  ],
+  Switzerland: [
+    "Wise",
+    "Paysend"
   ]
 };
 

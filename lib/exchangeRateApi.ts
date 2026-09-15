@@ -36,7 +36,7 @@ const LIVE_RATE_CACHE_TTL_MS = LIVE_RATE_REVALIDATE_SECONDS * 1000;
 const SUPPORTED_SOURCE_CURRENCIES: SourceCurrency[] = originCountries.map(
   (origin) => origin.currency
 );
-const FALLBACK_SOURCE_CURRENCIES: SourceCurrency[] = ["USD", "GBP", "CAD"];
+const FALLBACK_SOURCE_CURRENCIES: SourceCurrency[] = ["USD", "GBP", "CAD", "CHF"];
 
 function buildFallbackProviderRates(): SupabaseExchangeRateRow[] {
   const now = new Date().toISOString();

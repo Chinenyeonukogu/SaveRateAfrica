@@ -9,6 +9,7 @@ import { formatCompact } from "@/lib/format";
 import { getProviderAffiliateLink } from "@/lib/affiliateLinks";
 import { buildNigeriaCorridor } from "@/lib/analytics";
 import { TrackedProviderLink } from "@/components/TrackedProviderLink";
+import { originCountries } from "@/lib/corridors";
 
 interface ProvidersDirectoryClientProps {
   providers: Provider[];
@@ -60,9 +61,13 @@ export function ProvidersDirectoryClient({
               onChange={(event) => setCountry(event.target.value as SenderCountry | "All")}
             >
               <option value="All">All countries</option>
-              <option value="USA">USA</option>
-              <option value="UK">UK</option>
-              <option value="Canada">Canada</option>
+              {originCountries
+                .filter((origin) => origin.active)
+                .map((origin) => (
+                  <option key={origin.code} value={origin.code}>
+                    {origin.label}
+                  </option>
+                ))}
             </select>
           </label>
 

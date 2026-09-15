@@ -34,3 +34,20 @@ test("UAE → NGN never renders Flutterwave Send, Nala, or PayAngel", () => {
   assert.equal(renderedProviders.includes("Nala"), false);
   assert.equal(renderedProviders.includes("PayAngel"), false);
 });
+
+test("Switzerland to NGN is active and only renders its scrape allowlist", () => {
+  const switzerland = config.origins.find((entry) => entry.code === "Switzerland");
+  assert.equal(switzerland?.active, true);
+
+  const rows = [
+    { provider: "Wise", send_currency: "CHF", receive_currency: "NGN" },
+    { provider: "Paysend", send_currency: "CHF", receive_currency: "NGN" },
+    { provider: "MoneyGram", send_currency: "CHF", receive_currency: "NGN" },
+    { provider: "Wise", send_currency: "GBP", receive_currency: "NGN" }
+  ];
+
+  assert.deepEqual(
+    providersThatMayRender("Switzerland", rows).map((row) => row.provider),
+    ["Wise", "Paysend"]
+  );
+});
