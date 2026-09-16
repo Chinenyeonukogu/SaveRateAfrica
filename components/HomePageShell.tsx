@@ -201,6 +201,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
       buildComparisonFromLiveRates({
         amount: normalizedAmount,
         senderCountry,
+        recipientCurrency: "NGN",
         sortBy,
         liveBaseRates: {
           provider: currentComparison.rateProvider,

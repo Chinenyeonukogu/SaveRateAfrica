@@ -349,6 +349,7 @@ function buildComparisonForAmount(
       updatedAt: comparison.updatedAt
     },
     senderCountry: comparison.senderCountry,
+    recipientCurrency: "NGN",
     sortBy: "best-rate"
   });
 }
