@@ -32,7 +32,10 @@ declare global {
     | undefined;
 }
 
-export const LIVE_RATE_REVALIDATE_SECONDS = 1800;
+// Keep corridor availability responsive after the rate-ingestion job writes
+// new rows. A short server cache prevents a newly enabled route from looking
+// unavailable for up to 30 minutes.
+export const LIVE_RATE_REVALIDATE_SECONDS = 60;
 const LIVE_RATE_CACHE_TTL_MS = LIVE_RATE_REVALIDATE_SECONDS * 1000;
 const SUPPORTED_SOURCE_CURRENCIES: SourceCurrency[] = originCountries.map(
   (origin) => origin.currency
