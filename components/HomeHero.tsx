@@ -80,7 +80,7 @@ const recipientCountries = [
     code: "Kenya",
     currency: "KES",
     name: "Kenya",
-    flagEmoji: "🇰🇪",
+    flag: { alt: "Kenya flag", src: "/flags/ke.svg" },
     helper: "KES · Kenya",
     disabled: false
   },
@@ -88,7 +88,7 @@ const recipientCountries = [
     code: "Senegal",
     currency: "XOF",
     name: "Senegal",
-    flagEmoji: "🇸🇳",
+    flag: { alt: "Senegal flag", src: "/flags/sn.svg" },
     helper: "XOF · Senegal",
     disabled: false
   },
@@ -96,7 +96,7 @@ const recipientCountries = [
     code: "Egypt",
     currency: "EGP",
     name: "Egypt",
-    flagEmoji: "🇪🇬",
+    flag: { alt: "Egypt flag", src: "/flags/eg.svg" },
     helper: "EGP · Egypt",
     disabled: false
   }
@@ -133,18 +133,6 @@ function RecipientFlag({
   country: (typeof recipientCountries)[number];
   className?: string;
 }) {
-  if ("flagEmoji" in country) {
-    return (
-      <span
-        aria-label={`${country.name} flag`}
-        className={`inline-flex items-center justify-center text-[18px] leading-none ${className}`}
-        role="img"
-      >
-        {country.flagEmoji}
-      </span>
-    );
-  }
-
   return (
     <Image
       alt={country.flag.alt}
@@ -272,14 +260,6 @@ const trustPills = [
   { label: "Real-time data", icon: "signal" },
   { label: "No sign-up needed", icon: "check" },
   { label: "99% rate accuracy", icon: "star" }
-] as const;
-
-const socialProofFaces = [
-  "https://images.pexels.com/photos/26745561/pexels-photo-26745561.jpeg?auto=compress&cs=tinysrgb&w=80&h=80&fit=crop",
-  "https://randomuser.me/api/portraits/men/54.jpg",
-  "https://images.pexels.com/photos/18028052/pexels-photo-18028052.jpeg?auto=compress&cs=tinysrgb&w=80&h=80&fit=crop",
-  "https://images.pexels.com/photos/33844621/pexels-photo-33844621.jpeg?auto=compress&cs=tinysrgb&w=80&h=80&fit=crop",
-  "https://randomuser.me/api/portraits/men/75.jpg"
 ] as const;
 
 function formatCalculatedNgn(value: number) {
@@ -424,31 +404,6 @@ export function HomeHero({
                 ))}
               </div>
 
-              <div className="flex w-fit max-w-full items-center text-left">
-                <div className="flex shrink-0 items-center">
-                  {socialProofFaces.map((face, index) => (
-                    <Image
-                      key={face}
-                      alt=""
-                      className={`h-10 w-10 rounded-full border-[2.5px] border-[#0d2416] object-cover shadow-[0_4px_12px_rgba(0,0,0,0.28)] ${index === 0 ? "" : "-ml-3"}`}
-                      fetchPriority={index === 0 ? "high" : "auto"}
-                      height={40}
-                      priority={index === 0}
-                      quality={85}
-                      sizes="40px"
-                      src={face}
-                      width={40}
-                    />
-                  ))}
-                </div>
-                <div className="ml-3 min-w-0">
-                  <div className="text-[12px] leading-none text-brand-yellow">★★★★★</div>
-                  <p className="mt-1 text-[10px] font-semibold leading-[1.25] text-white min-[600px]:text-[11px]">
-                    Join the thousands finding better rates for transfers to Africa.
-                  </p>
-                </div>
-              </div>
-
             </div>
           </div>
 
@@ -558,13 +513,7 @@ export function HomeHero({
                                 }}
                               >
                                 <span className="flex min-w-0 items-center gap-3">
-                                  <span
-                                    aria-label={`${country.region} flag`}
-                                    className="inline-flex h-[18px] w-[24px] items-center justify-center rounded-[3px] text-[18px] leading-none"
-                                    role="img"
-                                  >
-                                    {country.flagEmoji}
-                                  </span>
+                                  <CountryFlag country={country.code} className="h-[18px] w-[24px] rounded-[3px] object-cover" />
                                   <span>
                                     <span
                                       className={`block text-[13px] font-bold ${

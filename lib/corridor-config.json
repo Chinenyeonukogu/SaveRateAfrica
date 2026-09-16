@@ -2,18 +2,18 @@
   "destinations": [
     { "code": "NGN", "name": "Nigeria", "flagEmoji": "🇳🇬", "flagSrc": "/flags/ng.svg", "active": true },
     { "code": "GHS", "name": "Ghana", "flagEmoji": "🇬🇭", "flagSrc": "/flags/gh.svg", "active": true },
-    { "code": "KES", "name": "Kenya", "flagEmoji": "🇰🇪", "active": true },
-    { "code": "XOF", "name": "Senegal", "flagEmoji": "🇸🇳", "active": true },
-    { "code": "EGP", "name": "Egypt", "flagEmoji": "🇪🇬", "active": true }
+    { "code": "KES", "name": "Kenya", "flagEmoji": "🇰🇪", "flagSrc": "/flags/ke.svg", "active": true },
+    { "code": "XOF", "name": "Senegal", "flagEmoji": "🇸🇳", "flagSrc": "/flags/sn.svg", "active": true },
+    { "code": "EGP", "name": "Egypt", "flagEmoji": "🇪🇬", "flagSrc": "/flags/eg.svg", "active": true }
   ],
   "providerCatalog": ["Wise", "Remitly", "WorldRemit", "Sendwave", "PayAngel", "MoneyGram", "Western Union", "ACE Money Transfer", "Pesa", "LemFi", "Afriex", "Flutterwave Send", "Nala", "TapTap Send", "Paysend", "Revolut"],
   "origins": [
     { "code": "USA", "label": "USA", "displayLabel": "🇺🇸 United States — USD", "currency": "USD", "region": "United States", "dialCode": "+1", "flagEmoji": "🇺🇸", "flagSrc": "/flags/us.svg", "active": true },
     { "code": "UK", "label": "UK", "displayLabel": "🇬🇧 United Kingdom — GBP", "currency": "GBP", "region": "United Kingdom", "dialCode": "+44", "flagEmoji": "🇬🇧", "flagSrc": "/flags/gb.svg", "active": true },
     { "code": "Canada", "label": "Canada", "displayLabel": "🇨🇦 Canada — CAD", "currency": "CAD", "region": "Canada", "dialCode": "+1", "flagEmoji": "🇨🇦", "flagSrc": "/flags/ca.svg", "active": true },
-    { "code": "UAE", "label": "United Arab Emirates", "displayLabel": "🇦🇪 United Arab Emirates — AED", "currency": "AED", "region": "UAE", "flagEmoji": "🇦🇪", "active": true },
-    { "code": "Eurozone", "label": "Eurozone", "displayLabel": "🇪🇺 Eurozone — EUR", "currency": "EUR", "region": "Eurozone", "flagEmoji": "🇪🇺", "active": true },
-    { "code": "Switzerland", "label": "Switzerland", "displayLabel": "🇨🇭 Switzerland — CHF", "currency": "CHF", "region": "Switzerland", "flagEmoji": "🇨🇭", "active": true }
+    { "code": "UAE", "label": "United Arab Emirates", "displayLabel": "United Arab Emirates — AED", "currency": "AED", "region": "UAE", "flagEmoji": "🇦🇪", "flagSrc": "/flags/ae.svg", "active": true },
+    { "code": "Eurozone", "label": "Eurozone", "displayLabel": "Eurozone — EUR", "currency": "EUR", "region": "Eurozone", "flagEmoji": "🇪🇺", "flagSrc": "/flags/eu.svg", "active": true },
+    { "code": "Switzerland", "label": "Switzerland", "displayLabel": "Switzerland — CHF", "currency": "CHF", "region": "Switzerland", "flagEmoji": "🇨🇭", "flagSrc": "/flags/ch.svg", "active": true }
   ],
   "corridors": [
     { "origin": "USA", "destination": "NGN", "eligibleProviders": ["Wise", "Remitly", "WorldRemit", "Sendwave", "PayAngel", "MoneyGram", "Western Union", "Pesa", "LemFi", "Afriex", "Flutterwave Send", "Nala", "TapTap Send", "Paysend"], "scrapeProviders": ["Nala", "Wise", "Pesa", "Paysend", "Flutterwave Send", "Remitly", "Sendwave"] },
