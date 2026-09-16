@@ -30,6 +30,10 @@ export function buildNigeriaCorridor(origin: string) {
   return `${origin}-NGN`;
 }
 
+export function buildCorridor(origin: string, destinationCurrency: string) {
+  return `${origin}-${destinationCurrency}`;
+}
+
 export function trackProviderClick({
   affiliateLink,
   corridor,
@@ -42,8 +46,8 @@ export function trackProviderClick({
   trackEvent("provider_click", {
     provider_name: providerName,
     corridor,
-    origin: corridor.replace(/-NGN$/, ""),
-    destination_currency: "NGN",
+    origin: corridor.split("-")[0],
+    destination_currency: corridor.split("-").at(-1),
     page_url: getCurrentPageUrl(),
     affiliate_link: affiliateLink
   });

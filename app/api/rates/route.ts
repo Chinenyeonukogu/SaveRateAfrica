@@ -8,6 +8,7 @@ import {
   type ComparisonSort,
   type SenderCountry
 } from "@/lib/providers";
+import { isDestinationCurrency, type DestinationCurrency } from "@/lib/corridors";
 
 export const revalidate = 1800;
 
@@ -24,6 +25,10 @@ function getRequestSort(value: string | null): ComparisonSort {
   return value && isComparisonSort(value) ? value : "best-rate";
 }
 
+function getRequestRecipientCurrency(value: string | null): DestinationCurrency {
+  return value && isDestinationCurrency(value) ? value : "NGN";
+}
+
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
 
@@ -32,6 +37,7 @@ export async function GET(request: NextRequest) {
       {
         amount: getRequestAmount(searchParams.get("amount")),
         senderCountry: getRequestSenderCountry(searchParams.get("senderCountry")),
+        recipientCurrency: getRequestRecipientCurrency(searchParams.get("recipientCurrency")),
         sortBy: getRequestSort(searchParams.get("sortBy"))
       },
       {

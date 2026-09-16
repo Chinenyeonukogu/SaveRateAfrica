@@ -10,8 +10,9 @@ import {
   type SourceCurrency
 } from "@/lib/providers";
 import {
-  isProviderEligibleForNigeriaCorridor,
-  isProviderScrapeEnabledForNigeriaCorridor
+  isProviderEligibleForCorridor,
+  isProviderScrapeEnabledForCorridor,
+  type DestinationCurrency
 } from "@/lib/corridors";
 import {
   getFallbackLiveBaseRates,
@@ -46,7 +47,7 @@ export interface ComparisonResult {
   amount: number;
   senderCountry: SenderCountry;
   sourceCurrency: SourceCurrency;
-  recipientCurrency: "NGN";
+  recipientCurrency: DestinationCurrency;
   sortBy: ComparisonSort;
   updatedAt: string;
   sourceUpdatedAt: string;
@@ -68,6 +69,7 @@ export interface ComparisonResult {
 interface FetchRatesArgs {
   amount: number;
   senderCountry: SenderCountry;
+  recipientCurrency?: DestinationCurrency;
   sortBy?: ComparisonSort;
 }
 
@@ -173,6 +175,7 @@ function getRatesEndpointUrl(
   const searchParams = new URLSearchParams({
     amount: String(args.amount),
     senderCountry: args.senderCountry,
+    recipientCurrency: args.recipientCurrency,
     sortBy: args.sortBy
   });
 
@@ -319,13 +322,14 @@ function getCountryRank(providerName: string, senderCountry: SenderCountry) {
 export function buildComparisonFromLiveRates({
   amount,
   senderCountry,
+  recipientCurrency = "NGN",
   sortBy,
   liveBaseRates
 }: Required<FetchRatesArgs> & { liveBaseRates: LiveBaseRatesResponse }): ComparisonResult {
   const sourceCurrency = getCurrencyBySender(senderCountry);
-  const baseMidMarketRate = liveBaseRates.rates[sourceCurrency] ?? 0;
+  const baseMidMarketRate = Math.max(0, ...liveBaseRates.providerRates.filter((row) => row.send_currency === sourceCurrency && row.receive_currency === recipientCurrency).map((row) => row.rate));
   if (!Number.isFinite(baseMidMarketRate) || baseMidMarketRate <= 0) {
-    throw new Error(`Supabase exchange_rates is missing ${sourceCurrency}-NGN rows.`);
+    throw new Error(`Supabase exchange_rates is missing ${sourceCurrency}-${recipientCurrency} rows.`);
   }
   const adjustedAmount = clampAmount(amount);
 
@@ -333,8 +337,9 @@ export function buildComparisonFromLiveRates({
     .filter(
       (rateRow) =>
         rateRow.send_currency === sourceCurrency &&
-        isProviderEligibleForNigeriaCorridor(senderCountry, rateRow.provider) &&
-        isProviderScrapeEnabledForNigeriaCorridor(senderCountry, rateRow.provider)
+        rateRow.receive_currency === recipientCurrency &&
+        isProviderEligibleForCorridor(senderCountry, recipientCurrency, rateRow.provider) &&
+        isProviderScrapeEnabledForCorridor(senderCountry, recipientCurrency, rateRow.provider)
     )
     .map((rateRow) => {
       const provider =
@@ -381,7 +386,7 @@ export function buildComparisonFromLiveRates({
     });
 
   if (rows.length === 0) {
-    throw new Error(`Supabase exchange_rates is missing ${sourceCurrency}-NGN rows.`);
+    throw new Error(`Supabase exchange_rates is missing ${sourceCurrency}-${recipientCurrency} rows.`);
   }
 
   const bestValueAmount = Math.max(...rows.map((row) => row.amountReceived));
@@ -404,7 +409,7 @@ export function buildComparisonFromLiveRates({
     amount: adjustedAmount,
     senderCountry,
     sourceCurrency,
-    recipientCurrency: "NGN",
+    recipientCurrency,
     sortBy,
     updatedAt: liveBaseRates.updatedAt,
     sourceUpdatedAt: liveBaseRates.sourceUpdatedAt,
@@ -428,6 +433,7 @@ export async function getLiveComparison(
   {
     amount,
     senderCountry,
+    recipientCurrency = "NGN",
     sortBy = "best-rate"
   }: FetchRatesArgs,
   options: Pick<FetchRatesOptions, "allowFallback"> = {}
@@ -448,6 +454,7 @@ export async function getLiveComparison(
   return buildComparisonFromLiveRates({
     amount: adjustedAmount,
     senderCountry,
+    recipientCurrency,
     sortBy,
     liveBaseRates
   });
@@ -457,6 +464,7 @@ export async function fetchRates(
   {
     amount,
     senderCountry,
+    recipientCurrency = "NGN",
     sortBy = "best-rate"
   }: FetchRatesArgs,
   options: FetchRatesOptions = {}
@@ -464,6 +472,7 @@ export async function fetchRates(
   const normalizedArgs = {
     amount: clampAmount(amount),
     senderCountry,
+    recipientCurrency,
     sortBy
   };
 

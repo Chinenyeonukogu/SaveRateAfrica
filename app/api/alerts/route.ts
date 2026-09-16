@@ -2,10 +2,11 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 import {
-  getNigeriaCorridorConfig,
+  getCorridorConfig,
   getOriginCountry,
   isOriginCountry,
-  isProviderEligibleForNigeriaCorridor
+  isDestinationCurrency,
+  isProviderEligibleForCorridor
 } from "@/lib/corridors";
 
 const awsConfig = {
@@ -22,16 +23,18 @@ const sesClient = new SESClient(awsConfig);
 
 export async function POST(req: Request) {
   try {
-    const { email, targetRate, country } = (await req.json()) as {
+    const { email, targetRate, country, destinationCurrency } = (await req.json()) as {
       email?: string;
       targetRate?: number | string;
       country?: string;
+      destinationCurrency?: string;
     };
     const alertCountry = country && isOriginCountry(country) ? country : "USA";
+    const destination = destinationCurrency && isDestinationCurrency(destinationCurrency) ? destinationCurrency : "NGN";
     const origin = getOriginCountry(alertCountry);
-    const corridor = getNigeriaCorridorConfig(alertCountry);
+    const corridor = getCorridorConfig(alertCountry, destination);
     const alertProviders = corridor?.scrapeProviders.filter((provider) =>
-      isProviderEligibleForNigeriaCorridor(alertCountry, provider)
+      isProviderEligibleForCorridor(alertCountry, destination, provider)
     );
     if (!origin?.active || !alertProviders?.length) {
       return Response.json({ error: "Rate alerts are not available for this corridor yet." }, { status: 400 });
@@ -46,8 +49,8 @@ export async function POST(req: Request) {
           email,
           targetRate: targetRateText,
           country: alertCountry,
-          corridor: `${alertCountry}-NGN`,
-          destinationCurrency: "NGN",
+          corridor: `${alertCountry}-${destination}`,
+          destinationCurrency: destination,
           status: "active",
           createdAt: new Date().toISOString()
         }
@@ -70,7 +73,7 @@ export async function POST(req: Request) {
 
 Your rate alert has been saved successfully.
 
-We will email you the moment NGN hits your target rate of ${targetRateText} NGN/${currency}.
+We will email you the moment ${destination} hits your target rate of ${targetRateText} ${destination}/${currency}.
 
 Thank you for using SaveRateAfrica!
 

@@ -11,6 +11,7 @@ export type OriginCountryCode =
   | "Eurozone"
   | "Switzerland";
 export type OriginCurrency = "USD" | "GBP" | "CAD" | "AED" | "EUR" | "CHF";
+export type DestinationCurrency = "NGN" | "GHS" | "KES" | "XOF" | "EGP";
 export type NigeriaCorridor = `${OriginCountryCode}-${typeof NIGERIA_DESTINATION}`;
 
 export type ProviderCatalogName =
@@ -45,7 +46,7 @@ export interface OriginCountry {
 
 export interface NigeriaCorridorConfig {
   origin: OriginCountryCode;
-  destination: typeof NIGERIA_DESTINATION;
+  destination: DestinationCurrency;
   eligibleProviders: readonly ProviderCatalogName[];
   /** Providers with a real, enabled scraper integration for this corridor. */
   scrapeProviders: readonly ProviderCatalogName[];
@@ -53,6 +54,8 @@ export interface NigeriaCorridorConfig {
 
 export const providerCatalogNames = rawCorridorConfig.providerCatalog as readonly ProviderCatalogName[];
 export const originCountries = rawCorridorConfig.origins as readonly OriginCountry[];
+export interface DestinationCountry { code: DestinationCurrency; name: string; flagEmoji: string; flagSrc?: string; active: boolean; }
+export const destinationCountries = rawCorridorConfig.destinations as readonly DestinationCountry[];
 export const nigeriaCorridors = rawCorridorConfig.corridors as readonly NigeriaCorridorConfig[];
 
 const providerNameAliases: Readonly<Record<string, ProviderCatalogName>> = {
@@ -90,6 +93,18 @@ export function getNigeriaCorridorConfig(origin: OriginCountryCode) {
   return nigeriaCorridors.find((corridor) => corridor.origin === origin);
 }
 
+export function getCorridorConfig(origin: OriginCountryCode, destination: DestinationCurrency) {
+  return nigeriaCorridors.find((corridor) => corridor.origin === origin && corridor.destination === destination);
+}
+
+export function getDestinationCountry(value: string) {
+  return destinationCountries.find((country) => country.code === value);
+}
+
+export function isDestinationCurrency(value: string): value is DestinationCurrency {
+  return getDestinationCountry(value) !== undefined;
+}
+
 /**
  * Fail closed: the provider must be known and explicitly allowed for this
  * exact origin + Nigeria destination pair. Currency alone is never sufficient.
@@ -104,6 +119,11 @@ export function isProviderEligibleForNigeriaCorridor(
   return Boolean(provider && corridor?.eligibleProviders.includes(provider));
 }
 
+export function isProviderEligibleForCorridor(origin: OriginCountryCode, destination: DestinationCurrency, providerName: string) {
+  const provider = toProviderCatalogName(providerName);
+  return Boolean(provider && getCorridorConfig(origin, destination)?.eligibleProviders.includes(provider));
+}
+
 /** True only when an allowlisted provider has a real scraper for this pair. */
 export function isProviderScrapeEnabledForNigeriaCorridor(
   origin: OriginCountryCode,
@@ -113,4 +133,9 @@ export function isProviderScrapeEnabledForNigeriaCorridor(
   const corridor = getNigeriaCorridorConfig(origin);
 
   return Boolean(provider && corridor?.scrapeProviders.includes(provider));
+}
+
+export function isProviderScrapeEnabledForCorridor(origin: OriginCountryCode, destination: DestinationCurrency, providerName: string) {
+  const provider = toProviderCatalogName(providerName);
+  return Boolean(provider && getCorridorConfig(origin, destination)?.scrapeProviders.includes(provider));
 }

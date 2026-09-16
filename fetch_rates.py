@@ -44,13 +44,13 @@ def load_corridor_config():
     corridors = []
     for corridor in config.get("corridors", []):
         origin = origins.get(corridor.get("origin"))
-        if not origin or corridor.get("destination") != "NGN":
+        if not origin or not corridor.get("destination"):
             continue
         corridors.append(
             {
                 "origin": origin["code"],
                 "send_currency": origin["currency"],
-                "receive_currency": "NGN",
+                "receive_currency": corridor["destination"],
                 "scrape_providers": set(corridor.get("scrapeProviders", [])),
             }
         )
@@ -62,11 +62,16 @@ def load_corridor_config():
 
 CORRIDORS = load_corridor_config()
 SUPPORTED_SEND_CURRENCIES = {corridor["send_currency"] for corridor in CORRIDORS}
-CORRIDOR_BY_CURRENCY = {corridor["send_currency"]: corridor for corridor in CORRIDORS}
+CORRIDOR_BY_PAIR = {
+    (corridor["send_currency"], corridor["receive_currency"]): corridor
+    for corridor in CORRIDORS
+}
 
 
 def is_scrape_enabled_for_row(row):
-    corridor = CORRIDOR_BY_CURRENCY.get(row.get("send_currency"))
+    corridor = CORRIDOR_BY_PAIR.get(
+        (row.get("send_currency"), row.get("receive_currency"))
+    )
     return bool(
         corridor
         and row.get("receive_currency") == corridor["receive_currency"]
@@ -233,11 +238,8 @@ def is_valid_scraped_rate(row):
     except (TypeError, ValueError):
         return False
 
-    send_currency = row["send_currency"]
-    minimum_rate = MIN_REASONABLE_NGN_RATE_BY_CURRENCY.get(send_currency)
     return bool(
-        minimum_rate
-        and minimum_rate <= rate <= MAX_REASONABLE_NGN_RATE
+        0.0001 <= rate <= 1_000_000
         and is_scrape_enabled_for_row(row)
     )
 
@@ -346,6 +348,8 @@ def fetch_wise_exchange_rates():
     rows = []
 
     for corridor in CORRIDORS:
+        if "Wise" not in corridor["scrape_providers"]:
+            continue
         try:
             row = fetch_wise_exchange_rate(corridor)
             if row:
@@ -353,7 +357,7 @@ def fetch_wise_exchange_rates():
         except Exception as error:
             print(
                 "[Wise] Failed "
-                f"{corridor['send_currency']}-{corridor['receive_currency']}: {error}"
+                f"{corridor['origin']} {corridor['send_currency']}-{corridor['receive_currency']}: {error}"
             )
 
     return validated_rows("Wise", rows)

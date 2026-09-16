@@ -3,12 +3,13 @@ import {
   providers,
   type SourceCurrency
 } from "@/lib/providers";
-import { originCountries } from "@/lib/corridors";
+import { isDestinationCurrency, originCountries } from "@/lib/corridors";
+import type { DestinationCurrency } from "@/lib/corridors";
 
 export interface SupabaseExchangeRateRow {
   provider: string;
   send_currency: SourceCurrency;
-  receive_currency: "NGN";
+  receive_currency: DestinationCurrency;
   rate: number;
   fee: number | null;
   updated_at: string | null;
@@ -45,7 +46,7 @@ function buildFallbackProviderRates(): SupabaseExchangeRateRow[] {
     FALLBACK_SOURCE_CURRENCIES.map((currency) => ({
       provider: provider.name,
       send_currency: currency,
-      receive_currency: "NGN" as const,
+    receive_currency: "NGN" as const,
       rate:
         Math.round(
           (baseMidMarketRates[currency] ?? 0) *
@@ -105,7 +106,7 @@ function normalizeRateRow(row: Partial<SupabaseExchangeRateRow>) {
   if (
     !row.provider ||
     !isSourceCurrency(sendCurrency) ||
-    receiveCurrency !== "NGN" ||
+    !isDestinationCurrency(receiveCurrency) ||
     !Number.isFinite(rate) ||
     rate <= 0
   ) {
@@ -115,7 +116,7 @@ function normalizeRateRow(row: Partial<SupabaseExchangeRateRow>) {
   return {
     provider: row.provider,
     send_currency: sendCurrency,
-    receive_currency: "NGN",
+    receive_currency: receiveCurrency as DestinationCurrency,
     rate,
     fee: fee === null || Number.isFinite(fee) ? fee : null,
     updated_at: row.updated_at ?? null,
@@ -164,7 +165,6 @@ async function fetchSupabaseExchangeRates() {
   const searchParams = new URLSearchParams({
     select:
       "provider,send_currency,receive_currency,rate,fee,updated_at,is_automated",
-    receive_currency: "eq.NGN",
     order: "provider.asc,send_currency.asc"
   });
 

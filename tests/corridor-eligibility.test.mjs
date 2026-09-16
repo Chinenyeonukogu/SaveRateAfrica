@@ -51,3 +51,21 @@ test("Switzerland to NGN is active and only renders its scrape allowlist", () =>
     ["Wise", "Paysend"]
   );
 });
+
+test("new recipient corridors fail closed by origin, destination, and provider", () => {
+  const rows = [
+    { provider: "Wise", send_currency: "USD", receive_currency: "GHS" },
+    { provider: "PayAngel", send_currency: "USD", receive_currency: "GHS" },
+    { provider: "Wise", send_currency: "USD", receive_currency: "XOF" },
+    { provider: "Remitly", send_currency: "USD", receive_currency: "XOF" }
+  ];
+
+  assert.deepEqual(
+    providersThatMayRender("USA", rows).map((row) => row.provider),
+    []
+  );
+  const ghana = config.corridors.find((entry) => entry.origin === "USA" && entry.destination === "GHS");
+  const senegal = config.corridors.find((entry) => entry.origin === "USA" && entry.destination === "XOF");
+  assert.deepEqual(ghana.scrapeProviders, ["Wise"]);
+  assert.deepEqual(senegal.scrapeProviders, []);
+});
