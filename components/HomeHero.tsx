@@ -73,32 +73,32 @@ const recipientCountries = [
     currency: "GHS",
     name: "Ghana",
     flag: { alt: "Ghana flag", src: "/flags/gh.svg" },
-    helper: "We're working to bring Ghana soon!",
-    disabled: true
+    helper: "GHS · Ghana",
+    disabled: false
   },
   {
     code: "Kenya",
     currency: "KES",
     name: "Kenya",
     flagEmoji: "🇰🇪",
-    helper: "We're working to bring Kenya soon!",
-    disabled: true
+    helper: "KES · Kenya",
+    disabled: false
   },
   {
     code: "Senegal",
     currency: "XOF",
     name: "Senegal",
     flagEmoji: "🇸🇳",
-    helper: "We're working to bring Senegal soon!",
-    disabled: true
+    helper: "XOF · Senegal",
+    disabled: false
   },
   {
     code: "Egypt",
     currency: "EGP",
     name: "Egypt",
     flagEmoji: "🇪🇬",
-    helper: "We're working to bring Egypt soon!",
-    disabled: true
+    helper: "EGP · Egypt",
+    disabled: false
   }
 ] as const;
 
@@ -626,7 +626,9 @@ export function HomeHero({
                       {recipientDropdownOpen ? (
                         <div className="absolute left-0 right-0 top-full z-30 mt-2 overflow-hidden rounded-[10px] border border-[#e0ede2] bg-white shadow-[0_14px_32px_rgba(0,0,0,0.16)]">
                           {recipientCountries.map((country) => {
-                            const disabled = !availableRecipientCurrencies.includes(country.currency);
+                            // Each configured recipient is selectable. Live comparison results
+                            // still fail closed server-side when a provider has no verified quote.
+                            const disabled = country.disabled;
                             return (
                             <button
                               key={country.code}
