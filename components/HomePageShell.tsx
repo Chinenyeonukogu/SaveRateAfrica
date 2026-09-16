@@ -16,6 +16,7 @@ import {
   type ComparisonSort,
   type SenderCountry
 } from "@/lib/providers";
+import { isProviderEligibleForCorridor, isProviderScrapeEnabledForCorridor, type DestinationCurrency } from "@/lib/corridors";
 
 interface HomePageShellProps {
   initialComparison: ComparisonResult;
@@ -110,6 +111,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
   const [senderCountry, setSenderCountry] = useState<SenderCountry>(
     initialComparison.senderCountry
   );
+  const [recipientCurrency, setRecipientCurrency] = useState<DestinationCurrency>(initialComparison.recipientCurrency);
   const [comparison, setComparison] = useState(initialComparison);
   const [sortBy, setSortBy] = useState<ComparisonSort>(initialComparison.sortBy);
   const [isLoading, setIsLoading] = useState(false);
@@ -118,6 +120,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
   const [nextRefreshAt, setNextRefreshAt] = useState(initialComparison.cachedUntil);
   const amountRef = useRef(amount);
   const senderCountryRef = useRef(senderCountry);
+  const recipientCurrencyRef = useRef(recipientCurrency);
   const sortByRef = useRef(sortBy);
   const lastValidAmountRef = useRef(initialComparison.amount);
   const latestRequestIdRef = useRef(0);
@@ -141,6 +144,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
         {
           amount: normalizedAmount,
           senderCountry: senderCountryRef.current,
+          recipientCurrency: recipientCurrencyRef.current,
           sortBy: nextSort
         },
         {
@@ -185,6 +189,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
   useEffect(() => {
     senderCountryRef.current = senderCountry;
   }, [senderCountry]);
+  useEffect(() => { recipientCurrencyRef.current = recipientCurrency; }, [recipientCurrency]);
 
   useEffect(() => {
     sortByRef.current = sortBy;
@@ -201,7 +206,7 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
       buildComparisonFromLiveRates({
         amount: normalizedAmount,
         senderCountry,
-        recipientCurrency: "NGN",
+        recipientCurrency,
         sortBy,
         liveBaseRates: {
           provider: currentComparison.rateProvider,
@@ -213,7 +218,11 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
         }
       })
     );
-  }, [amount, senderCountry, sortBy]);
+  }, [amount, senderCountry, recipientCurrency, sortBy]);
+
+  const availableRecipientCurrencies = (["NGN", "GHS", "KES", "XOF", "EGP"] as DestinationCurrency[]).filter((destination) =>
+    comparison.providerRates.some((row) => row.send_currency === comparison.sourceCurrency && row.receive_currency === destination && isProviderEligibleForCorridor(senderCountry, destination, row.provider) && isProviderScrapeEnabledForCorridor(senderCountry, destination, row.provider))
+  );
 
   useEffect(() => {
     const msUntilRefresh = Math.max(
@@ -322,9 +331,12 @@ export function HomePageShell({ initialComparison }: HomePageShellProps) {
           comparisonProviders={comparison.providers}
           isLoading={isLoading}
           senderCountry={senderCountry}
+          recipientCurrency={recipientCurrency}
+          availableRecipientCurrencies={availableRecipientCurrencies}
           onAmountChange={setAmount}
           onCompare={handleCompare}
           onSenderCountryChange={setSenderCountry}
+          onRecipientCurrencyChange={setRecipientCurrency}
         />
 
         <HomeLearnSection />

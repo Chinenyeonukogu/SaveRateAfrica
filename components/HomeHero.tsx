@@ -10,15 +10,18 @@ import {
 
 import type { ComparisonProviderRow } from "@/lib/fetchRates";
 import { senderCountries, type SenderCountry } from "@/lib/providers";
-import { getOriginCountry, originCountries } from "@/lib/corridors";
+import { getOriginCountry, originCountries, type DestinationCurrency } from "@/lib/corridors";
 
 interface HomeHeroProps {
   amount: string;
   comparisonProviders: ComparisonProviderRow[];
   senderCountry: SenderCountry;
+  recipientCurrency: DestinationCurrency;
+  availableRecipientCurrencies: DestinationCurrency[];
   isLoading: boolean;
   onAmountChange: (value: string) => void;
   onSenderCountryChange: (value: SenderCountry) => void;
+  onRecipientCurrencyChange: (value: DestinationCurrency) => void;
   onCompare: () => void;
 }
 
@@ -59,6 +62,7 @@ const senderCountryOptions = originCountries; /*
 const recipientCountries = [
   {
     code: "Nigeria",
+    currency: "NGN",
     name: "Nigeria",
     flag: { alt: "Nigeria flag", src: "/flags/ng.svg" },
     helper: "NGN · Nigeria",
@@ -66,6 +70,7 @@ const recipientCountries = [
   },
   {
     code: "Ghana",
+    currency: "GHS",
     name: "Ghana",
     flag: { alt: "Ghana flag", src: "/flags/gh.svg" },
     helper: "We're working to bring Ghana soon!",
@@ -73,6 +78,7 @@ const recipientCountries = [
   },
   {
     code: "Kenya",
+    currency: "KES",
     name: "Kenya",
     flagEmoji: "🇰🇪",
     helper: "We're working to bring Kenya soon!",
@@ -80,6 +86,7 @@ const recipientCountries = [
   },
   {
     code: "Senegal",
+    currency: "XOF",
     name: "Senegal",
     flagEmoji: "🇸🇳",
     helper: "We're working to bring Senegal soon!",
@@ -87,6 +94,7 @@ const recipientCountries = [
   },
   {
     code: "Egypt",
+    currency: "EGP",
     name: "Egypt",
     flagEmoji: "🇪🇬",
     helper: "We're working to bring Egypt soon!",
@@ -285,9 +293,12 @@ export function HomeHero({
   amount,
   comparisonProviders,
   senderCountry,
+  recipientCurrency,
+  availableRecipientCurrencies,
   isLoading,
   onAmountChange,
   onSenderCountryChange,
+  onRecipientCurrencyChange,
   onCompare
 }: HomeHeroProps) {
   const currencyMeta = currencySymbolByCountry[senderCountry];
@@ -302,7 +313,7 @@ export function HomeHero({
   const selectedSenderCountry =
     senderCountries.find((country) => country.code === senderCountry) ??
     senderCountries[0];
-  const selectedRecipientCountry = recipientCountries[0];
+  const selectedRecipientCountry = recipientCountries.find((country) => country.currency === recipientCurrency) ?? recipientCountries[0];
 
   useEffect(() => {
     let flashTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -614,18 +625,21 @@ export function HomeHero({
 
                       {recipientDropdownOpen ? (
                         <div className="absolute left-0 right-0 top-full z-30 mt-2 overflow-hidden rounded-[10px] border border-[#e0ede2] bg-white shadow-[0_14px_32px_rgba(0,0,0,0.16)]">
-                          {recipientCountries.map((country) => (
+                          {recipientCountries.map((country) => {
+                            const disabled = !availableRecipientCurrencies.includes(country.currency);
+                            return (
                             <button
                               key={country.code}
                               className={`flex w-full items-center justify-between gap-3 px-3 py-3 text-left transition ${
-                                country.disabled
+                                disabled
                                   ? "cursor-not-allowed bg-[#fafafa]"
                                   : "bg-[#e8f5e9] hover:bg-[#f4faf5]"
                               }`}
-                              disabled={country.disabled}
+                              disabled={disabled}
                               type="button"
                               onClick={() => {
-                                if (!country.disabled) {
+                                if (!disabled) {
+                                  onRecipientCurrencyChange(country.currency);
                                   setRecipientDropdownOpen(false);
                                 }
                               }}
@@ -634,13 +648,13 @@ export function HomeHero({
                                 <RecipientFlag
                                   country={country}
                                   className={`h-[18px] w-[24px] rounded-[3px] object-cover ${
-                                    country.disabled ? "grayscale" : ""
+                                    disabled ? "grayscale" : ""
                                   }`}
                                 />
                                 <span>
                                   <span
                                     className={`block text-[13px] font-bold ${
-                                      country.disabled ? "text-[#9a9a9a]" : "text-[#1a2e1a]"
+                                      disabled ? "text-[#9a9a9a]" : "text-[#1a2e1a]"
                                     }`}
                                   >
                                     {country.name}
@@ -651,13 +665,13 @@ export function HomeHero({
                                 </span>
                               </span>
 
-                              {country.disabled ? (
+                              {disabled ? (
                                 <span className="shrink-0 rounded-full bg-brand-yellow px-2 py-1 text-[9px] font-black uppercase text-[#1a1a1a]">
                                   Coming Soon
                                 </span>
                               ) : null}
                             </button>
-                          ))}
+                          )})}
                         </div>
                       ) : null}
                     </div>
