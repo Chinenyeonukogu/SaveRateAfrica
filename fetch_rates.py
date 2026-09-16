@@ -131,6 +131,28 @@ REMITLY_REQUESTS = [
     },
 ]
 
+REMITLY_ORIGIN_CODES = {"USD": "USA", "GBP": "GBR", "CAD": "CAN"}
+REMITLY_DESTINATION_CODES = {"NGN": "NGA", "GHS": "GHA", "XOF": "SEN"}
+
+def remitly_requests_from_corridors():
+    requests = []
+    for corridor in CORRIDORS:
+        if "Remitly" not in corridor["scrape_providers"]:
+            continue
+        origin = REMITLY_ORIGIN_CODES.get(corridor["send_currency"])
+        destination = REMITLY_DESTINATION_CODES.get(corridor["receive_currency"])
+        if not origin or not destination:
+            print(f"[Remitly] No calculator mapping for {corridor['origin']} {corridor['send_currency']}-{corridor['receive_currency']}")
+            continue
+        conduit = f"{origin}%3A{corridor['send_currency']}-{destination}%3A{corridor['receive_currency']}"
+        requests.append({
+            "origin": corridor["origin"],
+            "send_currency": corridor["send_currency"],
+            "receive_currency": corridor["receive_currency"],
+            "url": f"https://api.remitly.io/v3/calculator/estimate?conduit={conduit}&anchor=SEND&amount=500&purpose=OTHER&customer_segment=RETURNING&promoCode=&strict_promo=true",
+        })
+    return requests
+
 SENDWAVE_REQUESTS = [
     {
         "send_currency": "USD",
@@ -496,7 +518,10 @@ def fetch_remitly_exchange_rate(request_config):
     fee = estimate.get("fee") or {}
     total_fee_amount = fee.get("total_fee_amount")
 
-    if request_config["send_currency"] in REMITLY_FALLBACK_FEES:
+    if (
+        request_config["receive_currency"] == "NGN"
+        and request_config["send_currency"] in REMITLY_FALLBACK_FEES
+    ):
         try:
             if total_fee_amount is None or float(total_fee_amount) <= 0:
                 total_fee_amount = REMITLY_FALLBACK_FEES[request_config["send_currency"]]
@@ -506,7 +531,7 @@ def fetch_remitly_exchange_rate(request_config):
     return {
         "provider": "Remitly",
         "send_currency": request_config["send_currency"],
-        "receive_currency": "NGN",
+        "receive_currency": request_config["receive_currency"],
         "rate": exchange_rate.get("base_rate")
         or exchange_rate.get("promotional_exchange_rate"),
         "fee": total_fee_amount,
@@ -518,7 +543,7 @@ def fetch_remitly_exchange_rate(request_config):
 def fetch_remitly_exchange_rates():
     rows = []
 
-    for request_config in REMITLY_REQUESTS:
+    for request_config in remitly_requests_from_corridors():
         try:
             if rows:
                 time.sleep(2)
@@ -526,7 +551,7 @@ def fetch_remitly_exchange_rates():
             if row:
                 rows.append(row)
         except Exception as error:
-            print(f"[Remitly] Failed {request_config['send_currency']}-NGN: {error}")
+            print(f"[Remitly] Failed {request_config['origin']} {request_config['send_currency']}-{request_config['receive_currency']}: {error}")
 
     return validated_rows("Remitly", rows)
 

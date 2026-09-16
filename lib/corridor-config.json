@@ -22,15 +22,15 @@
     { "origin": "UAE", "destination": "NGN", "eligibleProviders": ["Wise", "Remitly", "WorldRemit", "Sendwave", "MoneyGram", "Western Union", "ACE Money Transfer", "Pesa", "LemFi", "Afriex", "TapTap Send", "Paysend"], "scrapeProviders": ["Wise", "Pesa", "Paysend", "Remitly", "Sendwave"] },
     { "origin": "Eurozone", "destination": "NGN", "eligibleProviders": ["Wise", "Remitly", "WorldRemit", "Sendwave", "PayAngel", "MoneyGram", "Western Union", "ACE Money Transfer", "Pesa", "LemFi", "Afriex", "Flutterwave Send", "Nala", "TapTap Send", "Paysend"], "scrapeProviders": ["Nala", "Wise", "Pesa", "Paysend", "Flutterwave Send", "Remitly", "Sendwave"] },
     { "origin": "Switzerland", "destination": "NGN", "eligibleProviders": ["Wise", "MoneyGram", "Western Union", "ACE Money Transfer", "Paysend", "Revolut"], "scrapeProviders": ["Wise", "Paysend"] }
-    ,{ "origin": "USA", "destination": "GHS", "eligibleProviders": ["Wise", "Remitly", "PayAngel"], "scrapeProviders": ["Wise"] }
-    ,{ "origin": "UK", "destination": "GHS", "eligibleProviders": ["Wise", "Remitly", "PayAngel", "ACE Money Transfer"], "scrapeProviders": ["Wise"] }
-    ,{ "origin": "Canada", "destination": "GHS", "eligibleProviders": ["Wise", "Remitly", "PayAngel"], "scrapeProviders": ["Wise"] }
+    ,{ "origin": "USA", "destination": "GHS", "eligibleProviders": ["Wise", "Remitly", "PayAngel"], "scrapeProviders": ["Wise", "Remitly"] }
+    ,{ "origin": "UK", "destination": "GHS", "eligibleProviders": ["Wise", "Remitly", "PayAngel", "ACE Money Transfer"], "scrapeProviders": ["Wise", "Remitly"] }
+    ,{ "origin": "Canada", "destination": "GHS", "eligibleProviders": ["Wise", "Remitly", "PayAngel"], "scrapeProviders": ["Wise", "Remitly"] }
     ,{ "origin": "USA", "destination": "KES", "eligibleProviders": ["Wise", "PayAngel"], "scrapeProviders": ["Wise"] }
     ,{ "origin": "UK", "destination": "KES", "eligibleProviders": ["Wise", "PayAngel", "ACE Money Transfer"], "scrapeProviders": ["Wise"] }
     ,{ "origin": "Canada", "destination": "KES", "eligibleProviders": ["Wise", "PayAngel"], "scrapeProviders": ["Wise"] }
-    ,{ "origin": "USA", "destination": "XOF", "eligibleProviders": ["Remitly", "PayAngel"], "scrapeProviders": [] }
-    ,{ "origin": "UK", "destination": "XOF", "eligibleProviders": ["PayAngel", "ACE Money Transfer"], "scrapeProviders": [] }
-    ,{ "origin": "Canada", "destination": "XOF", "eligibleProviders": ["PayAngel"], "scrapeProviders": [] }
+    ,{ "origin": "USA", "destination": "XOF", "eligibleProviders": ["Remitly", "PayAngel"], "scrapeProviders": ["Remitly"] }
+    ,{ "origin": "UK", "destination": "XOF", "eligibleProviders": ["Remitly", "PayAngel", "ACE Money Transfer"], "scrapeProviders": ["Remitly"] }
+    ,{ "origin": "Canada", "destination": "XOF", "eligibleProviders": ["Remitly", "PayAngel"], "scrapeProviders": ["Remitly"] }
     ,{ "origin": "USA", "destination": "EGP", "eligibleProviders": ["Wise"], "scrapeProviders": ["Wise"] }
     ,{ "origin": "UK", "destination": "EGP", "eligibleProviders": ["Wise", "ACE Money Transfer"], "scrapeProviders": ["Wise"] }
     ,{ "origin": "Canada", "destination": "EGP", "eligibleProviders": ["Wise"], "scrapeProviders": ["Wise"] }

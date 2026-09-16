@@ -66,6 +66,6 @@ test("new recipient corridors fail closed by origin, destination, and provider",
   );
   const ghana = config.corridors.find((entry) => entry.origin === "USA" && entry.destination === "GHS");
   const senegal = config.corridors.find((entry) => entry.origin === "USA" && entry.destination === "XOF");
-  assert.deepEqual(ghana.scrapeProviders, ["Wise"]);
-  assert.deepEqual(senegal.scrapeProviders, []);
+  assert.deepEqual(ghana.scrapeProviders, ["Wise", "Remitly"]);
+  assert.deepEqual(senegal.scrapeProviders, ["Remitly"]);
 });
