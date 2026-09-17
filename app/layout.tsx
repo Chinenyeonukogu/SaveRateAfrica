@@ -2,8 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import type { ReactNode } from "react";
 
-import { GlobalClientWidgets } from "@/components/GlobalClientWidgets";
-import { SiteFooter } from "@/components/SiteFooter";
+import { ConditionalChrome } from "@/components/ConditionalChrome";
 
 import "./globals.css";
 
@@ -145,8 +144,7 @@ export default function RootLayout({
       </head>
       <body className="bg-brand-light text-brand-navy">
         {children}
-        <SiteFooter />
-        <GlobalClientWidgets />
+        <ConditionalChrome />
         <Script
           id="google-tag-manager"
           strategy="lazyOnload"

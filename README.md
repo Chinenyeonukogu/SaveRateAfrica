@@ -40,6 +40,28 @@ African diaspora in USA, UK and Canada compare 14 providers in seconds — so ev
 dollar, pound and loonie lands as more naira in your loved ones hands. No hidden fees. 
 No guesswork. Just smarter sending money!
 
+## Maintenance Mode
+The site supports a server-enforced maintenance mode that shows every visitor a
+dedicated "down for maintenance" page while you keep full access.
+
+**Turn it ON/OFF:**
+1. In the Vercel project settings, set the `MAINTENANCE_MODE` environment
+   variable to `true` (on) or `false`/unset (off).
+2. Redeploy (or click "Redeploy" on the latest deployment) for the change to
+   take effect.
+
+**Admin bypass (no login system required):**
+1. Set a long random `MAINTENANCE_BYPASS_SECRET` environment variable (also in
+   Vercel project settings) — keep this value private.
+2. While maintenance mode is on, visit `https://www.saverateafrica.com/?bypass=YOUR_SECRET`
+   once. This sets a secure, HttpOnly cookie in your browser and gives you full
+   access to preview the live site; regular visitors without that cookie only
+   ever see `/maintenance`.
+
+The gate is enforced in `middleware.ts` on the server, so it can't be bypassed
+by disabling JavaScript, and `/maintenance` itself is always reachable to avoid
+redirect loops.
+
 ## Built By
 Chinenye Onukogu
 ###
